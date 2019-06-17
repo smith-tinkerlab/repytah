@@ -25,13 +25,18 @@ def stretch_diags(thresh_diags, band_width):
     
     temp_song_marks_out = np.zeros(n)
     
-    (inds, jnds) = thresh_diags.nonzero()
+    (inds_tup, jnds_tup) = thresh_diags.nonzero()
+    
+    # takes first list in array?
+    # that's what it needs to do
+    inds = inds_tup[0]
+    jnds = jnds_tup[0]
     
     subtemp = np.identity(band_width)
     
     # expands each entry in thresh_diags into diagonal of
     # length band width
-    for i in range(1, band_width.shape[1]):
+    for i in range(inds.shape[0]):
         tempmat = np.zeros(n)
         
         tempmat[inds[i]:(inds[i] + band_width - 1), 
