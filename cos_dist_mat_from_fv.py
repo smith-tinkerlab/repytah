@@ -33,5 +33,7 @@ def cos_dist_mat_from_fv(matrix_featurevecs, num_fv_per_shingle):
             mat_as[((i-1) * num_rows):((i * num_rows)),] = matrix_featurevecs[:,
                    (i-1):((num_columns - num_fv_per_shingle + i))]
             
-sdm_row = spd.pdist(mat_as, 'cosine')
-self_dissim_mat = spd.squareform(sdm_row)
+    sdm_row = spd.pdist(mat_as, 'cosine')
+    self_dissim_mat = spd.squareform(sdm_row)
+    
+    return self_dissim_mat

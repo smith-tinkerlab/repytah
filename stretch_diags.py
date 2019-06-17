@@ -31,3 +31,5 @@ def stretch_diags(thresh_diags, band_width):
                 
     
     stretch_diag_mat = (temp_song_marks_out > 0)
+    
+    return stretch_diag_mat
