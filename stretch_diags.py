@@ -21,26 +21,21 @@ import numpy as np
 def stretch_diags(thresh_diags, band_width):
     
     # creates size of returned matrix
-    n = thresh_diags.shape[1] + band_width - 1
+    n = thresh_diags.shape[0] + band_width - 1
     
     temp_song_marks_out = np.zeros(n)
     
-    (inds_tup, jnds_tup) = thresh_diags.nonzero()
-    
-    # takes first list in array?
-    # that's what it needs to do
-    inds = inds_tup[0]
-    jnds = jnds_tup[0]
+    (jnds, inds) = thresh_diags.nonzero()
     
     subtemp = np.identity(band_width)
     
     # expands each entry in thresh_diags into diagonal of
     # length band width
     for i in range(inds.shape[0]):
-        tempmat = np.zeros(n)
+        tempmat = np.zeros((n,n))
         
-        tempmat[inds[i]:(inds[i] + band_width - 1), 
-                jnds[i]:(jnds[i] + band_width - 1)] = subtemp
+        tempmat[inds[i]:(inds[i] + band_width), 
+                jnds[i]:(jnds[i] + band_width)] = subtemp
         
         temp_song_marks_out = temp_song_marks_out + tempmat
                 
