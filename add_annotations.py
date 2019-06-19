@@ -30,7 +30,7 @@ def add_annotations(input_mat, song_length):
     s_two = input_mat[:,2]
     
     # creates matrix of all repeats
-    s_three = np.ones(num_columns,1)
+    s_three = np.ones((num_columns,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, (s_one, s_two)),
                                 shape = (song_length, song_length)).toarray()
