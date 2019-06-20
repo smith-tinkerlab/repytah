@@ -30,7 +30,7 @@ def cos_dist_mat_from_fv(matrix_featurevecs, num_fv_per_shingle):
         mat_as = np.zeros(((num_rows * num_fv_per_shingle),
                            (num_columns - num_fv_per_shingle + 1)))
         
-        for i in range(1, num_fv_per_shingle):
+        for i in range(1, num_fv_per_shingle + 1):
             # use feature vectors to create an audio shingle
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
