@@ -20,7 +20,7 @@ import scipy.sparse as sps
 
 def add_annotations(input_mat, song_length):
     
-    num_columns = input_mat.shape[0]
+    num_rows = input_mat.shape[0]
     
     # removes any already present annotation markers
     input_mat[:, 5] = 0
@@ -30,7 +30,7 @@ def add_annotations(input_mat, song_length):
     s_two = input_mat[:,2]
     
     # creates matrix of all repeats
-    s_three = np.ones((num_columns,), dtype = int)
+    s_three = np.ones((num_rows,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, (s_one, s_two)),
                                 shape = (song_length, song_length)).toarray()
