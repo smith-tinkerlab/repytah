@@ -21,6 +21,12 @@ import numpy as np
 
 def stitch_diags(thresh_diags, z_or_n):
     
-    #stuff happens
+    num_rows = thresh_diags.shape[0]
+    
+    if z_or_n == 0:
+        p = np.zeros((1,num_rows), dtype = int)
+    elif z_or_n == 1:
+        #will I have to do a for loop to change an array of 
+        #zeros into an array of NaNs? 
     
     return song_pattern
