@@ -24,9 +24,41 @@ def stitch_diags(thresh_diags, z_or_n):
     num_rows = thresh_diags.shape[0]
     
     if z_or_n == 0:
-        p = np.zeros((1,num_rows), dtype = int)
+        p_base = np.zeros((1,num_rows), dtype = int)
     elif z_or_n == 1:
         #will I have to do a for loop to change an array of 
         #zeros into an array of NaNs? 
     
+    # initializing group number
+    pattern_num = 1
+    
+    col_sum = thresh_diags.sum(axis = 0)
+    
+    check_inds = col_sum.nonzero()
+    
+    # creates vector of song length
+    p_mask = np.ones(1, num_rows)
+    p_out = (col_sum == 0)
+    p_mask = p_mask - p_out
+    
+    while check_inds.size != 0:
+        
+        # takes first entry in check_inds
+        i = check_inds[0]
+        
+        # takes the corresponding row from thresh_diags
+        temp_row = thresh_diags[i,:]
+        
+        # finds all time steps that i is close to
+        inds = temp_row.nonzero()
+        
+        if inds.size != 0:
+            while inds.size != 0:
+                
+                # takes sum of rows corresponding to inds and
+                # multiplies the sums against p_mask
+                c_mat = 
+    
     return song_pattern
+
+
