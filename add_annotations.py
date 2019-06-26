@@ -39,11 +39,9 @@ def add_annotations(input_mat, song_length):
     
     full_mat = up_tri_mat + low_tri_mat
     
-    return full_mat
-    
     
     # stitches info from input_mat into a single row
-    song_pattern = stitch_diags(full_mat, 0)
+    song_pattern = stitch_diags(full_mat)
     
     # gets maximum of each column
     sp_max = song_pattern.max(0)
