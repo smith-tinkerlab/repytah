@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-"""
-Adds annotations to pairs of repeats in input matrix
-
-ARGS:
-    input_mat: List of pairs of repeats. The first two columns refer to 
-        the first repeat of the pair. The third and fourth columns refer
-        to the second repeat of the pair. The fifth column refers to the
-        repeat lengths. The sixth column contains any previous annotations,
-        which will be removed.
-        
-    song_length: Number of audio shingles in the song.
-    
-RETURNS:
-    anno_list: List of pairs of repeats with annotations marked
-"""
 
 import numpy as np
 import scipy.sparse as sps
 
 def add_annotations(input_mat, song_length):
+    """
+    Adds annotations to pairs of repeats in input matrix
+
+    ARGS:
+        input_mat: List of pairs of repeats. The first two columns refer to 
+            the first repeat of the pair. The third and fourth columns refer
+            to the second repeat of the pair. The fifth column refers to the
+            repeat lengths. The sixth column contains any previous annotations,
+            which will be removed.
+        
+        song_length: Number of audio shingles in the song.
+    
+    RETURNS:
+        anno_list: List of pairs of repeats with annotations marked
+    """
     
     num_rows = input_mat.shape[0]
     
@@ -38,6 +38,9 @@ def add_annotations(input_mat, song_length):
     low_tri_mat = up_tri_mat.conj().transpose()
     
     full_mat = up_tri_mat + low_tri_mat
+    
+    return full_mat
+    
     
     # stitches info from input_mat into a single row
     song_pattern = stitch_diags(full_mat, 0)
@@ -72,3 +75,4 @@ def add_annotations(input_mat, song_length):
     anno_list = input_mat[temp_inds,]
     
     return anno_list
+    
