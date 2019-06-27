@@ -50,10 +50,10 @@ def add_annotations(input_mat, song_length):
     song_pattern = stitch_diags(full_mat)
     
     # gets maximum of each column
-    sp_max = song_pattern.max(0)
+    #sp_max = song_pattern.max(0)
     
     # adds annotation markers to pairs of repeats
-    for i in sp_max:
+    for i in song_pattern:
         pinds = np.nonzero(song_pattern == i)
         
         #one if annotation not already marked, 0 if it is
