@@ -52,19 +52,25 @@ def find_add_mrows(lst_no_anno, check_start_inds, k):
             l_left_k = ci*np.ones(l_num,1) - L[lnds,0]
      
             #Note: E-S+1 = (CI - 1) - L(LNDS,1) + 1
-            l_add_left = np.concatenate((L[lnds,0], (ci - 1 * np.ones((l_num,1))), SJ_li, (SJ_li + l_left_k - np.ones((l_num,1))), l_left_k), axis = None)
+            l_add_left = np.append(L[lnds,0], (ci - 1 * np.ones((l_num,1))), 
+                                   SJ_li, (SJ_li + l_left_k - np.ones((l_num,1))), 
+                                   l_left_k)
             
             # Middle of left pair
             # Note: L_MID_K = K
-            l_add_mid = np.concatenate(((ci*np.ones((l_num,1))), (ci+k-1)*np.ones((l_num,1)), SJ_li + l_left_k, SJ_li + l_left_k + (k-1)*np.ones((l_num,1)), k*np.ones((l_num,1))), axis = None) 
+            l_add_mid = np.append((ci*np.ones((l_num,1))), (ci+k-1)*np.ones((l_num,1)), 
+                                  SJ_li + l_left_k, SJ_li + l_left_k + (k-1)*np.ones((l_num,1)), 
+                                  k*np.ones((l_num,1))) 
             
             # Right side of left pair
-            l_right_k = np.concatenate((L[lnds, 1] - ((ci + k) - 1) * np.ones((l_num,1))), axis = None)
+            l_right_k = np.append(L[lnds, 1] - ((ci + k) - 1) * np.ones((l_num,1)))
             
-            l_add_right = np.concatenate((((ci + k)*np.ones((l_num,1))), L[lnds,1], (EJ_li - l_right_k + np.ones((l_num,1))), EJ_li, l_right_k), axis = None)
+            l_add_right = np.append(((ci + k)*np.ones((l_num,1))), L[lnds,1], 
+                                    (EJ_li - l_right_k + np.ones((l_num,1))), 
+                                    EJ_li, l_right_k)
             
             # Add the found rows        
-            add_rows = np.concatenate((l_add_left, l_add_mid, l_add_right), axis= 0)
+            add_rows = np.append(l_add_left, l_add_mid, l_add_right)
             add_rows = np.reshape(add_rows, (3,5))
         
         #Right Check: Check for CI on the right side of the pairs
@@ -78,20 +84,24 @@ def find_add_mrows(lst_no_anno, check_start_inds, k):
             #Left side of right pair
             r_left_k = ci*np.ones((r_num,1)) - L[rnds,2]
             #Note: E-S+1 = (CI - 1) - L(LNDS,3) + 1
-            r_add_left = np.concatenate((SI_ri, (SI_ri + r_left_k - np.ones((r_num,1))), L[rnds,3], (ci - 1)*np.ones((r_num,1)), r_left_k), axis = None)
+            r_add_left = np.append(SI_ri, (SI_ri + r_left_k - np.ones((r_num,1))), 
+                                    L[rnds,3], (ci - 1)*np.ones((r_num,1)), r_left_k)
             
             #Middle of right pair
             # Note: R_MID_K = K
-            r_add_mid = np.concatenate(((SI_ri + r_left_k),(SI_ri + r_left_k + (k - 1)*np.ones((r_num,1))), ci*np.ones((r_num,1)), (ci + k - 1)*np.ones((r_num,1)), k*np.ones((r_num,1))), axis = None)
+            r_add_mid = np.append((SI_ri + r_left_k),(SI_ri + r_left_k + (k - 1)*np.ones((r_num,1))), 
+                                  ci*np.ones((r_num,1)), (ci + k - 1)*np.ones((r_num,1)), 
+                                  k*np.ones((r_num,1)))
 
             #Right side of right pair
             r_right_k = L[rnds, 3] - ((ci + k) - 1)*np.ones((r_num,1))
-            r_add_right = np.concatenate((EI_ri - r_right_k + np.ones((r_num,1)),EI_ri, (ci + k)*np.ones((r_num,1)), L[rnds,3], r_right_k), axis = None)
+            r_add_right = np.append(EI_ri - r_right_k + np.ones((r_num,1)),EI_ri, 
+                                    (ci + k)*np.ones((r_num,1)), L[rnds,3], r_right_k)
             
-            add_rows = np.concatenate((r_add_left, r_add_mid, r_add_right), axis = 0)
+            add_rows = np.append(r_add_left, r_add_mid, r_add_right, axis = 0)
             add_rows = np.reshape(add_rows, (3,5))
             
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0).astype(int)
+            add_rows = np.append(add_rows, add_rows, axis = 0).astype(int)
 
         return(add_rows)
 
