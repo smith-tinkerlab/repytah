@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
-"""
-Creates audio shingles from feature vectors, finds cosine 
-    distance between shingles, and returns self dissimilarity matrix
-    
-ARGS: 
-    matrix_featurevecs: Matrix of feature vectors where each
-        column is a timestep
-        
-    num_fv_per_shingle: Number of feature vectors per audio
-        shingle
-    
-RETURNS:
-    self_dissim_mat: Self dissimilarity matrix with paired
-        cosine distances between shingles
 
-"""
 
 import numpy as np
 import scipy.spatial.distance as spd
 
 def cos_dist_mat_from_fv(matrix_featurevecs, num_fv_per_shingle):
+    """
+    Creates audio shingles from feature vectors, finds cosine 
+        distance between shingles, and returns self dissimilarity matrix
+    
+    ARGS: 
+        matrix_featurevecs: Matrix of feature vectors where each
+            column is a timestep
+        
+        num_fv_per_shingle: Number of feature vectors per audio
+            shingle
+    
+    RETURNS:
+        self_dissim_mat: Self dissimilarity matrix with paired
+            cosine distances between shingles
+
+    """
     
     [num_rows, num_columns] = matrix_featurevecs.shape
     
