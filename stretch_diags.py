@@ -7,19 +7,19 @@ def stretch_diags(thresh_diags, band_width):
     Stretches entries of matrix of thresholded diagonal onsets
         into diagonals of given length
     
-    ARGS
+    Args
     ----
-    thresh_diags: array
-        Binary matrix where entries equal to 1 signal the existence 
+    thresh_diags: np.array
+        binary matrix where entries equal to 1 signal the existence 
         of a diagonal
     
     band_width: int
-        Length of encoded diagonals
+        length of encoded diagonals
     
-    RETURNS
+    Returns
     -------
-    stretch_diag_mat: logical array
-        Logical matrix with diagonals of length band_width starting 
+    stretch_diag_mat: np.array [boolean]
+        logical matrix with diagonals of length band_width starting 
         at each entry prescribed in thresh_diag
     
     """
