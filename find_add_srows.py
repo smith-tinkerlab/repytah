@@ -36,33 +36,39 @@ def find_add_srows(lst_no_anno, check_inds, k):
         ci = check_inds[i] 
             
         #Left check: check for CI on the left side of the pairs 
-        lnds = (SI == ci) #Check if the starting index of the left repeat of the pair equals CI
+        #Check if the starting index of the left repeat of the pair equals CI
+        lnds = (SI == ci) 
         
         if lnds.sum(axis = 0) > 0:
             SJ_li = L[lnds, 2] 
             l_num = SJ_li.shape[0] 
             
-            l_add = np.concatenate((L[lnds, 0], L[lnds, 0] + k - 1, SJ_li, (SJ_li + k - 1), np.ones((l_num, 1))*k), axis=None)
-            l_add_right = np.concatenate( ( L[lnds, 0] + k , L[lnds, 1], SJ_li + k, L[lnds, 3], L[lnds, 4] - k), axis =None)
+            l_add = np.append(L[lnds, 0], L[lnds, 0] + k - 1, SJ_li, (SJ_li + k - 1), 
+                              np.ones((l_num, 1))*k)
+            l_add_right = np.append(L[lnds, 0] + k , L[lnds, 1], SJ_li + k, L[lnds, 3], 
+                                    L[lnds, 4] - k)
 
             ##Add the found rows 
-            add_rows = np.concatenate((l_add, l_add_right), axis= 0)
+            add_rows = np.append(l_add, l_add_right, axis= 0)
             add_rows = np.reshape(add_rows, (2,5))
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0)
+            add_rows = np.append(add_rows, add_rows, axis = 0)
             
         #Right Check: check for CI on the right side of the pairs 
-        rnds = (SJ == ci) #Check if the the starting index of the right repeat of the pair equals CI
+        #Check if the the starting index of the right repeat of the pair equals CI
+        rnds = (SJ == ci) 
 
         if rnds.sum(axis = 0) > 0:
             SJ_ri = L[rnds, 0]
             r_num = SJ_ri.shape[0]
             
-            r_add = np.concatenate((SJ_ri, (SJ_ri + k - 1), L[rnds, 2], (L[rnds, 2] + k - 1), k*np.ones((r_num, 1))), axis = None)
-            r_add_right = np.concatenate(((SJ_ri + k), L[rnds, 1], (L[rnds, 2] + k), L[rnds,3], (L[rnds, 4] -k)), axis = None) 
+            r_add = np.append(SJ_ri, (SJ_ri + k - 1), L[rnds, 2], (L[rnds, 2] + k - 1), 
+                              k*np.ones((r_num, 1)))
+            r_add_right = np.append((SJ_ri + k), L[rnds, 1], (L[rnds, 2] + k), L[rnds,3], 
+                                    (L[rnds, 4] -k)) 
 
-            add_rows = np.concatenate((r_add, r_add_right), axis = None)
+            add_rows = np.append(r_add, r_add_right)
             add_rows = np.reshape(add_rows, (2,5)) 
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0)
+            add_rows = np.append(add_rows, add_rows, axis = 0)
 
     return add_rows
 

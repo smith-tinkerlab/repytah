@@ -37,31 +37,37 @@ def find_add_erows(lst_no_anno, check_inds, k):
         ci = check_inds[i]
         
         #Left Check: Check for CI on the left side of the pairs
-        lnds = (EI == ci) # Check if the end index of the left repeat of the pair equals CI
+        # Check if the end index of the left repeat of the pair equals CI
+        lnds = (EI == ci)
         
         if lnds.sum(axis = 0) > 0: 
             EJ_li = L[lnds,3]
             l_num = EJ_li.shape[0] 
-            l_add = np.concatenate((L[lnds,1] - k + 1, L[lnds,1], (EJ_li - k + 1), EJ_li, k*np.ones((l_num,1))), axis = None) 
-            l_add_left = np.concatenate((L[lnds,0], (L[lnds,1] - k), L[lnds,2], (EJ_li - k), (L[lnds,4] - k)), axis = None) 
+            l_add = np.append(L[lnds,1] - k + 1, L[lnds,1], (EJ_li - k + 1), 
+                               EJ_li, k*np.ones((l_num,1)))
+            l_add_left = np.append(L[lnds,0], (L[lnds,1] - k), L[lnds,2], 
+                                    (EJ_li - k), (L[lnds,4] - k)) 
             
             ##Add the found pairs of repeats
-            add_rows = np.concatenate((l_add, l_add_left), axis= 0)
+            add_rows = np.append(l_add, l_add_left)
             add_rows = np.reshape(add_rows, (2,5))
         
         # Right Check: Check for CI on the right side of the pairs
-        rnds = (EJ == ci) #Check if the end index of the right repeat of the pair equals CI
+        #Check if the end index of the right repeat of the pair equals CI
+        rnds = (EJ == ci) 
         
         if rnds.sum(axis = 0) > 0:
             EI_ri = L[rnds, 1]
             r_rum = EI_ri.shape[0]
-            r_add = np.concatenate(((EI_ri - k + 1), EI_ri, (L[rnds, 3] - k + 1), L[rnds,3], k*np.ones((r_rum, 1))), axis = None)
-            r_add_left = np.concatenate((L[rnds, 0], (EI_ri - k), L[rnds, 2], (L[rnds, 3] - k), L[rnds, 4] - k), axis = None) 
+            r_add = np.append((EI_ri - k + 1), EI_ri, (L[rnds, 3] - k + 1), 
+                              L[rnds,3], k*np.ones((r_rum, 1)))
+            r_add_left = np.append(L[rnds, 0], (EI_ri - k), L[rnds, 2], 
+                                   (L[rnds, 3] - k), L[rnds, 4] - k) 
 
             ##Add the found rows 
-            add_rows = np.concatenate((r_add, r_add_left), axis= 0)
+            add_rows = np.append(r_add, r_add_left)
             add_rows = np.reshape(add_rows, (2,5))
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0).astype(int)
+            add_rows = np.append(add_rows, add_rows).astype(int)
 
         return(add_rows) 
         
