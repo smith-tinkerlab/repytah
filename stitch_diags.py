@@ -8,16 +8,16 @@ def stitch_diags(thresh_diags):
     Stitches information from thresholded diagonal matrix into a single
         row
 
-    ARGS
+    Args
     ----
     thresh_diags: array
-        Binary matrix with 1 at each pair (SI,SJ) and 0 elsewhere. 
+        binary matrix with 1 at each pair (SI,SJ) and 0 elsewhere. 
         WARNING: must be symmetric
     
-    RETURNS
+    Returns
     -------
     song_pattern: array
-        Row where each entry represents a time step and the group 
+        row where each entry represents a time step and the group 
         that time step is a member of
     
     """
