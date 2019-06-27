@@ -7,17 +7,23 @@ def add_annotations(input_mat, song_length):
     """
     Adds annotations to pairs of repeats in input matrix
 
-    ARGS:
-        input_mat: List of pairs of repeats. The first two columns refer to 
-            the first repeat of the pair. The third and fourth columns refer
-            to the second repeat of the pair. The fifth column refers to the
-            repeat lengths. The sixth column contains any previous annotations,
-            which will be removed.
+    Args
+    ----
+    input_mat: array
+        list of pairs of repeats. The first two columns refer to 
+        the first repeat of the pair. The third and fourth columns refer
+        to the second repeat of the pair. The fifth column refers to the
+        repeat lengths. The sixth column contains any previous annotations,
+        which will be removed.
         
-        song_length: Number of audio shingles in the song.
+    song_length: int
+        number of audio shingles in the song.
     
-    RETURNS:
-        anno_list: List of pairs of repeats with annotations marked
+    Returns
+    -------
+    anno_list: array
+        list of pairs of repeats with annotations marked
+    
     """
     
     num_rows = input_mat.shape[0]
