@@ -41,7 +41,7 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
     for a in range(1, anno_max+1):
         ands = (anno_lst == a)
         start_inds = np.concatenate((k_mat[ands,0],k_mat[ands,2]))
-        pattern_row[0,start_inds-2] = a
+        pattern_row[0,start_inds-1] = a
     
     
     # Step 2: Check that in fact each annotation has a repeat associated to it
