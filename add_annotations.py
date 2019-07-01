@@ -3,6 +3,89 @@
 import numpy as np
 import scipy.sparse as sps
 
+def stitch_diags(thresh_diags):
+    
+    """
+    Stitches information from thresholded diagonal matrix into a single
+        row
+
+    Args
+    ----
+    thresh_diags: array
+        binary matrix with 1 at each pair (SI,SJ) and 0 elsewhere. 
+        WARNING: must be symmetric
+    
+    Returns
+    -------
+    song_pattern: array
+        row where each entry represents a time step and the group 
+        that time step is a member of
+    
+    """
+    
+    num_rows = thresh_diags.shape[0]
+    
+    p_base = np.zeros((1,num_rows), dtype = int)
+
+    # initializing group number
+    pattern_num = 1
+    
+    col_sum = thresh_diags.sum(axis = 0)
+    
+    check_inds = col_sum.nonzero()
+    check_inds = check_inds[0]
+    
+    # creates vector of song length
+    p_mask = np.ones((1, num_rows))
+    p_out = (col_sum == 0)
+    p_mask = p_mask - p_out
+    
+    while np.size(check_inds) != 0:
+        
+        # takes first entry in check_inds
+        i = check_inds[0]
+        
+        # takes the corresponding row from thresh_diags
+        temp_row = thresh_diags[i,:]
+        
+        # finds all time steps that i is close to
+        inds = temp_row.nonzero()
+        
+        if np.size(inds) != 0:
+            while np.size(inds) != 0:
+                
+                # takes sum of rows corresponding to inds and
+                # multiplies the sums against p_mask
+                c_mat = np.sum(thresh_diags[inds,:], axis = 1)
+                
+                # finds nonzero entries of c_mat
+                c_inds = c_mat.nonzero()
+                
+                # gives all elements of c_inds the same grouping 
+                # number as i
+                p_base[0,c_inds] = pattern_num
+                
+                # removes all used elements of c_inds from
+                # check_inds and p_mask
+                check_inds = np.setdiff1d(check_inds, c_inds)
+                p_mask[0,c_inds] = 0
+                
+                # resets inds to c_inds with inds removed
+                inds = np.setdiff1d(c_inds, inds)
+                
+            # updates grouping number to prepare for next group
+            pattern_num = pattern_num + 1
+            
+        # removes i from check_inds
+        check_inds = np.setdiff1d(check_inds, i)
+        
+    song_pattern = p_base
+    
+    return song_pattern
+
+
+
+
 def add_annotations(input_mat, song_length):
     """
     Adds annotations to pairs of repeats in input matrix
@@ -49,17 +132,14 @@ def add_annotations(input_mat, song_length):
     # stitches info from input_mat into a single row
     song_pattern = stitch_diags(full_mat)
     
-    # gets maximum of each column
-    #sp_max = song_pattern.max(0)
-    
     # adds annotation markers to pairs of repeats
-    for i in song_pattern:
+    for i in song_pattern[0]:
         pinds = np.nonzero(song_pattern == i)
         
         #one if annotation not already marked, 0 if it is
         check_inds = (input_mat[:,5] == 0)
         
-        for j in pinds:
+        for j in pinds[1]:
             
             # finds all starting pairs that contain time step j
             # and DO NOT have an annotation
@@ -71,9 +151,9 @@ def add_annotations(input_mat, song_length):
             input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
             
             # removes pairs of repeats with annotations from consideration
-            check_inds = check_inds - mark_inds
-            
-    (unused, temp_inds) = np.sort(input_mat[:,5])
+            check_inds = check_inds ^ mark_inds
+     
+    temp_inds = np.argsort(input_mat[:,5])
     
     # creates list of annotations
     anno_list = input_mat[temp_inds,]
