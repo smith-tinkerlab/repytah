@@ -103,13 +103,13 @@ def find_complete_list(pair_lst,song_length):
 
             
         # Add the new pairs of repeats to the temporary list add_mat
-        add_mat = np.concatenate((add_srows, add_erows, add_mrows), axis=0)
+        add_mat = np.append((add_srows, add_erows, add_mrows), axis=0)
 
         
     # Step 2: Combine pair_lst and add_mat. Make sure that you don't have any
     #         double rows in add_mat. Then find the new list of found 
     #         bandwidths in combine_mat
-    combine_mat = np.concatenate((pair_list, add_mat))
+    combine_mat = np.append((pair_list, add_mat))
     combine_mat = np.unique(combine_mat, axis=0)
     combine_inds = np.argsort(combine_mat[:,4])
     combine_mat = combine_mat[combine_inds,:]
@@ -144,12 +144,12 @@ def find_complete_list(pair_lst,song_length):
         bandwidth_mat = np.array((combine_mat[new_bsnds:new_bend,]))
         length_bandwidth_mat = np.size(bandwidth_mat,axis=0)
         
-        temp_anno_lst = np.concatenate((bandwidth_mat,(np.zeros((length_bandwidth_mat,1)))),axis=1).astype(int)
+        temp_anno_lst = np.append((bandwidth_mat,(np.zeros((length_bandwidth_mat,1)))),axis=1).astype(int)
        
     
         # Part C: Get annotation markers for this bandwidth
         temp_anno_lst = add_annotations(temp_anno_lst, sn)   
-        full_lst = np.concatenate((full_lst, temp_anno_lst))
+        full_lst = np.append((full_lst, temp_anno_lst))
 
 
     lst_out = full_lst
