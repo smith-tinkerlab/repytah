@@ -49,17 +49,14 @@ def add_annotations(input_mat, song_length):
     # stitches info from input_mat into a single row
     song_pattern = stitch_diags(full_mat)
     
-    # gets maximum of each column
-    #sp_max = song_pattern.max(0)
-    
     # adds annotation markers to pairs of repeats
-    for i in song_pattern:
+    for i in song_pattern[0]:
         pinds = np.nonzero(song_pattern == i)
         
         #one if annotation not already marked, 0 if it is
         check_inds = (input_mat[:,5] == 0)
         
-        for j in pinds:
+        for j in pinds[1]:
             
             # finds all starting pairs that contain time step j
             # and DO NOT have an annotation
@@ -71,9 +68,9 @@ def add_annotations(input_mat, song_length):
             input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
             
             # removes pairs of repeats with annotations from consideration
-            check_inds = check_inds - mark_inds
-            
-    (unused, temp_inds) = np.sort(input_mat[:,5])
+            check_inds = check_inds ^ mark_inds
+     
+    temp_inds = np.argsort(input_mat[:,5])
     
     # creates list of annotations
     anno_list = input_mat[temp_inds,]
