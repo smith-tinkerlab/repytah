@@ -64,14 +64,14 @@ def find_complete_list(pair_lst,song_length):
         # Part A1: Isolate all starting time steps of the repeats of length bandwidth
         SI = pair_list[bsnds:bend, 0]
         SJ = pair_list[bsnds:bend, 2]
-        all_vec_snds = np.concatenate((SI, SJ))
+        all_vec_snds = np.append((SI, SJ))
         int_snds = np.unique(all_vec_snds)
 
         
         # Part A2: Isolate all ending time steps of the repeats of length bandwidth
         EI = pair_list[bsnds:bend, 1] # Similar to definition for SI
         EJ = pair_list[bsnds:bend, 3] # Similar to definition for SJ
-        all_vec_ends = np.concatenate((EI,EJ))
+        all_vec_ends = np.append((EI,EJ))
         int_ends = np.unique(all_vec_ends)
 
         
