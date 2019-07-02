@@ -1,17 +1,19 @@
 #line 11 https://stackoverflow.com/questions/1721802/what-is-the-equivalent-of-matlabs-repmat-in-numpy
 import numpy as np
-#Ex input: input_mat = np.array([[1, 1, 0, 1, 0, 0,], [1, 1, 1, 0, 1, 0], [0, 1, 1, 0, 0, 1], [1, 0, 0, 1, 0, 0], [0, 1, 0, 0, 1, 0], [0, 0, 1, 0, 0, 1]])
 """
 check_overlaps compares every pair of rows in input_mat and checks for
 overlaps between those pairs.
 
-Args: 
-    input_matrix np.array[int] Matrix that we are checking for overlaps
+args
+---
+    input_matrix: np.array[int]
+        Matrix that we are checking for overlaps
 
-returns: 
-    overlaps_yn np.array[bool] logical matrix where (i,j) = 1 if row i of
-                      input_mat and row j of input_mat overlap and 0
-                      otherwise.
+returns
+---
+    overlaps_yn: np.array[bool] 
+        logical matrix where (i,j) = 1 if row i of input_mat 
+        and row j of input_mat overlap and 0 otherwise.
 """
 def check_overlaps(input_mat)
     
