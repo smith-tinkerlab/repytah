@@ -1,19 +1,23 @@
 #line 217: https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column
 import numpy
 from scipy import signal
-#Example inputs
-# thresh_mat = numpy.array([[1, 1, 0, 1, 0, 0,], [1, 1, 1, 0, 1, 0], [0, 1, 1, 0, 0, 1], [1, 0, 0, 1, 0, 0], [0, 1, 0, 0, 1, 0], [0, 0, 1, 0, 0, 1]])
-# bandwidth_vec = numpy.array([3, 2])
-# thresh_bw = 2
-# LIGHTUP_LST_WITH_THRESH_BW finds all diagonals present in THRESH_MAT,
-# removing each diagonal as it is found.
+"""
+Finds all diagonals present in THRESH_MAT,
+removing each diagonal as it is found.
 
-# INPUT: THRESH_MAT -- Thresholded matrix that we extract diagonals from
-#         BANDWIDTH_VEC -- Vector of lengths of diagonals to be found
-#         THRESH_BW -- Smallest allowed diagonal length
+args
+    thresh_mat np.array[int]:
+        Thresholded matrix that we extract diagonals from
+    bandwidth_vec np.array[1D,int]:
+        Vector of lengths of diagonals to be found
+    thresh_bw int:
+        Smallest allowed diagonal length
 
-#  OUTPUT: ALL_LST -- List of pairs of repeats that correspond to diagonals
-#                     in THRESH_MAT
+returns
+    all_lst np.array[int]:
+        list of pairs of repeats that 
+        correspond to diagonals in thresh_mat
+"""
 def lightup_lst_with_thresh_bw(thresh_mat, bandwidth_vec, thresh_bw)
     b = numpy.size(bandwidth_vec)
 
