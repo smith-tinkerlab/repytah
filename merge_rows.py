@@ -11,7 +11,7 @@ def merge_rows(input_mat, input_width):
     input_mat: np.array
         binary matrix with ones where repeats start and zeroes otherwise
         
-    input_width: 
+    input_width: int
         length of repeats encoded in input_mat
         
     Returns
@@ -49,8 +49,7 @@ def merge_rows(input_mat, input_width):
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
         not_merge[merge_inds,:] = []
         # possibility: not_merge = not_merge[1:,:]
-        
-        
+          
         # step 2d: check that newly merged rows do not cause overlaps within row
         # if there are conflicts, rerun compare_and_cut
         merge_block = reconstruct_full_block(union_merge, input_width)
