@@ -62,7 +62,6 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
         k_lst_out = np.unique(k_mat, axis=0)
         for na in range (1, len(inds_markers)+1):
             IM = inds_markers[na-1]
-
             if IM > na:
                 # Fix the annotaions in k_lst_out
                 kmat_temp_anno = (k_lst_out[:,5] == IM)
