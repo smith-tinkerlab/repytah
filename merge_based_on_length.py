@@ -33,7 +33,6 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     target_bandwidth = np.unique(target_bandwidth)
     T = target_bandwidth.shape[0] 
     
-    
     for i in range(1,T+1):
         test_bandwidth = target_bandwidth[i-1]
         inds = (temp_bandwidth == test_bandwidth) # Check if temp_bandwidth is equal to test_bandwidth
