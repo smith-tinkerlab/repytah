@@ -6,7 +6,7 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         indices and zeroes otherwise, after removing the annotations that have overlaps, 
         output k_lst_out which only contains rows that have no overlaps,
         the annotations that have overlaps get removed from k_lst_out
-        gets added to overlap_lst
+        gets added to overlap_lst.
     
     Args
     ----
