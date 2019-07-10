@@ -25,7 +25,7 @@ def stitch_diags(thresh_diags):
     
     num_rows = thresh_diags.shape[0]
     
-    p_base = np.zeros((1,num_rows), dtype = int)
+    pattern_base = np.zeros((1,num_rows), dtype = int)
 
     # initializing group number
     pattern_num = 1
@@ -36,9 +36,9 @@ def stitch_diags(thresh_diags):
     check_inds = check_inds[0]
     
     # creates vector of song length
-    p_mask = np.ones((1, num_rows))
-    p_out = (col_sum == 0)
-    p_mask = p_mask - p_out
+    pattern_mask = np.ones((1, num_rows))
+    pattern_out = (col_sum == 0)
+    pattern_mask = pattern_mask - pattern_out
     
     while np.size(check_inds) != 0:
         
@@ -63,12 +63,13 @@ def stitch_diags(thresh_diags):
                 
                 # gives all elements of c_inds the same grouping 
                 # number as i
-                p_base[0,c_inds] = pattern_num
+                pattern_base[0,c_inds] = pattern_num
+                #pattern_base[c_inds] = pattern_num
                 
                 # removes all used elements of c_inds from
                 # check_inds and p_mask
                 check_inds = np.setdiff1d(check_inds, c_inds)
-                p_mask[0,c_inds] = 0
+                pattern_mask[0,c_inds] = 0
                 
                 # resets inds to c_inds with inds removed
                 inds = np.setdiff1d(c_inds, inds)
@@ -79,7 +80,7 @@ def stitch_diags(thresh_diags):
         # removes i from check_inds
         check_inds = np.setdiff1d(check_inds, i)
         
-    song_pattern = p_base
+    song_pattern = pattern_base
     
     return song_pattern
 
