@@ -70,4 +70,4 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
     else:
         k_lst_out = np.array([])
     
-    return pattern_row,k_lst_out
+    return pattern_row, k_lst_out
