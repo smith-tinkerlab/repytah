@@ -47,8 +47,9 @@ def merge_rows(input_mat, input_width):
         # step 2c: union rows with starting indices in common with row2check and
         # remove those rows from input_mat
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
-        not_merge[merge_inds,:] = []
+        #not_merge[merge_inds,:] = []
         # possibility: not_merge = not_merge[1:,:]
+        np.delete(not_merge[merge_inds,:])
           
         # step 2d: check that newly merged rows do not cause overlaps within row
         # if there are conflicts, rerun compare_and_cut

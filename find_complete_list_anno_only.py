@@ -16,20 +16,27 @@ def fcl_anno_only(pair_list, song_length):
         
     Returns
     -------
-    out_list:
+    out_lst:
         list of pairs of repeats with smaller repeats added and with
         annotation markers
         
     """
     
     # find list of unique repeat lengths
-    #bw_found =
+    bw_found = np.unique(pair_list[:,4])
+    bw_num = bw_found.shape[0]
+    
+    full_lst = np.array([])
+    
     # remove longest bandwidth row if it is the length of the full song
+    if song_length == bw_found[b-1]:
+        
     
     # add annotation markers to each pair of repeats
-    for j in range(b):
+    for j in range(1, bw_length + 1):
+        bandwidth = 
         # isolate pairs of repeats of desired length
         
         # get annotations for this bandwidth
-    return out_list
+    return out_lst
 
