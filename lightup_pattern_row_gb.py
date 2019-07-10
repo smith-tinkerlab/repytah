@@ -58,7 +58,7 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         good_check[0,start_inds-1] = 1 # Add 1 to all time steps where repeats with annotation a begin
     
         # Using reconstruct_full_block to check for overlaps
-        # function call - reconstruct_full_block
+        # Function call - reconstruct_full_block
         block_check = reconstruct_full_block(good_check,bw)
 
         # If there are any overlaps, remove the bad annotations from both
