@@ -3,7 +3,7 @@ import numpy as np
 def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     """
     Merges rows of full_mat that contain repeats that are the same 
-        length and are repeats of the same piece of structure
+        length and are repeats of the same piece of structure.
 
     Args
     ----
