@@ -36,9 +36,9 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         contain overlapping repeats with annotations marked
     """
     # Step 0: Initialize outputs: Start with a vector of all 0's for
-    #         PATTERN_ROW and assume that the row has no overlaps
+    #         pattern_row and assume that the row has no overlaps
     pattern_row = np.zeros((1,song_length)).astype(int)
-    overlap_lst = np.array([])
+    overlap_lst = []
     bw = band_width
     
     # Step 0a: Find the number of distinct annotations
@@ -50,7 +50,8 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         # Step 1a: Add 1's to pattern_row to the time steps where repeats with
         # annotation a begin
         ands = (anno_lst == a) # Check if anno_lst is equal to a
-        start_inds = np.concatenate((k_mat[ands,0],k_mat[ands,2]))
+        bind_rows = [k_mat[ands,0],k_mat[ands,2]]
+        start_inds = np.concatenate(bind_rows)
         pattern_row[0,start_inds-1] = a
 
         # Step 2: check annotation by annotation
@@ -58,22 +59,27 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         good_check[0,start_inds-1] = 1 # Add 1 to all time steps where repeats with annotation a begin
     
         # Using reconstruct_full_block to check for overlaps
-        # Function call - reconstruct_full_block
         block_check = reconstruct_full_block(good_check,bw)
 
         # If there are any overlaps, remove the bad annotations from both
         # the pattern_row and from the k_lst_out
         if block_check.max() > 1:
             # Remove the bad annotations from pattern_row
-            pattern_row[0,start_inds] = 0
+            pattern_row[0,start_inds-1] = 0
     
             # Remove the bad annotations from k_lst_out and add them to overlap_lst
-            rm_inds = ands
+            remove_inds = ands
 
-            temp_add = k_mat[rm_inds,:]
-            overlap_lst = np.concatenate((overlap_lst,temp_add))
-
-            k_mat[rm_inds,:] = np.array([])
+            temp_add = k_mat[remove_inds,:]
+            overlap_lst.append(temp_add)
+            
+            if np.any(rm_inds == True):
+                # Convert the boolean array rm_inds into an array of integers
+                remove_inds = np.array(rm_inds).astype(int)
+                remove = np.where(rm_inds==1)
+                # Delete the row that meets the condition set by remove_inds
+                k_mat = np.delete(k_mat,remove,axis=0)
+                
             anno_lst = k_mat[:,5]
            
     inds_markers = np.unique(pattern_row)
