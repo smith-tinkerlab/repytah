@@ -19,7 +19,7 @@ returns
 
 
 
-def lightup_lst_with_thresh_bw(thresh_mat, bandwidth_vec, thresh_bw):
+def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
 
     b = np.size(bandwidth_vec)
