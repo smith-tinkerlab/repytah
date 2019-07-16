@@ -28,9 +28,7 @@ def stitch_diags(thresh_diags):
     pattern_num = 1
     
     col_sum = thresh_diags.sum(axis = 0)
-    #col_sum = np.delete(col_sum, 0)
-    #col_sum = np.append(col_sum, 0)
-    
+
     check_inds = col_sum.nonzero()
     check_inds = check_inds[0]
     
@@ -40,7 +38,6 @@ def stitch_diags(thresh_diags):
     pattern_mask = pattern_mask - pattern_out
     
     while np.size(check_inds) != 0:
-        
         # takes first entry in check_inds
         i = check_inds[0]
         
@@ -52,7 +49,6 @@ def stitch_diags(thresh_diags):
         
         if np.size(inds) != 0:
             while np.size(inds) != 0:
-                
                 # takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
                 c_mat = np.sum(thresh_diags[inds,:], axis = 0)
@@ -65,7 +61,6 @@ def stitch_diags(thresh_diags):
                 # gives all elements of c_inds the same grouping 
                 # number as i
                 pattern_base[0,c_inds] = pattern_num
-                #pattern_base[c_inds] = pattern_num
                 
                 # removes all used elements of c_inds from
                 # check_inds and p_mask
