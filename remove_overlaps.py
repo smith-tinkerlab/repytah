@@ -39,16 +39,15 @@ returns
                             repeats that do overlap in time.
 """
 import numpy as np
-def remove_overlaps(input_mat, song_length):
-    x = []     
+def remove_overlaps(input_mat, song_length):    
     #same list with repetitions removed
     bw_vec = np.unique(input_mat[:,4])
     #convert L to python list of np arrays
 
     L = []
-    for i in range(0,(np.shape(input_mat)[0])):
-        x = np.array(input_mat[i,:])
-        L.append(x)
+    for i in range(0,(np.shape(input_mat)[0])-1):
+        L.append(np.array(input_mat[i,:]))
+        
 
 
 
@@ -69,7 +68,7 @@ def remove_overlaps(input_mat, song_length):
         #repeats with annotation markers
         #create bw_lst
         i = 0              
-        while i < 0:
+        while i < len(L):
             line = L[i][4]
             if line == bw:
                 bw_lst.append(line)
@@ -89,17 +88,28 @@ def remove_overlaps(input_mat, song_length):
     #              BW_LST_OUT which only contains rows that have no overlaps
     #         THREE: The annotations that have overlaps get removed from 
     #                BW_LST_OUT and gets added to ALL_OVERLAP_LST
+    
+    #momentary commmends!!!!
             tuple_of_outputs = lightup_pattern_row_gb(bw_lst, song_length, bw)
             
             pattern_row = tuple_of_outputs[0]
             bw_lst_out = tuple_of_outputs[1]
             overlap_lst = tuple_of_outputs[2]
 
-            
+
+            #convert the numpy arrays to lists of 1d numpy arrays
+            bw_lst_out_py = []
+            for i in range(0,(np.shape(bw_lst_out)[0])-1):
+                bw_lst_out_py.append(np.array(input_mat[i,:]))
+
+            overlap_lst_py = []
+            for i in range(0,(np.shape(overlap_lst)[0])-1):
+                overlap_lst_py.append(np.array(input_mat[i,:]))
+
             #if there are lines to add
-            if np.shape(overlap_lst)[0] != 0:
-                #add them
-                all_overlap_lst.append(overlap_lst)
+            if len(overlap_lst_py) != 0:
+                #add them               
+                all_overlap_lst.extend(overlap_lst_py)
         else:
             # Similar to the IF case -- 
             # Use LIGHTUP_PATTERN_ROW_BW_1 to do the following two things:
@@ -109,7 +119,17 @@ def remove_overlaps(input_mat, song_length):
             #      BW_LST. Also in this case, THREE from above does not exist
             tuple_of_outputs = lightup_pattern_row_gb_1(bw_lst, song_length)
             pattern_row =  tuple_of_outputs[0]
-            bw_lst_out =  tuple_of_outputs[1]
+            bw_lst_out_orig =  tuple_of_outputs[1]
+            
+            #convert the numpy arrays to lists of 1d numpy arrays
+            bw_lst_out_py = []
+            for i in range(0,(np.shape(bw_lst_out)[0])-1):
+                bw_lst_out_py.append(np.array(input_mat[i,:]))
+
+            overlap_lst_py = []
+            for i in range(0,(np.shape(overlap_lst)[0])-1):
+                overlap_lst_py.append(np.array(input_mat[i,:]))
+
         if np.max(np.max(pattern_row)) > 0:
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
@@ -119,9 +139,25 @@ def remove_overlaps(input_mat, song_length):
             pattern_key = tuple_of_outputs[1]
             anno_temp_lst = tuple_of_outputs[2]
 
+
+            #convert the numpy arrays to lists of 1d numpy arrays
+            pattern_mat_py = []
+            for i in range(0,(np.shape(pattern_mat)[0])-1):
+                pattern_mat_py.append(np.array(pattern_mat[i,:]))
+
+            pattern_key_py = []
+            for i in range(0,(np.shape(pattern_key)[0])-1):
+                pattern_key_py.append(np.array(pattern_key[i,:]))
+
+
+            anno_temp_lst_py = []
+            for i in range(0,(np.shape(anno_temp_lst)[0])-1):
+                anno_temp_lst_py.append(np.array(anno_temp_lst[i,:]))
+
+
         else:
-            pattern_mat = [];
-            pattern_key = [];
+            pattern_mat = []
+            pattern_key = []
 
         
         if np.sum(np.sum(pattern_mat)) > 0:
@@ -135,17 +171,16 @@ def remove_overlaps(input_mat, song_length):
 
 
         #add to L
-        L.append(bw_lst_out)
+        L.append(bw_lst_out_py)
         #sort list by 5th column
         #create dict to re-sort L
         re_sort_L = {}
-        for i in range(0, len(L)):
+        for i in range(0, len(L)-1):
             #get 5th column values into list of tuples
             #key = index, value = value
-            re_sort_L[i] = L[i].item(4)
+            re_sort_L[i] = (L[i])[4]
         #convt to list of tuples and sort
         re_sort_L = re_sort_L.items()
-        
         #sort that dict by values  
         re_sort_L = sorted(re_sort_L, key=lambda re_sort_L: re_sort_L[1])
 
@@ -153,8 +188,7 @@ def remove_overlaps(input_mat, song_length):
         sorted_inds = [x[0] for x in re_sort_L]
         #sort L according to sorted indexes
         L = [L for sorted_inds, L in sorted(zip(sorted_inds, L))]
-      
-        break
+
         #will just use a np array here
         np_mat_L = np.array(L)
         bw_vec = np.unique(np_mat_L[:,4])
@@ -181,7 +215,6 @@ def remove_overlaps(input_mat, song_length):
     mat_NO = list(filter(lambda mat_NO: mat_NO.tolist() != [], mat_NO))
     annno_NO = list(filter(lambda anno_NO: anno_NO.tolist() != [], anno_NO))
 
-    print(key_NO)
     if len(key_NO) !=0:
         key_NO = np.concatenate(key_NO)
     else:
