@@ -1,0 +1,61 @@
+HIERARCHICAL_STRUCTURE [full_visualization, full_key, full_matrix_no, full_anno_lst] ...
+    = hierarchical_structure(matrix_no, key_no, sn)
+"""
+ distills the repeats encoded in MATRIX_NO (and KEY_NO) to 
+the essential structure components and then builds the
+hierarchical representation
+
+args 
+-----
+    matrix_NO np.array[int]:
+        binary matrix with 1's where repeats begin and 0's
+        otherwise
+    key_NO np.array[int]:
+        vector containing the lengths of the repeats encoded in matrix_NO
+    sn int:
+        song length, which is the number of audio shingles
+
+returns 
+-----
+    full_visualization np.array[int]: 
+        binary matrix representation for
+        full_matrix_NO with blocks of 1's equal to
+        the length's prescribed in full_key
+    full_key np.array[int]:
+        vector containing the lengths of the hierarchical
+        structure encoded in full_matrix_NO
+    full_matrix_NO np.array[int]:
+        binary matrix with 1's where hierarchical 
+        structure begins and 0's otherwise
+    full_anno_lst np.array[int]:
+        vector containing the annotation markers of the 
+        hierarchical structure encoded in each row of
+        full_matrix_NO
+"""
+# Distill repeats encoded in MATRIX_NO (and KEY_NO) to the essential
+# structure components, the set of repeated structure so that no time step
+# is contained in more than one piece of structure. We call the resulting
+# matrix PNO (for pattern no overlaps) and the associated key PNO_KEY.
+
+breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
+PNO = breakup_tuple[0]
+PNO_key = breakup_tuple[1]
+# Using PNO and PNO_KEY, we build a vector that tells us the order of the
+# repeats of the essential structure components.
+
+# Get the block representation for PNO, called PNO_BLOCK
+PNO_block = reconstruct_full_block(PNO, PNO_key)
+
+# Assign a unique number for each row in PNO. We refer these unique numbers
+# COLORS. 
+num_colors = np.shape(PNO)[0]
+num_timesteps = np.shape(PNO)[1]
+#MATLAB: color_mat = repmat([1:num_colors]', 1, num_timesteps);
+color_mat = np.tile([1:num_colors].T, (1, num_timesteps))
+# For each time step in row i that equals 1, change the value at that time
+# step to i
+#PNO_color = color_mat.*PNO;
+#PNO_color_vec = sum(PNO_color,1);
+
+# Find where repeats exist in time, paying special attention to the starts
+# and ends of each repeat of an essential structure component
