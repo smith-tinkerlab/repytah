@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import scipy.sparse as sps
 
 def stitch_diags(thresh_diags):
-    
     """
     Stitches information from thresholded diagonal matrix into a single
         row
@@ -20,9 +18,7 @@ def stitch_diags(thresh_diags):
     song_pattern: array
         row where each entry represents a time step and the group 
         that time step is a member of
-    
     """
-
     song_length = thresh_diags.shape[0]
     
     # initialize song pattern base
@@ -59,11 +55,12 @@ def stitch_diags(thresh_diags):
                 
                 # takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
-                c_mat = np.sum(thresh_diags[inds,:],1)
+                c_mat = np.sum(thresh_diags[inds,:], axis = 0)
                 c_mat = c_mat*pattern_mask
                 
                 # finds nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
+                c_inds = c_inds[1]
                 
                 # gives all elements of c_inds the same grouping 
                 # number as i
@@ -112,7 +109,6 @@ def add_annotations(input_mat, song_length):
     -------
     anno_list: array
         list of pairs of repeats with annotations marked
-    
     """
     num_rows = input_mat.shape[0]
     
