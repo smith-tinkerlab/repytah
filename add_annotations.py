@@ -22,21 +22,24 @@ def stitch_diags(thresh_diags):
         that time step is a member of
     
     """
-    
-    num_rows = thresh_diags.shape[0]
-    
-    pattern_base = np.zeros((1,num_rows), dtype = int)
 
-    # initializing group number
+    song_length = thresh_diags.shape[0]
+    
+    # initialize song pattern base
+    pattern_base = np.zeros((1,song_length), dtype = int)
+
+    # initialize group number
     pattern_num = 1
     
     col_sum = thresh_diags.sum(axis = 0)
+    #col_sum = np.delete(col_sum, 0)
+    #col_sum = np.append(col_sum, 0)
     
     check_inds = col_sum.nonzero()
     check_inds = check_inds[0]
     
     # creates vector of song length
-    pattern_mask = np.ones((1, num_rows))
+    pattern_mask = np.ones((1, song_length))
     pattern_out = (col_sum == 0)
     pattern_mask = pattern_mask - pattern_out
     
@@ -56,7 +59,8 @@ def stitch_diags(thresh_diags):
                 
                 # takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
-                c_mat = np.sum(thresh_diags[inds,:], axis = 1)
+                c_mat = np.sum(thresh_diags[inds,:],1)
+                c_mat = c_mat*pattern_mask
                 
                 # finds nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
@@ -73,6 +77,7 @@ def stitch_diags(thresh_diags):
                 
                 # resets inds to c_inds with inds removed
                 inds = np.setdiff1d(c_inds, inds)
+                inds = np.delete(inds,0)
                 
             # updates grouping number to prepare for next group
             pattern_num = pattern_num + 1
@@ -109,7 +114,6 @@ def add_annotations(input_mat, song_length):
         list of pairs of repeats with annotations marked
     
     """
-    
     num_rows = input_mat.shape[0]
     
     # removes any already present annotation markers
