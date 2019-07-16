@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 
 def stretch_diags(thresh_diags, band_width):
@@ -21,7 +20,6 @@ def stretch_diags(thresh_diags, band_width):
     stretch_diag_mat: np.array [boolean]
         logical matrix with diagonals of length band_width starting 
         at each entry prescribed in thresh_diag
-    
     """
     # creates size of returned matrix
     n = thresh_diags.shape[0] + band_width - 1
