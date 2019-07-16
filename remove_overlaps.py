@@ -67,31 +67,17 @@ def remove_overlaps(input_mat, song_length):
         bw = bw_vec[0]
         #Extract pairs of repeats of length BW from the list of pairs of
         #repeats with annotation markers
-        #separate lines based on bw
-        i = 0
-        bw_lst_ins = False
-        while i < len(L):
-            if L[i][4] >= bw:
-                #if the next line is less than bw
-                if L[i+1][4] < bw and not bw_lst_ins:
-                    break
-                #first line to not = (greater) bw
-                if L[i][4]>bw:
-                    break
+        #create bw_lst
+        i = 0              
+        while i < 0:
+            line = L[i][4]
+            if line == bw:
                 bw_lst.append(line)
-                bw_lst_ins = True
-                #blank out the line in L
                 L[i] = np.array([])
             i=i+1
         #endWhile
-        # if we've added nothing to bw_lst... take everything from L and put it there
-        if not bw_lst_ins:
-            bw_lst = L.copy
-            L = []
-            
-
-
-        #remove blanked entries from L (appended to bw_lst)
+        
+    #remove blanked entries from L (appended to bw_lst)
 
         #doesn't like elem wise comparison when right operand numpy array
         L = list(filter(lambda L: L.tolist() != [], L))
