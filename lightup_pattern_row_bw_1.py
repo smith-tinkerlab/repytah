@@ -33,13 +33,16 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
     pattern_row = np.zeros((1,song_length)).astype(int)
     
     # Step 0a: Find the number of distinct annotations
-    anno_lst = k_mat[:,5]
-    anno_max = anno_lst.max(0)
+    anno_lst = k_mat[:,5] # Get the elements of k_mat's fifth column
+    anno_max = anno_lst.max(0) # Set the number of max elements in each column
     
     # Step 1: Loop over the annotations
     for a in range(1, anno_max+1):
-        ands = (anno_lst == a)
-        start_inds = np.concatenate((k_mat[ands,0],k_mat[ands,2]))
+        ands = (anno_lst == a) # Check if anno_lst is equal to a 
+        
+        # Combine rows into a single matrix
+        bind_rows = [k_mat[ands,0],k_mat[ands,2]]
+        start_inds = np.concatenate(bind_rows)
         pattern_row[0,start_inds-1] = a
     
     # Step 2: Check that in fact each annotation has a repeat associated to it
@@ -50,7 +53,7 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
         inds_markers = np.delete(inds_markers,0)
 
     if inds_markers.size > 0:
-        for na in range (1, len(inds_markers)+1):
+        for na in range (1,len(inds_markers)+1):
             IM = inds_markers[na-1]
             if IM > na:
                 # Fix the annotations in pattern_row
@@ -60,7 +63,7 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
     # Edit the annotations to match the annotations in pattern_row
     if k_mat.size > 0:
         k_lst_out = np.unique(k_mat, axis=0)
-        for na in range (1, len(inds_markers)+1):
+        for na in range (1,len(inds_markers)+1):
             IM = inds_markers[na-1]
             if IM > na:
                 # Fix the annotaions in k_lst_out
