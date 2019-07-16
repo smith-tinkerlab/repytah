@@ -34,10 +34,10 @@ def fcl_anno_only(pair_list, song_length):
     # Add annotation markers to each pair of repeats
     full_list = []
     for j in range(bw_num):
-        bandwidth = bw_found[j]
+        band_width = bw_found[j]
         # Isolate pairs of repeats of desired length
-        bsnds = np.amin(np.nonzero(pair_list[:,4] == bandwidth))
-        bends = np.nonzero(pair_list[:,4] > bandwidth)
+        bsnds = np.amin(np.nonzero(pair_list[:,4] == band_width))
+        bends = np.nonzero(pair_list[:,4] > band_width)
         
         if np.size(bends) > 0:
             bends = np.amin(bends)
