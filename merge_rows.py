@@ -42,8 +42,6 @@ def merge_rows(input_mat, input_width):
         # step 2c: union rows with starting indices in common with row2check and
         # remove those rows from input_mat
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
-        #not_merge[merge_inds,:] = []
-        # possibility: not_merge = not_merge[1:,:]
         np.delete(not_merge, not_merge[merge_inds,:])
           
         # step 2d: check that newly merged rows do not cause overlaps within row
@@ -52,18 +50,15 @@ def merge_rows(input_mat, input_width):
         if np.max(merge_block) > 1:
             (union_merge, union_merge_key) = compare_and_cut(union_merge, input_width,
             union_merge, input_width)
-            
         else:
             union_merge_key = input_width
-        
         
         # step 2e: add unions to merge_mat and merge_key
         merge_mat = np.array([[merge_mat], [union_merge]])
         merge_key = np.array([[merge_key], [union_merge_key]])
         
-        
         # step 3: reinitialize rs for stopping condition
-        rpws = not_merge.shape[0]
+        rows = not_merge.shape[0]
     
     return merge_mat
 
