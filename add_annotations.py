@@ -2,7 +2,7 @@
 import numpy as np
 import scipy.sparse as sps
 
-def stitch_diags(thresh_diags):
+def find_song_pattern(thresh_diags):
     """
     Stitches information from thresholded diagonal matrix into a single
         row
@@ -21,10 +21,10 @@ def stitch_diags(thresh_diags):
     """
     song_length = thresh_diags.shape[0]
     
-    # initialize song pattern base
+    # Initialize song pattern base
     pattern_base = np.zeros((1,song_length), dtype = int)
 
-    # initialize group number
+    # Initialize group number
     pattern_num = 1
     
     col_sum = thresh_diags.sum(axis = 0)
@@ -32,49 +32,49 @@ def stitch_diags(thresh_diags):
     check_inds = col_sum.nonzero()
     check_inds = check_inds[0]
     
-    # creates vector of song length
+    # Creates vector of song length
     pattern_mask = np.ones((1, song_length))
     pattern_out = (col_sum == 0)
     pattern_mask = pattern_mask - pattern_out
     
     while np.size(check_inds) != 0:
-        # takes first entry in check_inds
+        # Takes first entry in check_inds
         i = check_inds[0]
         
-        # takes the corresponding row from thresh_diags
+        # Takes the corresponding row from thresh_diags
         temp_row = thresh_diags[i,:]
         
-        # finds all time steps that i is close to
+        # Finds all time steps that i is close to
         inds = temp_row.nonzero()
         
         if np.size(inds) != 0:
             while np.size(inds) != 0:
-                # takes sum of rows corresponding to inds and
+                # Takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
                 c_mat = np.sum(thresh_diags[inds,:], axis = 0)
                 c_mat = c_mat*pattern_mask
                 
-                # finds nonzero entries of c_mat
+                # Finds nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
                 c_inds = c_inds[1]
                 
-                # gives all elements of c_inds the same grouping 
+                # Gives all elements of c_inds the same grouping 
                 # number as i
                 pattern_base[0,c_inds] = pattern_num
                 
-                # removes all used elements of c_inds from
+                # Removes all used elements of c_inds from
                 # check_inds and p_mask
                 check_inds = np.setdiff1d(check_inds, c_inds)
                 pattern_mask[0,c_inds] = 0
                 
-                # resets inds to c_inds with inds removed
+                # Resets inds to c_inds with inds removed
                 inds = np.setdiff1d(c_inds, inds)
                 inds = np.delete(inds,0)
                 
-            # updates grouping number to prepare for next group
+            # Updates grouping number to prepare for next group
             pattern_num = pattern_num + 1
             
-        # removes i from check_inds
+        # Removes i from check_inds
         check_inds = np.setdiff1d(check_inds, i)
         
     song_pattern = pattern_base
@@ -107,14 +107,14 @@ def add_annotations(input_mat, song_length):
     """
     num_rows = input_mat.shape[0]
     
-    # removes any already present annotation markers
+    # Removes any already present annotation markers
     input_mat[:, 5] = 0
     
-    # find where repeats start
+    # Find where repeats start
     s_one = input_mat[:,0]
     s_two = input_mat[:,2]
     
-    # creates matrix of all repeats
+    # Creates matrix of all repeats
     s_three = np.ones((num_rows,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, (s_one, s_two)),
@@ -125,33 +125,33 @@ def add_annotations(input_mat, song_length):
     full_mat = up_tri_mat + low_tri_mat
     
     
-    # stitches info from input_mat into a single row
-    song_pattern = stitch_diags(full_mat)
+    # Stitches info from input_mat into a single row
+    song_pattern = find_song_pattern(full_mat)
     
-    # adds annotation markers to pairs of repeats
+    # Adds annotation markers to pairs of repeats
     for i in song_pattern[0]:
         pinds = np.nonzero(song_pattern == i)
         
-        #one if annotation not already marked, 0 if it is
+        #One if annotation not already marked, 0 if it is
         check_inds = (input_mat[:,5] == 0)
         
         for j in pinds[1]:
             
-            # finds all starting pairs that contain time step j
+            # Finds all starting pairs that contain time step j
             # and DO NOT have an annotation
             mark_inds = (s_one == j) + (s_two == j)
             mark_inds = (mark_inds > 0)
             mark_inds = check_inds * mark_inds
             
-            # adds found annotations to the relevant time steps
+            # Adds found annotations to the relevant time steps
             input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
             
-            # removes pairs of repeats with annotations from consideration
+            # Removes pairs of repeats with annotations from consideration
             check_inds = check_inds ^ mark_inds
      
     temp_inds = np.argsort(input_mat[:,5])
     
-    # creates list of annotations
+    # Creates list of annotations
     anno_list = input_mat[temp_inds,]
     
     return anno_list

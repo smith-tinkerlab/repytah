@@ -29,7 +29,7 @@ def create_sdm(matrix_featurevecs, num_fv_per_shingle):
                            (num_columns - num_fv_per_shingle + 1)))
         
         for i in range(1, num_fv_per_shingle + 1):
-            # use feature vectors to create an audio shingle
+            # Use feature vectors to create an audio shingle
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
