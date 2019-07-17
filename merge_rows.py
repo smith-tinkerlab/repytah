@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 
 def merge_rows(input_mat, input_width):
@@ -61,7 +60,3 @@ def merge_rows(input_mat, input_width):
         rows = not_merge.shape[0]
     
     return merge_mat
-
-    
-    
-
