@@ -82,8 +82,6 @@ def find_song_pattern(thresh_diags):
     return song_pattern
 
 
-
-
 def add_annotations(input_mat, song_length):
     """
     Adds annotations to pairs of repeats in input matrix
@@ -123,7 +121,6 @@ def add_annotations(input_mat, song_length):
     low_tri_mat = up_tri_mat.conj().transpose()
     
     full_mat = up_tri_mat + low_tri_mat
-    
     
     # Stitches info from input_mat into a single row
     song_pattern = find_song_pattern(full_mat)
