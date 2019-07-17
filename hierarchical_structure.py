@@ -58,14 +58,14 @@ def hierarchical_structure(matrix_no,key_no,sn):
     # Matlab ~
     if PNO_block_vec[0] == 0:
         one_vec = np.concatenate((1,one_vec),axis=1)
-    elif PNO_blcok_vec[0] == 1:
+    elif PNO_block_vec[0] == 1:
         one_vec = np.concatenate((0,one_vec),axis=1)
     
     # Matlab line 67 -- what does this mean?
     PNO_color_vec[one_vec == 1] = (num_colors + 1)
     
     # Python ok
-    non_zero_inds = (PNO_color_vec > 0)
+    non_zero_inds = np.array([PNO_color_vec > 0])
     num_NZI = non_zero_inds.sum(axis=0)
     PNO_color_inds_only = PNO_color_vec[0,non_zero_inds-1]
     
