@@ -7,24 +7,24 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
 
     Args
     ----
-    k_mat: 
+    k_mat: np.array
         List of pairs of repeats of length 1 with annotations 
         marked. The first two columns refer to the first repeat
         of the pair, the second two refer to the second repeat of
         the pair, the fifth column refers to the length of the
         repeats, and the sixth column contains the annotation markers.
                  
-   song_length: 
+   song_length: int
         song length, which is the number of audio shingles
    
     Returns
     ------- 
-    pattern_row: 
+    pattern_row: np.array
         row that marks where non-overlapping repeats
         occur, marking the annotation markers for the
         start indices and zeroes otherwise.
 
-    k_lst_out: 
+    k_lst_out: np.array
         list of pairs of repeats of length BAND_WIDTH that
         contain no overlapping repeats with annotations marked.
     """
