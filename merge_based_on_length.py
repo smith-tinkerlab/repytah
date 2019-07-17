@@ -19,7 +19,7 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     -------    
     out_mat: np.array
         binary matrix with ones where repeats start and zeros otherwise
-        with rows of FULL_MAT merged if appropriate
+        with rows of full_mat merged if appropriate
         
     one_length_vec: np.array
         length of the repeats encoded in out_mat
@@ -64,7 +64,7 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
 
             temp_bandwidth = np.sort(temp_bandwidth) # Sort the elements of temp_bandwidth
             bnds = np.argsort(temp_bandwidth) # Return the indices that would sort temp_bandwidth
-            temp_mat = temp_mat[bnds-1,]
+            temp_mat = temp_mat[bnds,]
 
     out_mat = temp_mat
     out_length_vec = temp_bandwidth
