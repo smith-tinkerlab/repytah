@@ -9,7 +9,7 @@ def create_sdm(matrix_featurevecs, num_fv_per_shingle):
     
     Args
     ----
-    matrix_featurevecs: np.array
+    fv_mat: np.array
         matrix of feature vectors where each column is a timestep
         
     num_fv_per_shingle: int
@@ -20,10 +20,10 @@ def create_sdm(matrix_featurevecs, num_fv_per_shingle):
     self_dissim_mat: np.array 
         self dissimilarity matrix with paired cosine distances between shingles
     """
-    [num_rows, num_columns] = matrix_featurevecs.shape
+    [num_rows, num_columns] = fv_mat.shape
     
     if num_fv_per_shingle == 1:
-        mat_as = matrix_featurevecs
+        mat_as = fv_mat
     else:
         mat_as = np.zeros(((num_rows * num_fv_per_shingle),
                            (num_columns - num_fv_per_shingle + 1)))
@@ -33,7 +33,7 @@ def create_sdm(matrix_featurevecs, num_fv_per_shingle):
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
-            mat_as[((i-1) * num_rows):((i * num_rows)),] = matrix_featurevecs[:,
+            mat_as[((i-1) * num_rows):((i * num_rows)),] = fv_mat[:,
                    (i-1):((num_columns - num_fv_per_shingle + i))]
             
     sdm_row = spd.pdist(mat_as, 'cosine')
