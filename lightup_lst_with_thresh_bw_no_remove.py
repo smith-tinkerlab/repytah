@@ -108,15 +108,15 @@ def lightup_lst_with_thresh_band_width_no_remove(thresh_mat,band_width_vec):
                 
                 # 2) Middle Overlap
                 mnds = (end_I_overlap - start_J_overlap - K + ones_no) > 0
-                SIm = start_J_overlap * (mnds)
-                EIm = (end_I_overlap*(mnds) - K*(mnds))
-                SJm = (start_J_overlap*(mnds) + K*(mnds))
-                EJm = end_I_overlap*(mnds)
-                Km = (end_I_overlap*(mnds) - start_J_overlap*(mnds) - K*(mnds) + ones_no*(mnds))
+                start_I_middle = start_J_overlap * (mnds)
+                end_I_middle = (end_I_overlap*(mnds) - K*(mnds))
+                start_J_middle = (start_J_overlap*(mnds) + K*(mnds))
+                end_J_middle = end_I_overlap*(mnds)
+                k_middle = (end_I_overlap*(mnds) - start_J_overlap*(mnds) - K*(mnds) + ones_no*(mnds))
             
                 if mnds.sum() > 0:
-                    mint_lst = np.column_stack([SIm,EIm,SJm,EJm,Km])
-                    Im = np.argsort(Km)
+                    mint_lst = np.column_stack([start_I_middle,end_I_middle,start_J_middle,end_J_middle,k_middle])
+                    Im = np.argsort(k_middle)
                     Im.reshape(np.size(Im),1)
                     mint_lst = mint_lst[Im,:]
 
