@@ -61,8 +61,8 @@ def hierarchical_structure(matrix_no,key_no,sn):
     elif PNO_blcok_vec[0] == 1:
         one_vec = np.concatenate((0,one_vec),axis=1)
     
-    # what does this mean?
-    PNO_color_vec(one_vec == 1) = (num_colors + 1)
+    # Matlab line 67 -- what does this mean?
+    PNO_color_vec[one_vec == 1] = (num_colors + 1)
     
     # Python ok
     non_zero_inds = (PNO_color_vec > 0)
@@ -72,8 +72,8 @@ def hierarchical_structure(matrix_no,key_no,sn):
     zero_inds_short = (PNO_color_inds_only == (num_colors + 1))
     PNO_color_inds_only[0,zero_inds_short-1] = 0
     
-    # Is this the correct translation of repmat - matlab line 100?
-    PNO_IO_mat = np.kron(ones(num_NZI, 1),PNO_color_inds_only)
+    # Matlab line 100
+    PNO_IO_mat = np.kron(ones((num_NZI, 1)),PNO_color_inds_only)
     
     # Matlab ~ 
     PNO_IO_mask = (((PNO_IO_mat > 0) + (PNO_IO_mat.conk().transpose() > 0)) == 2)
@@ -92,7 +92,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
 
     # Matlab line 132
     output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
-    (NZI_matrix_no,NZI_key_no) = output_tuple[1:2]
+    (NZI_matrix_no,NZI_key_no) = output_tuple[1:3]
                           
     NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
 
@@ -102,7 +102,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
     pattern_starts = (non_zero_inds).nonzero()
 
     # Matlab
-    pattern_ends = np.concatenate((pattern_starts(1:) - 1), sn)) # is this suppose to be -2 instead of -1? 
+    pattern_ends = np.concatenate(((pattern_starts(1:) - 1), sn)) # is this suppose to be -2 instead of -1? 
     pattern_lengths = np.array((pattern_ends - pattern_starts + 1)) # is this suppose to be 0 instead of -1?
                 
     # Python ok
