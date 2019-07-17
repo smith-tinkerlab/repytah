@@ -21,14 +21,14 @@ def find_complete_list(pair_list,song_length):
         list of pairs of repeats with smaller repeats added
     """
     # Find the list of unique repeat lengths
-    bfound = np.unique(pair_list[:,4])
-    b = np.size(bfound, axis=0) # Number of unique repeat lengths
+    bw_found = np.unique(pair_list[:,4])
+    bw_num = np.size(bw_found, axis=0)
     
     # If the longest bandwidth is the length of the song, then remove that row
-    if song_length == bfound[b-1]: 
-        pair_list[-1,:] = np.array([])
-        bfound[-1] = np.array([])
-        b = (b - 1)
+    if song_length == bw_found[bw_num-1]: 
+        pair_list[-1,:] = []
+        bw_found[-1] = []
+        bw_num = (bw_num - 1)
         
     # Initalize temp variables
     p = np.size(pair_list,axis=0)
@@ -36,12 +36,12 @@ def find_complete_list(pair_list,song_length):
 
     # Step 1: For each found bandwidth, search upwards (i.e. search the larger 
     #        bandwidths) and add all found diagonals to the variable add_mat        
-    for j in range (1,b+1):
-        bandwidth = bfound[j-1]
+    for j in range (1,bw_num+1):
+        band_width = bw_found[j-1]
         
         # Isolate pairs of repeats that are length bandwidth
-        bsnds = np.amin((pair_list[:,4] == bandwidth).nonzero()) # Return the minimum of the array
-        bends = (pair_list[:,4] > bandwidth).nonzero()
+        bsnds = np.amin((pair_list[:,4] == band_width).nonzero()) # Return the minimum of the array
+        bends = (pair_list[:,4] > band_width).nonzero()
     
         # Convert bends into an array
         bend = np.array(bends)
@@ -49,7 +49,7 @@ def find_complete_list(pair_list,song_length):
         if bend.size > 0:
             bend = np.amin(bend)
         else:
-            bend = np.amin(p)
+            bend = p
     
         # Part A1: Isolate all starting time steps of the repeats of length bandwidth
         SI = pair_list[bsnds:bend, 0]
@@ -68,9 +68,9 @@ def find_complete_list(pair_list,song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        add_srows = find_add_srows_both_check_no_anno(pair_lst, int_snds, bandwidth)
-        add_erows = find_add_mrows_both_check_no_anno(pair_lst, int_snds, bandwidth)
-        add_mrows = find_add_erows_both_check_no_anno(pair_lst, int_ends, bandwidth)
+        add_srows = find_add_srows_both_check_no_anno(pair_lst, int_snds, band_width)
+        add_erows = find_add_mrows_both_check_no_anno(pair_lst, int_snds, band_width)
+        add_mrows = find_add_erows_both_check_no_anno(pair_lst, int_ends, band_width)
         
         # Check if any of the arrays are empty, if so, reshape them
         if add_mrows.size == 0:
@@ -99,17 +99,17 @@ def find_complete_list(pair_list,song_length):
     c = np.size(combine_mat,axis=0)
     
     # Again, find the list of unique repeat lengths
-    new_bfound = np.unique(combine_mat[:,4])
-    new_b = np.size(new_bfound,axis=0)
+    new_bw_found = np.unique(combine_mat[:,4])
+    new_bw_num = np.size(new_bfound,axis=0)
     full_lst = []
     
     # Step 3: Loop over the new list of found bandwidths to add the annotation
     #         markers to each found pair of repeats
-    for j in range(1, new_b + 1):
-        new_bandwidth = new_bfound[j-1]
+    for j in range(1, new_bw_num+1):
+        new_band_width = new_bw_found[j-1]
         # Isolate pairs of repeats in combine_mat that are length bandwidth
-        new_bsnds = np.amin((combine_mat[:,4] == new_bandwidth).nonzero()) # Return the minimum of the array
-        new_bends = (combine_mat[:,4] > new_bandwidth).nonzero() 
+        new_bsnds = np.amin((combine_mat[:,4] == new_band_width).nonzero()) # Return the minimum of the array
+        new_bends = (combine_mat[:,4] > new_band_width).nonzero() 
 
         # Convert new_bends into an array
         new_bend = np.array(new_bends)
@@ -119,10 +119,10 @@ def find_complete_list(pair_list,song_length):
         else:
             new_bend = c
         
-        bandwidth_mat = np.array((combine_mat[new_bsnds:new_bend,]))
-        length_bandwidth_mat = np.size(bandwidth_mat,axis=0)
+        band_width_mat = np.array((combine_mat[new_bsnds:new_bend,]))
+        length_band_width_mat = np.size(band_width_mat,axis=0)
 
-        temp_anno_lst = np.concatenate((bandwidth_mat,(np.zeros((length_bandwidth_mat,1)))),axis=1).astype(int)
+        temp_anno_lst = np.concatenate((band_width_mat,(np.zeros((length_band_width_mat,1)))),axis=1).astype(int)
 
         # Part C: Get annotation markers for this bandwidth
         temp_anno_lst = add_annotations(temp_anno_lst,song_length)
