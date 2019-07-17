@@ -9,7 +9,7 @@ def find_complete_list(pair_list,song_length):
     pair_lst: np.array
         list of pairs of repeats found in earlier step
         (bandwidths MUST be in ascending order). If you have
-        run lightup_lst_with_thresh before this script,
+        run find_initial_repeats before this script,
         then pair_lst will be ordered correctly. 
            
     song_length: int
