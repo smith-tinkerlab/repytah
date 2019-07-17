@@ -61,6 +61,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
     elif PNO_blcok_vec[0] == 1:
         one_vec = np.concatenate((0,one_vec),axis=1)
     
+    # what does this mean?
     PNO_color_vec(one_vec == 1) = (num_colors + 1)
     
     # Python ok
@@ -71,14 +72,15 @@ def hierarchical_structure(matrix_no,key_no,sn):
     zero_inds_short = (PNO_color_inds_only == (num_colors + 1))
     PNO_color_inds_only[0,zero_inds_short-1] = 0
     
+    # Is this the correct translation of repmat - matlab line 100?
     PNO_IO_mat = np.kron(ones(num_NZI, 1),PNO_color_inds_only)
     
-    # Matlab
-    PNO_IO_mask = (((PNO_IO_mat > 0) + (PNO_IO_mat' > 0)) == 2)
-    symm_PNO_inds_only = (PNO_IO_mat == PNO_IO_mat').*PNO_IO_mask
+    # Matlab ~ 
+    PNO_IO_mask = (((PNO_IO_mat > 0) + (PNO_IO_mat.conk().transpose() > 0)) == 2)
+    symm_PNO_inds_only = (PNO_IO_mat == PNO_IO_mat.conj().transpose())*PNO_IO_mask
                          
     # Python ok
-    NZI_lst = lightup_lst_with_thresh_bw_no_remove(symm_PNO_inds_only, [1:num_NZI])
+    NZI_lst = lightup_lst_with_thresh_bw_no_remove(symm_PNO_inds_only, [0:num_NZI])
                           
     remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
     if np.any(remove_inds == True):
@@ -88,26 +90,27 @@ def hierarchical_structure(matrix_no,key_no,sn):
                           
     NZI_lst_anno = find_complete_list_anno_only(NZI_lst, num_NZI)
 
-    # Matlab 
-    [~, NZI_matrix_no, NZI_key_no] = remove_overlaps(NZI_lst_anno, num_NZI)
+    # Matlab line 132
+    output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
+    (NZI_matrix_no,NZI_key_no) = output_tuple[1:2]
                           
     NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
 
     # Matlab
-    [nzi_rows] = size(NZI_pattern_block,1)
+    nzi_rows = NZI_pattern_block.shape[0]
                           
     pattern_starts = (non_zero_inds).nonzero()
 
     # Matlab
-    pattern_ends = [(pattern_starts(2:end) - 1), sn]
-    pattern_lengths = [pattern_ends - pattern_starts + 1]
+    pattern_ends = np.concatenate((pattern_starts(1:) - 1), sn)) # is this suppose to be -2 instead of -1? 
+    pattern_lengths = np.array((pattern_ends - pattern_starts + 1)) # is this suppose to be 0 instead of -1?
                 
     # Python ok
     full_visualization = np.zeros((nzi_rows, sn))
     full_matrix_no = np.zeros((nzi_rows, sn))
                           
     for i in range(1,num_NZI+1):
-        # Matlab
+        # Matlab - fix
         full_visualization(:,[pattern_starts(i):pattern_ends(i)]) = repmat(NZI_pattern_block(:,i),1,pattern_lengths(i))
         full_matrix_no(:,pattern_starts(i)) = NZI_matrix_no(:,i)
     
@@ -120,7 +123,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
     for i in range(1,nzi_rows+1):
         one_start = np.amin((find_key_mat(i,:) == 2).nonzero())
         # Matlab
-        temp_row = find_key_mat(i,:)
+        temp_row = find_key_mat[i,:]
 
         # Python ok
         temp_row[0:one_start] = 1
@@ -133,9 +136,9 @@ def hierarchical_structure(matrix_no,key_no,sn):
         if find_two.size == 0:
             find_two = sn + 1
 
-        # Matlab - maybe use np.amin?
+        # Matlab - maybe use np.amin? 
         one_end = min(find_zero,find_two);
-        full_key(i) = one_end - one_start;
+        full_key[i] = one_end - one_start;
     
     full_key = np.sort(full_key)
     full_key_inds = np.argsort(full_key)
