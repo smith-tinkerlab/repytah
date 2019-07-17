@@ -141,18 +141,19 @@ def hierarchical_structure(matrix_no,key_no,sn):
     full_key_inds = np.argsort(full_key)
 
     full_visualization = full_visualization[full_key_inds,:]
-
     # Matlab
-    full_matrix_no = full_matrix_no(full_key_inds,:)
+    full_matrix_no = full_matrix_no[full_key_inds,:]
                           
     # Matlab
-    inds_remove = (sum(full_matrix_no,2) <= 1)
-    full_key(inds_remove) = []
-    full_matrix_no(inds_remove,:) = []
-    full_visualization(inds_remove,:) = []
-    
+                          #might need to change to for loop
+    inds_remove = (np.sum(full_matrix_no,1) <= 1)
+
+    np.delete(full_key, inds_remove, axis = 0)
+
+    np.delete(full_matrix_no,[inds_remove,:], axis = 0)
+
+    np.delete(full_visualization, [inds_remove,:], axis = 0)
     full_anno_lst = get_annotation_lst(full_key)
-    
                           
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
