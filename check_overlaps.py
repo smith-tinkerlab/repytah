@@ -67,3 +67,5 @@ def check_overlaps(input_mat)
 
     # endif
     overlaps_yn = overlap_mat
+    
+    return overlaps_yn
