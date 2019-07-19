@@ -27,33 +27,16 @@ def num_of_parts(input_vec, input_start, input_all_starts):
         length_vec: np.array 
             column vector of the lengths 
     """
-    #Initialize Inputs 
-    #Example 1 
-    input_vec = np.array([1, 2, 3, 4])
-    input_start = 1 
-    input_all_starts = np.array([1, 5, 9])
     
-    #diff_vec = input_vec(2:end) - input_vec(1:end-1);
-    print(input_vec[1:])
-    print(input_vec[:-1])
-    #diff_vec = input_vec[1:-1] - input_vec[:-2]
     diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
-    print(diff_vec)
-    #diff_vec = [1,diff_vec];
-    #diff_vec = 
     break_mark = diff_vec > 1
-    print(break_mark)
-    print(sum(break_mark))
     
     if sum(break_mark) == 0: 
         start_vec = input_vec[0]
-        print("start_vec\n", start_vec)
         end_vec = input_vec[-1]
-        print("end_vec\n", end_vec)
         add_vec = start_vec - input_start
-        print(add_vec)
         start_mat = input_all_starts + add_vec
-        print(start_mat)
+
     else:
         start_vec = np.zeros((2,1))
         end_vec =  np.zeros((2,1))
