@@ -6,25 +6,25 @@ import numpy as np
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
     Creates a binary matrix with a block of 1's for 
-    each repeat encoded in pattern_mat whose length 
-    is encoded in patern_key
+        each repeat encoded in pattern_mat whose length 
+        is encoded in patern_key
 
     Args
     ----
-        pattern_mat: np.array
-            binary matrix with 1's where repeats begin 
-            and 0's otherwise
+    pattern_mat: np.array
+        binary matrix with 1's where repeats begin 
+        and 0's otherwise
      
-        pattern_key: np.array
-            vector containing the lengths of the repeats 
-            encoded in each row of pattern_mat
+    pattern_key: np.array
+        vector containing the lengths of the repeats 
+        encoded in each row of pattern_mat
 
     Returns
     -------
-        pattern_block: np.array
-            binary matrix representation for pattern_mat 
-            with blocks of 1's equal to the length's 
-            prescribed in pattern_key
+    pattern_block: np.array
+        binary matrix representation for pattern_mat 
+        with blocks of 1's equal to the length's 
+        prescribed in pattern_key
     """
     #Find number of beats (columns) in pattern_mat
     
@@ -92,6 +92,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     
 
     
+
 
 
 

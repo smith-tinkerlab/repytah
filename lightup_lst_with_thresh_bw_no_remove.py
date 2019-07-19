@@ -24,7 +24,7 @@ def lightup_lst_with_thresh_band_width_no_remove(thresh_mat,band_width_vec):
     band_width_vec = band_width_vec
     b = np.size(band_width_vec,axis=0)
     
-    int_all = [] # Interval list for non-overlapping pairs
+    int_all = []  # Interval list for non-overlapping pairs
     sint_all = [] # Interval list for the left side of the overlapping pairs
     eint_all = [] # Interval list for the right side of the overlapping pairs
     mint_all = [] # Interval list for the middle of the overlapping pairs if they exist
