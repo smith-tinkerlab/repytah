@@ -196,7 +196,7 @@ def compare_and_cut(red, RL, blue, BL):
     union_length, UM_inds = np.sort(union_length)
     union_mat = union_mat[UM_inds,:]
     
-    output = union_mat, union_length 
+    output = (union_mat, union_length) 
     
     return output 
 
