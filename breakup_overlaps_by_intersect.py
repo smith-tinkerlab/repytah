@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 17 08:57:40 2019
-
-@author: lizettecarpenter
-"""
 import numpy as np
 from inspect import signature 
 
@@ -38,18 +33,6 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
             of essential structure components in
             pattern_no_overlaps 
     """
-
-    input_pattern_obj = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 ],
-                            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 ],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-                            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 ]])
-    #maybe change name to pattern_key 
-    bw_vec = np.array([[3], 
-                      [5], 
-                      [8], 
-                      [8]])
-    thresh_bw = 3 
-     
     sig = signature(breakup_overlaps_by_intersect)
     params = sig.parameters 
     if len(params) < 3: 
