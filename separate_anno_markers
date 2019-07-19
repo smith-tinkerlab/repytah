@@ -42,20 +42,7 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
             row vector containing the annotation markers of 
             the repeats encoded in each row of pattern_mat
     """
-
-    #Example 1: 
-    #k_mat = np.array([[1, 1, 3, 3, 1, 1],
-                      [4, 4, 6, 6, 1, 2]]) 
-    #sn = 6
-    #band_width = 1
-    #pattern_row = np.array([1, 0, 1, 2, 0, 2])
-
-    #Example 2: 
-    #k_mat = np.array([[1, 1, 3, 3, 1, 1]])
-    #sn = 6
-    #band_width = 1
-    #pattern_row = np.array([1, 0, 1, 0, 0, 0])
-
+    
     #List of annotation markers 
     anno_lst = k_mat[:,5] 
 
@@ -64,7 +51,6 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     pattern_mat = np.zeros((anno_lst.size, sn), dtype = np.intp)
 
     #Separate the annotions into individual rows 
-
     if anno_lst.size > 1: #If there are two or more annotations 
         #Loops through the list of annotation markers 
         for a in anno_lst: 
@@ -91,11 +77,9 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     #Transpose anno_lst from a row vector into a column vector 
     anno_id_lst = anno_lst.reshape((1,2)).transpose()
     
-    return pattern_mat, pattern_key, anno_id_lst
-
-#Using Example 1: 
-pattern_mat, pattern_key, anno_id_lst = separate_anno_markers(np.array([[1, 1, 3, 3, 1, 1],[4, 4, 6, 6, 1, 2]]), 6, 1, np.array([1, 0, 1, 2, 0, 2]) )
-
+    output = (pattern_mat, pattern_key, anno_id_lst)
+    
+    return output 
 
 
 
