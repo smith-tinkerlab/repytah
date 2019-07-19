@@ -2,8 +2,8 @@ import numpy as np
 
 def lightup_pattern_row_gb(k_mat,song_length,band_width):
     """
-    Turn the k_mat into marked rows with annotation markers for the start
-        indices and zeroes otherwise, after removing the annotations that have overlaps, 
+    Turn k_mat into marked rows with annotation markers for the start indices 
+        and zeroes otherwise, after removing the annotations that have overlaps, 
         output k_lst_out which only contains rows that have no overlaps,
         the annotations that have overlaps get removed from k_lst_out
         gets added to overlap_lst.
@@ -73,10 +73,10 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
             temp_add = k_mat[remove_inds,:]
             overlap_lst.append(temp_add)
             
-            if np.any(rm_inds == True):
+            if np.any(remove_inds == True):
                 # Convert the boolean array rm_inds into an array of integers
-                remove_inds = np.array(rm_inds).astype(int)
-                remove = np.where(rm_inds==1)
+                remove_inds = np.array(remove_inds).astype(int)
+                remove = np.where(remove_inds==1)
                 # Delete the row that meets the condition set by remove_inds
                 k_mat = np.delete(k_mat,remove,axis=0)
                 
