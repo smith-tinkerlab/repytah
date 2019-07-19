@@ -134,6 +134,6 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     pattern_no_overlaps = PNO[bw_inds,:]
     pattern_no_overlaps_key = bw_vec
         
-    output = pattern_no_overlaps, pattern_no_overlaps_key
+    output = (pattern_no_overlaps, pattern_no_overlaps_key)
     
     return output 
