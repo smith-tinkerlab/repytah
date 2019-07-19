@@ -3,6 +3,7 @@ import numpy as np
 import scipy.spatial.distance as spd
 import scipy.sparse as sps
 from scipy import signal
+from inspect import signature 
 
 def add_annotations(input_mat, song_length):
     """
@@ -76,6 +77,140 @@ def add_annotations(input_mat, song_length):
     return anno_list
 
 
+def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
+    """
+    Distills repeats encoded in input_pattern_obj and bw_vec to the 
+        essential structure components, the set of repeats so that 
+        no time step is contained in more than one repeat.
+    
+    Args
+    ----
+    input_pattern_obj: np.array 
+        binary matrix with 1's where repeats begin 
+        and 0's otherwise 
+        
+    bw_vec: np.array 
+        vector containing the lengths of the repeats
+        encoded in input_pattern_obj
+        
+    thresh_bw: int
+        the smallest allowable repeat length 
+        
+    Returns
+    -------
+    pattern_no_overlaps: np.array 
+        binary matrix with 1's where repeats of 
+        essential structure components begin 
+        
+    pattern_no_overlaps_key: np.array 
+        vector containing the lengths of the repeats of 
+        essential structure components in pattern_no_overlaps 
+    """
+    sig = signature(breakup_overlaps_by_intersect)
+    params = sig.parameters 
+    if len(params) < 3: 
+        T = 0 
+    else: 
+        T = thresh_bw
+    
+    # Initialize input_pattern_obj 
+    PNO = input_pattern_obj
+    
+    # Sort the bw_vec and the PNO so that we process the biggest pieces first
+    
+    # Part 1: Sort the lengths in bw_vec in descending order 
+    sort_bw_vec = np.sort(bw_vec)
+    desc_bw_vec = sort_bw_vec[::-1]
+    
+    # Part 2: Sort the indices of bw_vec in descending order 
+    bw_inds = np.argsort(desc_bw_vec, axis = 0)
+    row_bw_inds = np.transpose(bw_inds)
+    
+    
+    PNO = PNO[(row_bw_inds),:]
+    PNO = PNO.reshape(4,19)
+    
+    T_inds = np.nonzero(bw_vec == T) 
+    T_inds = np.array(T_inds) - 1  # Bends is converted into an array
+
+    if T_inds.size != 0: 
+        T_inds = max(bw_vec.shape) - 1
+
+    PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
+    
+    # Check stopping condition -- Are there overlaps?
+    while np.sum(PNO_block[ : T_inds, :]) > 0:
+        # Find all overlaps by comparing the rows of repeats pairwise
+        overlaps_PNO_block = check_overlaps(PNO_block)
+        
+        # Remove the rows with bandwidth T or less from consideration
+        overlaps_PNO_block[T_inds:, ] = 0
+        overlaps_PNO_block[:,T_inds:] = 0
+        
+        # Find the first two groups of repeats that overlap, calling one group
+        # RED and the other group BLUE
+        [ri,bi] = overlaps_PNO_block.nonzero() 
+        [ri,bi] = np.where(overlaps_PNO_block !=0)
+        
+        red = PNO[ri,:]
+        RL = bw_vec[ri,:]
+        
+        blue = PNO[bi,:]
+        BL = bw_vec[bi,:]
+        
+        # Compare the repeats in RED and BLUE, cutting the repeats in those
+        # groups into non-overlapping pieces
+        union_mat, union_length = compare_and_cut(red, RL, blue, BL)
+        
+        PNO = np.delete(PNO, ri, axis = 0)
+        PNO = np.delete(PNO, bi, axis = 0)
+
+        bw_vec = np.delete(bw_vec, ri, axis = 0)
+        bw_vec = np.delete(bw_vec, bi, axis = 0)
+        
+        PNO = np.vstack(PNO, union_mat) 
+        bw_vec = np.vstack(bw_vec, union_length)
+        
+        # Check there are any repeats of length 1 that should be merged into
+        # other groups of repeats of length 1 and merge them if necessary
+        if sum(union_length == 1) > 0:
+            PNO, bw_vec = merge_based_on_length(PNO, bw_vec, 1)
+        
+        # AGAIN, Sort the bw_vec and the PNO so that we process the biggest 
+        # pieces first
+        # Part 1: Sort the lengths in bw_vec in descending order 
+        sort_bw_vec = np.sort(bw_vec)
+        desc_bw_vec = sort_bw_vec[::-1]
+        # Part 2: Sort the indices of bw_vec in descending order 
+        bw_inds = np.argsort(desc_bw_vec, axis = 0)
+        row_bw_inds = np.transpose(bw_inds)
+        
+        PNO = PNO[(row_bw_inds),:]
+        
+        # Find the first row that contains repeats of length less than T and
+        # remove these rows from consideration during the next check of the
+        # stopping condition
+        #T_inds = np.nonzeros(bw_vec == T, 1) 
+        T_inds = np.amin(desc_bw_vec == T) - 1
+        T_inds = np.array(T_inds) # Bends is converted into an array
+
+        if T_inds.size != 0:  
+            T_inds = max(desc_bw_vec.shape) - 1
+
+        PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
+    
+    # Sort the lengths in bw_vec in ascending order 
+    bw_vec = np.sort(desc_bw_vec)
+    # Sort the indices of bw_vec in ascending order     
+    bw_inds = np.argsort(desc_bw_vec)
+   
+    pattern_no_overlaps = PNO[bw_inds,:]
+    pattern_no_overlaps_key = bw_vec
+        
+    output = (pattern_no_overlaps, pattern_no_overlaps_key)
+    
+    return output 
+
 
 def check_overlaps(input_mat):
     """
@@ -147,8 +282,206 @@ def check_overlaps(input_mat):
     return overlaps_yn
 
 
+def compare_and_cut(red, RL, blue, BL):
+    """
+    Compares two rows of repeats labeled RED and BLUE, and determines 
+        if there are any overlaps in time between them. If there is, 
+        then we cut the repeats in RED and BLUE into up to 3 pieces. 
+    
+    Args
+    ----
+    red: np.array 
+        binary row vector encoding a set of repeats with 1's where each
+        repeat starts and 0's otherwise 
+            
+    red_len: int
+        length of repeats encoded in red 
+            
+    blue: np.array 
+        binary row vector encoding a set of repeats with 1's where each
+        repeat starts and 0's otherwise 
+            
+    blue_len: int
+        length of repeats encoded in blue 
 
-def create_sdm(matrix_featurevecs, num_fv_per_shingle):
+    Returns
+    -------
+    union_mat: np.array 
+        binary matrix representation of up to three rows encoding
+        non-overlapping repeats cut from red and blue
+
+    union_length: np.array 
+        vector containing the lengths of the repeats encoded in union_mat
+    """
+    sn = red.shape[0]
+    assert sn == blue.shape[0]
+    
+    start_red = np.flatnonzero(red)
+    start_red = start_red[None, :] 
+
+    start_blue = np.flatnonzero(blue)
+    start_blue = start_blue[None, :] 
+    
+    # Determine if the rows have any intersections
+    red_block = reconstruct_full_block(red, RL)
+    blue_block = reconstruct_full_block(blue, BL)
+
+    red_block = red_block > 0
+    blue_block = blue_block > 0 
+    purple_block = np.logical_and(red_block, blue_block)
+    
+    # If there is any intersection between the rows, then start comparing one
+    # repeat in RED to one repeat in BLUE
+    if purple_block.sum() > 0:  
+        # Find number of blocks in red and in blue
+        LSR = max(start_red.shape)
+        LSB = max(start_blue.shape) 
+        
+        # Build the pairs of starting indices to search, where each pair
+        #contains a starting index in RED and a starting index in BLUE
+        red_inds = np.tile(start_red.transpose(), (LSB, 1))
+        blue_inds = np.tile(start_blue, (LSR,1))
+
+        
+        compare_inds = np.concatenate((blue_inds.transpose(),  red_inds), axis = None)
+        compare_inds = np.reshape(compare_inds, (4,2), order='F')
+    
+        
+        # Initialize the output variables union_mat and union_length
+        union_mat = np.array([])
+        union_length = np.array([]) 
+    
+        # Loop over all pairs of starting indices
+        for start_ind in range(0, LSR*LSB):
+            # Isolate one repeat in RED and one repeat in BLUE
+            ri = compare_inds[start_ind, 1]
+            bi = compare_inds[start_ind, 0]
+            
+            red_ri = np.arange(ri, ri+RL)
+            blue_bi = np.arange(bi, bi+BL)
+            
+            # Determine if the blocks intersect and call the intersection
+            # PURPLE
+            purple = np.intersect1d(red_ri,blue_bi)
+            
+            if purple.size != 0: 
+            
+                # Remove PURPLE from RED_RI, call it RED_MINUS_PURPLE
+                red_minus_purple = np.setdiff1d(red_ri,purple)
+                
+                # If RED_MINUS_PURPLE is not empty, then see if there are one
+                # or two parts in RED_MINUS_PURPLE. Then cut PURPLE out of ALL
+                # of the repeats in RED. If there are two parts left in
+                # RED_MINUS_PURPLE, then the new variable NEW_RED, which holds
+                # the part(s) of RED_MINUS_PURPLE, should have two rows with
+                # 1's for the starting indices of the resulting pieces and 0's
+                # elsewhere. Also RED_LENGTH_VEC will have the length(s) of the
+                # parts in NEW_RED.
+                if red_minus_purple.size != 0:
+                    red_start_mat, red_length_vec = num_of_parts(red_minus_purple, ri, start_red)
+                    new_red = inds_to_rows(red_start_mat,sn)
+                else:
+                    # If RED_MINUS_PURPLE is empty, then set NEW_RED and
+                    # RED_LENGTH_VEC to empty
+                    new_red = np.array([])
+                    red_length_vec = np.array([])
+           
+                # Noting that PURPLE is only one part and in both RED_RI and
+                # BLUE_BI, then we need to find where the purple starting
+                # indices are in all the RED_RI
+                purple_in_red_mat, purple_length = num_of_parts(purple, ri, start_red)
+                
+                # If BLUE_MINUS_PURPLE is not empty, then see if there are one
+                # or two parts in BLUE_MINUS_PURPLE. Then cut PURPLE out of ALL
+                # of the repeats in BLUE. If there are two parts left in
+                # BLUE_MINUS_PURPLE, then the new variable NEW_BLUE, which
+                # holds the part(s) of BLUE_MINUS_PURPLE, should have two rows
+                # with 1's for the starting indices of the resulting pieces and
+                # 0's elsewhere. Also BLUE_LENGTH_VEC will have the length(s)
+                # of the parts in NEW_BLUE.
+                blue_minus_purple = np.setdiff1d(blue_bi,purple)
+                
+                if blue_minus_purple.size != 0: 
+                    blue_start_mat, blue_length_vec = num_of_parts(blue_minus_purple, bi, start_blue)
+                    new_blue = inds_to_rows(blue_start_mat, sn)
+                else:
+                    # If BLUE_MINUS_PURPLE is empty, then set NEW_BLUE and
+                    # BLUE_LENGTH_VEC to empty
+                    new_blue = np.array([])
+                    blue_length_vec = np.array([])
+                    
+                # Recalling that PURPLE is only one part and in both RED_RI and
+                # BLUE_BI, then we need to find where the purple starting
+                # indices are in all the BLUE_RI
+                purple_in_blue_mat, x = num_of_parts(purple, bi, start_blue)
+                
+                # Union PURPLE_IN_RED_MAT and PURPLE_IN_BLUE_MAT to get
+                # PURPLE_START, which stores all the purple indices
+                purple_start = np.union1d(purple_in_red_mat, purple_in_blue_mat)
+                
+                # Use PURPLE_START to get NEW_PURPLE with 1's where the repeats
+                # in the purple rows start and 0 otherwise. 
+                new_purple = inds_to_rows(purple_start, sn);
+                
+                if new_red.size != 0 | new_blue.size != 0:
+                    # Form the outputs
+                    union_mat = np.vstack((new_red, new_blue, new_purple))
+                    union_length = np.vstack((red_length_vec, blue_length_vec, purple_length))
+
+                    union_mat, union_length = merge_based_on_length(union_mat, union_length, union_length)
+                    break
+                elif new_red.size == 0 & new_blue.size == 0:
+                    new_purple_block = reconstruct_full_block(new_purple, purple_length)
+                    if max(new_purple_block.shape) < 2:
+                        union_mat = new_purple
+                        union_length = purple_length
+                        break
+            
+    # Check that there are no overlaps in each row of union_mat
+    union_mat_add = np.array([])
+    union_mat_add_length = np.array([])
+    union_mat_rminds = np.array([])
+    
+    # Isolate one row at a time, call it union_row
+    for i in range(0, union_mat.shape[0] + 1):
+        union_row = union_mat[i,:]
+        union_row_width = union_length[i];
+        union_row_block = reconstruct_full_block(union_row, union_row_width)
+        
+        # If there are at least one overlap, then compare and cut that row
+        # until there are no overlaps
+        if (union_row_block.sum(axis = 0) > 1) > 0:
+            union_mat_rminds = np.vstack(union_mat_rminds, i)
+            
+            union_row_new, union_row_new_length = compare_and_cut(union_row, union_row_width, union_row, union_row_width)
+            
+            # Add UNION_ROW_NEW and UNION_ROW_NEW_LENGTH to UNION_MAT_ADD and
+            # UNION_MAT_ADD_LENGTH, respectively
+            union_mat_add = np.vstack(union_mat_add, union_row_new)
+            union_mat_add_length = np.vstack(union_mat_add_length, union_row_new_length)
+
+    # Remove the old rows from UNION_MAT (as well as the old lengths from
+    # UNION_LENGTH)
+    
+    union_mat = np.delete(union_mat, union_mat_rminds, axis = 0)
+    union_length = np.delete(union_length, union_mat_rminds)
+
+    
+    # Add UNION_ROW_NEW and UNION_ROW_NEW_LENGTH to UNION_MAT and
+    # UNION_LENGTH, respectively, such that UNION_MAT is in order by
+    # lengths in UNION_LENGTH
+    union_mat = np.vstack(union_mat, union_mat_add)
+    union_length = np.vstack(union_length, union_mat_add_length)
+    
+    union_length, UM_inds = np.sort(union_length)
+    union_mat = union_mat[UM_inds,:]
+    
+    output = (union_mat, union_length) 
+    
+    return output 
+
+
+def create_sdm(fv_mat, num_fv_per_shingle):
     """
     Creates audio shingles from feature vectors, finds cosine 
         distance between shingles, and returns self dissimilarity matrix
@@ -372,6 +705,105 @@ def find_add_erows(lst_no_anno, check_inds, k):
             add_rows = np.concatenate((add_rows, add_rows), axis = 0).astype(int)
             #print(add_rows)                   
     return add_rows
+
+
+def find_add_mrows(lst_no_anno, check_inds, k): 
+    """
+    Finds diagonals of length k that neither start nor end at the 
+        same time steps as previously found repeats of length k. 
+        
+    Args
+    ----
+    lst_no_anno: np.array 
+        list of pairs of repeats
+        
+    check_inds: np.array
+        list of ending indices for repeats of length k that we use to 
+        check lst_no_anno for more repeats of length k
+        
+    k: int
+        length of repeats that we are looking for 
+        
+    Returns
+    -------
+    add_rows: np.array
+        list of newly found pairs of repeats of length K that are 
+        contained in larger repeats in LST_NO_ANNO 
+    """
+    #Initialize list of pairs 
+    L = lst_no_anno 
+    #Logical, which pair of repeats has a length greater than k (T returns 1, F returns 0)
+    search_inds = (L[:,4] > k)
+    
+    #Multiply the starting index of all repeats "I" by search_inds
+    SI = np.multiply(L[:,0], search_inds)
+
+    #Multiply the starting index of all repeats "J" by search_inds
+    SJ = np.multiply(L[:,2], search_inds)
+
+    #Multiply the ending index of all repeats "I" by search_inds
+    EI = np.multiply(L[:,1], search_inds)
+
+    #Multiply the ending index of all repeats "J" by search_inds
+    EJ = np.multiply(L[:,3], search_inds)
+    
+    #Loop over CHECK_INDS 
+    for i in range(check_inds.size): 
+        ci = check_inds[i]
+        #Left Check: check for CI on the left side of the pairs
+        lnds = ((SI < ci) + (EI > (ci + k -1)) == 2)
+        #Check that SI < CI and that EI > (CI + K - 1) indicating that there
+        #is a repeat of length k with starting index CI contained in a larger
+        #repeat which is the left repeat of a pair
+        if lnds.sum(axis = 0) > 0:
+            #Find the 2nd entry of the row (lnds) whose starting index of the repeat "I" equals CI 
+            SJ_li = L[lnds,2]
+            EJ_li = L[lnds,3]
+            l_num = SJ_li.shape[0]
+
+            #Left side of left pair
+            l_left_k = ci*np.ones(l_num,1) - L[lnds,0]
+            l_add_left = np.concatenate((L[lnds,0], (ci - 1 * np.ones((l_num,1))), SJ_li, (SJ_li + l_left_k - np.ones((l_num,1))), l_left_k), axis = None)
+
+            # Middle of left pair
+            l_add_mid = np.concatenate(((ci*np.ones((l_num,1))), (ci+k-1)*np.ones((l_num,1)), SJ_li + l_left_k, SJ_li + l_left_k + (k-1)*np.ones((l_num,1)), k*np.ones((l_num,1))), axis = None) 
+
+            # Right side of left pair
+            l_right_k = np.concatenate((L[lnds, 1] - ((ci + k) - 1) * np.ones((l_num,1))), axis = None)
+            l_add_right = np.concatenate((((ci + k)*np.ones((l_num,1))), L[lnds,1], (EJ_li - l_right_k + np.ones((l_num,1))), EJ_li, l_right_k), axis = None)
+
+            # Add the found rows        
+            add_rows = np.vstack((l_add_left, l_add_mid, l_add_right))
+            #add_rows = np.reshape(add_rows, (3,5))
+
+        #Right Check: Check for CI on the right side of the pairs
+        rnds = ((SJ < ci) + (EJ > (ci + k - 1)) == 2); 
+
+        #Check that SI < CI and that EI > (CI + K - 1) indicating that there
+        #is a repeat of length K with starting index CI contained in a larger
+        #repeat which is the right repeat of a pair
+        if rnds.sum(axis = 0) > 0:
+            SI_ri = L[rnds,0]
+            EI_ri = L[rnds,1]
+            r_num = SI_ri.shape[0]
+
+            #Left side of right pair
+            r_left_k = ci*np.ones((r_num,1)) - L[rnds,2]
+            r_add_left = np.concatenate((SI_ri, (SI_ri + r_left_k - np.ones((r_num,1))), L[rnds,3], (ci - 1)*np.ones((r_num,1)), r_left_k), axis = None)
+
+            #Middle of right pair
+            r_add_mid = np.concatenate(((SI_ri + r_left_k),(SI_ri + r_left_k + (k - 1)*np.ones((r_num,1))), ci*np.ones((r_num,1)), (ci + k - 1)*np.ones((r_num,1)), k*np.ones((r_num,1))), axis = None)
+
+            #Right side of right pair
+            r_right_k = L[rnds, 3] - ((ci + k) - 1)*np.ones((r_num,1))
+            r_add_right = np.concatenate((EI_ri - r_right_k + np.ones((r_num,1)),EI_ri, (ci + k)*np.ones((r_num,1)), L[rnds,3], r_right_k), axis = None)
+
+            add_rows = np.vstack((r_add_left, r_add_mid, r_add_right))
+            #add_rows = np.reshape(add_rows, (3,5))
+
+            add_rows = np.concatenate((add_rows, add_rows), axis = 0).astype(int)
+     
+    return add_rows 
 
 
 def find_add_srows(lst_no_anno, check_inds, k):
@@ -636,6 +1068,205 @@ def find_complete_list(pair_list,song_length):
     return lst_out
 
 
+def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
+    """
+
+    Finds all diagonals present in THRESH_MAT, removing each diagonal 
+    as it is found.
+    
+    Args
+    ----
+    thresh_mat: np.array(int)
+        Thresholded matrix that we extract diagonals from
+        
+    bandwidth_vec: np.array(1D, int)
+        Vector of lengths of diagonals to be found
+        
+    thresh_bw: int
+        Smallest allowed diagonal length
+        
+    Returns
+    -------
+    all_lst: np.array(int)
+        list of pairs of repeats that correspond to diagonals in thresh_mat
+    """
+
+    b = np.size(bandwidth_vec)
+
+    #create empty lists to store arrays
+    int_all =  []
+    sint_all = []
+    eint_all = []
+    mint_all = []
+
+    #loop over all bandwidths
+    for bw in bandwidth_vec:
+        if bw > thresh_bw:
+        #search for diagonals of length BW
+            thresh_mat_size = np.size(thresh_mat)
+            DDM_rename = signal.convolve2d(thresh_mat[0:thresh_mat_size, 0:thresh_mat_size],np.eye(bw),'valid')
+            #mark where diagonals of length BW start
+            thresh_DDM_rename = (DDM_rename == bw) 
+            if np.sum(np.sum(thresh_DDM_rename)) > 0:
+                full_bw = bw
+                #1) Non-Overlaps: Search outside the overlapping shingles
+
+                #Find the starts that are paired together
+                #returns tuple of lists (python) https://docs.scipy.org/doc/np/reference/generated/np.nonzero.html
+                #need to add 1 to return correct number of nonzero ints matlab vs python
+                overlaps = np.nonzero(np.triu(thresh_DDM_rename, (full_bw)))
+
+                startI = np.array(overlaps[0])
+                num_nonoverlaps = np.size(startI)
+                startJ = np.array(overlaps[1])
+                #Find the matching ends EI for SI and EJ for SJ
+                matchI = (startI + full_bw-1);
+                matchJ = (startJ + full_bw-1);
+
+                 #List pairs of starts with their ends and the widths of the
+                #non-overlapping interval
+
+                int_lst = np.column_stack([startI, matchI, startJ, matchJ, full_bw])
+                #Add the new non-overlapping intervals to the full list of
+                #non-overlapping intervals
+                int_all.append(int_lst)
+                # 2) Overlaps: Search only the overlaps in shingles
+                #returns tuple (python) 
+                shingle_overlaps = np.nonzero(np.tril(np.triu(thresh_DDM_rename), (full_bw-1)))
+                #gets list for I and J [1,2,3,4] turn those to np, transpose them vertically
+                startI_inShingle = np.array(shingle_overlaps[0]) 
+                startJ_inShingle = np.array(shingle_overlaps[1]) 
+                #find number of overlaps
+                num_overlaps = np.size(startI_inShingle)
+                if (num_overlaps == 1 and startI_inShingle == startJ_inShingle):
+                    sint_lst = np.column_stack([startI_inShingle, startI_inShingle,(startI_inShingle + (full_bw - 1)),startJ_inShingle,(startJ_inShingle + (full_bw - 1)), full_bw])
+                    sint_all.append(sint_lst)
+                elif num_overlaps>0:
+                        #Since you are checking the overlaps you need to cut these
+                        #intervals into pieces: left, right, and middle. NOTE: the
+                        #middle interval may NOT exist
+                    # Vector of 1's that is the length of the number of
+                    # overlapping intervals. This is used a lot. 
+                    ones_no = np.ones(num_overlaps);
+
+                    #2a) Left Overlap
+                    #remain consistent with being matlab -1
+                    K = startJ_inShingle - startI_inShingle
+                    sint_lst = np.column_stack([startI_inShingle, (startJ_inShingle - ones_no), startJ_inShingle, (startJ_inShingle + K - ones_no), K])
+                    #returns list of indexes of sorted list
+                    Is = np.argsort(K)
+                    #turn array vertical
+                    Is.reshape(np.size(Is), 1)
+                    #extract all columns from row Is
+                    sint_lst = sint_lst[Is, :]
+                                    #grab only length column
+                    i = 0
+                    for length in np.transpose(sint_lst[:,4]):
+                        #if this length is greater than thresh_bw-- we found our index
+                        if length > thresh_bw:
+                        #if its not the first row
+                            if(i!=0):
+                                #delete rows that fall below threshold
+                                sint_lst = np.delete(sint_lst, (i-1), axis=0)
+                            sint_all.append(sint_lst)
+                                #after we found the min that exceeds thresh_bw... break
+                            break
+                        i=i+1
+                    #endfor
+                    #2b right overlap
+                    endI_right = startI_inShingle + (full_bw)
+                    endJ_right = startJ_inShingle + (full_bw)
+                    eint_lst = np.column_stack([(endI_right + ones_no - K), endI_right, (endI_right + ones_no), endJ_right, K])
+                    indexes = np.argsort(K)
+                    #turn result to column
+                    indexes.reshape(np.size(indexes),1)
+                    eint_lst = eint_lst[indexes, :]
+                    
+                    #grab only length column
+                    i = 0
+                    for length in np.transpose(eint_lst[:,4]):
+                        #if this length is greater than thresh_bw-- we found our index
+                        if length > thresh_bw:
+                            #if its not the first row
+                            if(i!=0):
+                                #delete rows that fall below threshold
+                                eint_lst = np.delete(eint_lst, (i-1), axis=0)
+                            eint_all.append(eint_lst)
+                            #after we found the min that exceeds thresh_bw... break
+                            break
+                        i=i+1
+
+                    # 2) Middle Overlap
+                    #returns logical 0 or 1 for true or false
+                    mnds = (endI_right - startJ_inShingle - K + ones_no) > 0
+                    #for each logical operator convert to 0 or 1
+                    for operator in mnds:
+                        if operator is True:
+                            operator = 1
+                        else:
+                            operator = 0
+                    startI_middle = startJ_inShingle*(mnds)
+                    endI_middle = (endI_right*(mnds) - K*(mnds))
+                    startJ_middle = (startJ_inShingle*(mnds) + K*(mnds))
+                    endJ_middle = endI_right*(mnds)
+                    #fixes indexing here because length starts at 1 and indexes start at 0
+                    Km = (endI_right*(mnds) - startJ_inShingle*(mnds) - K*(mnds) +ones_no*(mnds))-1
+                    if np.sum(np.sum(mnds)) > 0 : 
+                        mint_lst = np.column_stack([startI_middle, endI_middle, startJ_middle, endJ_middle, Km])
+                        #revert for same reason
+                        Km = Km+1
+                        Im = np.argsort(Km)
+                        #turn array to column
+                        Im.reshape(np.size(Im), 1)
+                        mint_lst = mint_lst[Im, :]
+
+                       #Remove the pairs that fall below the bandwidth threshold
+                        #grab only length column
+                        i = 0
+                        for length in np.transpose(mint_lst[:,4]):
+                            #if this length is greater than thresh_bw-- we found our index
+                            if length > thresh_bw:
+                            #if its not the first row
+                                if(i!=0):
+                                    #delete rows that fall below threshold
+                                    mint_lst = np.delete(mint_lst, (i-1), axis=0)
+                                mint_all.append(mint_lst)
+                                #after we found the min that exceeds thresh_bw... break
+                                break
+                            i=i+1
+                        #endfor
+                    #endif line 143 np.sum(np.sum(mnds)) > 0
+                #endif line 67 (num_overlaps == 1 and startI_inShingle == startJ_inShingle)
+
+                                    #returns matrix with diags in it
+                SDM = stretch_diags(DDM_rename, bw)
+                thresh_mat = thresh_mat - SDM
+
+                if np.sum(np.sum(thresh_mat)) == 0:
+                    break
+                #endIf line 174
+            #endIf line 34 np.sum(np.sum(thresh_DDM_rename)) > 0
+       #endIf line 28 bw > thresh_bw
+    #endfor
+     #Combine non-overlapping intervals with the left, right, and middle parts
+     #of the overlapping intervals
+    #remove empty lines from the lists
+
+
+    out_lst = int_all + sint_all + eint_all + mint_all
+    #remove empty lists from final output
+    
+    all_lst = filter(None, out_lst)
+
+    if out_lst is not None:
+        all_lst = np.vstack(out_lst)
+    else:
+        all_lst = np.array([])
+        
+    #return final list
+    return all_lst
+
+
 def find_song_pattern(thresh_diags):
     """
     Stitches information from thresholded diagonal matrix into a single
@@ -714,6 +1345,240 @@ def find_song_pattern(thresh_diags):
     song_pattern = pattern_base
     
     return song_pattern
+
+
+def hierarchical_structure(matrix_no,key_no,sn):
+    """
+    Distills the repeats encoded in matrix_no (and key_no) to the 
+        essential structure components and then builds the hierarchical 
+        representation
+        
+    Args 
+    ----
+    matrix_NO: np.array(int)
+        binary matrix with 1's where repeats begin and 0's otherwise
+        
+    key_NO: np.array(int)
+        vector containing the lengths of the repeats encoded in matrix_no
+        
+    sn: int
+        song length, which is the number of audio shingles
+        
+    Returns 
+    -------
+    full_visualization: np.array(int) 
+        binary matrix representation for full_matrix_no with blocks of 
+        1's equal to the length's prescribed in full_key
+            
+    full_key: np.array(int)
+        vector containing the lengths of the hierarchical structure 
+        encoded in full_matrix_no
+            
+    full_matrix_no: np.array(int)
+        binary matrix with 1's where hierarchical structure begins 
+        and 0's otherwise
+            
+    full_anno_lst: np.array[int]
+        vector containing the annotation markers of the hierarchical 
+        structure encoded in each row of full_matrix_no
+    """
+    breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
+    PNO = breakup_tuple[0]
+    PNO_key = breakup_tuple[1]
+    
+    # Using PNO and PNO_KEY, we build a vector that tells us the order of the
+    # repeats of the essential structure components.
+    # Get the block representation for PNO, called PNO_BLOCK
+    PNO_block = reconstruct_full_block(PNO, PNO_key)
+
+
+    # Assign a unique (nonzero) number for each row in PNO. We refer these unique numbers
+    # COLORS. 
+    num_colors = PNO.shape[0]
+    num_timesteps = PNO.shape[1]
+    
+    # Create unique color identifier for num_colors
+    color_lst = np.arange(1, num_colors+1)
+    
+    # Turn it into a column
+    color_lst = color_lst.reshape(np.size(color_lst),1)
+    color_mat = np.tile(color_lst, (1, num_timesteps))
+
+    # For each time step in row i that equals 1, change the value at that time
+    # step to i
+    PNO_color = color_mat * PNO
+    PNO_color_vec = PNO_color.sum(axis=0)
+    
+    # Find where repeats exist in time, paying special attention to the starts
+    # and ends of each repeat of an essential structure component
+    #take sums down columns --- conv to logical
+    PNO_block_vec = ( np.sum(PNO_block, axis = 0) ) > 0
+    PNO_block_vec = PNO_block_vec.astype(np.float32)
+
+    one_vec = (PNO_block_vec[0:sn-1] - PNO_block_vec[1:sn])
+    
+    #  Find all the blocks of consecutive time steps that are not contained in
+    #  any of the essential structure components. We call these blocks zero
+    #  blocks. 
+    #  Shift PNO_BLOCK_VEC so that the zero blocks are marked at the correct
+    #  time steps with 1's
+    if PNO_block_vec[0] == 0 :
+        one_vec = np.insert(one_vec, 1, 1)
+    elif PNO_block_vec[0] == 1:
+        one_vec = np.insert(one_vec, 1, 0)
+        
+    # Assign one new unique number to all the zero blocks
+    PNO_color_vec[one_vec == 1] = (num_colors + 1)
+    
+    #  We are only concerned with the order that repeats of the essential
+    #  structure components occur in. So we create a vector that only contains
+    #  the starting indices for each repeat of the essential structure
+    #  components.
+    #  We isolate the starting index of each repeat of the essential structure
+    #  components and save a binary vector with 1 at a time step if a repeat of
+    #  any essential structure component occurs there
+    #     non_zero_inds = PNO_color_vec > 0
+    num_NZI = non_zero_inds.sum(axis=0)
+
+    PNO_color_inds_only = PNO_color_vec[non_zero_inds-1]
+    
+    # For indices that signals the start of a zero block, turn those indices
+    # back to 0
+    zero_inds_short = (PNO_color_inds_only == (num_colors + 1))
+    PNO_color_inds_only[zero_inds_short-1] = 0
+
+    # Create a binary matrix SYMM_PNO_INDS_ONLY such that the (i,j) entry is 1
+    # if the following three conditions are true: 
+    #     1) a repeat of an essential structure component is the i-th thing in
+    #        the ordering
+    #     2) a repeat of an essential structure component is the j-th thing in 
+    #        the ordering 
+    #     3) the repeat occurring in the i-th place of the ordering and the one
+    #        occuring in the j-th place of the ordering are repeats of the same
+    #        essential structure component. 
+    # If any of the above conditions are not true, then the (i,j) entry of
+    # SYMM_PNO_INDS_ONLY is 0.
+
+    # Turn our pattern row into a square matrix by stacking that row the
+    # number of times equal to the columns in that row    
+    PNO_IO_mat = np.tile(PNO_color_inds_only,(num_NZI, 1))
+    PNO_IO_mat = PNO_IO_mat.astype(np.float32)
+
+    PNO_IO_mask = ((PNO_IO_mat > 0).astype(np.float32) + (PNO_IO_mat.transpose() > 0).astype(np.float32)) == 2
+    symm_PNO_inds_only = (PNO_IO_mat.astype(np.float32) == PNO_IO_mat.transpose().astype(np.float32))*PNO_IO_mask
+
+    #  Extract all the diagonals in SYMM_PNO_INDS_ONLY and get pairs of repeated
+    #  sublists in the order that repeats of essential structure components.
+    #  These pairs of repeated sublists are the basis of our hierarchical
+    #  representation.
+    NZI_lst = lightup_lst_with_thresh_bw_no_remove(symm_PNO_inds_only, [0:num_NZI])                 
+    remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
+    
+    #  Remove any pairs of repeats that are two copies of the same repeat (i.e.
+    #  a pair (A,B) where A == B)
+    if np.any(remove_inds == True):
+        remove_inds = np.array(remove_inds).astype(int)
+        remove = np.where(remove_inds == 1)
+        NZI_lst = np.delete(NZI_lst,remove,axis=0)
+        
+    #Add the annotation markers to the pairs in NZI_LST
+    NZI_lst_anno = find_complete_list_anno_only(NZI_lst, num_NZI)
+
+
+    output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
+    (NZI_matrix_no,NZI_key_no) = output_tuple[1:3]
+                          
+    NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
+
+    nzi_rows = NZI_pattern_block.shape[0]
+    
+    #Find where all blocks start and end
+    pattern_starts = np.nonzero(non_zero_inds)[0]
+
+    pattern_ends = np.array([pattern_starts[1: ] - 1]) 
+    pattern_ends = np.insert(pattern_ends,np.shape(pattern_ends)[1], sn-1)
+    pattern_lengths = np.array(pattern_ends - pattern_starts+1) # is this suppose to be 0 instead of -1?
+
+    full_visualization = np.zeros((nzi_rows, sn))
+    full_matrix_no = np.zeros((nzi_rows, sn))       
+
+    
+    for i in range(0,num_NZI):
+        repeated_sect = NZI_pattern_block[:,i].reshape(np.shape(NZI_pattern_block)[0],1)
+        full_visualization[:,pattern_starts[i]:pattern_ends[i]+1] = np.tile(repeated_sect,(1,pattern_lengths[i]))
+        full_matrix_no[:,pattern_starts[i]] = NZI_matrix_no[:,i]
+        
+    # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
+    full_key = np.zeros((nzi_rows,1))
+    find_key_mat = full_visualization + full_matrix_no
+    
+    for i in range(0,nzi_rows):
+        one_start = np.where(find_key_mat[i,:] == 2)[0][0]
+        temp_row = find_key_mat[i,:]
+        temp_row[0:one_start+1] = 1
+        find_zero = np.where(temp_row == 0)[0][0]
+
+        if np.size(find_zero) == 0:
+            find_zero = sn
+
+        find_two = np.where(temp_row == 2)[0][0]
+        if np.size(find_two) == 0:
+            find_two = sn
+
+        one_end = np.minimum(find_zero,find_two);
+        full_key[i] = one_end - one_start;
+      
+    full_key_inds = np.argsort(full_key, axis = 0)
+    
+    #switch to row
+    full_key_inds = full_key_inds[:,0]
+    full_key = np.sort(full_key, axis = 0)
+    full_visualization = full_visualization[full_key_inds,:]
+    full_matrix_no = full_matrix_no[full_key_inds,:]
+                        
+    #Remove rows of our hierarchical representation that contain only one
+    # repeat        
+    inds_remove = np.where(np.sum(full_matrix_no,1) <= 1)
+    inds_remove = np.array([1])
+    full_key = np.delete(full_key, inds_remove, axis = 0)
+
+    full_matrix_no = np.delete(full_matrix_no, inds_remove, axis = 0)
+    full_visualization = np.delete(full_visualization, inds_remove, axis = 0)
+
+    full_anno_lst = get_annotation_lst(full_key)
+                          
+    output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
+    
+    return output
+
+
+def inds_to_rows(input_inds_mat, row_length):
+    """
+    Converts a list of indices to row(s) with 1's where an 
+        index occurs and 0's otherwise
+    
+    Args
+    ----
+    input_inds_mat: np.array 
+        matrix of one or two rows, containing the starting indices 
+            
+    row_length: int 
+        length of the rows 
+            
+    Returns
+    -------
+    new_mat: np.array 
+        matrix of one or two rows, with 1's where the starting indices 
+        and 0's otherwise 
+    """
+    mat_rows = input_inds_mat.shape[0]
+    new_mat = np.zeros((mat_rows,row_length))
+
+    for i in range(0, mat_rows + 1):
+        inds = input_inds_mat[i,:]
+        new_mat[i,inds] = 1;
+
+    return new_mat
 
 
 def lightup_lst_with_thresh_band_width_no_remove(thresh_mat,band_width_vec):
@@ -1182,6 +2047,58 @@ def merge_rows(input_mat, input_width):
     
     return merge_mat
 
+def num_of_parts(input_vec, input_start, input_all_starts):
+    """
+    Determines the number of blocks of consecutive time steps
+        in a given list of time steps 
+    
+    Args
+    ----
+    input_vec: np.array 
+        one or two parts to replicate 
+            
+    input_start: np.array  
+        starting index for part to be replicated 
+        
+    input_all_starts: np.array
+        starting indices for replication 
+    
+    Returns
+    -------
+    start_mat: np.array 
+        matrix of one or two rows, containing the starting indices 
+            
+    length_vec: np.array 
+        column vector of the lengths 
+    """
+    diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
+    break_mark = diff_vec > 1
+    
+    if sum(break_mark) == 0: 
+        start_vec = input_vec[0]
+        end_vec = input_vec[-1]
+        add_vec = start_vec - input_start
+        start_mat = input_all_starts + add_vec
+
+    else:
+        start_vec = np.zeros((2,1))
+        end_vec =  np.zeros((2,1))
+    
+        start_vec[0] = input_vec[0]
+        end_vec[0] = input_vec[break_mark - 2]
+    
+        start_vec[1] = input_vec[break_mark - 1]
+        end_vec[1] = input_vec[-1]
+    
+        add_vec = start_vec - input_start
+        start_mat = np.concatenate((input_all_starts + add_vec[0]), (input_all_starts + add_vec[1]))
+
+    length_vec = end_vec - start_vec + 2
+        
+    output = (start_mat, length_vec)
+    
+    return output 
+
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
@@ -1206,49 +2123,70 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
     """
-    # Number of beats in pattern_mat (columns)
-    sn = pattern_mat.shape[1]
-
-    # Number of repeated structures in pattern_mat (rows)
+    #Find number of beats (columns) in pattern_mat
+    
+    #Check size of pattern_mat (in cases where there is only 1 pair of
+    #repeated structures)
+    if (pattern_mat.ndim == 1): 
+        #Convert a 1D array into 2D array 
+        #From https://stackoverflow.com/questions/3061761/numpy-array-dimensions
+        pattern_mat = pattern_mat[None, : ]
+        #Assign number of beats to sn 
+        sn = pattern_mat.shape[1]
+    else: 
+        #Assign number of beats to sn 
+        sn = pattern_mat.shape[1]
+        
+    #Assign number of repeated structures (rows) in pattern_mat to sb 
     sb = pattern_mat.shape[0]
-
-    # Pre-allocating a sn by sb array of zeros 
+    
+    #Pre-allocating a sn by sb array of zeros 
     pattern_block = np.zeros((sb,sn)).astype(int)  
-
+    
+    #Check if pattern_key is in vector row 
+    if pattern_key.ndim != 1: 
+        #Convert pattern_key into a vector row 
+        length_vec = np.array([])
+        for i in pattern_key:
+            length_vec = np.append(length_vec, i).astype(int)
+    else: 
+        length_vec = pattern_key 
+    
     for i in range(sb):
-
-        # Retrieve all of row i of pattern_mat 
+        #Retrieve all of row i of pattern_mat 
         repeated_struct = pattern_mat[i,:]
-
-        # Retrieve the length of the repeats encoded in row i of pattern_mat 
-        length = pattern_key[i]
-
-        # Pre-allocate a section of size length x sn for pattern_block
+    
+        #Retrieve the length of the repeats encoded in row i of pattern_mat 
+        length = length_vec[i]
+    
+        #Pre-allocate a section of size length x sn for pattern_block
         sub_section = np.zeros((length, sn))
-
-        # Replace first row in block_zeros with repeated_structure 
+    
+        #Replace first row in block_zeros with repeated_structure 
         sub_section[0,:] = repeated_struct
-
-        # Creates pattern_block: Sums up each column after sliding repeated 
-        # structure i to the right bw - 1 times 
+        
+        #Creates pattern_block: Sums up each column after sliding repeated 
+        #sastructure i to the right bw - 1 times 
         for b in range(2, length + 1): 
-
-            # Retrieve repeated structure i up to its (1 - b) position 
+    
+            #Retrieve repeated structure i up to its (1 - b) position 
             sub_struct_a = repeated_struct[0:(1 - b)]
-
-            # Row vector with number of entries not included in sub_struct_a  
+    
+            #Row vector with number of entries not included in sub_struct_a  
             sub_struct_b = np.zeros((1,( b  - 1)))
-
-            # Append sub_struct_b in front of sub_struct_a 
+    
+            #Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
-
-            # Replace part of sub_section with new_struct 
+            
+            #Replace part of sub_section with new_struct 
             sub_section[b - 1,:] = new_struct
-
-        # Replaces part of pattern_block with the sums of each column in sub_section 
-        pattern_block[i,:] = np.sum(sub_section, axis = 0)
-
+    
+    #Replaces part of pattern_block with the sums of each column in 
+    #sub_section 
+    pattern_block[i,:] = np.sum(sub_section, axis = 0)
+    
     return pattern_block
+
 
 def remove_overlaps(input_mat, song_length):  
     """
@@ -1507,7 +2445,81 @@ def remove_overlaps(input_mat, song_length):
     return output_tuple
 
 
+def separate_anno_markers(k_mat, sn, band_width, pattern_row): 
+    """
+    Expands pattern_row into a matrix, so that there is one group of 
+        repeats per row.
+        
+    Args
+    ----
+    k_mat: np.array
+        list of pairs of repeats of length band_width with annotations 
+        marked. The first two columns refer to the first repeat of the pair, 
+        the second two refer to the second repeat of the pair, the fifth 
+        column refers to the length of the repeats, and the sixth column 
+        contains the annotation markers.
+        
+    sn: int
+        song length, which is the number of audio shingles
+        
+    band_width: int 
+        the length of repeats encoded in k_mat
+        
+    pattern_row: np.array
+        row vector that marks where non-overlapping repeats occur, marking 
+        the annotation markers for the start indices and 0's otherwise
+        
+    Returns
+    -------
+    pattern_mat: np.array
+        matrix representation of k_mat with one row for each group of repeats
+        
+    pattern_key: np.array
+        row vector containing the lengths of the repeats encoded in each row 
+        of pattern_mat
+        
+    anno_id_lst: np.array 
+        row vector containing the annotation markers of the repeats encoded 
+        in each row of pattern_mat
+    """
+    #List of annotation markers 
+    anno_lst = k_mat[:,5] 
 
+    #Initialize pattern_mat: Start with a matrix of all 0's that has
+    #the same number of rows as there are annotations and sn columns 
+    pattern_mat = np.zeros((anno_lst.size, sn), dtype = np.intp)
+
+    #Separate the annotions into individual rows 
+    if anno_lst.size > 1: #If there are two or more annotations 
+        #Loops through the list of annotation markers 
+        for a in anno_lst: 
+        #Find starting indices:  
+            #Start index of first repeat a 
+            a_one = k_mat[a-1, 0] - 1
+
+            #Start index of second repeat a
+            a_two = k_mat[a-1, 2] - 1
+
+            #Start indices of repeat a 
+            s_inds = np.append(a_one, a_two)
+
+            #Replace entries at each repeats' start time with "1"
+            pattern_mat[a - 1, s_inds] = 1
+
+        #Creates row vector with the same dimensions of anno_lst   
+        pattern_key = band_width * np.ones((anno_lst.size, 1)).astype(int)
+
+    else: 
+        #When there is one annotation  
+        pattern_mat = pattern_row 
+        pattern_key = band_width
+        
+    #Transpose anno_lst from a row vector into a column vector 
+    anno_id_lst = anno_lst.reshape((1,2)).transpose()
+    
+    output = (pattern_mat, pattern_key, anno_id_lst)
+    
+    return output 
 
 
 def stretch_diags(thresh_diags, band_width):
