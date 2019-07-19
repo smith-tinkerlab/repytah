@@ -114,4 +114,6 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         overlap_lst = np.unique(overlap_lst,axis=0)
         overlap_lst = add_annotations(overlap_lst,song_length)
 
-    return pattern_row, k_lst_out, overlap_lst
+    output = (pattern_row, k_lst_out, overlap_lst)
+    
+    return output
