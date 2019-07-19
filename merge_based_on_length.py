@@ -4,6 +4,7 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     """
     Merges rows of full_mat that contain repeats that are the same 
         length and are repeats of the same piece of structure.
+        
     Args
     ----
     full_mat: np.array
@@ -69,4 +70,6 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     out_mat = temp_mat
     out_length_vec = temp_bandwidth
     
-    return out_mat,out_length_vec
+    output = (out_mat,out_length_vec)
+    
+    return output
