@@ -3,7 +3,7 @@ import numpy as np
 
 def fcl_anno_only(pair_list, song_length):
     """
-    Finds annotations for all pairs of repeats found in previous step
+    Finds annotations for all pairs of repeats in pair_list
     
     Args
     ----

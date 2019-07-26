@@ -3,7 +3,8 @@ import numpy as np
 
 def merge_rows(input_mat, input_width):
     """
-    Merges rows with at least one common repeat from the same repeated structure
+    Merges rows that have at least one common repeat; said common repeat(s)
+        must occur at the same time step and be of common length
     
     Args
     ----
