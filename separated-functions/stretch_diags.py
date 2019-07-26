@@ -8,7 +8,7 @@ def stretch_diags(thresh_diags, band_width):
                                                                                  
     Args
     ----
-    thresh_diags: np.array
+    thresh_diags: np.array [boolean]
         binary matrix where entries equal to 1 signal the existence 
         of a diagonal
     
