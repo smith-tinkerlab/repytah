@@ -4,7 +4,7 @@ import scipy.sparse as sps
 
 def add_annotations(input_mat, song_length):
     """
-    Adds annotations to pairs of repeats in input matrix
+    Adds annotations to pairs of repeats in input_mat
 
     Args
     ----
@@ -43,7 +43,7 @@ def add_annotations(input_mat, song_length):
     full_mat = up_tri_mat + low_tri_mat
     
     # Stitches info from input_mat into a single row
-    song_pattern = find_song_pattern(full_mat)
+    song_pattern = __find_song_pattern(full_mat)
     
     # Adds annotation markers to pairs of repeats
     for i in song_pattern[0]:
