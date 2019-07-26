@@ -2,10 +2,10 @@
 import numpy as np
 
 
-def find_song_pattern(thresh_diags):
+def __find_song_pattern(thresh_diags):
     """
-    Stitches information from thresholded diagonal matrix into a single
-        row
+    Stitches information from thresh_diags matrix into a single
+        row, song_pattern, that shows the timesteps containing repeats
 
     Args
     ----
