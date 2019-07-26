@@ -6,7 +6,7 @@ from inspect import signature
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
     Distills repeats encoded in input_pattern_obj and bw_vec to the essential 
-    structure components, the set of repeats so that no time step is contained 
+    structure components, the set of repeats, so that no time step is contained 
     in more than one repeat.
     
     Args
