@@ -3,9 +3,9 @@ import numpy as np
 
 def stretch_diags(thresh_diags, band_width):
     """
-    Stretches entries of matrix of thresholded diagonal onsets
-        into diagonals of given length
-    
+    Creates binary matrix with full length diagonals from binary matrix of
+        diagonal starts and length of diagonals
+                                                                                 
     Args
     ----
     thresh_diags: np.array
