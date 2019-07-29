@@ -1,6 +1,6 @@
 import numpy as np
 
-def lightup_pattern_row_bw_1(k_mat,song_length):
+def find_all_repeats(k_mat,song_length):
     """
     Turn the k_mat into marked rows with annotation markers for
         the start indices and zeroes otherwise. Check if the 
