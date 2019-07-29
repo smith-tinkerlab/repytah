@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np 
 
-def compare_and_cut(red, red_len, blue, blue_len):
+def _compare_and_cut(red, red_len, blue, blue_len):
     """
     Compares two rows of repeats labeled RED and BLUE, and determines if there 
     are any overlaps in time between them. If there is, then we cut the 
