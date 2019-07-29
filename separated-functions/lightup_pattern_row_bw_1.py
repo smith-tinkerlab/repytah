@@ -3,7 +3,9 @@ import numpy as np
 def lightup_pattern_row_bw_1(k_mat,song_length):
     """
     Turn the k_mat into marked rows with annotation markers for
-        the start indices and zeroes otherwise
+        the start indices and zeroes otherwise. Check if the 
+        proper sequence of annotation markers was given and 
+        fix them if necessary.
 
     Args
     ----
@@ -37,7 +39,7 @@ def lightup_pattern_row_bw_1(k_mat,song_length):
     anno_max = anno_lst.max(0) # Set the number of max elements in each column
     
     # Step 1: Loop over the annotations
-    for a in range(1, anno_max+1):
+    for a in range(1,anno_max+1):
         ands = (anno_lst == a) # Check if anno_lst is equal to a 
         
         # Combine rows into a single matrix
