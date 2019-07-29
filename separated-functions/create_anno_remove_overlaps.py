@@ -1,12 +1,13 @@
 import numpy as np
 
-def lightup_pattern_row_gb(k_mat,song_length,band_width):
+def create_anno_remove_overlaps(k_mat,song_length,band_width):
     """
     Turn k_mat into marked rows with annotation markers for the start indices 
-        and zeroes otherwise, after removing the annotations that have overlaps, 
-        output k_lst_out which only contains rows that have no overlaps,
-        the annotations that have overlaps get removed from k_lst_out
-        gets added to overlap_lst.
+        and zeroes otherwise. After removing the annotations that have overlaps, 
+        output k_lst_out which only contains rows that have no overlaps. Then 
+        take the annotations that have overlaps from k_lst_out and put them in
+        overlap_lst. Lastly, check if the proper sequence of annotation markers 
+        was given and fix them if necessary.
     
     Args
     ----
@@ -114,6 +115,6 @@ def lightup_pattern_row_gb(k_mat,song_length,band_width):
         overlap_lst = np.unique(overlap_lst,axis=0)
         overlap_lst = add_annotations(overlap_lst,song_length)
 
-    output = (pattern_row, k_lst_out, overlap_lst)
+    output = (pattern_row,k_lst_out,overlap_lst)
     
     return output
