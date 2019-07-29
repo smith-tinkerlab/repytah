@@ -53,15 +53,19 @@ def find_complete_list(pair_list,song_length):
             bend = p
     
         # Part A1: Isolate all starting time steps of the repeats of length bandwidth
-        SI = pair_list[bsnds:bend, 0]
-        SJ = pair_list[bsnds:bend, 2]
-        all_vec_snds = np.concatenate((SI, SJ))
+        start_I = pair_list[bsnds:bend, 0]
+        start_J = pair_list[bsnds:bend, 2]
+        combine_starts = [start_I,start_J]
+        
+        all_vec_snds = np.concatenate(combine_starts)
         int_snds = np.unique(all_vec_snds)
     
         # Part A2: Isolate all ending time steps of the repeats of length bandwidth
-        EI = pair_list[bsnds:bend, 1] # Similar to definition for SI
-        EJ = pair_list[bsnds:bend, 3] # Similar to definition for SJ
-        all_vec_ends = np.concatenate((EI,EJ))
+        end_I = pair_list[bsnds:bend, 1] # Similar to definition for SI
+        end_J = pair_list[bsnds:bend, 3] # Similar to definition for SJ
+        combine_ends = [end_I,end_J]
+        
+        all_vec_ends = np.concatenate(combine_ends)
         int_ends = np.unique(all_vec_ends)
     
         # Part B: Use the current diagonal information to search for diagonals 
@@ -86,12 +90,12 @@ def find_complete_list(pair_list,song_length):
        
         # Add the new pairs of repeats to the temporary list add_mat
         add_mat.extend((add_srows,add_erows,add_mrows))
-        add = np.concatenate(add_mat)
+        new_mat = np.concatenate(add_mat)
       
-    # Step 2: Combine pair_lst and add_mat. Make sure that you don't have any
+    # Step 2: Combine pair_lst and new_mat. Make sure that you don't have any
     #         double rows in add_mat. Then find the new list of found 
     #         bandwidths in combine_mat.
-    combo = [pair_list,add]
+    combo = [pair_list,new_mat]
     combine_mat = np.concatenate(combo)
 
     combine_mat = np.unique(combine_mat,axis=0)
@@ -106,11 +110,11 @@ def find_complete_list(pair_list,song_length):
     
     # Step 3: Loop over the new list of found bandwidths to add the annotation
     #         markers to each found pair of repeats
-    for j in range(1, new_bw_num+1):
-        new_band_width = new_bw_found[j-1]
+    for j in range(1,new_bw_num+1):
+        new_bw = new_bw_found[j-1]
         # Isolate pairs of repeats in combine_mat that are length bandwidth
-        new_bsnds = np.amin((combine_mat[:,4] == new_band_width).nonzero()) # Return the minimum of the array
-        new_bends = (combine_mat[:,4] > new_band_width).nonzero() 
+        new_bsnds = np.amin((combine_mat[:,4] == new_bw).nonzero()) # Return the minimum of the array
+        new_bends = (combine_mat[:,4] > new_bw).nonzero() 
 
         # Convert new_bends into an array
         new_bend = np.array(new_bends)
@@ -126,10 +130,10 @@ def find_complete_list(pair_list,song_length):
         temp_anno_lst = np.concatenate((band_width_mat,(np.zeros((length_band_width_mat,1)))),axis=1).astype(int)
 
         # Part C: Get annotation markers for this bandwidth
-        temp_anno_lst = add_annotations(temp_anno_lst,song_length)
+        temp_anno_lst = add_annotations(temp_anno_lst, song_length)
         full_lst.append(temp_anno_lst)
-        full = np.vstack(full_lst)
+        final_lst = np.vstack(full_lst)
     
-    lst_out = full
+    lst_out = final_lst
     
     return lst_out
