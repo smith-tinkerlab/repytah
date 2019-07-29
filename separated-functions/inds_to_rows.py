@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-def inds_to_rows(input_inds_mat, row_length):
+def __inds_to_rows(input_inds_mat, row_length):
     """
     Converts a list of indices to row(s) with 1's where an 
     index occurs and 0's otherwise

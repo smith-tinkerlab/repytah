@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-def num_of_parts(input_vec, input_start, input_all_starts):
+def __num_of_parts(input_vec, input_start, input_all_starts):
     """
     Determines the number of blocks or repeats of consecutive time steps
     in input_vec, a given list of time steps    
