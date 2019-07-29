@@ -6,8 +6,7 @@ utilities.py
 This script when imported as a module allows search.py, disassemble.py and 
 assemble.py in the ah package to run smoothly. 
 
-This file can also be imported as a module and contains the following
-functions:
+This file contains the following functions:
     
     * reconstruct_full_block - Creates a record of when pairs of repeated
     structures occur, from the first beat in the song to the end. Pairs of 
