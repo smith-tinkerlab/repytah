@@ -5,7 +5,7 @@ import numpy as np
 def __find_song_pattern(thresh_diags):
     """
     Stitches information from thresh_diags matrix into a single
-        row, song_pattern, that shows the timesteps containing repeats
+        row, song_pattern, that shows the timesteps containing repeats; 
 
     Args
     ----
@@ -77,6 +77,8 @@ def __find_song_pattern(thresh_diags):
         # Removes i from check_inds
         check_inds = np.setdiff1d(check_inds, i)
         
+    pattern_base = pattern_base[:,1:]
+    pattern_base = np.append(pattern_base, np.array([[0]]), axis = 1)
     song_pattern = pattern_base
     
     return song_pattern
