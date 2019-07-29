@@ -1,9 +1,10 @@
 import numpy as np
 
-def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
+def merge_based_on_length(full_mat,full_bw,target_bw):
     """
     Merges rows of full_mat that contain repeats that are the same 
-        length and are repeats of the same piece of structure.
+        length (as set by full_bandwidth) and are repeats of the 
+        same piece of structure.
         
     Args
     ----
@@ -30,17 +31,17 @@ def merge_based_on_length(full_mat,full_bandwidth,target_bandwidth):
     temp_mat = full_mat[bnds,:] 
     
     target_bandwidth = np.unique(target_bandwidth) # Find the unique elements of target_bandwidth
-    T = target_bandwidth.shape[0] # Number of columns 
+    target_size = target_bandwidth.shape[0] # Number of columns 
     
-    for i in range(1,T+1):
+    for i in range(1,target_size+1):
         test_bandwidth = target_bandwidth[i-1]
         inds = (temp_bandwidth == test_bandwidth) # Check if temp_bandwidth is equal to test_bandwidth
         
         # If the sum of all inds elements is greater than 1, then execute this if statement
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
-            toBmerged = temp_mat[inds,:]
-            merged_mat = merge_rows(toBmerged, test_bandwidth)
+            merge_bw = temp_mat[inds,:]
+            merged_mat = merge_rows(merge_bw,test_bandwidth)
         
             bandwidth_add_size = merged_mat.shape[0] # Number of columns
             bandwidth_add = test_bandwidth * np.ones((bandwidth_add_size,1)).astype(int)
