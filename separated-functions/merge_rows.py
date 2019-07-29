@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-def merge_rows(input_mat, input_width):
+def _merge_rows(input_mat, input_width):
     """
     Merges rows that have at least one common repeat; said common repeat(s)
         must occur at the same time step and be of common length
@@ -48,7 +48,7 @@ def merge_rows(input_mat, input_width):
         # If there are conflicts, rerun compare_and_cut
         merge_block = reconstruct_full_block(union_merge, input_width)
         if np.max(merge_block) > 1:
-            (union_merge, union_merge_key) = compare_and_cut(union_merge, input_width,
+            (union_merge, union_merge_key) = _compare_and_cut(union_merge, input_width,
             union_merge, input_width)
         else:
             union_merge_key = input_width
