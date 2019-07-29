@@ -99,9 +99,9 @@ def compare_and_cut(red, red_len, blue, blue_len):
                 #elsewhere. Also red_length_vec will have the length(s) of the
                 #parts in new_red.
                 if red_minus_purple.size != 0:
-                    red_start_mat, red_length_vec = num_of_parts(\
+                    red_start_mat, red_length_vec = __num_of_parts(\
                                               red_minus_purple, ri, start_red)
-                    new_red = inds_to_rows(red_start_mat,sn)
+                    new_red = __inds_to_rows(red_start_mat,sn)
                 else:
                     # If red_minus_purple is empty, then set new_red and
                     # red_length_vec to empty
@@ -111,7 +111,7 @@ def compare_and_cut(red, red_len, blue, blue_len):
                 #Noting that purple is only one part and in both red_ri and
                 #blue_bi, then we need to find where the purple starting
                 #indices are in all the red_ri
-                purple_in_red_mat, purple_length = num_of_parts(purple, ri, \
+                purple_in_red_mat, purple_length = __num_of_parts(purple, ri, \
                                                                 start_red)
                 
                 #If blue_minus_purple is not empty, then see if there are one
@@ -125,9 +125,9 @@ def compare_and_cut(red, red_len, blue, blue_len):
                 blue_minus_purple = np.setdiff1d(blue_bi,purple)
                 
                 if blue_minus_purple.size != 0: 
-                    blue_start_mat, blue_length_vec = num_of_parts(\
+                    blue_start_mat, blue_length_vec = __num_of_parts(\
                                             blue_minus_purple, bi, start_blue)
-                    new_blue = inds_to_rows(blue_start_mat, sn)
+                    new_blue = __inds_to_rows(blue_start_mat, sn)
                 else:
                     #If blue_minus_purple is empty, then set new_blue and
                     #blue_length_vec to empty
@@ -137,7 +137,7 @@ def compare_and_cut(red, red_len, blue, blue_len):
                 #Recalling that purple is only one part and in both red_rd 
                 #and blue_bi, then we need to find where the purple starting
                 #indices are in all the blue_ri
-                purple_in_blue_mat, x = num_of_parts(purple, bi, start_blue)
+                purple_in_blue_mat, x = __num_of_parts(purple, bi, start_blue)
                 
                 #Union purple_in_red_mat and purple_in_blue_mat to get
                 #purple_start, which stores all the purple indices
@@ -146,7 +146,7 @@ def compare_and_cut(red, red_len, blue, blue_len):
                 
                 #Use purple_start to get new_purple with 1's where the repeats
                 #in the purple rows start and 0 otherwise. 
-                new_purple = inds_to_rows(purple_start, sn);
+                new_purple = __inds_to_rows(purple_start, sn);
                 
                 if new_red.size != 0 | new_blue.size != 0:
                     #Form the outputs
@@ -154,7 +154,7 @@ def compare_and_cut(red, red_len, blue, blue_len):
                     union_length = np.vstack((red_length_vec, \
                                               blue_length_vec, purple_length))
 
-                    union_mat, union_length = merge_based_on_length(\
+                    union_mat, union_length = _merge_based_on_length(\
                                         union_mat, union_length, union_length)
                     break
                 elif new_red.size == 0 & new_blue.size == 0:
