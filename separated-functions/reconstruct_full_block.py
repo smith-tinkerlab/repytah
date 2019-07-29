@@ -5,9 +5,8 @@ import numpy as np
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
-    Creates a binary matrix with a block of 1's for 
-        each repeat encoded in pattern_mat whose length 
-        is encoded in patern_key
+    Creates a binary matrix with a block of 1's for each repeat encoded in 
+    pattern_mat whose length is encoded in pattern_key
 
     Args
     ----
@@ -26,13 +25,13 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
     """
-    #Find number of beats (columns) in pattern_mat
-    
+    #First, find number of beats (columns) in pattern_mat: 
     #Check size of pattern_mat (in cases where there is only 1 pair of
     #repeated structures)
     if (pattern_mat.ndim == 1): 
         #Convert a 1D array into 2D array 
-        #From https://stackoverflow.com/questions/3061761/numpy-array-dimensions
+        #From:
+        #https://stackoverflow.com/questions/3061761/numpy-array-dimensions
         pattern_mat = pattern_mat[None, : ]
         #Assign number of beats to sn 
         sn = pattern_mat.shape[1]
