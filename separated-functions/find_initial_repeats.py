@@ -3,8 +3,8 @@
 import numpy as np
 from scipy import signal
 """
-Finds all diagonals present in thresh_mat, removing each 
-diagonal as it is found.
+Finds all diagonals present in thresh_mat, removing each diagonal as it is 
+found.
 
 Args
 ----
