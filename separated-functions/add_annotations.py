@@ -4,11 +4,11 @@ import scipy.sparse as sps
 
 def add_annotations(input_mat, song_length):
     """
-    Adds annotations to pairs of repeats in input_mat
+    Adds annotations to the pairs of repeats in input_mat   
 
     Args
     ----
-    input_mat: array
+    input_mat: np.array
         list of pairs of repeats. The first two columns refer to 
         the first repeat of the pair. The third and fourth columns refer
         to the second repeat of the pair. The fifth column refers to the
@@ -21,7 +21,7 @@ def add_annotations(input_mat, song_length):
     Returns
     -------
     anno_list: array
-        list of pairs of repeats with annotations marked
+        list of pairs of repeats with annotations marked. 
     """
     num_rows = input_mat.shape[0]
     
