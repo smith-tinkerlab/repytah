@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import signal
 
-def lightup_lst_with_thresh_band_width_no_remove(thresh_mat,band_width_vec):
+def find_all_repeats(thresh_mat,band_width_vec):
     """
     Finds all the diagonals present in thresh_mat.
     
