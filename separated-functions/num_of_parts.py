@@ -4,16 +4,17 @@ import numpy as np
 
 def num_of_parts(input_vec, input_start, input_all_starts):
     """
-    Determines the number of blocks of consecutive time steps
-    in a given list of time steps 
+    Determines the number of blocks or repeats of consecutive time steps
+    in input_vec, a given list of time steps    
     
     Args
     ----
         input_vec: np.array 
-            one or two parts to replicate 
+            one or two parts that are overlap(s) in time between two rows of 
+            repeats to replicate 
             
         input_start: np.array index 
-            starting index for part to be replicated 
+            starting index for the part to be replicated 
         
         input_all_starts: np.array indices 
             starting indices for replication 
@@ -21,11 +22,11 @@ def num_of_parts(input_vec, input_start, input_all_starts):
     Returns
     -------
         start_mat: np.array 
-            matrix of one or two rows, containing 
-            the starting indices 
+            array of one or two rows, containing the starting indices of the 
+            replicated repeats 
             
         length_vec: np.array 
-            column vector of the lengths 
+            column vector containing the lengths of the replicated parts 
     """
     
     diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
