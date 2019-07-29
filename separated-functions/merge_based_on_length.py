@@ -1,6 +1,6 @@
 import numpy as np
 
-def merge_based_on_length(full_mat,full_bw,target_bw):
+def _merge_based_on_length(full_mat,full_bw,target_bw):
     """
     Merges rows of full_mat that contain repeats that are the same 
         length (as set by full_bandwidth) and are repeats of the 
@@ -41,7 +41,7 @@ def merge_based_on_length(full_mat,full_bw,target_bw):
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
             merge_bw = temp_mat[inds,:]
-            merged_mat = merge_rows(merge_bw,test_bandwidth)
+            merged_mat = _merge_rows(merge_bw,test_bandwidth)
         
             bandwidth_add_size = merged_mat.shape[0] # Number of columns
             bandwidth_add = test_bandwidth * np.ones((bandwidth_add_size,1)).astype(int)
