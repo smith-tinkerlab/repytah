@@ -35,8 +35,9 @@ def add_annotations(input_mat, song_length):
     # Creates matrix of all repeats
     s_three = np.ones((num_rows,), dtype = int)
     
-    up_tri_mat = sps.coo_matrix((s_three, (s_one, s_two)),
-                                shape = (song_length, song_length)).toarray()
+    up_tri_mat = sps.coo_matrix((s_three, 
+                                 (s_one, s_two)), shape = (song_length + 1, 
+                                 song_length + 1)).toarray()
     
     low_tri_mat = up_tri_mat.conj().transpose()
     
@@ -44,6 +45,10 @@ def add_annotations(input_mat, song_length):
     
     # Stitches info from input_mat into a single row
     song_pattern = __find_song_pattern(full_mat)
+    
+    # Restructures song_pattern
+    song_pattern = song_pattern[:,:-1]
+    song_pattern = np.insert(song_pattern, 0, 0, axis=1)
     
     # Adds annotation markers to pairs of repeats
     for i in song_pattern[0]:
