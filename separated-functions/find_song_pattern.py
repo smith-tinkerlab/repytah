@@ -5,17 +5,21 @@ import numpy as np
 def __find_song_pattern(thresh_diags):
     """
     Stitches information from thresh_diags matrix into a single
-        row, song_pattern, that shows the timesteps containing repeats; 
+        row, song_pattern, that shows the timesteps containing repeats;
+        From the full matrix that decodes repeat beginnings (thresh_diags),
+        the locations, or beats, where these repeats start are found and
+        encoded into the song_pattern array
 
     Args
     ----
-    thresh_diags: array
-        binary matrix with 1 at each pair (SI,SJ) and 0 elsewhere. 
+    thresh_diags: np.array
+        binary matrix with 1 at the start of each repeat pair (SI,SJ) and 
+        0 elsewhere. 
         WARNING: must be symmetric
     
     Returns
     -------
-    song_pattern: array
+    song_pattern: np.array [shape = (1, song_length)]
         row where each entry represents a time step and the group 
         that time step is a member of
     """
