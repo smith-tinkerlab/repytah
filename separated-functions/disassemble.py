@@ -4,7 +4,7 @@ disassemble.py
 
 This script contains functions that separate and disassemble inputs into 
 smaller or more specific pieces. They focus mainly on overlaps and annotation
-markers
+markers.
 
 This file contains the following functions:
     
