@@ -82,13 +82,13 @@ def find_all_repeats(thresh_mat,band_width_vec):
 
                 # 2a) Left Overlap
                 K = start_J_overlap - start_I_overlap  # NOTE: end_J_overlap - end_I_overlap will also equal this,
-                               # since the intervals that are overlapping are
-                               # the same length. Therefore the "left"
-                               # non-overlapping section is the same length as
-                               # the "right" non-overlapping section. It does
-                               # NOT follow that the "middle" section is equal
-                               # to either the "left" or "right" piece. It is
-                               # possible, but unlikely.
+                                                       # since the intervals that are overlapping are
+                                                       # the same length. Therefore the "left"
+                                                       # non-overlapping section is the same length as
+                                                       # the "right" non-overlapping section. It does
+                                                       # NOT follow that the "middle" section is equal
+                                                       # to either the "left" or "right" piece. It is
+                                                       # possible, but unlikely.
                 sint_lst = np.column_stack([start_I_overlap,(start_J_overlap - ones_no),start_J_overlap,(start_J_overlap + K - ones_no),K]).astype(int)
                 Is = np.argsort(K) # Return the indices that would sort K
                 Is.reshape(np.size(Is), 1)
