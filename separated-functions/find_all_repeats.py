@@ -8,7 +8,7 @@ def find_all_repeats(thresh_mat,band_width_vec):
         differences. First, we do not remove diagonals after we 
         find them. Second, there is no smallest bandwidth size 
         as we are looking for all diagonals.
-
+        
     Args
     ----
     thresh_mat: np.array
@@ -22,21 +22,21 @@ def find_all_repeats(thresh_mat,band_width_vec):
     all_lst: np.array
         list of pairs of repeats that correspond to diagonals
         in thresh_mat
+        
     """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
-    band_width_vec = band_width_vec
-    b = np.size(band_width_vec,axis=0)
+    b = np.size(band_width_vec, axis=0)
     
     int_all = []  # Interval list for non-overlapping pairs
     sint_all = [] # Interval list for the left side of the overlapping pairs
     eint_all = [] # Interval list for the right side of the overlapping pairs
     mint_all = [] # Interval list for the middle of the overlapping pairs if they exist
     
-    for i in range(1,b+1): # Loop over all possible band_widths
+    for i in range(1, b + 1): # Loop over all possible band_widths
         # Set current band_width
-        j = b-i+1
-        band_width = band_width_vec[j-1]
+        j = b - i + 1
+        band_width = band_width_vec[j - 1]
 
         # Search for diagonals of length band_width
         DDM = signal.convolve2d(thresh_temp[0:,0:],np.eye(band_width),'valid').astype(int)
