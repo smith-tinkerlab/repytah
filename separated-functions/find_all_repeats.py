@@ -9,7 +9,6 @@ def find_all_repeats(thresh_mat,band_width_vec):
         find them. Second, there is no smallest bandwidth size 
         as we are looking for all diagonals.
 
-    
     Args
     ----
     thresh_mat: np.array
