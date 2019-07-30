@@ -117,7 +117,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
 #  sublists in the order that repeats of essential structure components.
 #  These pairs of repeated sublists are the basis of our hierarchical
 #  representation.
-    NZI_lst = lightup_lst_with_thresh_bw_no_remove(symm_PNO_inds_only, [0:num_NZI])                 
+    NZI_lst = find_all_repeats(symm_PNO_inds_only, [0:num_NZI])                 
     remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
 #  Remove any pairs of repeats that are two copies of the same repeat (i.e.
 #  a pair (A,B) where A == B)
