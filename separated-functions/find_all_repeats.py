@@ -3,8 +3,12 @@ from scipy import signal
 
 def find_all_repeats(thresh_mat,band_width_vec):
     """
-    Find all repeated structures that are encoded as diagonals in thresh_mat. 
-    
+    Finds all the diagonals present in thresh_mat. This function is 
+        nearly identical to find_initial_repeats, with two crucial 
+        differences. First, we do not remove diagonals after we 
+        find them. Second, there is no smallest bandwidth size 
+        as we are looking for all diagonals.
+        
     Args
     ----
     thresh_mat: np.array

@@ -3,16 +3,16 @@ import numpy as np
 def find_complete_list(pair_list,song_length):
     """
     Finds all smaller diagonals (and the associated pairs of repeats) 
-        that are contained in larger diagonals found in 
-        find_initial_repeats.
+        that are contained pair_list, which is composed of larger 
+        diagonals found in find_initial_repeats.
         
     Args
     ----
-    pair_lst: np.array
+    pair_list: np.array
         list of pairs of repeats found in earlier step
         (bandwidths MUST be in ascending order). If you have
         run find_initial_repeats before this script,
-        then pair_lst will be ordered correctly. 
+        then pair_list will be ordered correctly. 
            
     song_length: int
         song length, which is the number of audio shingles.
@@ -74,9 +74,9 @@ def find_complete_list(pair_list,song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        add_srows = find_add_srows_both_check_no_anno(pair_lst, int_snds, band_width)
-        add_erows = find_add_mrows_both_check_no_anno(pair_lst, int_snds, band_width)
-        add_mrows = find_add_erows_both_check_no_anno(pair_lst, int_ends, band_width)
+        add_srows = find_add_srows_both_check_no_anno(pair_list, int_snds, band_width)
+        add_erows = find_add_mrows_both_check_no_anno(pair_list, int_snds, band_width)
+        add_mrows = find_add_erows_both_check_no_anno(pair_list, int_ends, band_width)
         
         # Check if any of the arrays are empty, if so, reshape them
         if add_mrows.size == 0:
@@ -93,7 +93,7 @@ def find_complete_list(pair_list,song_length):
         add_mat.extend((add_srows,add_erows,add_mrows))
         new_mat = np.concatenate(add_mat)
       
-    # Step 2: Combine pair_lst and new_mat. Make sure that you don't have any
+    # Step 2: Combine pair_list and new_mat. Make sure that you don't have any
     #         double rows in add_mat. Then find the new list of found 
     #         bandwidths in combine_mat.
     combo = [pair_list,new_mat]
