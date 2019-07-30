@@ -9,8 +9,8 @@ assemble.py in the ah package to run smoothly.
 This file contains the following functions:
     
     * reconstruct_full_block - Creates a record of when pairs of repeated
-    structures occur, from the first beat in the song to the end. Pairs of 
-    repeated structures are marked with 1's. 
+    structures occur, from the first beat in the song to the last beat of the
+    song. Pairs of repeated structures are marked with 1's. 
 
     * find_initial_repeats - Finds all diagonals present in thresh_mat, 
     removing each diagonal as it is found.
@@ -39,7 +39,7 @@ import scipy.spatial.distance as spd
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
     Creates a binary matrix with a block of 1's for each repeat encoded in 
-    pattern_mat whose length is encoded in pattern_key
+    pattern_mat whose length is encoded in pattern_key.........
 
     Args
     ----
