@@ -53,8 +53,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 #1) Non-Overlaps: Search outside the overlapping shingles
 
                 #Find the starts that are paired together
-                #returns tuple of lists (python) https://docs.scipy.org/doc/np/reference/generated/np.nonzero.html
-                #need to add 1 to return correct number of nonzero ints matlab vs python
+                #Need to add 1 to return correct number of nonzero ints matlab vs python
                 overlaps = np.nonzero(np.triu(thresh_DDM_rename, (full_bw)))
 
                 startI = np.array(overlaps[0])
@@ -72,12 +71,11 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 #non-overlapping intervals
                 int_all.append(int_lst)
                 # 2) Overlaps: Search only the overlaps in shingles
-                #returns tuple (python) 
                 shingle_overlaps = np.nonzero(np.tril(np.triu(thresh_DDM_rename), (full_bw-1)))
-                #gets list for I and J [1,2,3,4] turn those to np, transpose them vertically
+                #Gets list for I and J [1,2,3,4] turn those to np, transpose them vertically
                 startI_inShingle = np.array(shingle_overlaps[0]) 
                 startJ_inShingle = np.array(shingle_overlaps[1]) 
-                #find number of overlaps
+                #Find number of overlaps
                 num_overlaps = np.size(startI_inShingle)
                 if (num_overlaps == 1 and startI_inShingle == startJ_inShingle):
                     sint_lst = np.column_stack([startI_inShingle, startI_inShingle,(startI_inShingle + (full_bw - 1)),startJ_inShingle,(startJ_inShingle + (full_bw - 1)), full_bw])
@@ -91,26 +89,26 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     ones_no = np.ones(num_overlaps);
 
                     #2a) Left Overlap
-                    #remain consistent with being matlab -1
+                    #Remain consistent with being matlab -1
                     K = startJ_inShingle - startI_inShingle
                     sint_lst = np.column_stack([startI_inShingle, (startJ_inShingle - ones_no), startJ_inShingle, (startJ_inShingle + K - ones_no), K])
-                    #returns list of indexes of sorted list
+                    #Returns list of indexes of sorted list
                     Is = np.argsort(K)
-                    #turn array vertical
+                    #Turn array vertical
                     Is.reshape(np.size(Is), 1)
-                    #extract all columns from row Is
+                    #Extract all columns from row Is
                     sint_lst = sint_lst[Is, :]
                                     #grab only length column
                     i = 0
                     for length in np.transpose(sint_lst[:,4]):
-                        #if this length is greater than thresh_bw-- we found our index
+                        #If this length is greater than thresh_bw-- we found our index
                         if length > thresh_bw:
-                        #if its not the first row
+                        #If its not the first row
                             if(i!=0):
-                                #delete rows that fall below threshold
+                                #Delete rows that fall below threshold
                                 sint_lst = np.delete(sint_lst, (i-1), axis=0)
                             sint_all.append(sint_lst)
-                                #after we found the min that exceeds thresh_bw... break
+                                #After we found the min that exceeds thresh_bw... break
                             break
                         i=i+1
                     #endfor
@@ -119,28 +117,28 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     endJ_right = startJ_inShingle + (full_bw)
                     eint_lst = np.column_stack([(endI_right + ones_no - K), endI_right, (endI_right + ones_no), endJ_right, K])
                     indexes = np.argsort(K)
-                    #turn result to column
+                    #Turn result to column
                     indexes.reshape(np.size(indexes),1)
                     eint_lst = eint_lst[indexes, :]
                     
-                    #grab only length column
+                    #Grab only length column
                     i = 0
                     for length in np.transpose(eint_lst[:,4]):
-                        #if this length is greater than thresh_bw-- we found our index
+                        #If this length is greater than thresh_bw-- we found our index
                         if length > thresh_bw:
                             #if its not the first row
                             if(i!=0):
-                                #delete rows that fall below threshold
+                                #Delete rows that fall below threshold
                                 eint_lst = np.delete(eint_lst, (i-1), axis=0)
                             eint_all.append(eint_lst)
-                            #after we found the min that exceeds thresh_bw... break
+                            #After we found the min that exceeds thresh_bw... break
                             break
                         i=i+1
 
                     # 2) Middle Overlap
-                    #returns logical 0 or 1 for true or false
+                    #Returns logical 0 or 1 for true or false
                     mnds = (endI_right - startJ_inShingle - K + ones_no) > 0
-                    #for each logical operator convert to 0 or 1
+                    #For each logical operator convert to 0 or 1
                     for operator in mnds:
                         if operator is True:
                             operator = 1
@@ -150,14 +148,14 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     endI_middle = (endI_right*(mnds) - K*(mnds))
                     startJ_middle = (startJ_inShingle*(mnds) + K*(mnds))
                     endJ_middle = endI_right*(mnds)
-                    #fixes indexing here because length starts at 1 and indexes start at 0
+                    #Fixes indexing here because length starts at 1 and indexes start at 0
                     Km = (endI_right*(mnds) - startJ_inShingle*(mnds) - K*(mnds) +ones_no*(mnds))-1
                     if np.sum(np.sum(mnds)) > 0 : 
                         mint_lst = np.column_stack([startI_middle, endI_middle, startJ_middle, endJ_middle, Km])
-                        #revert for same reason
+                        #Revert for same reason
                         Km = Km+1
                         Im = np.argsort(Km)
-                        #turn array to column
+                        #Turn array to column
                         Im.reshape(np.size(Im), 1)
                         mint_lst = mint_lst[Im, :]
 
@@ -165,14 +163,14 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                         #grab only length column
                         i = 0
                         for length in np.transpose(mint_lst[:,4]):
-                            #if this length is greater than thresh_bw-- we found our index
+                            #If this length is greater than thresh_bw-- we found our index
                             if length > thresh_bw:
-                            #if its not the first row
+                            #If its not the first row
                                 if(i!=0):
-                                    #delete rows that fall below threshold
+                                    #Delete rows that fall below threshold
                                     mint_lst = np.delete(mint_lst, (i-1), axis=0)
                                 mint_all.append(mint_lst)
-                                #after we found the min that exceeds thresh_bw... break
+                                #After we found the min that exceeds thresh_bw... break
                                 break
                             i=i+1
                         #endfor
@@ -191,11 +189,11 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     #endfor
      #Combine non-overlapping intervals with the left, right, and middle parts
      #of the overlapping intervals
-    #remove empty lines from the lists
+    #Remove empty lines from the lists
 
 
     out_lst = int_all + sint_all + eint_all + mint_all
-    #remove empty lists from final output
+    #Remove empty lists from final output
     
     all_lst = filter(None, out_lst)
 
