@@ -4,8 +4,9 @@ import numpy as np
 
 def find_add_srows(lst_no_anno, check_inds, k):
     """
-    Finds diagonals of length k that start at the same time step 
-        as previously found repeats of length k. 
+    Finds pairs of repeated structures, representated as diagonals of a 
+    certain length, k, that start at the same time step as previously found 
+    pairs of repeated structures of the same length.  
         
     Args
     ----
