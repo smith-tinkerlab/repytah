@@ -2,8 +2,9 @@ import numpy as np
 
 def find_add_mrows(lst_no_anno, check_inds, k): 
     """
-    Finds diagonals of length k that neither start nor end at the same time 
-    steps as previously found repeats of length k. 
+    Finds pairs of repeated structures, represented as diagonals of a certain
+    length, k, that neither start nor end at the same time steps as previously
+    found pairs of repeated structures of the same length. 
 
     Args
     ----
