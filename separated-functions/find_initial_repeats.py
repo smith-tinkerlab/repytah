@@ -3,7 +3,8 @@
 import numpy as np
 from scipy import signal
 """
-Finds all diagonals present in thresh_mat, removing each diagonal as it is 
+Looks for largest repeated structures in thresh_mat. Finds all diagonals present in thresh_mat, and represents them with their start/end
+indices and lengths. Removes each diagonal as it is found 
 found.
 
 Args
@@ -12,7 +13,7 @@ Args
         thresholded matrix that we extract diagonals from
     
     bandwidth_vec: np.array[1D,int]:
-        vector of lengths of diagonals to be found
+        vector of lengths of diagonals to be found. Should be 1,2,3,..... n where n = num_timesteps
     
     thresh_bw int:
         smallest allowed diagonal length
