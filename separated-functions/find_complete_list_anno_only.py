@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-def fcl_anno_only(pair_list, song_length):
+def find_complete_list_anno_only(pair_list, song_length):
     """
-    Finds annotations for all pairs of repeats in pair_list
+    Finds annotations for all pairs of repeats in pair_list (created in 
+    find_all_repeats)
     
     Args
     ----
