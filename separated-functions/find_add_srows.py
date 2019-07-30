@@ -26,18 +26,6 @@ def find_add_srows(lst_no_anno, check_inds, k):
         contained in larger repeats in lst_no_anno
             
     """
-    # List of pairs of repeats 
-    lst_no_anno = np.array([[1, 15, 31, 45, 15], 
-                            [1, 10, 46, 55, 10], 
-                            [31, 40, 46, 55, 10],
-                            [10, 25, 41, 55, 15]])
-
-    # Ending indices of length k (length of repeat we are looking for)
-    check_inds = np.array([10, 55, 40, 55])
-
-    # Length of repeat we are looking for 
-    k = 10
-    L = lst_no_anno
 
     # Logical, which pair of repeats has a length greater than k (T returns 1, F returns 0)
     search_inds = (L[:,4] > k)
