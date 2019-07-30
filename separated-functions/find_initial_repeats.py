@@ -2,29 +2,30 @@
 #https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
 import numpy as np
 from scipy import signal
-"""
-Finds all diagonals present in thresh_mat, removing each diagonal as it is 
-found.
-
-Args
-----
-    thresh_mat: np.array[int]:
-        thresholded matrix that we extract diagonals from
-    
-    bandwidth_vec: np.array[1D,int]:
-        vector of lengths of diagonals to be found
-    
-    thresh_bw int:
-        smallest allowed diagonal length
-
-Returns
--------
-    all_lst: np.array[int]:
-        list of pairs of repeats that correspond to 
-        diagonals in thresh_mat
-"""
 
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
+    """
+    Identifies all repeated structures in a sequential data stream which are 
+    represented as diagonals in thresh_mat and then stores the pairs of
+    repeats that correspond to each repeated structure in a list. 
+    
+    Args
+    ----
+        thresh_mat: np.array[int]:
+            thresholded matrix that we extract diagonals from
+        
+        bandwidth_vec: np.array[1D,int]:
+            vector of lengths of diagonals to be found
+        
+        thresh_bw int:
+            smallest allowed diagonal length
+    
+    Returns
+    -------
+        all_lst: np.array[int]:
+            list of pairs of repeats that correspond to 
+            diagonals in thresh_mat
+    """
 
     b = np.size(bandwidth_vec)
 
