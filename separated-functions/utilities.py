@@ -16,7 +16,7 @@ This file contains the following functions:
     removing each diagonal as it is found.
     
     * add_annotations - Adds annotations to each pair of repeated structures 
-    according to their order of occurence. 
+    according to their length and order of occurence. 
     
     * create_sdm - Creates a self-dissimilarity matrix; this matrix is found 
     by creating audio shingles from feature vectors, and finding cosine 
@@ -331,7 +331,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
 def add_annotations(input_mat, song_length):
     """
-    Adds annotations to the pairs of repeats in input_mat   
+    Adds annotations to the pairs of repeats in input_mat; Annotations depend 
+    on length of repeats and the time that repeats occur in song
 
     Args
     ----
@@ -447,7 +448,8 @@ def create_sdm(fv_mat, num_fv_per_shingle):
   
 
 def reformat(pattern_mat, pattern_key):
-    """Transforms a binary array with 1's where repeats start and 0's
+    """
+    Transforms a binary array with 1's where repeats start and 0's
     otherwise into an a list of repeated stuctures. This list consists of
     information about the repeats including length, when they occur and when
     they end. 
