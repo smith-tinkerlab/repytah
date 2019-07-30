@@ -3,9 +3,9 @@ import scipy.spatial.distance as spd
 
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
-    Creates self-dissimilarity matrix; This matrix is found by creating audio 
-        shingles from feature vectors, and finding cosine distance between 
-        shingles
+    Creates self-dissimilarity matrix; this matrix is found by creating audio 
+    shingles from feature vectors, and finding cosine distance between 
+    shingles
     
     Args
     ----
@@ -20,7 +20,8 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     Returns
     -------
     self_dissim_mat: np.array 
-        self dissimilarity matrix with paired cosine distances between shingles
+        self dissimilarity matrix with paired cosine distances between 
+        shingles
     """
     [num_rows, num_columns] = fv_mat.shape
     if num_fv_per_shingle == 1:
