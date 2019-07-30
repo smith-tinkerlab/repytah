@@ -34,8 +34,8 @@ def create_sdm(fv_mat, num_fv_per_shingle):
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
-            mat_as[((i-1)*num_rows+1)-1:(i*num_rows), : ] = fv_mat[:, 
-                   i-1:(num_columns- num_fv_per_shingle + i)]
+            mat_as[((i-1)*num_rows+1)-1:(i*num_rows), : ] = 
+	    fv_mat[ : , i-1 :(num_columns - num_fv_per_shingle + i)]
 
     sdm_row = spd.pdist(mat_as.T, 'cosine')
     self_dissim_mat = spd.squareform(sdm_row)

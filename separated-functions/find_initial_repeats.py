@@ -5,24 +5,26 @@ from scipy import signal
 
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
-    Identifies all repeated structures in a sequential data stream which are 
-    represented as diagonals in thresh_mat and then stores the pairs of
-    repeats that correspond to each repeated structure in a list. 
-    
+    Looks for the largest repeated structures in thresh_mat. Finds all 
+    repeated structures, represented as diagonals present in thresh_mat, 
+    and then stores them with their start/end indices and lengths in a 
+    list. As each diagonal is found, they are removed to avoid identifying
+    repeated sub-structures. 
+  
     Args
     ----
-        thresh_mat: np.array[int]:
+        thresh_mat: np.array[int]
             thresholded matrix that we extract diagonals from
-        
-        bandwidth_vec: np.array[1D,int]:
-            vector of lengths of diagonals to be found
-        
-        thresh_bw int:
+
+        bandwidth_vec: np.array[1D,int]
+            vector of lengths of diagonals to be found. Should be 1,2,3,..... n where n = num_timesteps
+
+        thresh_bw: int
             smallest allowed diagonal length
-    
+
     Returns
     -------
-        all_lst: np.array[int]:
+        all_lst: np.array[int]
             list of pairs of repeats that correspond to 
             diagonals in thresh_mat
     """
