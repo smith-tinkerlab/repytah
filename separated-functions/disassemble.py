@@ -3,18 +3,27 @@
 disassemble.py
 
 This script contains functions that separate and disassemble inputs into 
-smaller pieces
+smaller or more specific pieces. They focus mainly on overlaps and annotation
+markers
 
 This file contains the following functions:
     
-    * create_anno_remove_overlaps
+    * create_anno_remove_overlaps - Turns rows of repeats into marked rows with 
+    annotation markers for the start indices and zeroes otherwise. After 
+    removing the annotations that have overlaps, creates separate arrays
+    for annotations with overlaps and annotations without overlaps. Finally,
+    the annotation markers are checked and fixed if necessary.
     
-    * create_anno_rows
+    * create_anno_rows - Turns rows of repeats into marked rows with annotation
+    markers for start indices and zeroes otherwise. Then checks if the correct 
+    annotation markers were given and fixes the markers if necessary.
     
-    * remove_overlaps
+    * remove_overlaps - Removes any pairs of repeats with the same length and 
+    annotation marker where at least one pair of repeats overlap in time
     
-    * separate_anno_markers
-
+    * separate_anno_markers - Expands vector of non-overlapping repeats into
+    a matrix representation. The matrix representation is a visual recored of
+    where all of the repeats in a song start and end.
 """
 
 import numpy as np
