@@ -38,8 +38,10 @@ import scipy.spatial.distance as spd
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
-    Creates a binary matrix with a block of 1's for each repeat encoded in 
-    pattern_mat whose length is encoded in pattern_key
+    Creates a record of when pairs of repeated structures occur, from the 
+    first beat in the song to the end. This record is a binary matrix with a 
+    block of 1's for each repeat encoded in pattern_mat whose length 
+    is encoded in pattern_key
 
     Args
     ----
