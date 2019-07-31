@@ -924,6 +924,3 @@ def hierarchical_structure(matrix_no,key_no,sn):
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
     return output
-
-
-
