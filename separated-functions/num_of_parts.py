@@ -4,14 +4,19 @@ import numpy as np
 
 def __num_of_parts(input_vec, input_start, input_all_starts):
     """
-    Determines the number of blocks or repeats of consecutive time steps
-    in input_vec, a given list of time steps    
+    This function continues the process of distilling the repeats of a song 
+    into their essential structure components. 
     
+    This function is used to determine the number of blocks of consecutive 
+    time steps in a list of time steps. A block of consecutive time steps
+    represent a distilled section of a repeat. 
+    
+
     Args
     ----
         input_vec: np.array 
-            one or two parts that are overlap(s) in time between two rows of 
-            repeats to replicate 
+            contains one or two parts of a repeat that are overlap(s) in time 
+            that may need to be replicated 
             
         input_start: np.array index 
             starting index for the part to be replicated 
