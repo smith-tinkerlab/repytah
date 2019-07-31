@@ -13,6 +13,14 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 * _Forthcoming_ Start-End and S_NL diagrams
 * _Forthcoming_ SuPP and MaPP representations
 
+### Modules
+
+* Aligned Hierarchies
+   * example.py - Includes a complete aligned hierarchies case in which a csv file with extracted features is input and the aligned  hierarchies are output.
+   * utilities.py - Includes utility functions that allow larger functions in other modules to function.
+   * search.py - Includes functions that find structures and information about those structures.
+   * transform.py - Includes functions that transform inputs to be of use in larger functions in assemble.py.
+   * assemble.py - Includes functions that create the hierarchical structure and build the aligned hierarchies.
 
 ## Contributors
 
