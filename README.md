@@ -16,11 +16,11 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 ### Modules
 
 * [Aligned Hierarchies](https://github.com/smith-tinkerlab/ah/tree/master/aligned-hierarchies)
-   * example.py - Includes a complete aligned hierarchies case in which a csv file with extracted features is input and the aligned  hierarchies are output.
-   * utilities.py - Includes utility functions that allow larger functions in other modules to function.
-   * search.py - Includes functions that find structures and information about those structures.
-   * transform.py - Includes functions that transform inputs to be of use in larger functions in assemble.py.
-   * assemble.py - Includes functions that create the hierarchical structure and build the aligned hierarchies.
+   * [example.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/example.py) - Includes a complete aligned hierarchies case in which a csv file with extracted features is input and the aligned  hierarchies are output.
+   * [utilities.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/utilities.py) - Includes utility functions that allow larger functions in other modules to function.
+   * [search.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/search.py) - Includes functions that find structures and information about those structures.
+   * [transform.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/transform.py) - Includes functions that transform inputs to be of use in larger functions in assemble.py.
+   * [assemble.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/assemble.py) - Includes functions that create the hierarchical structure and build the aligned hierarchies.
 
 ## Contributors
 
