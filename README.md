@@ -15,7 +15,7 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 
 ### Modules
 
-* Aligned Hierarchies
+* Aligned Hierarchies 
    * example.py - Includes a complete aligned hierarchies case in which a csv file with extracted features is input and the aligned  hierarchies are output.
    * utilities.py - Includes utility functions that allow larger functions in other modules to function.
    * search.py - Includes functions that find structures and information about those structures.
@@ -25,7 +25,7 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 ## Contributors
 
 The contributors for this package are:
-* Aligned Hierarchies
+* [Aligned Hierarchies](https://github.com/smith-tinkerlab/ah/tree/master/aligned-hierarchies)
     * [Jordan Moody](https://github.com/jormacmoo)
     * [Lizette Carpenter](https://github.com/lcarpenter20)
     * [Eleanor Donaher](https://github.com/edonaher)
