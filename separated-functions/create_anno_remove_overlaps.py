@@ -3,11 +3,11 @@ import numpy as np
 def create_anno_remove_overlaps(k_mat,song_length,band_width):
     """
     Turn k_mat into marked rows with annotation markers for the start indices 
-        and zeroes otherwise. After removing the annotations that have overlaps, 
-        output k_lst_out which only contains rows that have no overlaps. Then 
-        take the annotations that have overlaps from k_lst_out and put them in
-        overlap_lst. Lastly, check if the proper sequence of annotation markers 
-        was given and fix them if necessary.
+    and zeroes otherwise. After removing the annotations that have overlaps, 
+    output k_lst_out which only contains rows that have no overlaps. Then 
+    take the annotations that have overlaps from k_lst_out and put them in
+    overlap_lst. Lastly, check if the proper sequence of annotation markers 
+    was given and fix them if necessary.
     
     Args
     ----
