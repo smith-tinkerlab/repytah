@@ -24,8 +24,7 @@ This file contains the following functions:
     
     * reformat - Transforms a binary matrix representation of when repeats 
     occur in a song into a list of repeated structures detailing the length
-    and occurence of each repeat. 
-     
+    and occurence of each repeat.      
 """
 
 import numpy as np
