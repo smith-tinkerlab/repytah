@@ -3,8 +3,8 @@ import numpy as np
 def find_complete_list(pair_list,song_length):
     """
     Finds all smaller diagonals (and the associated pairs of repeats) 
-        that are contained in pair_list, which is composed of larger 
-        diagonals previously found in find_initial_repeats.
+    that are contained in pair_list, which is composed of larger 
+    diagonals found in find_initial_repeats.
         
     Args
     ----
