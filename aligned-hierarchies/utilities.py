@@ -3,7 +3,7 @@
 """ 
 utilities.py 
 
-This script when imported as a module allows search.py, disassemble.py and 
+This script when imported as a module allows search.py, transform.py and 
 assemble.py in the ah package to run smoothly. 
 
 This file contains the following functions:
