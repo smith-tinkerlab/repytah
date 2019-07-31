@@ -5,9 +5,10 @@ from inspect import signature
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
-    Distills repeats encoded in input_pattern_obj and bw_vec to the essential 
-    structure components, the set of repeats, so that no time step is contained 
-    in more than one repeat.
+    Extract repeats in input_patter_obj that has the starting indices of the 
+    repeats, into the essential structure componets using bw_vec, that has the 
+    lengths of each repeat. The essential structure components are the 
+    smallest building blocks that form the basis for every repeat in the song. 
     
     Args
     ----
@@ -58,15 +59,17 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     PNO = PNO.reshape(4,19)
     
     T_inds = np.nonzero(bw_vec == T) 
-    T_inds = np.array(T_inds) - 1  #Bends is converted into an array
+    T_inds = np.array(T_inds) - 1  
 
     if T_inds.size != 0: 
         T_inds = max(bw_vec.shape) - 1
-
+    
+    
     PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
     
     # Check stopping condition -- Are there overlaps?
     while np.sum(PNO_block[ : T_inds, :]) > 0:
+        
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_PNO_block = check_overlaps(PNO_block)
         
