@@ -43,8 +43,8 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     start_blue = start_blue[None, :] 
     
     #Determine if the rows have any intersections
-    red_block = reconstruct_full_block(red, RL)
-    blue_block = reconstruct_full_block(blue, BL)
+    red_block = reconstruct_full_block(red, red_len)
+    blue_block = reconstruct_full_block(blue, blue_len)
 
     red_block = red_block > 0
     blue_block = blue_block > 0 
@@ -73,22 +73,23 @@ def _compare_and_cut(red, red_len, blue, blue_len):
         union_length = np.array([]) 
     
         #Loop over all pairs of starting indices
-        for start_ind in range(0, LSR*LSB):
+        for start_ind in range(0, LSR * LSB):
+            
             #Isolate one repeat in red and one repeat in blue
             ri = compare_inds[start_ind, 1]
             bi = compare_inds[start_ind, 0]
             
-            red_ri = np.arange(ri, ri+RL)
-            blue_bi = np.arange(bi, bi+BL)
+            red_ri = np.arange(ri, ri + red_len)
+            blue_bi = np.arange(bi, bi + blue_len)
             
             #Determine if the blocks intersect and call the intersection
             #purple
-            purple = np.intersect1d(red_ri,blue_bi)
+            purple = np.intersect1d(red_ri, blue_bi)
             
             if purple.size != 0: 
             
-                #Remove pruple from red_ri, call it red_minus_purple
-                red_minus_purple = np.setdiff1d(red_ri,purple)
+                #Remove purple from red_ri, call it red_minus_purple
+                red_minus_purple = np.setdiff1d(red_ri, purple)
                 
                 #If red_minus_purple is not empty, then see if there are one
                 #or two parts in red_minus_purple. Then cut purple out of all
@@ -101,7 +102,7 @@ def _compare_and_cut(red, red_len, blue, blue_len):
                 if red_minus_purple.size != 0:
                     red_start_mat, red_length_vec = __num_of_parts(\
                                               red_minus_purple, ri, start_red)
-                    new_red = __inds_to_rows(red_start_mat,sn)
+                    new_red = __inds_to_rows(red_start_mat, sn)
                 else:
                     # If red_minus_purple is empty, then set new_red and
                     # red_length_vec to empty
