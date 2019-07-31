@@ -3,9 +3,9 @@ import numpy as np
 def create_anno_rows(k_mat,song_length):
     """
     Turn the k_mat into marked rows with annotation markers for
-        the start indices and zeroes otherwise. Check if the 
-        proper sequence of annotation markers was given and 
-        fix them if necessary.
+    the start indices and zeroes otherwise. Check if the 
+    proper sequence of annotation markers was given and 
+    fix them if necessary.
 
     Args
     ----
