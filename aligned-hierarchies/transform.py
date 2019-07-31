@@ -2,7 +2,7 @@
 """
 transform.py
 
-This script contains functions take inputs and transform them to be of use in 
+This script contains functions that take inputs and transform them to be of use in 
 bigger functions where they are called. They focus mainly on overlapping
 repeated structures and annotation markers.
 
