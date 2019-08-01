@@ -40,7 +40,11 @@ def create_anno_remove_overlaps(k_mat,song_length,band_width):
     Args
     ----
     k_mat: np.array
-        list of pair of repeats with annotations marked
+        List of pairs of repeats of length 1 with annotations 
+        marked. The first two columns refer to the first repeat
+        of the pair, the second two refer to the second repeat of
+        the pair, the fifth column refers to the length of the
+        repeats, and the sixth column contains the annotation markers.
     
     song_length: int
         number of audio shingles
@@ -575,4 +579,3 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output 
-
