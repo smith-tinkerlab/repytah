@@ -1,0 +1,10 @@
+Search
+======
+
+
+
+Functions
+---------
+
+
+.. automodule:: aligned-hierarchies.search

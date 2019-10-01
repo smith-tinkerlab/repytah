@@ -1,0 +1,10 @@
+Assemble
+========
+
+
+
+Functions
+---------
+
+
+.. automodule:: aligned-hierarchies.assemble
