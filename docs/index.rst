@@ -6,13 +6,18 @@
 Welcome to aligned-hierarchies's documentation!
 ===============================================
 
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Modules:
 
-   usage/installation
-   usage/quickstart
+   example
+   utilities
+   transform
+   assemble
+   search
 
-   :caption: Contents:
+   
 
 
 
