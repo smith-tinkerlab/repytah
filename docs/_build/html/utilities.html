@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Transform" href="transform.html" />
-    <link rel="prev" title="Example" href="example.html" />
+    <link rel="prev" title="Welcome to aligned-hierarchies’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,8 +34,37 @@
             
   <div class="section" id="utilities">
 <h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-utilities">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-utilities" title="Permalink to this headline">¶</a></h2>
+<p>utilities.py</p>
+<p>This script when imported as a module allows search.py, transform.py and
+assemble.py in the ah package to run smoothly.</p>
+<p>This file contains the following functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>add_annotations - Adds annotations to each pair of repeated structures</p></li>
+</ul>
+<p>according to their length and order of occurence.</p>
+<ul class="simple">
+<li><p>create_sdm - Creates a self-dissimilarity matrix; this matrix is found</p></li>
+</ul>
+<p>by creating audio shingles from feature vectors, and finding cosine
+distance between shingles.</p>
+<ul class="simple">
+<li><p>find_initial_repeats - Finds all diagonals present in thresh_mat,</p></li>
+</ul>
+<p>removing each diagonal as it is found.</p>
+<ul class="simple">
+<li><p>reconstruct_full_block - Creates a record of when pairs of repeated</p></li>
+</ul>
+<p>structures occur, from the first beat in the song to the last beat of the
+song. Pairs of repeated structures are marked with 1’s.</p>
+<ul class="simple">
+<li><p>reformat - Transforms a binary matrix representation of when repeats</p></li>
+</ul>
+<p>occur in a song into a list of repeated structures detailing the length
+and occurence of each repeat.</p>
+</div></blockquote>
 </div>
 </div>
 
@@ -56,19 +85,19 @@
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Modules:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="example.html">Example</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="example.html" title="previous chapter">Example</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to aligned-hierarchies’s documentation!</a></li>
       <li>Next: <a href="transform.html" title="next chapter">Transform</a></li>
   </ul></li>
 </ul>

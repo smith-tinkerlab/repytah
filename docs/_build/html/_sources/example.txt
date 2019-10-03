@@ -2,5 +2,5 @@ Example
 =======
 
 
-.. automodule:: aligned-hierarchies.example
+.. automodule:: example
 

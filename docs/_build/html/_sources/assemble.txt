@@ -7,4 +7,4 @@ Functions
 ---------
 
 
-.. automodule:: aligned-hierarchies.assemble
+.. automodule:: assemble

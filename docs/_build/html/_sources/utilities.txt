@@ -6,4 +6,4 @@ Utilities
 Functions
 ---------
 
-.. automodule:: aligned-hierarchies.utilities
+.. automodule:: utilities

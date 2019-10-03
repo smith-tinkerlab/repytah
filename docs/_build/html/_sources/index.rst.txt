@@ -11,11 +11,10 @@ Welcome to aligned-hierarchies's documentation!
    :maxdepth: 1
    :caption: Modules:
 
-   example
    utilities
    transform
    assemble
-   search
+   search_doc
 
    
 

@@ -1,11 +1,10 @@
 
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Index &#8212; aligned-hierarchies  documentation</title>
+    <title>Search &#8212; aligned-hierarchies  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,8 +12,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <link rel="index" title="Index" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Assemble" href="assemble.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,39 +31,48 @@
 
           <div class="body" role="main">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- <a href="#S"><strong>S</strong></a>
- | <a href="#T"><strong>T</strong></a>
- | <a href="#U"><strong>U</strong></a>
- 
+  <div class="section" id="search">
+<h1>Search<a class="headerlink" href="#search" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-search">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-search" title="Permalink to this headline">¶</a></h2>
+<p>search.py</p>
+<p>This file contains the following functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>find_add_erows - Finds pairs of repeated structures, represented as</p></li>
+</ul>
+<p>diagonals of a certain length, k, that end at the same time step as
+previously found pairs of repeated structures of the same length.</p>
+<ul class="simple">
+<li><p>find_add_mrows - Finds pairs of repeated structures, represented as</p></li>
+</ul>
+<p>diagonals of a certain length, k, that neither start nor end at the same
+time steps as previously found pairs of repeated structures of the same
+length.</p>
+<ul class="simple">
+<li><p>find_add_srows - Finds pairs of repeated structures, represented as</p></li>
+</ul>
+<p>diagonals of a certain length, k, that start at the same time step as
+previously found pairs of repeated structures of the same length.</p>
+<ul class="simple">
+<li><p>find_all_repeats - Finds all the diagonals present in thresh_mat. This</p></li>
+</ul>
+<p>function is nearly identical to find_initial_repeats, with two crucial
+differences. First, we do not remove diagonals after we find them. Second,
+there is no smallest bandwidth size as we are looking for all diagonals.</p>
+<ul class="simple">
+<li><p>find_complete_list_anno_only - Finds annotations for all pairs of</p></li>
+</ul>
+<p>repeats found in find_all_repeats. This list contains all the pairs of
+repeated structures with their start/end indices and lengths.</p>
+<ul class="simple">
+<li><p>find_complete_list - Finds all smaller diagonals (and the associated</p></li>
+</ul>
+<p>pairs of repeats) that are contained pair_list, which is composed of
+larger diagonals found in find_initial_repeats.</p>
+</div></blockquote>
 </div>
-<h2 id="S">S</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="search_doc.html#module-search">search (module)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="transform.html#module-transform">transform (module)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utilities.html#module-utilities">utilities (module)</a>
-</li>
-  </ul></td>
-</tr></table>
-
+</div>
 
 
           </div>
@@ -83,17 +92,18 @@
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Modules:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Search</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="assemble.html" title="previous chapter">Assemble</a></li>
   </ul></li>
 </ul>
 </div>
@@ -126,6 +136,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
+      |
+      <a href="_sources/search_doc.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     
