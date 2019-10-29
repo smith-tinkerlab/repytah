@@ -64,6 +64,157 @@ annotation markers were given and fixes the markers if necessary.</p>
 <p>a matrix representation. The matrix representation is a visual recored of
 where all of the repeats in a song start and end.</p>
 </div></blockquote>
+<dl class="function">
+<dt id="transform.create_anno_remove_overlaps">
+<code class="sig-prename descclassname">transform.</code><code class="sig-name descname">create_anno_remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param">k_mat</em>, <em class="sig-param">song_length</em>, <em class="sig-param">band_width</em><span class="sig-paren">)</span><a class="headerlink" href="#transform.create_anno_remove_overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn k_mat into marked rows with annotation markers for the start indices
+and zeroes otherwise. After removing the annotations that have overlaps,
+output k_lst_out which only contains rows that have no overlaps. Then
+take the annotations that have overlaps from k_lst_out and put them in
+overlap_lst. Lastly, check if the proper sequence of annotation markers
+was given and fix them if necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k_mat</strong> (<em>np.array</em>) – List of pairs of repeats of length 1 with annotations
+marked. The first two columns refer to the first repeat
+of the pair, the second two refer to the second repeat of
+the pair, the fifth column refers to the length of the
+repeats, and the sixth column contains the annotation markers.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – number of audio shingles</p></li>
+<li><p><strong>band_width</strong> (<em>int</em>) – the length of repeats encoded in k_mat</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>pattern_row</strong> (<em>np.array</em>) – row that marks where non-overlapping repeats occur,
+marking the annotation markers for the start indices
+and 0’s otherwise</p></li>
+<li><p><strong>k_lst_out</strong> (<em>np.array</em>) – list of pairs of repeats of length band_width that
+contain no overlapping repeats with annotations
+marked</p></li>
+<li><p><strong>overlap_lst</strong> (<em>np.array</em>) – list of pairs of repeats of length band_width that
+contain overlapping repeats with annotations marked</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="transform.create_anno_rows">
+<code class="sig-prename descclassname">transform.</code><code class="sig-name descname">create_anno_rows</code><span class="sig-paren">(</span><em class="sig-param">k_mat</em>, <em class="sig-param">song_length</em><span class="sig-paren">)</span><a class="headerlink" href="#transform.create_anno_rows" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Turn the k_mat into marked rows with annotation markers for the start
+indices and zeroes otherwise. Check if the proper sequence of annotation
+markers was given and fix them if necessary.</p>
+<dl class="simple">
+<dt>k_mat: np.array</dt><dd><p>List of pairs of repeats of length 1 with annotations
+marked. The first two columns refer to the first repeat
+of the pair, the second two refer to the second repeat of
+the pair, the fifth column refers to the length of the
+repeats, and the sixth column contains the annotation markers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>song_length: int</dt><dd><blockquote>
+<div><p>song length, which is the number of audio shingles</p>
+</div></blockquote>
+<dl class="simple">
+<dt>pattern_row: np.array</dt><dd><p>row that marks where non-overlapping repeats
+occur, marking the annotation markers for the
+start indices and zeroes otherwise.</p>
+</dd>
+<dt>k_lst_out: np.array</dt><dd><p>list of pairs of repeats of length BAND_WIDTH that
+contain no overlapping repeats with annotations marked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="transform.remove_overlaps">
+<code class="sig-prename descclassname">transform.</code><code class="sig-name descname">remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param">input_mat</em>, <em class="sig-param">song_length</em><span class="sig-paren">)</span><a class="headerlink" href="#transform.remove_overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Removes any pairs of repeat length and specific annotation marker</dt><dd><p>where there exists at least one pair of repeats that do
+overlap in time.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_mat</strong> (<em>np.array</em><em>(</em><em>int</em><em>)</em>) – List of pairs of repeats with annotations marked. The first
+two columns refer to the first repeat or the pair, the second
+two refer to the second repeat of the pair, the fifth column
+refers to the length of the repeats, and the sixth column
+contains the annotation markers.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – the number of audio shingles</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lst_no_overlaps</strong> (<em>np.array(int)</em>) – List of pairs of repeats with annotations marked. All the
+repeats of a given length and with a specific annotation
+marker do not overlap in time.</p></li>
+<li><p><strong>matrix_no_overlaps</strong> (<em>np.array(int)</em>) – Matrix representation of lst_no_overlaps with one row for
+each group of repeats</p></li>
+<li><p><strong>key_no_overlaps</strong> (<em>np.array(int)</em>) – Vector containing the lengths of the repeats encoded in
+each row of matrix_no_overlaps</p></li>
+<li><p><strong>annotations_no_overlaps</strong> (<em>np.array(int)</em>) – Vector containing the annotation markers of the repeats
+encoded in each row of matrix_no_overlaps</p></li>
+<li><p><strong>all_overlap_lst</strong> (<em>np.array(int)</em>) – List of pairs of repeats with annotations marked removed
+from input_mat. For each pair of repeat length and specific
+annotation marker, there exist at least one pair of repeats
+that do overlap in time.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="transform.separate_anno_markers">
+<code class="sig-prename descclassname">transform.</code><code class="sig-name descname">separate_anno_markers</code><span class="sig-paren">(</span><em class="sig-param">k_mat</em>, <em class="sig-param">sn</em>, <em class="sig-param">band_width</em>, <em class="sig-param">pattern_row</em><span class="sig-paren">)</span><a class="headerlink" href="#transform.separate_anno_markers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands pattern_row, a row vector that marks where non-overlapping
+repeats occur, into a matrix representation or np.array. The dimension of
+this array is twice the pairs of repeats by the length of the song (sn).
+k_mat provides a list of annotation markers that is used in separating the
+repeats of length band_width into individual rows. Each row will mark the
+start and end time steps of a repeat with 1’s and 0’s otherwise. The array
+is a visual record of where all of the repeats in a song start and end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k_mat</strong> (<em>np.array</em>) – List of pairs of repeats of length BAND_WIDTH with annotations
+marked. The first two columns refer to the start and end time
+steps of the first repeat of the pair, the second two refer to
+the start and end time steps of second repeat of the pair, the
+fifth column refers to the length of the repeats, and the sixth
+column contains the annotation markers. We will be indexing into
+the sixth column to obtain a list of annotation markers.</p></li>
+<li><p><strong>sn</strong> (<em>number</em>) – song length, which is the number of audio shingles</p></li>
+<li><p><strong>band_width</strong> (<em>number</em>) – the length of repeats encoded in k_mat</p></li>
+<li><p><strong>pattern_row</strong> (<em>np.array</em>) – row vector of the length of the song that marks where
+non-overlapping repeats occur with the repeats’ corresponding
+annotation markers and 0’s otherwise</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – matrix representation where each row contains a group of repeats
+marked</p></li>
+<li><p><strong>patter_key</strong> (<em>np.array</em>) – column vector containing the lengths of the repeats encoded in
+each row of pattern_mat</p></li>
+<li><p><strong>anno_id_lst</strong> (<em>np.array</em>) – column vector containing the annotation markers of the repeats
+encoded in each row of pattern_mat</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

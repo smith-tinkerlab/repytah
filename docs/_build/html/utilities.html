@@ -65,6 +65,138 @@ song. Pairs of repeated structures are marked with 1’s.</p>
 <p>occur in a song into a list of repeated structures detailing the length
 and occurence of each repeat.</p>
 </div></blockquote>
+<dl class="function">
+<dt id="utilities.add_annotations">
+<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param">input_mat</em>, <em class="sig-param">song_length</em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds annotations to the pairs of repeats in input_mat; Annotations depend
+on length of repeats and the time that repeats occur in song</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_mat</strong> (<em>np.array</em>) – list of pairs of repeats. The first two columns refer to
+the first repeat of the pair. The third and fourth columns refer
+to the second repeat of the pair. The fifth column refers to the
+repeat lengths. The sixth column contains any previous annotations,
+which will be removed.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – number of audio shingles in the song.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>anno_list</strong> – list of pairs of repeats with annotations marked.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilities.create_sdm">
+<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param">fv_mat</em>, <em class="sig-param">num_fv_per_shingle</em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates self-dissimilarity matrix; this matrix is found by creating audio
+shingles from feature vectors, and finding cosine distance between
+shingles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fv_mat</strong> (<em>np.array</em>) – matrix of feature vectors where each column is a timestep and each row
+includes feature information i.e. an array of 144 columns/beats and 12
+rows corresponding to chroma values</p></li>
+<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – number of feature vectors per audio shingle</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self_dissim_mat</strong> – self dissimilarity matrix with paired cosine distances between
+shingles</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilities.find_initial_repeats">
+<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param">thresh_mat</em>, <em class="sig-param">bandwidth_vec</em>, <em class="sig-param">thresh_bw</em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies all repeated structures in a sequential data stream which are
+represented as diagonals in thresh_mat and then stores the pairs of
+repeats that correspond to each repeated structure in a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em><em>:</em>) – thresholded matrix that we extract diagonals from</p></li>
+<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em><em>:</em>) – vector of lengths of diagonals to be found</p></li>
+<li><p><strong>int</strong> (<em>thresh_bw</em>) – smallest allowed diagonal length</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>all_lst</strong> – list of pairs of repeats that correspond to
+diagonals in thresh_mat</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array[int]:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilities.reconstruct_full_block">
+<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param">pattern_mat</em>, <em class="sig-param">pattern_key</em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a record of when pairs of repeated structures occur, from the
+first beat in the song to the end. This record is a binary matrix with a
+block of 1’s for each repeat encoded in pattern_mat whose length
+is encoded in pattern_key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – binary matrix with 1’s where repeats begin
+and 0’s otherwise</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – vector containing the lengths of the repeats
+encoded in each row of pattern_mat</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>pattern_block</strong> – binary matrix representation for pattern_mat
+with blocks of 1’s equal to the length’s
+prescribed in pattern_key</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilities.reformat">
+<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param">pattern_mat</em>, <em class="sig-param">pattern_key</em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a binary array with 1’s where repeats start and 0’s
+otherwise into an a list of repeated stuctures. This list consists of
+information about the repeats including length, when they occur and when
+they end.</p>
+<p>Every row has a pair of repeated structure. The first two columns are
+the time steps of when the first repeat of a repeated structure start and
+end. Similarly, the second two columns are the time steps of when the
+second repeat of a repeated structure start and end. The fourth colum is
+the length of the repeated structure.</p>
+<p>reformat.py may be helpful when writing example inputs for aligned
+hiearchies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – binary array with 1’s where repeats start and 0’s otherwise</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – array with the lengths of each repeated structure in pattern_mat</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>info_mat</strong> – array with the time steps of when the pairs of repeated structures
+start and end organized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

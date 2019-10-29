@@ -8,3 +8,4 @@ Functions
 
 
 .. automodule:: search
+   :members:

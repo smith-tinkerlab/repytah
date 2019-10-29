@@ -7,3 +7,4 @@ Functions
 ---------
 
 .. automodule:: utilities
+   :members:
