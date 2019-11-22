@@ -16,7 +16,6 @@ import create_sdm
 
 # infile must be a string with the name of a .mat file in the same folder
 def test_sdm(infile):
-    print('It finally works!')
     # could pull it out into its own function for many tests (like librosa)
     DATA = scipy.io.loadmat(infile, chars_as_strings = True)
     
