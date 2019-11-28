@@ -6,7 +6,7 @@ Unit tests for Aligned Hierarchies
 import numpy as np
 import pytest
 import scipy.io
-
+import create_sdm
 
 # not possible yet
 #from utilities import create_sdm
@@ -34,4 +34,9 @@ def test_sdm(infile):
     
     # Verify that self dissimilarity matrix is correct
     assert self_dissim_mat == DATA['matAS']
+    
+    # Verify that shape of matrices are the same after translation 
+    [num_rows, num_columns] = fv_mat.shape
+    [num_rows, num_columns] = f.shape
+    assert fv_mat.shape == f.shape
     
