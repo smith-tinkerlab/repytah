@@ -26,9 +26,14 @@ def find_add_mrows(lst_no_anno, check_inds, k):
     """
     #Initialize list of pairs 
     L = lst_no_anno 
+    
     #Logical, which pair of repeats has a length greater than k 
-    #(T returns 1, F returns 0)
     search_inds = (L[:,4] > k)
+    
+    #If there are no pairs of repeats that have a length greater than k 
+    if sum(search_inds) == 0:
+        add_rows = np.full(1, False) 
+        return add_rows
     
     #Multiply the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -45,8 +50,12 @@ def find_add_mrows(lst_no_anno, check_inds, k):
     #Loop over check_inds 
     for i in range(check_inds.size): 
         ci = check_inds[i]
-        #Left Check: check for CI on the left side of the pairs
+        #For Left  Check: check for CI on the left side of the pairs
         lnds = ((SI < ci) + (EI > (ci + k -1)) == 2)
+        
+        #For Right Check: check for CI on the right side of the pairs
+        rnds = ((SJ < ci) + (EJ > (ci + k - 1)) == 2);
+        
         #Check that SI < CI and that EI > (CI + K - 1) indicating that there
         #is a repeat of length k with starting index CI contained in a larger
         #repeat which is the left repeat of a pair
@@ -59,16 +68,10 @@ def find_add_mrows(lst_no_anno, check_inds, k):
 
             #Left side of left pair
             l_left_k = ci*np.ones(l_num,1) - L[lnds,0]
-            l_add_left = np.concatenate((L[lnds,0], (ci - 1 * \
-                                         np.ones((l_num,1))), SJ_li, \
-    (SJ_li + l_left_k - np.ones((l_num,1))), l_left_k), axis = None)
+            l_add_left = np.concatenate((L[lnds,0], (ci - 1 * np.ones((l_num,1))), SJ_li, (SJ_li + l_left_k - np.ones((l_num,1))), l_left_k), axis = None)
 
             #Middle of left pair
-            l_add_mid = np.concatenate(((ci*np.ones((l_num,1))), \
-                                        (ci+k-1)*np.ones((l_num,1)), \
-                                        SJ_li + l_left_k, SJ_li + \
-                                        l_left_k + (k-1)*np.ones((l_num,1)),\
-                                        k*np.ones((l_num,1))), axis = None) 
+            l_add_mid = np.concatenate(((ci*np.ones((l_num,1))), (ci+k-1)*np.ones((l_num,1)), SJ_li + l_left_k, SJ_li + l_left_k + (k-1)*np.ones((l_num,1)), k*np.ones((l_num,1))), axis = None) 
 
             #Right side of left pair
             l_right_k = np.concatenate((L[lnds, 1] - ((ci + k) - 1) * \
@@ -81,14 +84,12 @@ def find_add_mrows(lst_no_anno, check_inds, k):
             # Add the found rows        
             add_rows = np.vstack((l_add_left, l_add_mid, l_add_right))
             #add_rows = np.reshape(add_rows, (3,5))
-
-        #Right Check: Check for CI on the right side of the pairs
-        rnds = ((SJ < ci) + (EJ > (ci + k - 1)) == 2); 
+ 
 
         #Check that SI < CI and that EI > (CI + K - 1) indicating that there
         #is a repeat of length K with starting index CI contained in a larger
         #repeat which is the right repeat of a pair
-        if rnds.sum(axis = 0) > 0:
+        elif rnds.sum(axis = 0) > 0:
             SI_ri = L[rnds,0]
             EI_ri = L[rnds,1]
             r_num = SI_ri.shape[0]
@@ -120,11 +121,16 @@ def find_add_mrows(lst_no_anno, check_inds, k):
 
             add_rows = np.concatenate((add_rows, add_rows), \
                                       axis = 0).astype(int)
-     
-    return add_rows 
-
-
-
-
-
-
+            if add_rows == None: 
+                add_rows = np.full(1, False)
+                
+                return add_rows 
+            else: 
+                
+                return add_rows
+          
+        #If there are no found pairs 
+        else:
+            add_rows = np.full(1, False)
+           
+            return add_rows 
