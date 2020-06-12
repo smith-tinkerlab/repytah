@@ -58,27 +58,34 @@ def find_add_erows(lst_no_anno, check_inds, k):
         list of newly found pairs of repeats of length k that are 
         contained in larger repeats in lst_no_anno
     """
+
     L = lst_no_anno
+    add_rows = np.empty((0))
     # Logical, which pairs of repeats have length greater than k?
     search_inds = (L[:,4] > k)
+
+    #If there are no pairs of repeats that have a length greater than k
+    if sum(search_inds) == 0:
+        add_rows = np.full(1, False)
+        return add_rows
 
     # Multiply ending index of all repeats "I" by search_inds
     EI = np.multiply(L[:,1], search_inds)
     # Multipy ending index of all repeats "J" by search_inds
     EJ = np.multiply(L[:,3], search_inds)
-
+    
     #Loop over check_inds
     for i in range(check_inds.size): 
-        #print()
+      
         ci = check_inds[i]
-        #print("loop:", i, "ci:", ci)
-        
-    #Left Check: Check for CI on the left side of the pairs
-        # Check if the end index of the repeat "I" equals CI
+
+        # To check if the end index of the repeat "I" equals CI
         lnds = (EI == ci) 
-        #print("lnds:", lnds)
-        
-        # Find new rows 
+       
+        # To check if the end index of the right repeat of the pair equals CI
+        rnds = (EJ == ci)
+
+        #Left Check: Check for CI on the left side of the pairs
         if lnds.sum(axis = 0) > 0: #If the sum across (row) is greater than 0 
             # Find the 3rd entry of the row (lnds) whose starting index of 
             # repeat "J" equals CI
@@ -86,39 +93,36 @@ def find_add_erows(lst_no_anno, check_inds, k):
             
             # Number of rows in EJ_li 
             l_num = EJ_li.shape[0] 
-            #print("l_num:", l_num)
+            
             
             # Found pair of repeats on the left side
             one_lsi = L[lnds,1] - k + 1     #Starting index of found repeat i
             one_lei = L[lnds,1]             #Ending index of found repeat i
             one_lsj = EJ_li - k + 1         #Starting index of found repeat j
             one_lej = EJ_li                 #Ending index of found repeat j
-            one_lk = k*np.ones((l_num,1))   #Length of found pair of repeats
-            l_add = np.concatenate((one_lsi, one_lei, one_lsj, one_lej, \
-                                    one_lk), axis = None)
-
+            one_lk = k*np.ones((1,l_num)).astype(int).flatten()         
+            l_add = np.vstack((one_lsi,one_lei, one_lsj,one_lej,one_lk))
+            l_add = np.transpose(l_add)
+            
             
             # Found pair of repeats on the right side
             two_lsi = L[lnds,0]             #Starting index of found repeat i 
             two_lei = L[lnds,1] - k         #Ending index of ofund repeat i
             two_lsj = L[lnds,2]             #Starting index of found repeat j 
             two_lej = EJ_li - k             #Ending index of found repeat j
-            two_lk = L[lnds, 4] - k         #Length of found pair of repeats 
-            l_add_left = np.concatenate((two_lsi, two_lei, two_lsj, two_lej,\
-                                         two_lk), axis = None)
+            two_lk = L[lnds, 4] - k         #Length of found pair of repeats            
+            l_add_left = np.vstack((two_lsi,two_lei, two_lsj,two_lej,two_lk))
+            l_add_left = np.transpose(l_add_left)
+           
+            # Stack the found rows vertically        
+            if add_rows.size == 0:
+                add_rows = np.vstack((l_add, l_add_left))
+            else:
+                add_rows = np.vstack((add_rows, l_add, l_add_left))
             
-            # Stack the found rows vertically 
-            add_rows = np.vstack((l_add, l_add_left))
-            
-            # Stack all the rows found on the left side of the pairs 
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0)
-            
-    #Right Check: Check for CI on the right side of the pairs
-        # Check if the end index of the right repeat of the pair equals CI
-        rnds = (EJ == ci)
-        
-        # Find new rows
-        if rnds.sum(axis = 0) > 0:
+                
+        #Right Check: Check for CI on the right side of the pairs
+        elif rnds.sum(axis = 0) > 0:
             # Find the 1st entry of the row whose ending index of repeat 
             # "I" equals CI
             EI_ri = L[rnds, 1]
@@ -130,9 +134,9 @@ def find_add_erows(lst_no_anno, check_inds, k):
             one_rei = EI_ri                 #Ending index of found repeat i 
             one_rsj = L[rnds, 3] - k + 1    #Starting index of found repeat j
             one_rej = L[rnds,3]             #Ending index of found repeat j 
-            one_rk = k*np.ones((r_num, 1))  #Length of found pair or repeats
-            r_add = np.concatenate((one_rsi, one_rei, one_rsj, one_rej, \
-                                    one_rk), axis = None)
+            one_rk = k*np.ones((1,r_num)).astype(int).flatten()  #Length of found pair or repeats 
+            r_add = np.vstack((one_rsi,one_rei, one_rsj,one_rej,one_rk))
+            r_add = np.transpose(r_add)
             
             # Found pairs on the right side 
             two_rsi = L[rnds, 0]            #Starting index of found repeat i  
@@ -140,16 +144,15 @@ def find_add_erows(lst_no_anno, check_inds, k):
             two_rsj = L[rnds, 2]            #Starting index of found repeat j
             two_rej = L[rnds, 3] - k        #Ending index of found repeat j 
             two_rk = L[rnds, 4] - k         #Length of found pair or repeats
-            r_add_right = np.concatenate((two_rsi, two_rei, two_rsj, two_rej,\
-                                          two_rk), axis = None) 
+            r_add_right = np.vstack((two_rsi,two_rei, two_rsj,two_rej,two_rk))
+            r_add_right = np.transpose(r_add_right)
             
-            # Stack the found rows vertically 
-            add_rows = np.vstack((r_add, r_add_right))
-            
-            # Stack all the rows found on the right side of the pairs 
-            add_rows = np.concatenate((add_rows, add_rows),\
-                                      axis = 0).astype(int)
-                 
+            # Stack the found rows vertically  
+            if add_rows.size == 0:
+                add_rows = np.vstack((r_add,r_add_right))
+            else:
+                add_rows = np.vstack((add_rows, r_add, r_add_right))
+                     
     return add_rows
 
 def find_add_mrows(lst_no_anno, check_inds, k): 
@@ -177,7 +180,8 @@ def find_add_mrows(lst_no_anno, check_inds, k):
             contained in larger repeats in LST_NO_ANNO 
     """
     #Initialize list of pairs 
-    L = lst_no_anno 
+    L = lst_no_anno
+    add_rows = np.empty((0))
     
     #Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
@@ -198,7 +202,7 @@ def find_add_mrows(lst_no_anno, check_inds, k):
     for i in range(check_inds.size): 
         ci = check_inds[i]
         #Left Check: check for CI on the left side of the pairs
-        lnds = ((SI < ci) + (EI > (ci + k -1)) == 2)
+        lnds = ((SI < ci) & (EI > (ci + k -1)) == True)
         
         #Check that SI < CI and that EI > (CI + K - 1) indicating that there
         #is a repeat of length k with starting index CI contained in a larger
@@ -211,32 +215,41 @@ def find_add_mrows(lst_no_anno, check_inds, k):
             l_num = SJ_li.shape[0]
 
             #Left side of left pair
-            l_left_k = ci*np.ones(l_num,1) - L[lnds,0]
-            l_add_left = np.concatenate((L[lnds,0], (ci - 1 * \
-                                         np.ones((l_num,1))), SJ_li, \
-    (SJ_li + l_left_k - np.ones((l_num,1))), l_left_k), axis = None)
-
+            l_left_k = (ci*np.ones((1,l_num))) - L[lnds,0]
+            l_add_left = np.vstack((L[lnds,0]*np.ones((1,l_num)),\
+                                    (ci - 1 * np.ones((1,l_num))),\
+                                    SJ_li*np.ones((1,l_num)),\
+                                    (SJ_li + l_left_k - np.ones((1,l_num))),\
+                                    l_left_k))
+            
+            l_add_left = np.transpose(l_add_left)
+        
             #Middle of left pair
-            l_add_mid = np.concatenate(((ci*np.ones((l_num,1))), \
-                                        (ci+k-1)*np.ones((l_num,1)), \
+            l_add_mid = np.vstack(((ci*np.ones((1,l_num))), \
+                                        (ci+k-1)*np.ones((1,l_num)), \
                                         SJ_li + l_left_k, SJ_li + \
-                                        l_left_k + (k-1)*np.ones((l_num,1)),\
-                                        k*np.ones((l_num,1))), axis = None) 
-
+                                        l_left_k + (k-1)*np.ones((1,l_num)),\
+                                        k*np.ones((1,l_num))))
+            l_add_mid = np.transpose(l_add_mid)
+           
             #Right side of left pair
             l_right_k = np.concatenate((L[lnds, 1] - ((ci + k) - 1) * \
-                                        np.ones((l_num,1))), axis = None)
-            l_add_right = np.concatenate((((ci + k)*np.ones((l_num,1))), \
+                                        np.ones((1,l_num))), axis = None)
+            l_add_right = np.vstack((((ci + k)*np.ones((1,l_num))), \
                                           L[lnds,1], (EJ_li - l_right_k + \
-                                           np.ones((l_num,1))), EJ_li, \
-                                           l_right_k), axis = None)
-
+                                           np.ones((1,l_num))), EJ_li, \
+                                           l_right_k))
+            l_add_right = np.transpose(l_add_right)
+            
             # Add the found rows        
-            add_rows = np.vstack((l_add_left, l_add_mid, l_add_right))
-            #add_rows = np.reshape(add_rows, (3,5))
+            if add_rows.size ==0:
+                add_rows = np.vstack((l_add_left, l_add_mid, l_add_right)).astype(int)
+            else:
+                add_rows = np.vstack((add_rows, l_add_left, l_add_mid, l_add_right)).astype(int)    
+                
 
         #Right Check: Check for CI on the right side of the pairs
-        rnds = ((SJ < ci) + (EJ > (ci + k - 1)) == 2); 
+        rnds = ((SJ < ci) & (EJ > (ci + k - 1)) == True); 
 
         #Check that SI < CI and that EI > (CI + K - 1) indicating that there
         #is a repeat of length K with starting index CI contained in a larger
@@ -247,32 +260,37 @@ def find_add_mrows(lst_no_anno, check_inds, k):
             r_num = SI_ri.shape[0]
 
             #Left side of right pair
-            r_left_k = ci*np.ones((r_num,1)) - L[rnds,2]
-            r_add_left = np.concatenate((SI_ri, (SI_ri + r_left_k - \
-                                                 np.ones((r_num,1))), \
-                                              L[rnds,3], (ci - 1) * \
-                                              np.ones((r_num,1)), r_left_k), \
-                                              axis = None)
+            r_left_k = ci*np.ones((1,r_num)) - L[rnds,2]
+            r_add_left = np.vstack((SI_ri, (SI_ri + r_left_k - \
+                                                 np.ones((1,r_num))), \
+                                              L[rnds,2], (ci - 1) * \
+                                              np.ones((1,r_num)), r_left_k))
+            r_add_left = np.transpose(r_add_left)
+            #print(r_add_left)
 
             #Middle of right pair
-            r_add_mid = np.concatenate(((SI_ri + r_left_k),(SI_ri + r_left_k \
-                                        + (k - 1)*np.ones((r_num,1))), \
-                                        ci*np.ones((r_num,1)), \
-                                        (ci + k - 1)*np.ones((r_num,1)), \
-                                        k*np.ones((r_num,1))), axis = None)
+            r_add_mid = np.vstack(((SI_ri + r_left_k),(SI_ri + r_left_k \
+                                        + (k - 1)*np.ones((1,r_num))), \
+                                        ci*np.ones((1,r_num)), \
+                                        (ci + k - 1)*np.ones((1,r_num)), \
+                                        k*np.ones((1,r_num))))
+            r_add_mid = np.transpose(r_add_mid)    
+            #print(r_add_mid)
 
             #Right side of right pair
-            r_right_k = L[rnds, 3] - ((ci + k) - 1)*np.ones((r_num,1))
-            r_add_right = np.concatenate((EI_ri - r_right_k + \
-                                          np.ones((r_num,1)),EI_ri,\
-                                          (ci + k)*np.ones((r_num,1)), \
-                                          L[rnds,3], r_right_k), axis = None)
+            r_right_k = L[rnds, 3] - ((ci + k) - 1)*np.ones((1,r_num))
+            r_add_right = np.vstack((EI_ri - r_right_k + \
+                                          np.ones((1,r_num)),EI_ri,\
+                                          (ci + k)*np.ones((1,r_num)), \
+                                          L[rnds,3], r_right_k))
+            r_add_right = np.transpose(r_add_right)
+            #print(r_add_right)
 
-            add_rows = np.vstack((r_add_left, r_add_mid, r_add_right))
-            #add_rows = np.reshape(add_rows, (3,5))
-
-            add_rows = np.concatenate((add_rows, add_rows), \
-                                      axis = 0).astype(int)
+            # Add the found rows        
+            if add_rows.size ==0:
+                add_rows = np.vstack((r_add_left, r_add_mid, r_add_right)).astype(int)
+            else:
+                add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)  
      
     return add_rows 
 
@@ -302,6 +320,9 @@ def find_add_srows(lst_no_anno, check_inds, k):
             
     """
 
+    L = lst_no_anno 
+    add_rows = np.empty((0))
+
     # Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
 
@@ -319,7 +340,7 @@ def find_add_srows(lst_no_anno, check_inds, k):
         # Check if the starting index of repeat "I" of pair of repeats "IJ" 
         # equals CI
         lnds = (SI == ci) 
-        print("lnds:", lnds)
+        #print("lnds:", lnds)
         
         # If the sum across (row) is greater than 0 
         if lnds.sum(axis = 0) > 0: 
@@ -335,9 +356,10 @@ def find_add_srows(lst_no_anno, check_inds, k):
             one_lei = L[lnds, 0] + k - 1    #Ending index of found repeat i
             one_lsj = SJ_li                 #Starting index of found repeat j
             one_lej = SJ_li + k - 1         #Ending index of found repeat j
-            one_lk = np.ones((l_num, 1))*k  #Length of found pair of repeats
-            l_add = np.concatenate((one_lsi, one_lei, one_lsj, one_lej,\
-                                    one_lk), axis = None)
+            one_lk = k*np.ones((l_num, 1)).astype(int).flatten()  #Length of found pair of repeats
+            
+            l_add = np.vstack((one_lsi,one_lei, one_lsj,one_lej,one_lk))
+            l_add = np.transpose(l_add)
             
             # Found pair of repeats on the right side 
             two_lsi = L[lnds, 0] + k        #Starting index of found repeat i 
@@ -348,11 +370,15 @@ def find_add_srows(lst_no_anno, check_inds, k):
             l_add_right = np.concatenate((two_lsi, two_lei, two_lsj, two_lej,\
                                           two_lk), axis = None)
             
+            l_add_right = np.vstack((two_lsi, two_lei, two_lsj, two_lej,two_lk))
+            l_add_right = np.transpose(l_add_right)
+    
             # Stack the found rows vertically 
-            add_rows = np.vstack((l_add, l_add_right))
             
-            # Stack all the rows found on the left side of the pairs 
-            add_rows = np.concatenate((add_rows, add_rows), axis = 0)
+            if add_rows.size == 0:
+                add_rows = np.vstack((l_add, l_add_right))
+            else:
+                add_rows = np.vstack((add_rows, l_add, l_add_right))
             
     # Right Check: check for CI on the right side of the pairs 
         # Check if the the starting index of repeat "J" of the pair "IJ" 
@@ -368,27 +394,30 @@ def find_add_srows(lst_no_anno, check_inds, k):
             one_rei = SJ_ri + k - 1         #Ending index of found repeat i 
             one_rsj = L[rnds, 2]            #Starting index of found repeat j
             one_rej = L[rnds, 2] + k - 1    #Ending index of found repeat j 
-            one_rk = k*np.ones((r_num, 1))  #Length of found pair or repeats
-            r_add = np.concatenate((one_rsi, one_rei, one_rsj, one_rej, \
-                                    one_rk), axis = None)
+            one_rk = k*np.ones((r_num, 1)).astype(int).flatten()  #Length of found pair or repeats
             
+            r_add = np.vstack((one_rsi, one_rei, one_rsj, one_rej,one_rk)) 
+            r_add = np.transpose(r_add)
+                
             # Found pairs on the right side 
             two_rsi = SJ_ri + k             #Starting index of found repeat i  
             two_rei = L[rnds, 1]            #Ending index of found repeat i 
             two_rsj = L[rnds, 2] + k        #Starting index of found repeat j
             two_rej = L[rnds,3]             #Ending index of found repeat j 
             two_rk = L[rnds, 4] - k         #Length of found pair or repeats
-            r_add_right = np.concatenate((two_rsi, two_rei, two_rsj, two_rej,\
-                                          two_rk), axis = None) 
+            r_add_right = np.vstack((two_rsi, two_rei, two_rsj, two_rej,\
+                                          two_rk)) 
+            r_add_right = np.transpose(r_add_right)
             
             # Stack the found rows vertically 
-            add_rows = np.vstack((r_add, r_add_right))
+           
+            if add_rows.size == 0:
+                add_rows = np.vstack(r_add,r_add_right)
+            else:
+                add_rows = np.vstack((add_rows, r_add, r_add_right))
             
-            # Stack all the rows found on the right side of the pairs 
-            add_rows = np.concatenate((add_rows, add_rows),\
-                                      axis = 0).astype(int)
             
-    return add_rows 
+    return add_rows
 
 def find_all_repeats(thresh_mat,band_width_vec):
     """
