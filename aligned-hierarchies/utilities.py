@@ -435,14 +435,15 @@ def reconstruct_full_block(pattern_mat, pattern_key):
             #Replace part of sub_section with new_struct 
             sub_section[b - 1,:] = new_struct
     
-    #Replaces part of pattern_block with the sums of each column in 
-    #sub_section 
-    pattern_block[i,:] = np.sum(sub_section, axis = 0)
+        #Replaces part of pattern_block with the sums of each column in 
+        #sub_section 
+        pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
     
 #line 217: 
 #https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
+
 
 def reformat(pattern_mat, pattern_key):
     """
