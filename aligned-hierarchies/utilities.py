@@ -69,7 +69,6 @@ def add_annotations(input_mat, song_length):
     # Creates matrix of all repeats
     s_three = np.ones((num_rows,), dtype = int)
     
-    
     up_tri_mat = sps.coo_matrix((s_three, 
                                  (s_one-1, s_two-1)), shape = (song_length, 
                                  song_length)).toarray()
@@ -85,18 +84,17 @@ def add_annotations(input_mat, song_length):
     
     
     # Adds annotation markers to pairs of repeats
-    for i in range (1,SPmax+1):
+    for i in range(1,SPmax+1):
         pinds = np.nonzero(song_pattern == i)     
       
         #One if annotation not already marked, 0 if it is
         check_inds = (input_mat[:,5] == 0)
         
         for j in pinds[0]:
-            
             # Finds all starting pairs that contain time step j
             # and DO NOT have an annotation
-            mark_inds = (s_one == j+1) + (s_two == j+1)           
-            #mark_inds = (mark_inds > 0)            
+            mark_inds = (s_one == j+1) + (s_two == j+1)  
+            mark_inds = (mark_inds > 0)  
             mark_inds = check_inds * mark_inds
            
             # Adds found annotations to the relevant time steps
@@ -582,10 +580,9 @@ def __find_song_pattern(thresh_diags):
 
     # Initialize group number
     pattern_num = 1
-    
+
     col_sum = thresh_diags.sum(axis = 0)
     
-
     check_inds = col_sum.nonzero() #定位 
   
     check_inds = check_inds[0]
@@ -595,8 +592,6 @@ def __find_song_pattern(thresh_diags):
     pattern_out = (col_sum == 0)
     pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
     
-    
-
     
     while np.size(check_inds) != 0:
         # Takes first entry in check_inds
@@ -609,16 +604,13 @@ def __find_song_pattern(thresh_diags):
         inds = temp_row.nonzero()
         
        
-       
         if np.size(inds) != 0:
             while np.size(inds) != 0:
                 # Takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
                
                 c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
-                
                 c_mat = c_mat*pattern_mask
-                
                 
                 # Finds nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
@@ -627,19 +619,15 @@ def __find_song_pattern(thresh_diags):
                 # number as i
                 pattern_base[c_inds] = pattern_num
                
-                
                 # Removes all used elements of c_inds from
                 # check_inds and p_mask
                 check_inds = np.setdiff1d(check_inds, c_inds)
-                
+
                 pattern_mask[c_inds] = 0
                
                 # Resets inds to c_inds with inds removed
                 inds = np.setdiff1d(c_inds, inds)
                 inds = np.array([inds])
-                
-            
-                #inds = np.delete(inds,0)
                 
             # Updates grouping number to prepare for next group
             pattern_num = pattern_num + 1
@@ -647,9 +635,6 @@ def __find_song_pattern(thresh_diags):
         # Removes i from check_inds
         check_inds = np.setdiff1d(check_inds, i)
        
-        
-    #pattern_base = pattern_base[:,1:]
-    #pattern_base = np.append(pattern_base, np.array([[0]]), axis = 1)
     song_pattern = pattern_base
     
     return song_pattern
