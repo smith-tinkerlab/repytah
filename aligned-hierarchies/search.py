@@ -622,8 +622,11 @@ def find_complete_list_anno_only(pair_list, song_length):
         # Get annotations for this bandwidth
         temp_anno_list = add_annotations(temp_anno_mat, song_length)
         full_list.append(temp_anno_list)
+        #Sort the list 
         
     out_list = np.concatenate(full_list)
+    tem_out_lst = np.lexsort([out_list[:,2], out_list[:,0], out_list[:,5],out_list[:,4]])
+    out_list = out_list[tem_out_lst,:]
         
     return out_list
 
