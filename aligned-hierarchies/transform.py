@@ -545,26 +545,21 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     #List of annotation markers 
     anno_lst = k_mat[:,5] 
     anno_max = max(anno_lst)
-
+    
     #Initialize pattern_mat: Start with a matrix of all 0's that has
     #the same number of rows as there are annotations and sn columns 
     pattern_mat = np.zeros((anno_max, sn), dtype = np.intp)
-    #Initialize anno_id_lst: Start with a matrix of all 1's that has
-    #the same number of rows as there are annotations 1 columns 
-    anno_id_lst = np.ones((anno_max, 1), dtype = np.intp)
 
     #Separate the annotions into individual rows 
     if anno_max > 1: #If there are two or more annotations 
         #Loops through the list of annotation markers 
         for a in range (1,anno_max+1): 
+           
         #Find starting indices:  
             ands = (anno_lst == a)
             a_starts = np.concatenate((k_mat[ands,0], k_mat[ands,2]), axis=None)
-            
             #Replace entries at each repeats' start time with "1"
             pattern_mat[a-1, a_starts-1] = 1;
-            #Set the value of anno_id_lst
-            anno_id_lst[a-1,0] = k_mat[ands,5][a-1]
         
         #Creates row vector with the same dimensions of anno_lst   
         pattern_key = band_width * np.ones((anno_max, 1)).astype(int)
@@ -573,7 +568,9 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     else: #When there is one annotation  
         pattern_mat = pattern_row 
         pattern_key = band_width
-  
+    
+    anno_id_lst = np.arange(anno_max).reshape(anno_max,1)+1
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
+
