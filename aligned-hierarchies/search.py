@@ -662,9 +662,10 @@ def find_complete_list(pair_list,song_length):
         bw_found[-1] = []
         bw_num = (bw_num - 1)
         
-    # Initalize temp variables
+    # Initalize variables
     p = np.size(pair_list,axis=0)
-    add_mat = np.empty((0))
+    add_mat = np.zeros((1,5)).astype(int)
+   
 
     # Step 1: For each found bandwidth, search upwards (i.e. search the larger 
     #        bandwidths) and add all found diagonals to the variable add_mat        
@@ -711,21 +712,18 @@ def find_complete_list(pair_list,song_length):
         # Check if any of the arrays are empty
         # Add the new pairs of repeats to the temporary list add_mat
         if add_mrows.size != 0:  
-            if add_mat.size!=0:
-                add_mat=np.vstack((add_mat,add_mrows))
-            else:
-                add_mat=np.vstack(add_mrows)
+            add_mat=np.vstack((add_mat,add_mrows))
+           
         if add_srows.size != 0:  
-            if add_mat.size!=0:
-                add_mat=np.vstack((add_mat,add_srows))
-            else:
-                add_mat=np.vstack(add_srows)
+            add_mat=np.vstack((add_mat,add_srows))
+           
         if add_erows.size != 0:  
-            if add_mat.size!=0:
-                add_mat=np.vstack((add_mat,add_erows))
-            else:
-                add_mat=np.vstack(add_erows)
-       
+            add_mat=np.vstack((add_mat,add_erows))
+           
+    #Remove the empty row
+    if add_mat.size!=0:
+        add_mat= np.delete(add_mat,0,0)
+   
         
       
     # Step 2: Combine pair_list and new_mat. Make sure that you don't have any
@@ -777,4 +775,3 @@ def find_complete_list(pair_list,song_length):
     lst_out = final_lst
     
     return lst_out
-
