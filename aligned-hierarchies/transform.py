@@ -289,40 +289,41 @@ def remove_overlaps(input_mat, song_length):
     # Same list with repetitions removed
     bw_vec = np.unique(input_mat[:,4])
     
-    # Convert L to python list of np arrays
-    L = []
-    for i in range(0,(np.shape(input_mat)[0])-1):
-        L.append(np.array(input_mat[i,:]))
+    L = input_mat
 
     # Sort list ascending, then reverse it
     bw_vec = np.sort(bw_vec)
     bw_vec = bw_vec[::-1]
-
-    mat_NO = []
-    key_NO = []
-    anno_NO = []
-    all_overlap_lst = []
     
-    # While bw_vec still has entries
-    while np.size(bw_vec) != 0:
-        bw_lst = []
-        bw = bw_vec[0]
-        # Extract pairs of repeats of length BW from the list of pairs of
-        # repeats with annotation markers
-        # Create bw_lst
-        i = 0              
-        while i < len(L):
-            line = L[i][4]
-            if line == bw:
-                bw_lst.append(line)
-                L[i] = np.array([])
-            i=i+1
-        #endWhile
-        
-    # Remove blanked entries from L (appended to bw_lst)
 
-        # Doesn't like elem wise comparison when right operand numpy array
-        L = list(filter(lambda L: L.tolist() != [], L))
+    mat_NO = np.array([])
+    key_NO = np.array([])
+    anno_NO = np.array([])
+    all_overlap_lst = np.array([[0,0,0,0,0,0]])
+    
+# While bw_vec still has entries
+    while np.size(bw_vec) != 0:
+
+        bw_lst = np.array([])
+        #set bandwidth value
+        bw = bw_vec[0]
+        
+        deleteArray = []
+        
+        for i in range(len(L)):
+            #print(L[i][4])
+            linebw = L[i][4]
+            if linebw == bw:
+                if bw_lst.size == 0:
+                    bw_lst = np.array([L[i]])
+                    
+                else:
+                    bw_lst=np.vstack((bw_lst,L[i]))
+                    
+                deleteArray.append(i)
+
+        L = np.delete(L, deleteArray, 0)
+        
         if bw > 1:
     #         Use LIGHTUP_PATTERN_ROW_GB to do the following three things:
     #         ONE: Turn the BW_LST into marked rows with annotation markers for 
@@ -331,29 +332,18 @@ def remove_overlaps(input_mat, song_length):
     #              BW_LST_OUT which only contains rows that have no overlaps
     #         THREE: The annotations that have overlaps get removed from 
     #                BW_LST_OUT and gets added to ALL_OVERLAP_LST
-    
-            tuple_of_outputs = create_anno_remove_overlaps(bw_lst, 
-                                                           song_length, bw)
+            
+            tuple_of_outputs = create_anno_remove_overlaps(bw_lst, song_length, bw)
             
             pattern_row = tuple_of_outputs[0]
             bw_lst_out = tuple_of_outputs[1]
             overlap_lst = tuple_of_outputs[2]
-
-
-            # Convert the numpy arrays to lists of 1d numpy arrays
-            bw_lst_out_py = []
-            for i in range(0,(np.shape(bw_lst_out)[0])-1):
-                bw_lst_out_py.append(np.array(input_mat[i,:]))
-
-            overlap_lst_py = []
-            for i in range(0,(np.shape(overlap_lst)[0])-1):
-                overlap_lst_py.append(np.array(input_mat[i,:]))
-
-            # If there are lines to add
-            if len(overlap_lst_py) != 0:
-                # Add them               
-                all_overlap_lst.extend(overlap_lst_py)
-        else:
+        
+            
+            if overlap_lst.size>0:
+                all_overlap_lst = np.vstack((all_overlap_lst, overlap_lst))
+        
+        else:            
             # Similar to the IF case -- 
             # Use LIGHTUP_PATTERN_ROW_BW_1 to do the following two things:
             # ONE: Turn the BW_LST into marked rows with annotation markers for 
@@ -362,17 +352,9 @@ def remove_overlaps(input_mat, song_length):
             #      BW_LST. Also in this case, THREE from above does not exist
             tuple_of_outputs = create_anno_rows(bw_lst, song_length)
             pattern_row =  tuple_of_outputs[0]
-            bw_lst_out_orig =  tuple_of_outputs[1]
+            bw_lst_out =  tuple_of_outputs[1]
             
-            # Convert the numpy arrays to lists of 1d numpy arrays
-            bw_lst_out_py = []
-            for i in range(0,(np.shape(bw_lst_out)[0])-1):
-                bw_lst_out_py.append(np.array(input_mat[i,:]))
-
-            overlap_lst_py = []
-            for i in range(0,(np.shape(overlap_lst)[0])-1):
-                overlap_lst_py.append(np.array(input_mat[i,:]))
-
+        
         if np.max(np.max(pattern_row)) > 0:
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
@@ -381,126 +363,75 @@ def remove_overlaps(input_mat, song_length):
                                                         song_length, bw, 
                                                         pattern_row)
             pattern_mat = tuple_of_outputs[0]
-            pattern_key = tuple_of_outputs[1]
+            pattern_key = np.array(tuple_of_outputs[1])
             anno_temp_lst = tuple_of_outputs[2]
- 
-    
-            # Convert the numpy arrays to lists of 1d numpy arrays
-            pattern_mat_py = []
-            for i in range(0,(np.shape(pattern_mat)[0])-1):
-                pattern_mat_py.append(np.array(pattern_mat[i,:]))
-
-            pattern_key_py = []
-            for i in range(0,(np.shape(pattern_key)[0])-1):
-                pattern_key_py.append(np.array(pattern_key[i,:]))
-
-
-            anno_temp_lst_py = []
-            for i in range(0,(np.shape(anno_temp_lst)[0])-1):
-                anno_temp_lst_py.append(np.array(anno_temp_lst[i,:]))
-
-
+            
+        
         else:
             pattern_mat = []
             pattern_key = []
-
         
         if np.sum(np.sum(pattern_mat)) > 0:
+            
             # If there are lines to add, add them
             if np.shape(mat_NO)[0] != 0:
-                mat_NO.append(pattern_mat)
+                mat_NO = np.vstack((mat_NO,pattern_mat))
+            else: 
+                mat_NO = pattern_mat
+            
             if np.shape(key_NO)[0] != 0:
-                key_NO.append(pattern_key)
+                key_NO = np.vstack((key_NO,pattern_key))
+            else:
+                key_NO = np.array([pattern_key])
+                
             if np.shape(anno_NO)[0] != 0:
-                anno_NO.append(anno_temp_lst)
+                anno_NO = np.vstack((anno_NO,anno_temp_lst))
+            else:
+                anno_NO = anno_temp_lst
 
-
-        # Add to L
-        L.append(bw_lst_out_py)
-        # Sort list by 5th column
-        # Create dict to re-sort L
-        re_sort_L = {}
-        for i in range(0, len(L)-1):
-            # Get 5th column values into list of tuples
-            # Key = index, value = value
-            re_sort_L[i] = (L[i])[4]
-        # Convert to list of tuples and sort
-        re_sort_L = re_sort_L.items()
-        # Sort that dict by values  
-        re_sort_L = sorted(re_sort_L, key=lambda re_sort_L: re_sort_L[1])
-
+        L = np.vstack((L,bw_lst_out))
         
-        sorted_inds = [x[0] for x in re_sort_L]
-        # Sort L according to sorted indexes
-        L = [L for sorted_inds, L in sorted(zip(sorted_inds, L))]
-
-        # Will just use a np array here
-        np_mat_L = np.array(L)
-        bw_vec = np.unique(np_mat_L[:,4])
+        # create a new, sorted array
+        ind = np.lexsort((L[:,0], L[:,4]))
+        L = L[ind]
         
-        # Sort list ascending, then reverse it
+        bw_vec = np.unique(L[:,4])
         bw_vec = np.sort(bw_vec)
         bw_vec = bw_vec[::-1]
+        
         # Remove entries that fall below the bandwidth threshold
         cut_index = 0
 
         for value in bw_vec:
         # If the value is above the bandwidth 
-            if value < bw:
+            if value >= bw:
                 cut_index = cut_index+1
-        #endfor
+
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
-    #endWhile
-
-    # Set the outputs
-    lst_no_overlaps = np.array(L)
+    masterArray = np.hstack((mat_NO,key_NO,anno_NO))
+    cNum = masterArray.shape[1]
     
-    # Turn key_NO, mat_NO, and KEY_NO to numpy lists
-    key_NO = list(filter(lambda key_NO: key_NO.tolist() != [], key_NO))
-    mat_NO = list(filter(lambda mat_NO: mat_NO.tolist() != [], mat_NO))
-    anno_NO = list(filter(lambda anno_NO: anno_NO.tolist() != [], anno_NO))
-
-    if len(key_NO) !=0:
-        key_NO = np.concatenate(key_NO)
-    else:
-        key_NO = np.array([])
+    ind = np.lexsort((masterArray[:,cNum-1], masterArray[:,cNum-2]))
+    masterArray = masterArray[ind]
         
-    if len(mat_NO) !=0:
-        mat_NO = np.concatenate(mat_NO)
-    else:
-        mat_NO = np.array([])
-        
-    if len(anno_NO) !=0:
-        anno_NO = np.concatenate(anno_NO)
-    else:
-        anno_NO = np.array([])
-
-    # Convert to np.array
-    all_overlap_lst = np.array(all_overlap_lst)
-    if np.shape(all_overlap_lst)[0] != 0:
-        overlap_inds = np.argsort(all_overlap_lst[:,4])
-        all_overlap_lst = all_overlap_lst[overlap_inds, :]
-    #endif
+    #setting the outputs
+    lst_no_overlaps = L
     
-    key_NO = np.sort(key_NO)
-    mat_inds = np.argsort(key_NO)
-    if np.shape(mat_NO)[0] != 0:
-        matrix_no_overlaps = mat_NO[mat_inds,:]
-    else:
-        matrix_no_overlaps = mat_NO
+    matrix_no_overlaps = masterArray[:,:(cNum-2)]
+
+    key_no_overlaps = masterArray[:,(cNum-2)]
         
-    key_no_overlaps = key_NO
-    if np.shape(anno_NO)[0] != 0:
-        annotations_no_overlaps = mat_NO[mat_inds,:]
-    else:
-        annotations_no_overlaps = mat_NO
-        
-    # Compile final outputs to a tuple
-    output_tuple = (lst_no_overlaps, matrix_no_overlaps, key_no_overlaps, 
-                    annotations_no_overlaps, all_overlap_lst)
-   
-    return output_tuple
+    annotations_no_overlaps = masterArray[:,(cNum-1)]
+    
+    all_overlap_lst = np.delete(all_overlap_lst,0,0)
+    
+    
+    output = (lst_no_overlaps,matrix_no_overlaps,\
+              key_no_overlaps, annotations_no_overlaps,\
+                  all_overlap_lst)
+    
+    return output
 
 def separate_anno_markers(k_mat, sn, band_width, pattern_row): 
     """
