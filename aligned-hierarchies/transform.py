@@ -114,7 +114,11 @@ def create_anno_remove_overlaps(k_mat,song_length,band_width):
             remove_inds = ands
 
             temp_add = k_mat[remove_inds,:]
-            overlap_lst.append(temp_add)
+            
+            if (overlap_lst.size == 0):
+                overlap_lst = temp_add
+            else:
+                overlap_lst = np.vstack((overlap_lst,temp_add))
             
             if np.any(remove_inds == True):
                 # Convert the boolean array rm_inds into an array of integers
@@ -377,19 +381,20 @@ def remove_overlaps(input_mat, song_length):
             if np.shape(mat_NO)[0] != 0:
                 mat_NO = np.vstack((mat_NO,pattern_mat))
             else: 
-                mat_NO = pattern_mat
+                mat_NO = np.array([pattern_mat])
             
             if np.shape(key_NO)[0] != 0:
                 key_NO = np.vstack((key_NO,pattern_key))
             else:
-                key_NO = np.array([pattern_key])
+                key_NO = np.array([[pattern_key]])
                 
             if np.shape(anno_NO)[0] != 0:
                 anno_NO = np.vstack((anno_NO,anno_temp_lst))
             else:
                 anno_NO = anno_temp_lst
-
-        L = np.vstack((L,bw_lst_out))
+        
+        if (bw_lst_out.size > 0):
+            L = np.vstack((L,bw_lst_out))
         
         # create a new, sorted array
         ind = np.lexsort((L[:,0], L[:,4]))
@@ -409,29 +414,35 @@ def remove_overlaps(input_mat, song_length):
 
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
-    masterArray = np.hstack((mat_NO,key_NO,anno_NO))
-    cNum = masterArray.shape[1]
+    if mat_NO.size>0:
+        
+        masterArray = np.hstack((mat_NO,key_NO,anno_NO))
+        cNum = masterArray.shape[1]
     
-    ind = np.lexsort((masterArray[:,cNum-1], masterArray[:,cNum-2]))
-    masterArray = masterArray[ind]
+        ind = np.lexsort((masterArray[:,cNum-1], masterArray[:,cNum-2]))
+        masterArray = masterArray[ind]
+        
+        matrix_no_overlaps = masterArray[:,:(cNum-2)]
+
+        key_no_overlaps = masterArray[:,(cNum-2)]
+        
+        annotations_no_overlaps = masterArray[:,(cNum-1)]
+    else:
+        matrix_no_overlaps = mat_NO
+        key_no_overlaps = key_NO
+        annotations_no_overlaps = anno_NO
         
     #setting the outputs
     lst_no_overlaps = L
     
-    matrix_no_overlaps = masterArray[:,:(cNum-2)]
-
-    key_no_overlaps = masterArray[:,(cNum-2)]
-        
-    annotations_no_overlaps = masterArray[:,(cNum-1)]
-    
     all_overlap_lst = np.delete(all_overlap_lst,0,0)
-    
     
     output = (lst_no_overlaps,matrix_no_overlaps,\
               key_no_overlaps, annotations_no_overlaps,\
                   all_overlap_lst)
     
     return output
+
 
 def separate_anno_markers(k_mat, sn, band_width, pattern_row): 
     """
@@ -511,4 +522,3 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
-
