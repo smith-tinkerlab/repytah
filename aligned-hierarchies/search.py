@@ -594,7 +594,7 @@ def find_complete_list_anno_only(pair_list, song_length):
     bw_num = bw_found.shape[0]
     
     # Remove longest bandwidth row if it is the length of the full song
-    if song_length == bw_found[bw_num - 1]:
+    if song_length == bw_found[-1]:
         pair_list[-1,:] = []
         bw_found[-1] = []
         bw_num = (bw_num - 1)
@@ -602,6 +602,7 @@ def find_complete_list_anno_only(pair_list, song_length):
     
     # Add annotation markers to each pair of repeats
     full_list = []
+    
     for j in range(bw_num):
         band_width = bw_found[j]
         # Isolate pairs of repeats of desired length
@@ -622,10 +623,10 @@ def find_complete_list_anno_only(pair_list, song_length):
         # Get annotations for this bandwidth
         temp_anno_list = add_annotations(temp_anno_mat, song_length)
         full_list.append(temp_anno_list)
-        #Sort the list 
-        
+    
+    #Sort the list    
     out_list = np.concatenate(full_list)
-    tem_out_lst = np.lexsort([out_list[:,2], out_list[:,0], out_list[:,5],out_list[:,4]])
+    tem_out_lst = np.lexsort([out_list[:,0], out_list[:,2], out_list[:,5],out_list[:,4]])
     out_list = out_list[tem_out_lst,:]
         
     return out_list
