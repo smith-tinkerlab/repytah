@@ -583,7 +583,7 @@ def __find_song_pattern(thresh_diags):
 
     col_sum = thresh_diags.sum(axis = 0)
     
-    check_inds = col_sum.nonzero() #定位 
+    check_inds = col_sum.nonzero() 
   
     check_inds = check_inds[0]
     
@@ -603,12 +603,11 @@ def __find_song_pattern(thresh_diags):
         # Finds all time steps that i is close to
         inds = temp_row.nonzero()
         
-       
         if np.size(inds) != 0:
             while np.size(inds) != 0:
                 # Takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
-               
+                
                 c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
                 c_mat = c_mat*pattern_mask
                 
