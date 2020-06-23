@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
 assemble.py 
 
@@ -44,8 +45,10 @@ where they divided until there are only non-overlapping pieces left over.
 
 """
 import numpy as np
-
 from inspect import signature 
+from search import find_all_repeats
+from utilities import reconstruct_full_block
+ 
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
@@ -238,6 +241,7 @@ def check_overlaps(input_mat):
 
     compare_all = (compare_all > 0)
     overlap_mat = np.reshape(compare_all, (rs, rs))
+   
 
     # If OVERLAP_MAT is symmetric, only keep the upper-triangular portion. If
     # not, keep all of OVERLAP_MAT.
@@ -250,6 +254,7 @@ def check_overlaps(input_mat):
     overlaps_yn = overlap_mat
     
     return overlaps_yn
+
 
 
 def _compare_and_cut(red, red_len, blue, blue_len):
@@ -582,14 +587,14 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
         length of the repeats encoded in out_mat
     """
     # Sort the elements of full_bandwidth
-    temp_bandwidth = np.sort(full_bandwidth,axis=None)
+    temp_bandwidth = np.sort(full_bw,axis=None)
     
     # Return the indices that would sort full_bandwidth
-    bnds = np.argsort(full_bandwidth,axis=None) 
+    bnds = np.argsort(full_bw,axis=None) 
     temp_mat = full_mat[bnds,:] 
     
     # Find the unique elements of target_bandwidth
-    target_bandwidth = np.unique(target_bandwidth) 
+    target_bandwidth = np.unique(target_bw) 
     
     # Number of columns 
     target_size = target_bandwidth.shape[0] 
@@ -684,24 +689,29 @@ def _merge_rows(input_mat, input_width):
         # to be merged
         r2c_mat = np.kron(np.ones((rows,1)), row2check) 
         
+        
         # Step 2b: find indices of unmerged overlapping rows
         merge_inds = np.sum(((r2c_mat + not_merge) == 2), axis = 1) > 0
         
+       
         # Step 2c: union rows with starting indices in common with row2check 
         # and remove those rows from input_mat
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
-        np.delete(not_merge, not_merge[merge_inds,:])
-          
+        
+        not_merge = np.delete(not_merge,np.where(merge_inds==1),0)
+        #return not_merge
         # Step 2d: check that newly merged rows do not cause overlaps within
         # row 
         # If there are conflicts, rerun compare_and_cut
         merge_block = reconstruct_full_block(union_merge, input_width)
-        if np.max(merge_block) > 1:
-            (union_merge, union_merge_key) = _compare_and_cut(union_merge,\
-            input_width,
-            union_merge, input_width)
-        else:
-            union_merge_key = input_width
+        
+        
+        # if np.max(merge_block) > 1:
+        #     (union_merge, union_merge_key) = _compare_and_cut(union_merge,\
+        #     input_width,
+        #     union_merge, input_width)
+        # else:
+        union_merge_key = input_width
         
         # Step 2e: add unions to merge_mat and merge_key
         merge_mat = np.array([[merge_mat], [union_merge]])
@@ -710,8 +720,10 @@ def _merge_rows(input_mat, input_width):
         # Step 3: reinitialize rs for stopping condition
         rows = not_merge.shape[0]
     
-    return merge_mat
+    return merge_mat 
 
+
+      
 def hierarchical_structure(matrix_no,key_no,sn):
     """
      Distills the repeats encoded in MATRIX_NO (and KEY_NO) to the essential 
@@ -844,7 +856,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
     
     # These pairs of repeated sublists are the basis of our hierarchical
     # representation.
-    NZI_lst = find_all_repeats(symm_PNO_inds_only, [0:num_NZI])                 
+    NZI_lst = find_all_repeats(symm_PNO_inds_only, [0,num_NZI])                 
     remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
     
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
@@ -924,3 +936,4 @@ def hierarchical_structure(matrix_no,key_no,sn):
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
     return output
+
