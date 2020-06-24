@@ -658,18 +658,17 @@ def find_complete_list(pair_list,song_length):
     bw_num = np.size(bw_found, axis=0)
     
     # If the longest bandwidth is the length of the song, then remove that row
-    if song_length == bw_found[bw_num-1]: 
-        pair_list[-1,:] = []
-        bw_found[-1] = []
+    if song_length == bw_found[-1]: 
+        pair_list = np.delete(pair_list,-1,0)
+        bw_found = np.delete(bw_found,-1,0)
         bw_num = (bw_num - 1)
         
     # Initalize variables
     p = np.size(pair_list,axis=0)
     add_mat = np.zeros((1,5)).astype(int)
-   
 
     # Step 1: For each found bandwidth, search upwards (i.e. search the larger 
-    #        bandwidths) and add all found diagonals to the variable add_mat        
+    # bandwidths) and add all found diagonals to the variable add_mat        
     for j in range (0,bw_num-1):
         band_width = bw_found[j] 
         
@@ -677,6 +676,7 @@ def find_complete_list(pair_list,song_length):
         # Return the minimum of the array
         bsnds = np.amin((pair_list[:,4] == band_width).nonzero())
         bends = (pair_list[:,4] > band_width).nonzero()
+        
         # Convert bends into an array
         bend = np.array(bends)
     
@@ -686,17 +686,16 @@ def find_complete_list(pair_list,song_length):
             bend = p
         
         # Part A1: Isolate all starting time steps of the repeats of length 
-        # bandwidth
+        #          bandwidth
         start_I = pair_list[bsnds:bend, 0]
         start_J = pair_list[bsnds:bend, 2]
         all_vec_snds = np.concatenate((start_I,start_J), axis=None)  
         int_snds = np.unique(all_vec_snds)
 
-    
         # Part A2: Isolate all ending time steps of the repeats of length 
         # bandwidth
-        end_I = pair_list[bsnds:bend, 1] # Similar to definition for SI
-        end_J = pair_list[bsnds:bend, 3] # Similar to definition for SJ
+        end_I = pair_list[bsnds:bend, 1] # Similar to definition for start_I
+        end_J = pair_list[bsnds:bend, 3] # Similar to definition for start_J
 
         all_vec_ends = np.concatenate((end_I,end_J),axis=None)
         int_ends = np.unique(all_vec_ends)
@@ -724,7 +723,6 @@ def find_complete_list(pair_list,song_length):
     #Remove the empty row
     if add_mat.size!=0:
         add_mat= np.delete(add_mat,0,0)
-   
         
       
     # Step 2: Combine pair_list and new_mat. Make sure that you don't have any
@@ -732,6 +730,7 @@ def find_complete_list(pair_list,song_length):
     #         bandwidths in combine_mat.
     combine_mat = np.vstack((pair_list,add_mat))
     combine_mat = np.unique(combine_mat,axis=0)
+    
     # Return the indices that would sort combine_mat's fourth column
     combine_inds = np.argsort(combine_mat[:,4]) 
     combine_mat = combine_mat[combine_inds,:]
@@ -746,6 +745,7 @@ def find_complete_list(pair_list,song_length):
     #         markers to each found pair of repeats
     for j in range(1,new_bw_num+1):
         new_bw = new_bw_found[j-1]
+        
         # Isolate pairs of repeats in combine_mat that are length bandwidth
         # Return the minimum of the array
         new_bsnds = np.amin((combine_mat[:,4] == new_bw).nonzero()) 
@@ -764,7 +764,7 @@ def find_complete_list(pair_list,song_length):
 
         temp_anno_lst = np.concatenate((band_width_mat,\
                                         (np.zeros((length_band_width_mat,1))))\
-            ,axis=1).astype(int)
+                                        ,axis=1).astype(int)
 
         # Part C: Get annotation markers for this bandwidth
         temp_anno_lst = add_annotations(temp_anno_lst, song_length)
