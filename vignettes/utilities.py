@@ -28,9 +28,6 @@ This file contains the following functions:
     
     * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
     from diagonal starts and lengths
-    
-    * __find_song_pattern - stitches information from thresh_diags matrix into a single
-    row, song_pattern, that shows the timesteps containing repeats
 """
 
 import numpy as np
@@ -39,9 +36,9 @@ import scipy.sparse as sps
 import scipy.spatial.distance as spd
 
 def add_annotations(input_mat, song_length):
+ 
     """
-    Adds annotations to the pairs of repeats in input_mat; Annotations depend 
-    on length of repeats and the time that repeats occur in song
+    Adds annotations to the pairs of repeats in input_mat   
 
     Args
     ----
@@ -66,49 +63,48 @@ def add_annotations(input_mat, song_length):
     input_mat[:, 5] = 0
     
     # Find where repeats start
-    s_one = input_mat[:,0]
+    s_one = input_mat[:,0]  
     s_two = input_mat[:,2]
-    
+
     # Creates matrix of all repeats
     s_three = np.ones((num_rows,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, 
-                                 (s_one, s_two)), shape = (song_length + 1, song_length + 1)).toarray()
+                                 (s_one-1, s_two-1)), shape = (song_length, 
+                                 song_length)).toarray()
     
     low_tri_mat = up_tri_mat.conj().transpose()
     
     full_mat = up_tri_mat + low_tri_mat
     
+    
     # Stitches info from input_mat into a single row
     song_pattern = __find_song_pattern(full_mat)
-
-    # Restructures song_pattern
-    song_pattern = song_pattern[:,:-1]
-    song_pattern = np.insert(song_pattern, 0, 0, axis=1)
+    SPmax = max(song_pattern)
+    
     
     # Adds annotation markers to pairs of repeats
-    for i in song_pattern[0]:
-        pinds = np.nonzero(song_pattern == i)
-        
+    for i in range(1,SPmax+1):
+        pinds = np.nonzero(song_pattern == i)     
+      
         #One if annotation not already marked, 0 if it is
         check_inds = (input_mat[:,5] == 0)
         
-        for j in pinds[1]:
-            
+        for j in pinds[0]:
             # Finds all starting pairs that contain time step j
             # and DO NOT have an annotation
-            mark_inds = (s_one == j) + (s_two == j)
-            mark_inds = (mark_inds > 0)
+            mark_inds = (s_one == j+1) + (s_two == j+1)  
+            mark_inds = (mark_inds > 0)  
             mark_inds = check_inds * mark_inds
-            
+           
             # Adds found annotations to the relevant time steps
             input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
             
             # Removes pairs of repeats with annotations from consideration
             check_inds = check_inds ^ mark_inds
-     
+ 
     temp_inds = np.argsort(input_mat[:,5])
-    
+  
     # Creates list of annotations
     anno_list = input_mat[temp_inds,]
     
@@ -176,150 +172,183 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         all_lst: np.array[int]:
             list of pairs of repeats that correspond to 
             diagonals in thresh_mat
-    """    
-    
-    bw_len = bandwidth_vec.shape[1]
-    
-    int_all = []
+    """
+
+    b = np.size(bandwidth_vec)
+
+    #Create empty lists to store arrays
+    int_all =  []
     sint_all = []
     eint_all = []
     mint_all = []
-    
+
+    #Loop over all bandwidths
     for bw in bandwidth_vec:
         if bw > thresh_bw:
-            # Use convolution mx to find diagonals of length bw
-            id_mat = np.identity(bw)
-            diagonal_mat = signal.convolve2d(thresh_mat, id_mat, 'valid')
+            #Search for diagonals of length bw
+            thresh_mat_size = np.size(thresh_mat)
             
-            # Mark where diagonals of length bw start
-            diag_markers = (diagonal_mat == bw)
-            
-            if sum(diag_markers) > 0:
+            DDM_rename = signal.convolve2d(thresh_mat[0:thresh_mat_size, \
+                                                      0:thresh_mat_size],\
+    np.eye(bw), 'valid')
+            #Mark where diagonals of length bw start
+            thresh_DDM_rename = (DDM_rename == bw) 
+            if np.sum(np.sum(thresh_DDM_rename)) > 0:
                 full_bw = bw
-                # 1) Search outside the overlapping shingles
-                # Search for paired starts
-                upper_tri = np.triu(diag_markers, full_bw)
-                (start_i, start_j) = upper_tri.nonzero()
-                num_nonoverlaps = start_i.shape[0]
-                
-                # Find the matching ends for the prevously found starts
-                match_i = start_i + (full_bw - 1)
-                match_j = start_j + (full_bw - 1)
-                
-                # List pairs of starts with their ends and the widths of the
-                # non-overlapping intervals
-                int_lst = np.column_stack([start_i, match_i, start_j, match_j,
-                                           full_bw*np.ones(num_nonoverlaps,1)])
-    
-                # Add the new non-overlapping intervals to the full list of
-                # non-overlapping intervals
-                int_all.append(int_lst)
-                
-                # 2) Overlaps: Search only the overlaps in shingles
-                shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers), 
-                                                   (full_bw - 1))))
-                start_i_shin = np.array(shin_ovrlaps[0]) # row
-                start_j_shin = np.array(shin_ovrlaps[1]) # column
-                num_ovrlaps = start_i.shape[0]
-                
-                if(num_ovrlaps == 1 and start_i_shin == start_j_shin):
-                    sint_lst = np.column_stack([start_i_shin, 
-                                                (start_i_shin + (full_bw - 1)), 
-                                                start_j_shin, 
-                                                (start_j_shin + (full_bw - 1)),
-                                                full_bw])
-                    sint_all.append(sint_lst)
-                    
-                elif num_ovrlaps > 0:
-                        # Since you are checking the overlaps you need to 
-                        # cut these intervals into pieces: left, right, and 
-                        # middle. NOTE: the middle interval may NOT exist.
-                        
-                        # Create vector of 1's that is the length of the 
-                        # number of overlapping intervals. This is used a lot. 
-                        ones_no = np.ones(num_ovrlaps,1)
-                        
-                        # 2a) Left Overlap
-                        K = start_j_shin - start_i_shin 
-                        # NOTE: matchJ - matchI will also equal this, since the 
-                        # intervals that are overlapping are the same length. 
-                        # Therefore the "left" non-overlapping section is the 
-                        # same length as the "right" non-overlapping section. 
-                        # It does NOT follow that the "middle" section is 
-                        # equal to either the "left" or "right" piece. It is
-                        # possible, but unlikely.
-                        
-                        sint_lst = np.column_stack([start_i_shin, 
-                                                    (start_j_shin - ones_no), 
-                                                    start_j_shin, 
-                                                    (start_j_shin + K - ones_no), 
-                                                    K])
-                        i_s = np.argsort(K)
-                        sint_lst = sint_lst[i_s,]
-                        
-                        # Remove pairs that fall below the bandwidth threshold
-                        cut_s = np.amin((sint_lst[:,4]).nonzero())
-                        sint_lst = sint_lst[cut_s:,]
-                        
-                        # Add new left overlapping intervals to the full list
-                        # of left overlapping intervals
-                        sint_all.append(sint_lst)
-                        
-                        # 2b) Right Overlap
-                        end_i_right = start_i_shin + (full_bw - 1)
-                        end_j_right = start_j_shin + (full_bw - 1)
-                        eint_lst = np.column_stack([(end_i_right + ones_no - K),
-                                                    end_i_right,
-                                                    (end_i_right + ones_no), 
-                                                    end_j_right, K])
-                        ie = np.argsort(K)
-                        eint_lst = eint_lst[ie,]
-                        
-                        # Remove pairs that fall below the bandwidth threshold
-                        cut_e = np.amin((eint_lst[:,4]).nonzero())
-                        eint_lst = eint_lst[cut_e:,]
-                        
-                        # Add the new right overlapping intervals to the full list
-                        # of right overlapping intervals
-                        eint_all.append(eint_lst)
-                        
-                        # 2b) Middle Overlap
-                        mnds = (end_i_right - start_j_shin - K + ones_no) > 0
-                        start_i_mid = (start_j_shin * mnds)
-                        end_i_mid = (end_i_right * (mnds) - K * (mnds))
-                        start_j_mid = (start_j_shin * (mnds) + K * (mnds))
-                        end_j_mid = (end_i_mid * mnds)
-                        km = (end_i_mid * (mnds) - start_j_mid * 
-                              (mnds) - K * (mnds) + ones_no * (mnds))
-                        
-                        if mnds.sum() > 0:
-                            mint_lst = np.column_stack([start_i_mid, end_i_mid,
-                                                        start_j_mid, end_j_mid,
-                                                        km])
-                            im = np.argsort(km)
-                            mint_lst = mint_lst[im,]
-                            
-                            # Add the new middle overlapping intervals to 
-                            # the full list of middle overlapping intervals
-                            mint_all.append(mint_lst)
-                            
-                        # 4) Remove found diagonals of length bw from consideration
-                        sdm = stretch_diags(diag_markers, bw)
-                        thresh_mat = thresh_mat - sdm
-                        
-                if thresh_mat.sum() == 0:
-                        break
-                            
-    # Combine non-overlapping intervals with the left, right, and middle parts
-    # of the overlapping intervals
-    ovrlap_lst = np.concatenate((sint_all, eint_all, mint_all), axis = 0)
-    all_lst = np.concatenate((int_all, ovrlap_lst))
-    all_lst = filter(None, all_lst)
+                #1) Non-Overlaps: Search outside the overlapping shingles
 
-    # Sort the list by bandwidth size
-    I = np.argsort(all_lst[:,4])
-    all_lst = all_lst[I,]                     
+                #Find the starts that are paired together
+                #returns tuple of lists (python) https://docs.scipy.org/doc/np/reference/generated/np.nonzero.html
+                #need to add 1 to return correct number of nonzero ints matlab vs python
+                overlaps = np.nonzero(np.triu(thresh_DDM_rename, (full_bw)))
+
+                startI = np.array(overlaps[0])
+                num_nonoverlaps = np.size(startI)
+                startJ = np.array(overlaps[1])
+                #Find the matching ends EI for SI and EJ for SJ
+                matchI = (startI + full_bw-1);
+                matchJ = (startJ + full_bw-1);
+
+                 #List pairs of starts with their ends and the widths of the
+                #non-overlapping interval
+
+                int_lst = np.column_stack([startI, matchI, startJ, matchJ, full_bw])
+                #Add the new non-overlapping intervals to the full list of
+                #non-overlapping intervals
+                int_all.append(int_lst)
+                # 2) Overlaps: Search only the overlaps in shingles
+                #returns tuple (python) 
+                shingle_overlaps = np.nonzero(np.tril(np.triu(thresh_DDM_rename), (full_bw-1)))
+                #gets list for I and J [1,2,3,4] turn those to np, transpose them vertically
+                startI_inShingle = np.array(shingle_overlaps[0]) 
+                startJ_inShingle = np.array(shingle_overlaps[1]) 
+                #find number of overlaps
+                num_overlaps = np.size(startI_inShingle)
+                if (num_overlaps == 1 and startI_inShingle == startJ_inShingle):
+                    sint_lst = np.column_stack([startI_inShingle, startI_inShingle,(startI_inShingle + (full_bw - 1)),startJ_inShingle,(startJ_inShingle + (full_bw - 1)), full_bw])
+                    sint_all.append(sint_lst)
+                elif num_overlaps>0:
+                        #Since you are checking the overlaps you need to cut these
+                        #intervals into pieces: left, right, and middle. NOTE: the
+                        #middle interval may NOT exist
+                    # Vector of 1's that is the length of the number of
+                    # overlapping intervals. This is used a lot. 
+                    ones_no = np.ones(num_overlaps);
+
+                    #2a) Left Overlap
+                    #remain consistent with being matlab -1
+                    K = startJ_inShingle - startI_inShingle
+                    sint_lst = np.column_stack([startI_inShingle, (startJ_inShingle - ones_no), startJ_inShingle, (startJ_inShingle + K - ones_no), K])
+                    #returns list of indexes of sorted list
+                    Is = np.argsort(K)
+                    #turn array vertical
+                    Is.reshape(np.size(Is), 1)
+                    #extract all columns from row Is
+                    sint_lst = sint_lst[Is, :]
+                                    #grab only length column
+                    i = 0
+                    for length in np.transpose(sint_lst[:,4]):
+                        #if this length is greater than thresh_bw-- we found our index
+                        if length > thresh_bw:
+                        #if its not the first row
+                            if(i!=0):
+                                #delete rows that fall below threshold
+                                sint_lst = np.delete(sint_lst, (i-1), axis=0)
+                            sint_all.append(sint_lst)
+                                #after we found the min that exceeds thresh_bw... break
+                            break
+                        i=i+1
+                    #endfor
+                    #2b right overlap
+                    endI_right = startI_inShingle + (full_bw)
+                    endJ_right = startJ_inShingle + (full_bw)
+                    eint_lst = np.column_stack([(endI_right + ones_no - K), endI_right, (endI_right + ones_no), endJ_right, K])
+                    indexes = np.argsort(K)
+                    #turn result to column
+                    indexes.reshape(np.size(indexes),1)
+                    eint_lst = eint_lst[indexes, :]
+                    
+                    #grab only length column
+                    i = 0
+                    for length in np.transpose(eint_lst[:,4]):
+                        #if this length is greater than thresh_bw-- we found our index
+                        if length > thresh_bw:
+                            #if its not the first row
+                            if(i!=0):
+                                #delete rows that fall below threshold
+                                eint_lst = np.delete(eint_lst, (i-1), axis=0)
+                            eint_all.append(eint_lst)
+                            #after we found the min that exceeds thresh_bw... break
+                            break
+                        i=i+1
+
+                    # 2) Middle Overlap
+                    #returns logical 0 or 1 for true or false
+                    mnds = (endI_right - startJ_inShingle - K + ones_no) > 0
+                    #for each logical operator convert to 0 or 1
+                    for operator in mnds:
+                        if operator is True:
+                            operator = 1
+                        else:
+                            operator = 0
+                    startI_middle = startJ_inShingle*(mnds)
+                    endI_middle = (endI_right*(mnds) - K*(mnds))
+                    startJ_middle = (startJ_inShingle*(mnds) + K*(mnds))
+                    endJ_middle = endI_right*(mnds)
+                    #fixes indexing here because length starts at 1 and indexes start at 0
+                    Km = (endI_right*(mnds) - startJ_inShingle*(mnds) - K*(mnds) +ones_no*(mnds))-1
+                    if np.sum(np.sum(mnds)) > 0 : 
+                        mint_lst = np.column_stack([startI_middle, endI_middle, startJ_middle, endJ_middle, Km])
+                        #revert for same reason
+                        Km = Km+1
+                        Im = np.argsort(Km)
+                        #turn array to column
+                        Im.reshape(np.size(Im), 1)
+                        mint_lst = mint_lst[Im, :]
+
+                       #Remove the pairs that fall below the bandwidth threshold
+                        #grab only length column
+                        i = 0
+                        for length in np.transpose(mint_lst[:,4]):
+                            #if this length is greater than thresh_bw-- we found our index
+                            if length > thresh_bw:
+                            #if its not the first row
+                                if(i!=0):
+                                    #delete rows that fall below threshold
+                                    mint_lst = np.delete(mint_lst, (i-1), axis=0)
+                                mint_all.append(mint_lst)
+                                #after we found the min that exceeds thresh_bw... break
+                                break
+                            i=i+1
+                        #endfor
+                    #endif line 143 np.sum(np.sum(mnds)) > 0
+                #endif line 67 (num_overlaps == 1 and startI_inShingle == startJ_inShingle)
+
+                                    #returns matrix with diags in it
+                SDM = stretch_diags(DDM_rename, bw)
+                thresh_mat = thresh_mat - SDM
+
+                if np.sum(np.sum(thresh_mat)) == 0:
+                    break
+                #endIf line 174
+            #endIf line 34 np.sum(np.sum(thresh_DDM_rename)) > 0
+       #endIf line 28 bw > thresh_bw
+    #endfor
+     #Combine non-overlapping intervals with the left, right, and middle parts
+     #of the overlapping intervals
+    #remove empty lines from the lists
+
+
+    out_lst = int_all + sint_all + eint_all + mint_all
+    #remove empty lists from final output
     
+    all_lst = filter(None, out_lst)
+
+    if out_lst is not None:
+        all_lst = np.vstack(out_lst)
+    else:
+        all_lst = np.array([])
+    #return final list
     return all_lst
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
@@ -404,14 +433,15 @@ def reconstruct_full_block(pattern_mat, pattern_key):
             #Replace part of sub_section with new_struct 
             sub_section[b - 1,:] = new_struct
     
-    #Replaces part of pattern_block with the sums of each column in 
-    #sub_section 
-    pattern_block[i,:] = np.sum(sub_section, axis = 0)
+        #Replaces part of pattern_block with the sums of each column in 
+        #sub_section 
+        pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
     
 #line 217: 
 #https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
+
 
 def reformat(pattern_mat, pattern_key):
     """
@@ -474,7 +504,7 @@ def reformat(pattern_mat, pattern_key):
                 info_mat[r, 3] = j_ind + pattern_key[r]
                 info_mat[r, 4] = pattern_key[r]
                 
-    return info_mat 
+    return info_mat.astype(int)
 
 def stretch_diags(thresh_diags, band_width):
     """
@@ -520,6 +550,7 @@ def stretch_diags(thresh_diags, band_width):
     
     return stretch_diag_mat
 
+
 def __find_song_pattern(thresh_diags):
     """
     Stitches information from thresh_diags matrix into a single
@@ -541,28 +572,30 @@ def __find_song_pattern(thresh_diags):
         row where each entry represents a time step and the group 
         that time step is a member of
     """
-    
     song_length = thresh_diags.shape[0]
-
+    
     # Initialize song pattern base
-    pattern_base = np.zeros((1,song_length), dtype = int)
+    pattern_base = np.zeros((1,song_length), dtype = int).flatten()
+   
 
     # Initialize group number
     pattern_num = 1
-    
-    col_sum = thresh_diags.sum(axis = 0)
 
-    check_inds = col_sum.nonzero()
+    col_sum = thresh_diags.sum(axis = 0)
+    
+    check_inds = col_sum.nonzero() 
+  
     check_inds = check_inds[0]
     
     # Creates vector of song length
     pattern_mask = np.ones((1, song_length))
     pattern_out = (col_sum == 0)
-    pattern_mask = pattern_mask - pattern_out
+    pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
+    
     
     while np.size(check_inds) != 0:
         # Takes first entry in check_inds
-        i = check_inds[0]
+        i = check_inds[0] 
         
         # Takes the corresponding row from thresh_diags
         temp_row = thresh_diags[i,:]
@@ -574,34 +607,33 @@ def __find_song_pattern(thresh_diags):
             while np.size(inds) != 0:
                 # Takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
-                c_mat = np.sum(thresh_diags[inds,:], axis = 0)
+                
+                c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
                 c_mat = c_mat*pattern_mask
                 
                 # Finds nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
-                c_inds = c_inds[1]
                 
                 # Gives all elements of c_inds the same grouping 
                 # number as i
-                pattern_base[0,c_inds] = pattern_num
-                
+                pattern_base[c_inds] = pattern_num
+               
                 # Removes all used elements of c_inds from
                 # check_inds and p_mask
                 check_inds = np.setdiff1d(check_inds, c_inds)
-                pattern_mask[0,c_inds] = 0
-                
+
+                pattern_mask[c_inds] = 0
+               
                 # Resets inds to c_inds with inds removed
                 inds = np.setdiff1d(c_inds, inds)
-                inds = np.delete(inds,0)
+                inds = np.array([inds])
                 
             # Updates grouping number to prepare for next group
             pattern_num = pattern_num + 1
             
         # Removes i from check_inds
         check_inds = np.setdiff1d(check_inds, i)
-        
-    pattern_base = pattern_base[:,1:]
-    pattern_base = np.append(pattern_base, np.array([[0]]), axis = 1)
+       
     song_pattern = pattern_base
     
     return song_pattern
