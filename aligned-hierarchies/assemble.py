@@ -352,7 +352,7 @@ def __inds_to_rows(start_mat, row_length):
         inds = start_mat[i,:]
         new_mat[i,inds] = 1;
 
-    return new_mat
+    return new_mat.astype(int)
 
 def _merge_based_on_length(full_mat,full_bw,target_bw):
     """
@@ -403,7 +403,11 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
             merge_bw = temp_mat[inds,:]
-            merged_mat = _merge_rows(merge_bw,test_bandwidth)
+            print('merge_bw,',merge_bw)
+            print(np.array([test_bandwidth]))
+            merged_mat = _merge_rows(merge_bw,np.array([test_bandwidth]))
+            
+            print('merged_mat:',merged_mat)
             
             # Number of columns
             bandwidth_add_size = merged_mat.shape[0] 
@@ -411,6 +415,7 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
             np.ones((bandwidth_add_size,1)).astype(int)
          
             if np.any(inds == True):
+                print('true if')
                 # Convert the boolean array inds into an array of integers
                 inds = np.array(inds).astype(int)
                 remove_inds = np.where(inds == 1)
@@ -418,24 +423,31 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
                 # Delete the rows that meet the condition set by remove_inds
                 temp_mat = np.delete(temp_mat,remove_inds,axis=0)
                 temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
-    
+            
+            
             # Combine rows into a single matrix
-            bind_rows = [temp_mat,merged_mat]
-            temp_mat = np.concatenate(bind_rows)
+            #bind_rows = [temp_mat,merged_mat]
+            
+            temp_mat = np.vstack((temp_mat,merged_mat))
+            
+            print('temp_mat:',temp_mat)
             
             # Indicates temp_bandwidth is an empty array
             if temp_bandwidth.size == 0: 
                 temp_bandwidth = np.concatenate(bandwidth_add)
             # Indicates temp_bandwidth is not an empty array
             elif temp_bandwidth.size > 0: 
-                bind_bw = [temp_bandwidth,bandwidth_add]
-                temp_bandwidth = np.concatenate(bind_bw)
+                print('temp_bandwidth:',temp_bandwidth)
+                print('bandwidth_add:',bandwidth_add)
+                temp_bandwidth = np.concatenate((temp_bandwidth,bandwidth_add.flatten()))
+                print('temp_bandwidth2:',temp_bandwidth)
 
-            # Sort the elements of temp_bandwidth
-            temp_bandwidth = np.sort(temp_bandwidth)
-            
             # Return the indices that would sort temp_bandwidth
             bnds = np.argsort(temp_bandwidth) 
+            
+            # Sort the elements of temp_bandwidth
+            temp_bandwidth = np.sort(temp_bandwidth)
+
             temp_mat = temp_mat[bnds,]
 
     out_mat = temp_mat
@@ -692,8 +704,8 @@ def _merge_rows(input_mat, input_width):
     """
     # Step 0: initialize temporary variables
     not_merge = input_mat    # Everything must be checked
-    merge_mat = []           # Nothing has been merged yet
-    merge_key = []
+    merge_mat = np.array([])           # Nothing has been merged yet
+    merge_key = np.array([])
     rows = input_mat.shape[0]  # How many rows to merge?
     
     # Step 1: has every row been checked?
@@ -712,17 +724,17 @@ def _merge_rows(input_mat, input_width):
         
         # Step 2b: find indices of unmerged overlapping rows
         merge_inds = np.sum(((r2c_mat + not_merge) == 2), axis = 1) > 0
-        
        
         # Step 2c: union rows with starting indices in common with row2check 
         # and remove those rows from input_mat
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
-        
+        union_merge = union_merge.astype(int)
         not_merge = np.delete(not_merge,np.where(merge_inds==1),0)
-        #return not_merge
         # Step 2d: check that newly merged rows do not cause overlaps within
         # row 
         # If there are conflicts, rerun compare_and_cut
+        #print('union_merge',union_merge)
+        #print('input_width:',input_width)
         merge_block = reconstruct_full_block(union_merge, input_width)
         
         if np.max(merge_block) > 1:
@@ -733,16 +745,15 @@ def _merge_rows(input_mat, input_width):
             union_merge_key = input_width
         
         # Step 2e: add unions to merge_mat and merge_key
-        merge_mat = np.array([[merge_mat], [union_merge]])
-        merge_key = np.array([[merge_key], [union_merge_key]])
+        merge_mat = np.concatenate((merge_mat, union_merge))
+        merge_key = np.concatenate((merge_key, union_merge_key))
         
         # Step 3: reinitialize rs for stopping condition
         rows = not_merge.shape[0]
-    
-    return merge_mat 
 
-
-
+    if np.ndim(merge_mat) == 1:
+        merge_mat = np.array([merge_mat])
+    return merge_mat.astype(int)
 
       
 def hierarchical_structure(matrix_no,key_no,sn):
