@@ -5,16 +5,16 @@ search.py
 
 This file contains the following functions:
     
-    * find_add_erows - Finds pairs of repeated structures, represented as 
+    * __find_add_erows - Finds pairs of repeated structures, represented as 
     diagonals of a certain length, k, that end at the same time step as 
     previously found pairs of repeated structures of the same length.
 
-    * find_add_mrows - Finds pairs of repeated structures, represented as 
+    * __find_add_mrows - Finds pairs of repeated structures, represented as 
     diagonals of a certain length, k, that neither start nor end at the same 
     time steps as previously found pairs of repeated structures of the same 
     length. 
     
-    * find_add_srows - Finds pairs of repeated structures, represented as 
+    * __find_add_srows - Finds pairs of repeated structures, represented as 
     diagonals of a certain length, k, that start at the same time step as 
     previously found pairs of repeated structures of the same length. 
     
@@ -36,7 +36,7 @@ import numpy as np
 from scipy import signal
 from utilities import add_annotations
 
-def find_add_erows(lst_no_anno, check_inds, k):
+def __find_add_erows(lst_no_anno, check_inds, k):
     """
     Finds pairs of repeated structures, representated as diagonals of a 
     certain length, k, that end at the same time step as 
@@ -157,7 +157,7 @@ def find_add_erows(lst_no_anno, check_inds, k):
                      
     return add_rows
 
-def find_add_mrows(lst_no_anno, check_inds, k): 
+def __find_add_mrows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
     length, k, that neither start nor end at the same time steps as previously
@@ -296,7 +296,7 @@ def find_add_mrows(lst_no_anno, check_inds, k):
      
     return add_rows 
 
-def find_add_srows(lst_no_anno, check_inds, k):
+def __find_add_srows(lst_no_anno, check_inds, k):
     """
     Finds pairs of repeated structures, representated as diagonals of a 
     certain length, k, that start at the same time step as previously found 
@@ -705,9 +705,9 @@ def find_complete_list(pair_list,song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        add_srows = find_add_srows(pair_list, int_snds,band_width)
-        add_mrows = find_add_mrows(pair_list, int_snds, band_width)
-        add_erows = find_add_erows(pair_list, int_ends, band_width)
+        add_srows = __find_add_srows(pair_list, int_snds,band_width)
+        add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
+        add_erows = __find_add_erows(pair_list, int_ends, band_width)
        
         # Check if any of the arrays are empty
         # Add the new pairs of repeats to the temporary list add_mat
