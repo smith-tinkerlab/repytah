@@ -341,8 +341,6 @@ def __inds_to_rows(start_mat, row_length):
     """
     if (start_mat.ndim == 1): 
         #Convert a 1D array into 2D array 
-        #From:
-        #https://stackoverflow.com/questions/3061761/numpy-array-dimensions
         start_mat = start_mat[None, : ]
     
     mat_rows = start_mat.shape[0]
