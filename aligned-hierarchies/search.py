@@ -452,7 +452,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     int_all = np.empty((0,5), int) 
     
     # Interval list for the left side of the overlapping pairs
-    sint_all = np.empty((0,5), int)
+    sint_all = np.empty((0,5), int) 
     
     # Interval list for the right side of the overlapping pairs
     eint_all = np.empty((0,5), int) 
@@ -505,8 +505,8 @@ def find_all_repeats(thresh_mat, bw_vec):
             # Search for paired starts 
             shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, 1),
                                                   (full_bw - 1))))
-            start_i_shin = np.array(shin_ovrlaps[0]) # row
-            start_j_shin = np.array(shin_ovrlaps[1]) # column
+            start_i_shin = np.array(shin_ovrlaps[0]+1) # row
+            start_j_shin = np.array(shin_ovrlaps[1]+1) # column
             num_ovrlaps = len(start_i_shin)
             
             if num_ovrlaps > 0:
@@ -528,7 +528,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                                                        # to either the "left" or "right" piece. It is
                                                        # possible, but unlikely.
 
-                
                 sint_lst = np.column_stack([start_i_shin,
                                             (start_j_shin - ones_no),
                                             start_j_shin,
@@ -542,40 +541,44 @@ def find_all_repeats(thresh_mat, bw_vec):
     
                 # Add the new left overlapping intervals to the full list
                 # of left overlapping intervals
-                sint_all.append(sint_lst)
+                sint_all = np.vstack((sint_all,sint_lst))
     
                 # 2b) Right Overlap
                 end_i_right = start_i_shin + (full_bw-1)
+                
                 end_j_right = start_j_shin + (full_bw-1)
                 eint_lst = np.column_stack([(end_i_right + ones_no - K), 
                                             end_i_right,
                                             (end_i_right + ones_no), 
                                             end_j_right, K])
-                i_e = np.argsort(K) # Return the indices that would sort K
+                
+                i_e = np.lexsort(K) # Return the indices that would sort K
                 #Ie.reshape(np.size(Ie),1)
                 eint_lst = eint_lst[i_e:,]
     
                 # Add the new right overlapping intervals to the full list of
                 # right overlapping intervals
-                eint_all.append(eint_lst)
+                eint_all = np.vstack((eint_all,eint_lst))
                     
                 # 2) Middle Overlap
-                mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
+                mnds = (end_i_right - start_j_shin - K + ones_no) > 0
+                
                 start_I_middle = start_j_shin * (mnds)
-                end_I_middle = (end_i_shin*(mnds) - K*(mnds))
+                
+                end_I_middle = (end_i_right*(mnds) - K*(mnds))
                 start_J_middle = (start_j_shin*(mnds) + K*(mnds))
-                end_J_middle = end_i_shin*(mnds)
-                k_middle = (end_i_shin*(mnds) - start_j_shin*(mnds) - K*(mnds) + ones_no*(mnds))
+                end_J_middle = end_i_right*(mnds)
+                k_middle = (end_i_right*(mnds) - start_j_shin*(mnds) - K*(mnds) + ones_no*(mnds))
                 
                 if mnds.sum() > 0:
                     mint_lst = np.column_stack([start_I_middle,end_I_middle,start_J_middle,end_J_middle,k_middle])
-                    Im = np.argsort(k_middle)
-                    Im.reshape(np.size(Im),1)
+                    Im = np.lexsort(k_middle)
+                    #Im.reshape(np.size(Im),1)
                     mint_lst = mint_lst[Im,:]
     
                     # Add the new middle overlapping intervals to the full list
                     # of middle overlapping intervals
-                    mint_all.append(mint_lst)
+                    mint_all = np.vstack(mint_all,mint_lst)
     
         if thresh_temp.sum() == 0:
             break 
@@ -585,8 +588,12 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     inds = np.argsort(all_lst[:,4])
     all_lst = np.array(all_lst)[inds]
+
     
-    return(all_lst)
+    all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
+    all_lst = all_lst[all_lst_in]
+    
+    return(all_lst.astype(int))
 
 def find_complete_list_anno_only(pair_list, song_length):
     """
