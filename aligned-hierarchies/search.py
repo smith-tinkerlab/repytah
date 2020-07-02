@@ -527,14 +527,12 @@ def find_all_repeats(thresh_mat, bw_vec):
                                                        # NOT follow that the "middle" section is equal
                                                        # to either the "left" or "right" piece. It is
                                                        # possible, but unlikely.
-
-                sint_lst = np.column_stack([start_i_shin,
-                                            (start_j_shin - ones_no),
-                                            start_j_shin,
-                                            (start_j_shin + K - ones_no),
-                                            K])
+    
+                i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
+                j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
+                sint_lst = np.column_stack((i_sshin,j_sshin,K.T))
         
- 
+        
                 i_s = np.argsort(K) # Return the indices that would sort K
                 #Is.reshape(np.size(Is), 1)
                 sint_lst = sint_lst[i_s,]
@@ -544,13 +542,13 @@ def find_all_repeats(thresh_mat, bw_vec):
                 sint_all = np.vstack((sint_all,sint_lst))
     
                 # 2b) Right Overlap
-                end_i_right = start_i_shin + (full_bw-1)
+                end_i_shin = start_i_shin + (full_bw-1)
                 
-                end_j_right = start_j_shin + (full_bw-1)
-                eint_lst = np.column_stack([(end_i_right + ones_no - K), 
-                                            end_i_right,
-                                            (end_i_right + ones_no), 
-                                            end_j_right, K])
+                end_j_shin = start_j_shin + (full_bw-1)
+                
+                i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, end_i_shin[:])).T
+                j_eshin = np.vstack((end_i_shin[:] + ones_no[:], end_j_shin[:])).T
+                eint_lst = np.column_stack((i_eshin,j_eshin,K.T))
                 
                 i_e = np.lexsort(K) # Return the indices that would sort K
                 #Ie.reshape(np.size(Ie),1)
@@ -561,24 +559,23 @@ def find_all_repeats(thresh_mat, bw_vec):
                 eint_all = np.vstack((eint_all,eint_lst))
                     
                 # 2) Middle Overlap
-                mnds = (end_i_right - start_j_shin - K + ones_no) > 0
+                mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
                 
-                start_I_middle = start_j_shin * (mnds)
+                i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                i_middle = i_middle.T
+                i_middle = i_middle[np.all(i_middle != 0, axis=1)]
                 
-                end_I_middle = (end_i_right*(mnds) - K*(mnds))
-                start_J_middle = (start_j_shin*(mnds) + K*(mnds))
-                end_J_middle = end_i_right*(mnds)
-                k_middle = (end_i_right*(mnds) - start_j_shin*(mnds) - K*(mnds) + ones_no*(mnds))
+                j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                j_middle = j_middle.T
+                j_middle = j_middle[np.all(j_middle != 0, axis=1)]
                 
-                if mnds.sum() > 0:
-                    mint_lst = np.column_stack([start_I_middle,end_I_middle,start_J_middle,end_J_middle,k_middle])
-                    Im = np.lexsort(k_middle)
-                    #Im.reshape(np.size(Im),1)
-                    mint_lst = mint_lst[Im,:]
-    
-                    # Add the new middle overlapping intervals to the full list
-                    # of middle overlapping intervals
-                    mint_all = np.vstack(mint_all,mint_lst)
+                k_middle = np.vstack((end_i_shin[:] - start_j_shin[:] - K + ones_no[:])) * mnds
+                k_middle = k_middle.T
+                k_middle = k_middle[np.all(k_middle != 0, axis=1)]
+                
+                mint_lst = np.column_stack((i_middle,j_middle,k_middle))
+                
+                mint_all = np.vstack((mint_all, mint_lst))
     
         if thresh_temp.sum() == 0:
             break 
