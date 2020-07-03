@@ -194,16 +194,18 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     mint_all = np.empty((0,5), int) 
 
     #Loop over all bandwidths
-    for bw in bandwidth_vec:
+    for bw in np.flip((bandwidth_vec)):
         if bw > thresh_bw:
+            
+            
             #Use convolution matrix to find diagonals of length bw 
-            id_mat = np.identity(bw)
-            
-            #Search for diagonals of length bw
+            id_mat = np.identity(bw) 
+
+            # Search for diagonals of length band_width
             diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
-            
-            #Mark where diagonals of length bw start
-            diag_markers = (diagonal_mat == bw) 
+        
+            # Mark where diagonals of length band_width start
+            diag_markers = (diagonal_mat == bw).astype(int)
             
             if sum(diag_markers).any() > 0:
                 full_bw = bw
@@ -326,12 +328,12 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     
                     mint_all = np.vstack((mint_all, mint_lst))
 
-                    # Remove found diagonals of length BW from consideration
-                    SDM = stretch_diags(diag_markers, bw)
-                    thresh_temp = thresh_temp - SDM
+            # Remove found diagonals of length BW from consideration
+            SDM = stretch_diags(diag_markers, bw)
+            thresh_temp = thresh_temp - SDM
 
-                if thresh_temp.sum() == 0:
-                    break
+            if thresh_temp.sum() == 0:
+                break
 
     
     out_lst = np.vstack((sint_all, eint_all, mint_all))
