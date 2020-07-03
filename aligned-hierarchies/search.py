@@ -516,19 +516,14 @@ def find_all_repeats(thresh_mat, bw_vec):
     
                 # Vector of 1's that is the length of the number of
                 # overlapping intervals. This is used a lot.
-                ones_no = np.ones((num_ovrlaps,1))
+                ones_no = np.ones((num_ovrlaps)).astype(int)
 
                 # 2a) Left Overlap
                 K = start_j_shin - start_i_shin  # NOTE: end_J_overlap - end_I_overlap will also equal this,
-                                                       # since the intervals that are overlapping are
-                                                       # the same length. Therefore the "left"
-                                                       # non-overlapping section is the same length as
-                                                       # the "right" non-overlapping section. It does
-                                                       # NOT follow that the "middle" section is equal
-                                                       # to either the "left" or "right" piece. It is
-                                                       # possible, but unlikely.
+                                                # possible, but unlikely.
     
                 i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
+                
                 j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
                 sint_lst = np.column_stack((i_sshin,j_sshin,K.T))
         
@@ -536,10 +531,12 @@ def find_all_repeats(thresh_mat, bw_vec):
                 i_s = np.argsort(K) # Return the indices that would sort K
                 #Is.reshape(np.size(Is), 1)
                 sint_lst = sint_lst[i_s,]
+                
     
                 # Add the new left overlapping intervals to the full list
                 # of left overlapping intervals
                 sint_all = np.vstack((sint_all,sint_lst))
+    
     
                 # 2b) Right Overlap
                 end_i_shin = start_i_shin + (full_bw-1)
@@ -561,22 +558,25 @@ def find_all_repeats(thresh_mat, bw_vec):
                 # 2) Middle Overlap
                 mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
                 
-                i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
-                i_middle = i_middle.T
-                i_middle = i_middle[np.all(i_middle != 0, axis=1)]
-                
-                j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
-                j_middle = j_middle.T
-                j_middle = j_middle[np.all(j_middle != 0, axis=1)]
-                
-                k_middle = np.vstack((end_i_shin[:] - start_j_shin[:] - K + ones_no[:])) * mnds
-                k_middle = k_middle.T
-                k_middle = k_middle[np.all(k_middle != 0, axis=1)]
-                
-                mint_lst = np.column_stack((i_middle,j_middle,k_middle))
-                
-                mint_all = np.vstack((mint_all, mint_lst))
-    
+                if sum(mnds) > 0:
+                    i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                    i_middle = i_middle.T
+                    i_middle = i_middle[np.all(i_middle != 0, axis=1)]
+                    
+                    
+                    j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                    j_middle = j_middle.T
+                    j_middle = j_middle[np.all(j_middle != 0, axis=1)]
+                    
+                    
+                    k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds] - K[mnds] + ones_no[mnds]))
+                    k_middle = k_middle.T
+                    k_middle = k_middle[np.all(k_middle != 0, axis=1)]
+ 
+                    mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
+                    
+                    mint_all = np.vstack((mint_all, mint_lst))
+        
         if thresh_temp.sum() == 0:
             break 
             
@@ -585,12 +585,11 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     inds = np.argsort(all_lst[:,4])
     all_lst = np.array(all_lst)[inds]
-
     
+    all_lst = np.unique(all_lst,axis=0)
     all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
     all_lst = all_lst[all_lst_in]
-    
-    return(all_lst.astype(int))
+    return((all_lst).astype(int))
 
 def find_complete_list_anno_only(pair_list, song_length):
     """
