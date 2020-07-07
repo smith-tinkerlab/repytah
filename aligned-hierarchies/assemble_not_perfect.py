@@ -9,7 +9,7 @@ from inspect import signature
 from search import find_all_repeats
 from utilities import reconstruct_full_block
 
-
+# For recursion
 def check_each_row(union_mat,union_length):
     """    
     This function checks if there are overlaps within each row.
