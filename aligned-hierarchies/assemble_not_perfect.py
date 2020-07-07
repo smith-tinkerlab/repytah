@@ -9,6 +9,25 @@ from inspect import signature
 from search import find_all_repeats
 from utilities import reconstruct_full_block
 
+
+def check_each_row(union_mat,union_length):
+    """    
+    This function checks if there are overlaps within each row.
+    If there is an overlap, return True and an int which tells which 
+    row has the overlap.
+    If there is no overlap, return false(To make the output in the same
+    function, I added a 1 after False, but we will not use that number).
+    
+    """
+    for i in range(0, union_mat.shape[0]):
+        union_row = union_mat[i,:]
+        union_row_width = np.array([union_length[i]])
+        union_row_block = reconstruct_full_block(union_row, union_row_width)
+        if (np.sum(union_row_block[0]>1)) > 0:
+            return (True,i)
+    return (False,1)
+        
+
 def __num_of_parts(input_vec, input_start, input_all_starts):
     """    
     This function is used to determine the number of blocks of consecutive 
@@ -42,7 +61,6 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
     
     diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
     break_mark = diff_vec > 1
-    
     if sum(break_mark) == 0: 
         start_vec = input_vec[0]
         end_vec = input_vec[-1]
@@ -59,11 +77,11 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
         start_vec[1] = input_vec[break_mark - 1]
         end_vec[1] = input_vec[-1]
     
-        add_vec = start_vec - input_start
-        start_mat = np.concatenate((input_all_starts + add_vec[0]), (input_all_starts + add_vec[1]))
+        add_vec = np.array(start_vec - input_start).astype(int)
+        input_all_starts = np.array(input_all_starts).astype(int)
+        start_mat = np.vstack((input_all_starts + add_vec[0], input_all_starts + add_vec[1]))
 
     length_vec = end_vec - start_vec + 1
-        
     output = (start_mat, length_vec)
     
     return output 
@@ -112,7 +130,6 @@ def cut(red, red_len, blue, blue_len):
 
     start_blue = np.flatnonzero(blue)
     start_blue = start_blue[None, :] 
-    
     #Determine if the rows have any intersections
     red_block = reconstruct_full_block(red, red_len)
     blue_block = reconstruct_full_block(blue, blue_len)
@@ -150,7 +167,6 @@ def cut(red, red_len, blue, blue_len):
             # Isolate one repeat in red and one repeat in blue
             ri = compare_inds[start_ind, 1]
             bi = compare_inds[start_ind, 0]
-            
             red_ri = np.arange(ri, ri+red_len)
             blue_bi = np.arange(bi, bi+blue_len)
             
@@ -230,8 +246,7 @@ def cut(red, red_len, blue, blue_len):
                     # Form the outputs
                     if new_red.size != 0 and new_blue.size == 0 :
                         union_mat = np.vstack((new_red, new_purple))
-                        union_length = np.vstack((\
-                                              red_length_vec, purple_length))
+                        union_length = np.vstack((red_length_vec, purple_length))
                     elif new_red.size == 0 and new_blue.size != 0 :
                         union_mat = np.vstack((new_blue, new_purple))
                         union_length = np.vstack((\
@@ -252,6 +267,17 @@ def cut(red, red_len, blue, blue_len):
                     if max(new_purple_block[0]) < 2:
                         union_mat = new_purple
                         union_length = np.array([purple_length])
+    
+    ifstop = check_each_row(union_mat, union_length)[0]
+    
+    while (ifstop==True):
+        where = check_each_row(union_mat, union_length)[1]
+        a,b,if_merge= cut(union_mat[where],union_length[where],union_mat[where],union_length[where])
+        union_mat = np.delete(union_mat, where, axis = 0)
+        union_length = np.delete(union_length,where,axis = 0)
+        union_mat = np.vstack((a,union_mat))
+        union_length = np.vstack((b,union_length))
+        ifstop = check_each_row(union_mat, union_length)[0]
         
     output = (union_mat,union_length,if_merge)
     return output
@@ -283,33 +309,30 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
     one_length_vec: np.array
         length of the repeats encoded in out_mat
     """
-    temp_bandwidth = np.sort(full_bw,axis=None)
-    
+    temp_bandwidth = np.sort(full_bw,axis=0)
     # Return the indices that would sort full_bandwidth
     bnds = np.argsort(full_bw,axis=None) 
     temp_mat = full_mat[bnds,:] 
-    
     # Find the unique elements of target_bandwidth
-    target_bandwidth = np.unique(target_bw) 
+    target_bandwidth = np.array(np.unique(target_bw))
+
     # Number of columns 
     target_size = target_bandwidth.shape[0] 
     for i in range(1,target_size+1):
-        test_bandwidth = target_bandwidth[i-1]
-        
+        test_bandwidth = np.array([[target_bandwidth[i-1]]])
         # Check if temp_bandwidth is equal to test_bandwidth
-        inds = (temp_bandwidth == test_bandwidth) 
+        inds = np.array(np.where(temp_bandwidth == test_bandwidth))[0]
         # If the sum of all inds elements is greater than 1, then execute this 
         # if statement
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
-            merge_bw = temp_mat[inds,:]
+            merge_bw = temp_mat[inds]
             merge_mat = _merge_rows(merge_bw,test_bandwidth)
                    
             # Number of columns
             bandwidth_add_size = merge_mat.shape[0] 
             bandwidth_add = test_bandwidth * \
             np.ones((bandwidth_add_size,1)).astype(int)
-         
             if np.any(inds == True):
                 # Convert the boolean array inds into an array of integers
                 inds = np.array(inds).astype(int)
@@ -317,7 +340,6 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
                 # Delete the rows that meet the condition set by remove_inds
                 temp_mat = np.delete(temp_mat,remove_inds,axis=0)
                 temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
-    
             # Combine rows into a single matrix
             
             if temp_mat.size!=0:                             
@@ -332,12 +354,11 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
                 temp_bandwidth = np.concatenate(bandwidth_add)
             # Indicates temp_bandwidth is not an empty array
             elif temp_bandwidth.size > 0: 
-               
-                bind_bw = [np.array([temp_bandwidth]),bandwidth_add]
-                temp_bandwidth = np.concatenate(bind_bw)
+                
+                bind_bw = [temp_bandwidth,bandwidth_add]
+                temp_bandwidth = np.vstack((bind_bw))
 
-            temp_bandwidth = np.sort(temp_bandwidth,axis=None)
-
+            temp_bandwidth = np.sort(temp_bandwidth,axis=0)
             # Return the indices that would sort temp_bandwidth
             bnds = np.argsort(temp_bandwidth,axis=None) 
             temp_mat = temp_mat[bnds,:] 
@@ -372,7 +393,6 @@ def _merge_rows(input_mat, input_width):
     merge_mat = np.array([])          # Nothing has been merged yet
     merge_key = np.array([])
     rows = input_mat.shape[0]  # How many rows to merge?
-    
     # Step 1: has every row been checked?
     while rows > 0:
         # Step 2: start merge process
@@ -428,55 +448,57 @@ def _merge_rows(input_mat, input_width):
 
 def merge(union_mat,union_length,if_merge):
     # Maybe need a while loop
+    
     if if_merge:
         union_mat, union_length = _merge_based_on_length(\
                                         union_mat, union_length, union_length)
     
-    # Check that there are no overlaps in each row of union_mat 
-    union_mat_add = np.array([])
-    union_mat_add_length = np.array([])
-    union_mat_rminds = np.array([])
+    # # Check that there are no overlaps in each row of union_mat 
+    # union_mat_add = np.array([])
+    # union_mat_add_length = np.array([])
+    # union_mat_rminds = np.array([])
     
-    # Isolate one row at a time, call it union_row
-    for i in range(0, union_mat.shape[0]):
-        union_row = union_mat[i,:]
-        union_row_width = np.array([union_length[i]])
-        union_row_block = reconstruct_full_block(union_row, union_row_width)
-        # If there are at least one overlap, then compare and cut that row
-        # until there are no overlaps
+    # # Isolate one row at a time, call it union_row
+    # for i in range(0, union_mat.shape[0]):
+    #     union_row = union_mat[i,:]
+    #     union_row_width = np.array([union_length[i]])
+    #     union_row_block = reconstruct_full_block(union_row, union_row_width)
+    #     # If there are at least one overlap, then compare and cut that row
+    #     # until there are no overlaps
         
-        if (np.sum(union_row_block[0]>1)) > 0:
-            if union_mat_rminds.size!=0:
-                union_mat_rminds = np.vstack((union_mat_rminds, i))
-            else:
-                union_mat_rminds = np.array([i])
-            union_row_new, union_row_new_length,if_merge = cut(union_row,\
-                                union_row_width, union_row, union_row_width)
-            print(union_row_new)
-            # Add union_row_new and union_row_new_length to union_mat_add and
-            # union_mat_add_length, respectively
-            if union_mat_add.size!=0:
+    #     if (np.sum(union_row_block[0]>1)) > 0:
+    #         print(1)
+    #         if union_mat_rminds.size!=0:
+    #             union_mat_rminds = np.vstack((union_mat_rminds, i))
+    #         else:
+    #             union_mat_rminds = np.array([i])
+    #         union_row_new, union_row_new_length,if_merge = cut(union_row,\
+    #                             union_row_width, union_row, union_row_width)
+            
+    #         # Add union_row_new and union_row_new_length to union_mat_add and
+    #         # union_mat_add_length, respectively
+    #         if union_mat_add.size!=0:
                 
-                union_mat_add = np.vstack((union_mat_add, union_row_new))
-                union_mat_add_length = np.vstack((union_mat_add_length,\
-                                             union_row_new_length))
-            else:
-                union_mat_add = union_row_new
-                union_mat_add_length = union_row_new_length
+    #             union_mat_add = np.vstack((union_mat_add, union_row_new))
+    #             union_mat_add_length = np.vstack((union_mat_add_length,\
+    #                                          union_row_new_length))
+    #         else:
+    #             union_mat_add = union_row_new
+    #             union_mat_add_length = union_row_new_length
     
-        # Remove the old rows from union_mat (as well as the old lengths from
-    # union_length)
-    if union_mat_rminds.size!=0:
-        union_mat = np.delete(union_mat, union_mat_rminds, axis = 0)
-        union_length = np.delete(union_length, union_mat_rminds)
+    #     # Remove the old rows from union_mat (as well as the old lengths from
+    # # union_length)
+    # if union_mat_rminds.size!=0:
+    #     union_mat = np.delete(union_mat, union_mat_rminds, axis = 0)
+    #     union_length = np.delete(union_length, union_mat_rminds)
      
-    #Add union_row_new and union_row_new_length to union_mat and
-    #union_length, respectively, such that union_mat is in order by
-    #lengths in union_length
-    if union_mat_add.size!=0:
-        union_mat = np.vstack((union_mat, union_mat_add))
-    if union_mat_add_length.size!=0:
-        union_length = np.vstack((union_length, union_mat_add_length))
+    # #Add union_row_new and union_row_new_length to union_mat and
+    # #union_length, respectively, such that union_mat is in order by
+    # #lengths in union_length
+    # if union_mat_add.size!=0:
+    #     union_mat = np.vstack((union_mat, union_mat_add))
+    # if union_mat_add_length.size!=0:
+    #     union_length = np.vstack((union_length, union_mat_add_length))
     
     UM_inds = np.argsort(union_length.flatten())
     union_length = np.sort(union_length)
@@ -488,9 +510,12 @@ def merge(union_mat,union_length,if_merge):
         
 
 
-red = np.array([1,0,1,1,0,0,1,0,0,1,0,0,0])
-red_len = np.array([3])
-blue = np.array([0,1,0,0,1,0,1,1,1,0,0,0,0])
-blue_len = np.array([3])
+# red = np.array([1,0,1,1,0,0,1,0,0,1,0,0,0])
+red_len = np.array([4])
+# blue = np.array([0,1,0,0,1,0,1,1,1,0,0,0,0])
+blue_len = np.array([2])
+red = np.array([1,1,0,0,0,0,0,1,0,0,0,0,0])
+blue = np.array([0,1,0,1,0,0,0,0,1,0,1,0,0])
 output = cut(red, red_len, blue, blue_len)
-print(merge(output[0],output[1],output[2]))
+output1 = merge(output[0],output[1],output[2])
+print(output1)
