@@ -150,6 +150,50 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     self_dissim_mat = spd.squareform(sdm_row)
     return self_dissim_mat
   
+def stretch_diags(thresh_diags, band_width):
+    """
+    Creates binary matrix with full length diagonals from binary matrix of
+        diagonal starts and length of diagonals
+                                                                                 
+    Args
+    ----
+    thresh_diags: np.array
+        binary matrix where entries equal to 1 signal the existence 
+        of a diagonal
+    
+    band_width: int
+        length of encoded diagonals
+    
+    Returns
+    -------
+    stretch_diag_mat: np.array [boolean]
+        logical matrix with diagonals of length band_width starting 
+        at each entry prescribed in thresh_diag
+    """
+    # Creates size of returned matrix
+    n = thresh_diags.shape[0] + band_width - 1
+    
+    temp_song_marks_out = np.zeros(n)
+    
+    (jnds, inds) = thresh_diags.nonzero()
+    
+    subtemp = np.identity(band_width)
+    
+    # Expands each entry in thresh_diags into diagonal of
+    # length band width
+    for i in range(inds.shape[0]):
+        tempmat = np.zeros((n,n))
+        
+        tempmat[inds[i]:(inds[i] + band_width), 
+                jnds[i]:(jnds[i] + band_width)] = subtemp
+        
+        temp_song_marks_out = temp_song_marks_out + tempmat
+                
+    # Ensures that stretch_diag_mat is a binary matrix
+    stretch_diag_mat = (temp_song_marks_out > 0)
+    
+    return stretch_diag_mat
+
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
     Looks for the largest repeated structures in thresh_mat. Finds all 
@@ -195,10 +239,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
     #Loop over all bandwidths
     for bw in np.flip((bandwidth_vec)):
-        print('bw:',bw)
         if bw > thresh_bw:
-            
-            
+                        
             #Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
 
@@ -337,10 +379,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
             if thresh_temp.sum() == 0:
                 break
-        
-        
-
-    
+  
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     
@@ -351,6 +390,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     all_lst = all_lst[all_lst_in]
     
     return(all_lst.astype(int))
+
+
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
@@ -507,49 +548,6 @@ def reformat(pattern_mat, pattern_key):
                 
     return info_mat.astype(int)
 
-def stretch_diags(thresh_diags, band_width):
-    """
-    Creates binary matrix with full length diagonals from binary matrix of
-        diagonal starts and length of diagonals
-                                                                                 
-    Args
-    ----
-    thresh_diags: np.array
-        binary matrix where entries equal to 1 signal the existence 
-        of a diagonal
-    
-    band_width: int
-        length of encoded diagonals
-    
-    Returns
-    -------
-    stretch_diag_mat: np.array [boolean]
-        logical matrix with diagonals of length band_width starting 
-        at each entry prescribed in thresh_diag
-    """
-    # Creates size of returned matrix
-    n = thresh_diags.shape[0] + band_width - 1
-    
-    temp_song_marks_out = np.zeros(n)
-    
-    (jnds, inds) = thresh_diags.nonzero()
-    
-    subtemp = np.identity(band_width)
-    
-    # Expands each entry in thresh_diags into diagonal of
-    # length band width
-    for i in range(inds.shape[0]):
-        tempmat = np.zeros((n,n))
-        
-        tempmat[inds[i]:(inds[i] + band_width), 
-                jnds[i]:(jnds[i] + band_width)] = subtemp
-        
-        temp_song_marks_out = temp_song_marks_out + tempmat
-                
-    # Ensures that stretch_diag_mat is a binary matrix
-    stretch_diag_mat = (temp_song_marks_out > 0)
-    
-    return stretch_diag_mat
 
 
 def __find_song_pattern(thresh_diags):
