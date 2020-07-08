@@ -2,6 +2,7 @@
 #https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
 import numpy as np
 from scipy import signal
+from utilities import stretch_diags
 
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
