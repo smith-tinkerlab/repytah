@@ -172,7 +172,6 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                         cut_m = np.argwhere((mint_lst[:,4] > Tbw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
-                        print(mint_lst)
                         mint_all = np.vstack((mint_all, mint_lst))
                     
                     # Remove found diagonals of length BW from consideration
