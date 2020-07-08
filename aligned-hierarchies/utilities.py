@@ -195,6 +195,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
     #Loop over all bandwidths
     for bw in np.flip((bandwidth_vec)):
+        print('bw:',bw)
         if bw > thresh_bw:
             
             
@@ -239,12 +240,16 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 
                 # Search for paired starts 
                 shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, 1),
-                                                  (full_bw - 1))))
-                start_i_shin = np.array(shin_ovrlaps[0]) # row
-                start_j_shin = np.array(shin_ovrlaps[1]) # column
+                                                  (full_bw-1))))
+                #print('shin_ovrlaps:',shin_ovrlaps)
+                start_i_shin = np.array(shin_ovrlaps[0]+1) # row
+                start_j_shin = np.array(shin_ovrlaps[1]+1) # column
                 num_ovrlaps = len(start_i_shin)
                 
+                #print('start_i_shin:',start_i_shin)
+                #print('start_j_shin:',start_j_shin)
                 if (num_ovrlaps == 1 and start_i_shin == start_j_shin):
+                    print('if')
                     
                     i_sshin = np.vstack((start_i_shin[:], (start_i_shin[:] + (full_bw - 1)))).T
                     j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + (full_bw - 1)))).T
@@ -266,7 +271,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     ones_no = np.ones(num_ovrlaps);
 
                     # 2a) Left Overlap
-                    K = start_i_shin - start_j_shin
+                    K = start_j_shin - start_i_shin
                     
                     i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
                     j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
@@ -305,28 +310,32 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     eint_all = np.vstack((eint_all,eint_lst))
 
                     # 2) Middle Overlap
+                    
                     mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
                 
-                    i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
-                    i_middle = i_middle.T
-                    i_middle = i_middle[np.all(i_middle != 0, axis=1)]
-                
-                    j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
-                    j_middle = j_middle.T
-                    j_middle = j_middle[np.all(j_middle != 0, axis=1)]
-                
-                    k_middle = np.vstack((end_i_shin[:] - start_j_shin[:] - K + ones_no[:])) * mnds
-                    k_middle = k_middle.T
-                    k_middle = k_middle[np.all(k_middle != 0, axis=1)]
-                
-                    mint_lst = np.column_stack((i_middle,j_middle,k_middle))
-                    
+                    if sum(mnds) > 0:
+                        i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                        i_middle = i_middle.T
+                        i_middle = i_middle[np.all(i_middle != 0, axis=1)]
+                        
+                        
+                        j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                        j_middle = j_middle.T
+                        j_middle = j_middle[np.all(j_middle != 0, axis=1)]
+                        
+                        
+                        k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds] - K[mnds] + ones_no[mnds]))
+                        k_middle = k_middle.T
+                        k_middle = k_middle[np.all(k_middle != 0, axis=1)]
+        
+                        mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
+                                                
                     # Remove the pairs that fall below the bandwidth threshold 
-                    cut_m = np.argwhere((mint_lst[:,4] > Tbw))
-                    cut_m = cut_m.T
-                    mint_lst = np.delete(mint_lst, cut_m, axis = 0)
+                        cut_m = np.argwhere((mint_lst[:,4] > Tbw))
+                        cut_m = cut_m.T
+                        mint_lst = np.delete(mint_lst, cut_m, axis = 0)
                     
-                    mint_all = np.vstack((mint_all, mint_lst))
+                        mint_all = np.vstack((mint_all, mint_lst))
 
             # Remove found diagonals of length BW from consideration
             SDM = stretch_diags(diag_markers, bw)
@@ -334,6 +343,11 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
             if thresh_temp.sum() == 0:
                 break
+        
+        print('int_all:',int_all)
+        print('sint_all:',sint_all)
+        print('eint_all:',eint_all)
+        print('mint_all:',mint_all)
 
     
     out_lst = np.vstack((sint_all, eint_all, mint_all))
