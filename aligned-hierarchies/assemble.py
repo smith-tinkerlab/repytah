@@ -449,7 +449,6 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
     
     return output
 
-
 def _compare_and_cut(red, red_len, blue, blue_len):
     """
     Compares two rows of repeats labeled RED and BLUE, and determines if there 
@@ -694,7 +693,15 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     #print(union_length)
         
     totalArray = np.hstack((union_mat,union_length))
-    #print('totalArray:',totalArray)
+    totalArray = totalArray[np.argsort(totalArray[:, -1])]
+    # print('totalArray:',totalArray)
+    # print('sortArray:',totalArray[np.argsort(totalArray[:, -1])])
+    
+    # print('sn:',sn)
+    union_mat = totalArray[:, 0:sn] 
+    # print('union_MAT:',union_mat)
+    union_length = np.array([totalArray[:,-1]]).T
+    # print('union_LENGHT:',union_length)
     
     
     #UM_inds = np.argsort((union_length))
@@ -713,8 +720,7 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     # print('union_length:',union_length)
     # print('union_mat:',union_mat)
     # print('compare_and_cut done')
-    return output  
-
+    return output 
 
 
 def _merge_rows(input_mat, input_width):
