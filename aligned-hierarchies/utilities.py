@@ -150,6 +150,50 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     self_dissim_mat = spd.squareform(sdm_row)
     return self_dissim_mat
   
+def stretch_diags(thresh_diags, band_width):
+    """
+    Creates binary matrix with full length diagonals from binary matrix of
+        diagonal starts and length of diagonals
+                                                                                 
+    Args
+    ----
+    thresh_diags: np.array
+        binary matrix where entries equal to 1 signal the existence 
+        of a diagonal
+    
+    band_width: int
+        length of encoded diagonals
+    
+    Returns
+    -------
+    stretch_diag_mat: np.array [boolean]
+        logical matrix with diagonals of length band_width starting 
+        at each entry prescribed in thresh_diag
+    """
+    # Creates size of returned matrix
+    n = thresh_diags.shape[0] + band_width - 1
+    
+    temp_song_marks_out = np.zeros(n)
+    
+    (jnds, inds) = thresh_diags.nonzero()
+    
+    subtemp = np.identity(band_width)
+    
+    # Expands each entry in thresh_diags into diagonal of
+    # length band width
+    for i in range(inds.shape[0]):
+        tempmat = np.zeros((n,n))
+        
+        tempmat[inds[i]:(inds[i] + band_width), 
+                jnds[i]:(jnds[i] + band_width)] = subtemp
+        
+        temp_song_marks_out = temp_song_marks_out + tempmat
+                
+    # Ensures that stretch_diag_mat is a binary matrix
+    stretch_diag_mat = (temp_song_marks_out > 0)
+    
+    return stretch_diag_mat
+
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
     Looks for the largest repeated structures in thresh_mat. Finds all 
@@ -195,10 +239,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
     #Loop over all bandwidths
     for bw in np.flip((bandwidth_vec)):
-        print('bw:',bw)
         if bw > thresh_bw:
-            
-            
+                        
             #Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
 
@@ -239,26 +281,20 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 # 2) Overlaps: Search only the overlaps in shingles
                 
                 # Search for paired starts 
-                shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, 1),
+                shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
                                                   (full_bw-1))))
                 #print('shin_ovrlaps:',shin_ovrlaps)
                 start_i_shin = np.array(shin_ovrlaps[0]+1) # row
                 start_j_shin = np.array(shin_ovrlaps[1]+1) # column
                 num_ovrlaps = len(start_i_shin)
                 
-                #print('start_i_shin:',start_i_shin)
-                #print('start_j_shin:',start_j_shin)
-                if (num_ovrlaps == 1 and start_i_shin == start_j_shin):
-                    print('if')
+                
+                if (num_ovrlaps == 1 and start_i_shin == start_j_shin): 
                     
-                    i_sshin = np.vstack((start_i_shin[:], (start_i_shin[:] + (full_bw - 1)))).T
-                    j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + (full_bw - 1)))).T
-                    i_j_pairs = np.hstack((i_pairs, j_pairs))
-                    width_sshin = np.repeat(full_bw, i_j_pairs.shape[0], axis=0)
-                    width_sshin_col = width_sshin.T
-                    
-                    sint_lst = np.column_stack((i_sshin, j_sshin, width_sshin_col))
-                    
+                    i_sshin = np.concatenate((start_i_shin,start_i_shin+ (full_bw - 1)),axis = None)
+                    j_sshin = np.concatenate((start_j_shin,start_j_shin+ (full_bw - 1)),axis = None)
+                    i_j_pairs = np.hstack((i_sshin,j_sshin))
+                    sint_lst = np.hstack((i_j_pairs,full_bw))
                     sint_all = np.vstack((sint_all, sint_lst))
                     
                 elif num_ovrlaps > 0:
@@ -283,7 +319,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # Remove the pairs that fall below the bandwidth threshold
                     cut_s = np.argwhere((sint_lst[:,4] > Tbw))
                     cut_s = cut_s.T
-                    sint_lst = np.delete(sint_lst, cut_s, axis=0)
+                    sint_lst = sint_lst[cut_s][0]
     
                     # Add the new left overlapping intervals to the full list
                     # of left overlapping intervals
@@ -303,7 +339,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # Remove the pairs that fall below the bandwidth threshold
                     cut_e = np.argwhere((eint_lst[:,4] > Tbw))
                     cut_e = cut_e.T
-                    eint_lst = np.delete(eint_lst, cut_e, axis=0)
+                    eint_lst = eint_lst[cut_e][0]
     
                     # Add the new right overlapping intervals to the full list of
                     # right overlapping intervals
@@ -333,7 +369,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # Remove the pairs that fall below the bandwidth threshold 
                         cut_m = np.argwhere((mint_lst[:,4] > Tbw))
                         cut_m = cut_m.T
-                        mint_lst = np.delete(mint_lst, cut_m, axis = 0)
+                        mint_lst = mint_lst[cut_m][0]
                     
                         mint_all = np.vstack((mint_all, mint_lst))
 
@@ -343,13 +379,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
             if thresh_temp.sum() == 0:
                 break
-        
-        print('int_all:',int_all)
-        print('sint_all:',sint_all)
-        print('eint_all:',eint_all)
-        print('mint_all:',mint_all)
-
-    
+  
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     
@@ -360,6 +390,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     all_lst = all_lst[all_lst_in]
     
     return(all_lst.astype(int))
+
+
 
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
@@ -516,49 +548,6 @@ def reformat(pattern_mat, pattern_key):
                 
     return info_mat.astype(int)
 
-def stretch_diags(thresh_diags, band_width):
-    """
-    Creates binary matrix with full length diagonals from binary matrix of
-        diagonal starts and length of diagonals
-                                                                                 
-    Args
-    ----
-    thresh_diags: np.array
-        binary matrix where entries equal to 1 signal the existence 
-        of a diagonal
-    
-    band_width: int
-        length of encoded diagonals
-    
-    Returns
-    -------
-    stretch_diag_mat: np.array [boolean]
-        logical matrix with diagonals of length band_width starting 
-        at each entry prescribed in thresh_diag
-    """
-    # Creates size of returned matrix
-    n = thresh_diags.shape[0] + band_width - 1
-    
-    temp_song_marks_out = np.zeros(n)
-    
-    (jnds, inds) = thresh_diags.nonzero()
-    
-    subtemp = np.identity(band_width)
-    
-    # Expands each entry in thresh_diags into diagonal of
-    # length band width
-    for i in range(inds.shape[0]):
-        tempmat = np.zeros((n,n))
-        
-        tempmat[inds[i]:(inds[i] + band_width), 
-                jnds[i]:(jnds[i] + band_width)] = subtemp
-        
-        temp_song_marks_out = temp_song_marks_out + tempmat
-                
-    # Ensures that stretch_diag_mat is a binary matrix
-    stretch_diag_mat = (temp_song_marks_out > 0)
-    
-    return stretch_diag_mat
 
 
 def __find_song_pattern(thresh_diags):
