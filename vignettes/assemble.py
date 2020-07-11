@@ -257,220 +257,7 @@ def check_overlaps(input_mat):
 
 
 
-def _compare_and_cut(red, red_len, blue, blue_len):
-    """
-    Compares two rows of repeats labeled RED and BLUE, and determines if there 
-    are any overlaps in time between them. If there is, then we cut the 
-    repeats in RED and BLUE into up to 3 pieces. 
-    
-    Args
-    ----
-        red: np.array 
-            binary row vector encoding a set of repeats with 1's where each
-            repeat starts and 0's otherwise 
-            
-        red_len: number 
-            length of repeats encoded in red 
-            
-        blue: np.array 
-            binary row vector encoding a set of repeats with 1's where each
-            repeat starts and 0's otherwise 
-            
-        blue_len: number 
-            length of repeats encoded in blue 
 
-    Returns
-    -------
-        union_mat: np.array 
-            binary matrix representation of up to three rows encoding
-            non-overlapping repeats cut from red and blue
-
-        union_length: np.array 
-            vector containing the lengths of the repeats encoded in union_mat
-    """
-    sn = red.shape[0]
-    assert sn == blue.shape[0]
-    
-    start_red = np.flatnonzero(red)
-    start_red = start_red[None, :] 
-
-    start_blue = np.flatnonzero(blue)
-    start_blue = start_blue[None, :] 
-    
-    #Determine if the rows have any intersections
-    red_block = reconstruct_full_block(red, RL)
-    blue_block = reconstruct_full_block(blue, BL)
-
-    red_block = red_block > 0
-    blue_block = blue_block > 0 
-    purple_block = np.logical_and(red_block, blue_block)
-    
-    # If there is any intersection between the rows, then start comparing one
-    # repeat in red to one repeat in blue
-    if purple_block.sum() > 0:
-        
-        # Find number of blocks in red and in blue
-        LSR = max(start_red.shape)
-        LSB = max(start_blue.shape) 
-        
-        # Build the pairs of starting indices to search, where each pair
-        # contains a starting index in red and a starting index in blue
-        red_inds = np.tile(start_red.transpose(), (LSB, 1))
-        blue_inds = np.tile(start_blue, (LSR,1))
-
-        
-        compare_inds = np.concatenate((blue_inds.transpose(),  red_inds), \
-                                      axis = None)
-        compare_inds = np.reshape(compare_inds, (4,2), order='F')
-    
-        
-        # Initialize the output variables union_mat and union_length
-        union_mat = np.array([])
-        union_length = np.array([]) 
-    
-        # Loop over all pairs of starting indices
-        for start_ind in range(0, LSR*LSB):
-            
-            # Isolate one repeat in red and one repeat in blue
-            ri = compare_inds[start_ind, 1]
-            bi = compare_inds[start_ind, 0]
-            
-            red_ri = np.arange(ri, ri+RL)
-            blue_bi = np.arange(bi, bi+BL)
-            
-            # Determine if the blocks intersect and call the intersection
-            # purple
-            purple = np.intersect1d(red_ri, blue_bi)
-            
-            if purple.size != 0: 
-            
-                # Remove purple from red_ri, call it red_minus_purple
-                red_minus_purple = np.setdiff1d(red_ri, purple)
-                
-                # If red_minus_purple is not empty, then see if there are one
-                # or two parts in red_minus_purple.
-                # Then cut purple out of all of the repeats in red. 
-                if red_minus_purple.size != 0:
-                    # red_length_vec will have the length(s) of the parts in 
-                    # new_red 
-                    red_start_mat, red_length_vec = __num_of_parts(\
-                                              red_minus_purple, ri, start_red)
-                    
-                    # If there are two parts left in red_minus_purple, then 
-                    # the new variable new_red, which holds the part(s) of 
-                    # red_minus_purple, should have two rows with 1's for the 
-                    # starting indices of the resulting pieces and 0's 
-                    # elsewhere.
-                    new_red = __inds_to_rows(red_start_mat, sn)
-                else:
-                    # If red_minus_purple is empty, then set new_red and
-                    # red_length_vec to empty
-                    new_red = np.array([]) 
-                    red_length_vec = np.array([])
-           
-                # Noting that purple is only one part and in both red_ri and
-                # blue_bi, then we need to find where the purple starting
-                # indices are in all the red_ri
-                purple_in_red_mat, purple_length = __num_of_parts(purple, ri, \
-                                                                start_red)
-                
-                blue_minus_purple = np.setdiff1d(blue_bi,purple)
-                
-                # If blue_minus_purple is not empty, then see if there are one
-                # or two parts in blue_minus_purple. Then cut purple out of 
-                # all of the repeats in blue. 
-                if blue_minus_purple.size != 0: 
-                    blue_start_mat, blue_length_vec = __num_of_parts(\
-                                            blue_minus_purple, bi, start_blue)
-                    new_blue = __inds_to_rows(blue_start_mat, sn)
-               
-                # If there are two parts left in blue_minus_purple, then the 
-                # new variable new_blue, which holds the part(s) of 
-                # blue_minus_purple, should have two rows with 1's for the 
-                # starting indices of the resulting pieces and 0's elsewhere. 
-                else:
-                    # If blue_minus_purple is empty, then set new_blue and
-                    # blue_length_vec to empty
-                    new_blue = np.array([])
-                     # Also blue_length_vec will have the length(s) of the 
-                     # parts in new_blue.
-                    blue_length_vec = np.array([])
-                    
-                # Recalling that purple is only one part and in both red_rd 
-                # and blue_bi, then we need to find where the purple starting
-                # indices are in all the blue_ri
-                purple_in_blue_mat, x = __num_of_parts(purple, bi, start_blue)
-                
-                # Union purple_in_red_mat and purple_in_blue_mat to get
-                # purple_start, which stores all the purple indices
-                purple_start = np.union1d(purple_in_red_mat, \
-                                          purple_in_blue_mat)
-                
-                # Use purple_start to get new_purple with 1's where the repeats
-                # in the purple rows start and 0 otherwise. 
-                new_purple = __inds_to_rows(purple_start, sn);
-                
-                if new_red.size != 0 | new_blue.size != 0:
-                    # Form the outputs
-                    union_mat = np.vstack((new_red, new_blue, new_purple))
-                    union_length = np.vstack((red_length_vec, \
-                                              blue_length_vec, purple_length))
-
-                    union_mat, union_length = _merge_based_on_length(\
-                                        union_mat, union_length, union_length)
-                    break
-                elif new_red.size == 0 & new_blue.size == 0:
-                    new_purple_block = reconstruct_full_block(new_purple,\
-                                                              purple_length)
-                    if max(new_purple_block.shape) < 2:
-                        union_mat = new_purple
-                        union_length = purple_length
-                        break
-            
-    # Check that there are no overlaps in each row of union_mat
-    union_mat_add = np.array([])
-    union_mat_add_length = np.array([])
-    union_mat_rminds = np.array([])
-    
-    # Isolate one row at a time, call it union_row
-    for i in range(0, union_mat.shape[0] + 1):
-        union_row = union_mat[i,:]
-        union_row_width = union_length[i];
-        union_row_block = reconstruct_full_block(union_row, union_row_width)
-        
-        # If there are at least one overlap, then compare and cut that row
-        # until there are no overlaps
-        if (union_row_block.sum(axis = 0) > 1) > 0:
-            union_mat_rminds = np.vstack(union_mat_rminds, i)
-            
-            union_row_new, union_row_new_length = compare_and_cut(union_row,\
-                                union_row_width, union_row, union_row_width)
-            
-            # Add union_row_new and union_row_new_length to union_mat_add and
-            # union_mat_add_length, respectively
-            union_mat_add = np.vstack(union_mat_add, union_row_new)
-            union_mat_add_length = np.vstack(union_mat_add_length,\
-                                             union_row_new_length)
-
-    # Remove the old rows from union_mat (as well as the old lengths from
-    # union_length)
-    
-    union_mat = np.delete(union_mat, union_mat_rminds, axis = 0)
-    union_length = np.delete(union_length, union_mat_rminds)
-
-    
-    #Add union_row_new and union_row_new_length to union_mat and
-    #union_length, respectively, such that union_mat is in order by
-    #lengths in union_length
-    union_mat = np.vstack(union_mat, union_mat_add)
-    union_length = np.vstack(union_length, union_mat_add_length)
-    
-    union_length, UM_inds = np.sort(union_length)
-    union_mat = union_mat[UM_inds,:]
-    
-    output = (union_mat, union_length) 
-    
-    return output 
 
 def __num_of_parts(input_vec, input_start, input_all_starts):
     """    
@@ -525,7 +312,7 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
         add_vec = start_vec - input_start
         start_mat = np.concatenate((input_all_starts + add_vec[0]), (input_all_starts + add_vec[1]))
 
-    length_vec = end_vec - start_vec + 2
+    length_vec = end_vec - start_vec + 1
         
     output = (start_mat, length_vec)
     
@@ -552,14 +339,18 @@ def __inds_to_rows(start_mat, row_length):
             matrix of one or two rows, with 1's where 
             the starting indices and 0's otherwise 
     """
+    if (start_mat.ndim == 1): 
+        #Convert a 1D array into 2D array 
+        start_mat = start_mat[None, : ]
+    
     mat_rows = start_mat.shape[0]
     new_mat = np.zeros((mat_rows,row_length))
 
-    for i in range(0, mat_rows + 1):
+    for i in range(0, mat_rows):
         inds = start_mat[i,:]
         new_mat[i,inds] = 1;
 
-    return new_mat
+    return new_mat.astype(int)
 
 def _merge_based_on_length(full_mat,full_bw,target_bw):
     """
@@ -610,7 +401,11 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
             merge_bw = temp_mat[inds,:]
-            merged_mat = _merge_rows(merge_bw,test_bandwidth)
+            print('merge_bw,',merge_bw)
+            print(np.array([test_bandwidth]))
+            merged_mat = _merge_rows(merge_bw,np.array([test_bandwidth]))
+            
+            print('merged_mat:',merged_mat)
             
             # Number of columns
             bandwidth_add_size = merged_mat.shape[0] 
@@ -618,6 +413,7 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
             np.ones((bandwidth_add_size,1)).astype(int)
          
             if np.any(inds == True):
+                print('true if')
                 # Convert the boolean array inds into an array of integers
                 inds = np.array(inds).astype(int)
                 remove_inds = np.where(inds == 1)
@@ -625,24 +421,31 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
                 # Delete the rows that meet the condition set by remove_inds
                 temp_mat = np.delete(temp_mat,remove_inds,axis=0)
                 temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
-    
+            
+            
             # Combine rows into a single matrix
-            bind_rows = [temp_mat,merged_mat]
-            temp_mat = np.concatenate(bind_rows)
+            #bind_rows = [temp_mat,merged_mat]
+            
+            temp_mat = np.vstack((temp_mat,merged_mat))
+            
+            print('temp_mat:',temp_mat)
             
             # Indicates temp_bandwidth is an empty array
             if temp_bandwidth.size == 0: 
                 temp_bandwidth = np.concatenate(bandwidth_add)
             # Indicates temp_bandwidth is not an empty array
             elif temp_bandwidth.size > 0: 
-                bind_bw = [temp_bandwidth,bandwidth_add]
-                temp_bandwidth = np.concatenate(bind_bw)
+                print('temp_bandwidth:',temp_bandwidth)
+                print('bandwidth_add:',bandwidth_add)
+                temp_bandwidth = np.concatenate((temp_bandwidth,bandwidth_add.flatten()))
+                print('temp_bandwidth2:',temp_bandwidth)
 
-            # Sort the elements of temp_bandwidth
-            temp_bandwidth = np.sort(temp_bandwidth)
-            
             # Return the indices that would sort temp_bandwidth
             bnds = np.argsort(temp_bandwidth) 
+            
+            # Sort the elements of temp_bandwidth
+            temp_bandwidth = np.sort(temp_bandwidth)
+
             temp_mat = temp_mat[bnds,]
 
     out_mat = temp_mat
@@ -651,6 +454,233 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
     output = (out_mat,out_length_vec)
     
     return output
+
+
+def _compare_and_cut(red, red_len, blue, blue_len):
+    """
+    Compares two rows of repeats labeled RED and BLUE, and determines if there 
+    are any overlaps in time between them. If there is, then we cut the 
+    repeats in RED and BLUE into up to 3 pieces. 
+    
+    Args
+    ----
+        red: np.array 
+            binary row vector encoding a set of repeats with 1's where each
+            repeat starts and 0's otherwise 
+            
+        red_len: number 
+            length of repeats encoded in red 
+            
+        blue: np.array 
+            binary row vector encoding a set of repeats with 1's where each
+            repeat starts and 0's otherwise 
+            
+        blue_len: number 
+            length of repeats encoded in blue 
+
+    Returns
+    -------
+        union_mat: np.array 
+            binary matrix representation of up to three rows encoding
+            non-overlapping repeats cut from red and blue
+
+        union_length: np.array 
+            vector containing the lengths of the repeats encoded in union_mat
+    """
+    sn = red.shape[0]
+    assert sn == blue.shape[0]
+    
+    start_red = np.flatnonzero(red)
+    start_red = start_red[None, :] 
+
+    start_blue = np.flatnonzero(blue)
+    start_blue = start_blue[None, :] 
+    
+    #Determine if the rows have any intersections
+    red_block = reconstruct_full_block(red, red_len)
+    blue_block = reconstruct_full_block(blue, blue_len)
+
+    red_block = red_block > 0
+    blue_block = blue_block > 0 
+    purple_block = np.logical_and(red_block, blue_block)
+    
+    # If there is any intersection between the rows, then start comparing one
+    # repeat in red to one repeat in blue
+    if purple_block.sum() > 0:
+        
+        # Find number of blocks in red and in blue
+        LSR = max(start_red.shape)
+        LSB = max(start_blue.shape) 
+        
+        # Build the pairs of starting indices to search, where each pair
+        # contains a starting index in red and a starting index in blue
+        red_inds = np.tile(start_red.transpose(), (LSB, 1))
+        blue_inds = np.tile(start_blue, (LSR,1))
+        tem_blue = blue_inds[0][0]
+        for i in range (0,blue_inds.shape[1]):
+            for j in range (0,blue_inds.shape[0]):
+                tem_blue = np.vstack((tem_blue,blue_inds[j][i]))
+        tem_blue = np.delete(tem_blue,1,0) 
+        compare_inds = np.concatenate((tem_blue,  red_inds), \
+                                      axis = 1)
+       
+        
+        
+        # Initialize the output variables union_mat and union_length
+        union_mat = np.array([])
+        union_length = np.array([]) 
+    
+        # Loop over all pairs of starting indices
+        for start_ind in range(0, LSR*LSB):
+            
+            # Isolate one repeat in red and one repeat in blue
+            ri = compare_inds[start_ind, 1]
+            bi = compare_inds[start_ind, 0]
+            
+            red_ri = np.arange(ri, ri+red_len)
+            blue_bi = np.arange(bi, bi+blue_len)
+            
+            # Determine if the blocks intersect and call the intersection
+            # purple
+            purple = np.intersect1d(red_ri, blue_bi)
+            
+            if purple.size != 0: 
+            
+                # Remove purple from red_ri, call it red_minus_purple
+                red_minus_purple = np.setdiff1d(red_ri, purple)
+                
+                # If red_minus_purple is not empty, then see if there are one
+                # or two parts in red_minus_purple.
+                # Then cut purple out of all of the repeats in red. 
+                if red_minus_purple.size != 0:
+                    # red_length_vec will have the length(s) of the parts in 
+                    # new_red 
+                    red_start_mat, red_length_vec = __num_of_parts(\
+                                              red_minus_purple, ri, start_red)
+                    
+                    # If there are two parts left in red_minus_purple, then 
+                    # the new variable new_red, which holds the part(s) of 
+                    # red_minus_purple, should have two rows with 1's for the 
+                    # starting indices of the resulting pieces and 0's 
+                    # elsewhere.
+                    new_red = __inds_to_rows(red_start_mat, sn)
+                else:
+                    # If red_minus_purple is empty, then set new_red and
+                    # red_length_vec to empty
+                    new_red = np.array([]) 
+                    red_length_vec = np.array([])
+           
+                # Noting that purple is only one part and in both red_ri and
+                # blue_bi, then we need to find where the purple starting
+                # indices are in all the red_ri
+                purple_in_red_mat = __num_of_parts(purple, ri, \
+                                                                start_red)
+                
+                blue_minus_purple = np.setdiff1d(blue_bi,purple)
+                
+                # If blue_minus_purple is not empty, then see if there are one
+                # or two parts in blue_minus_purple. Then cut purple out of 
+                # all of the repeats in blue. 
+                if blue_minus_purple.size != 0: 
+                    blue_start_mat, blue_length_vec = __num_of_parts(\
+                                            blue_minus_purple, bi, start_blue)
+                    new_blue = __inds_to_rows(blue_start_mat, sn)
+               
+                # If there are two parts left in blue_minus_purple, then the 
+                # new variable new_blue, which holds the part(s) of 
+                # blue_minus_purple, should have two rows with 1's for the 
+                # starting indices of the resulting pieces and 0's elsewhere. 
+                else:
+                    # If blue_minus_purple is empty, then set new_blue and
+                    # blue_length_vec to empty
+                    new_blue = np.array([])
+                     # Also blue_length_vec will have the length(s) of the 
+                     # parts in new_blue.
+                    blue_length_vec = np.array([])
+                   
+                # Recalling that purple is only one part and in both red_rd 
+                # and blue_bi, then we need to find where the purple starting
+                # indices are in all the blue_ri
+                purple_in_blue_mat, purple_length = __num_of_parts(purple, bi, start_blue)
+                # Union purple_in_red_mat and purple_in_blue_mat to get
+                # purple_start, which stores all the purple indices
+                purple_start = np.union1d(purple_in_red_mat[0][0], \
+                                          purple_in_blue_mat[0])
+               
+                # Use purple_start to get new_purple with 1's where the repeats
+                # in the purple rows start and 0 otherwise. 
+                new_purple = __inds_to_rows(purple_start, sn);
+                
+                if new_red.size != 0 or new_blue.size != 0:
+                    # Form the outputs
+                    
+                    union_mat = np.vstack((new_red, new_blue, new_purple))
+                    
+                    union_length = np.vstack((red_length_vec, \
+                                              blue_length_vec, purple_length))
+
+                    union_mat, union_length = _merge_based_on_length(\
+                                        union_mat, union_length, union_length)
+                   
+                    break
+                elif new_red.size == 0 and new_blue.size == 0:
+                    new_purple_block = reconstruct_full_block(new_purple,\
+                                                              np.array([purple_length]))
+                        
+                    if max(new_purple_block[0]) < 2:
+                        union_mat = new_purple
+                        union_length = np.array([purple_length])
+                        break
+            
+    # Check that there are no overlaps in each row of union_mat
+    
+    union_mat_add = np.array([])
+    union_mat_add_length = np.array([])
+    union_mat_rminds = np.array([])
+    
+    # Isolate one row at a time, call it union_row
+    for i in range(0, union_mat.shape[0]):
+        union_row = union_mat[i,:]
+        union_row_width = np.array([union_length[i]]);
+        union_row_block = reconstruct_full_block(union_row, union_row_width)
+        # If there are at least one overlap, then compare and cut that row
+        # until there are no overlaps
+        
+        if (np.sum(union_row_block[i]>1)) > 0:
+            
+            union_mat_rminds = np.vstack((union_mat_rminds, i))
+            
+            union_row_new, union_row_new_length = _compare_and_cut(union_row,\
+                                union_row_width, union_row, union_row_width)
+            
+            # Add union_row_new and union_row_new_length to union_mat_add and
+            # union_mat_add_length, respectively
+            union_mat_add = np.vstack((union_mat_add, union_row_new))
+            union_mat_add_length = np.vstack((union_mat_add_length,\
+                                             union_row_new_length))
+
+    # Remove the old rows from union_mat (as well as the old lengths from
+    # union_length)
+    if union_mat_rminds.size!=0:
+        union_mat = np.delete(union_mat, union_mat_rminds, axis = 0)
+        union_length = np.delete(union_length, union_mat_rminds)
+
+    
+    #Add union_row_new and union_row_new_length to union_mat and
+    #union_length, respectively, such that union_mat is in order by
+    #lengths in union_length
+    if union_mat_add.size!=0:
+        union_mat = np.vstack((union_mat, union_mat_add))
+    if union_mat_add_length.size!=0:
+        union_length = np.vstack((union_length, union_mat_add_length))
+    UM_inds = np.argsort(union_length)
+    union_length = np.sort(union_length)
+    union_mat = union_mat[UM_inds,:].astype(int)
+    output = (union_mat, union_length) 
+    
+    return output 
+
+
 
 def _merge_rows(input_mat, input_width):
     """
@@ -672,8 +702,8 @@ def _merge_rows(input_mat, input_width):
     """
     # Step 0: initialize temporary variables
     not_merge = input_mat    # Everything must be checked
-    merge_mat = []           # Nothing has been merged yet
-    merge_key = []
+    merge_mat = np.array([])           # Nothing has been merged yet
+    merge_key = np.array([])
     rows = input_mat.shape[0]  # How many rows to merge?
     
     # Step 1: has every row been checked?
@@ -692,36 +722,36 @@ def _merge_rows(input_mat, input_width):
         
         # Step 2b: find indices of unmerged overlapping rows
         merge_inds = np.sum(((r2c_mat + not_merge) == 2), axis = 1) > 0
-        
        
         # Step 2c: union rows with starting indices in common with row2check 
         # and remove those rows from input_mat
         union_merge = np.sum(not_merge[merge_inds,:], axis = 0) > 0
-        
+        union_merge = union_merge.astype(int)
         not_merge = np.delete(not_merge,np.where(merge_inds==1),0)
-        #return not_merge
         # Step 2d: check that newly merged rows do not cause overlaps within
         # row 
         # If there are conflicts, rerun compare_and_cut
+        #print('union_merge',union_merge)
+        #print('input_width:',input_width)
         merge_block = reconstruct_full_block(union_merge, input_width)
         
-        
-        # if np.max(merge_block) > 1:
-        #     (union_merge, union_merge_key) = _compare_and_cut(union_merge,\
-        #     input_width,
-        #     union_merge, input_width)
-        # else:
-        union_merge_key = input_width
+        if np.max(merge_block) > 1:
+            (union_merge, union_merge_key) = _compare_and_cut(union_merge,\
+            input_width,
+            union_merge, input_width)
+        else:
+            union_merge_key = input_width
         
         # Step 2e: add unions to merge_mat and merge_key
-        merge_mat = np.array([[merge_mat], [union_merge]])
-        merge_key = np.array([[merge_key], [union_merge_key]])
+        merge_mat = np.concatenate((merge_mat, union_merge))
+        merge_key = np.concatenate((merge_key, union_merge_key))
         
         # Step 3: reinitialize rs for stopping condition
         rows = not_merge.shape[0]
-    
-    return merge_mat 
 
+    if np.ndim(merge_mat) == 1:
+        merge_mat = np.array([merge_mat])
+    return merge_mat.astype(int)
 
       
 def hierarchical_structure(matrix_no,key_no,sn):

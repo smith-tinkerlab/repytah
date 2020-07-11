@@ -8,27 +8,29 @@ repeated structures and annotation markers.
 
 This file contains the following functions:
     
-    * create_anno_remove_overlaps - Turns rows of repeats into marked rows with 
+    * __create_anno_remove_overlaps - Turns rows of repeats into marked rows with 
     annotation markers for the start indices and zeroes otherwise. After 
     removing the annotations that have overlaps, creates separate arrays
     for annotations with overlaps and annotations without overlaps. Finally,
     the annotation markers are checked and fixed if necessary.
     
-    * create_anno_rows - Turns rows of repeats into marked rows with annotation
+    * __create_anno_rows - Turns rows of repeats into marked rows with annotation
     markers for start indices and zeroes otherwise. Then checks if the correct 
     annotation markers were given and fixes the markers if necessary.
     
     * remove_overlaps - Removes any pairs of repeats with the same length and 
     annotation marker where at least one pair of repeats overlap in time
     
-    * separate_anno_markers - Expands vector of non-overlapping repeats into
+    * __separate_anno_markers - Expands vector of non-overlapping repeats into
     a matrix representation. The matrix representation is a visual recored of
     where all of the repeats in a song start and end.
 """
 
 import numpy as np
+from utilities import reconstruct_full_block
+from utilities import add_annotations
 
-def create_anno_remove_overlaps(k_mat,song_length,band_width):
+def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     """
     Turn k_mat into marked rows with annotation markers for the start indices 
     and zeroes otherwise. After removing the annotations that have overlaps, 
@@ -169,7 +171,7 @@ def create_anno_remove_overlaps(k_mat,song_length,band_width):
     return output
 
 
-def create_anno_rows(k_mat,song_length):
+def __create_anno_rows(k_mat,song_length):
     """
     Turn the k_mat into marked rows with annotation markers for the start 
     indices and zeroes otherwise. Check if the proper sequence of annotation 
@@ -337,7 +339,7 @@ def remove_overlaps(input_mat, song_length):
     #         THREE: The annotations that have overlaps get removed from 
     #                BW_LST_OUT and gets added to ALL_OVERLAP_LST
             
-            tuple_of_outputs = create_anno_remove_overlaps(bw_lst, song_length, bw)
+            tuple_of_outputs = __create_anno_remove_overlaps(bw_lst, song_length, bw)
             
             pattern_row = tuple_of_outputs[0]
             bw_lst_out = tuple_of_outputs[1]
@@ -354,7 +356,7 @@ def remove_overlaps(input_mat, song_length):
             #      the start indices and 0's otherwise 
             # TWO: In this case, there are no overlaps. Then BW_LST_OUT is just
             #      BW_LST. Also in this case, THREE from above does not exist
-            tuple_of_outputs = create_anno_rows(bw_lst, song_length)
+            tuple_of_outputs = __create_anno_rows(bw_lst, song_length)
             pattern_row =  tuple_of_outputs[0]
             bw_lst_out =  tuple_of_outputs[1]
             
@@ -363,7 +365,7 @@ def remove_overlaps(input_mat, song_length):
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
             
-            tuple_of_outputs = separate_anno_markers(bw_lst_out, 
+            tuple_of_outputs = __separate_anno_markers(bw_lst_out, 
                                                         song_length, bw, 
                                                         pattern_row)
             pattern_mat = tuple_of_outputs[0]
@@ -444,7 +446,7 @@ def remove_overlaps(input_mat, song_length):
     return output
 
 
-def separate_anno_markers(k_mat, sn, band_width, pattern_row): 
+def __separate_anno_markers(k_mat, sn, band_width, pattern_row): 
     """
     Expands pattern_row, a row vector that marks where non-overlapping
     repeats occur, into a matrix representation or np.array. The dimension of 
@@ -522,3 +524,4 @@ def separate_anno_markers(k_mat, sn, band_width, pattern_row):
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
+
