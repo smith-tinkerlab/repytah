@@ -375,7 +375,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
             # Remove found diagonals of length BW from consideration
             SDM = stretch_diags(diag_markers, bw)
-            thresh_temp = thresh_temp - SDM
+            thresh_temp = np.logical_xor(thresh_temp,SDM)
 
             if thresh_temp.sum() == 0:
                 break
