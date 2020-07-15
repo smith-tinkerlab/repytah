@@ -300,7 +300,8 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
         #Initialize start_vec and end_vec
         start_vec = input_vec[0]
         end_vec = input_vec[-1]
-        #input_vec has a break
+        
+        #Find the difference between the starts
         add_vec = start_vec - input_start
         #Find the new start of the distilled section
         start_mat = input_all_starts + add_vec
