@@ -289,33 +289,46 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
         length_vec: np.array 
             column vector containing the lengths of the replicated parts 
     """
-
+    
+    # Determine where input_vec has a break
     diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
     diff_vec = np.insert(diff_vec,0,1)
     break_mark = np.where(diff_vec > 1)[0]
+    
+    #input_vec is consecutive
     if sum(break_mark) == 0: 
+        #Initialize start_vec and end_vec
         start_vec = input_vec[0]
         end_vec = input_vec[-1]
+        #input_vec has a break
         add_vec = start_vec - input_start
+        #Find the new start of the distilled section
         start_mat = input_all_starts + add_vec
 
+    #input_vec has a break
     else:
+        #Initialize start_vec and end_vec
         start_vec = np.zeros((2,1))
         end_vec =  np.zeros((2,1))
-    
+        
+        #Find the start and end time step of the first part
         start_vec[0] = input_vec[0]
         end_vec[0] = input_vec[break_mark - 1]
 
+        #Find the start and end time step of the second part
         start_vec[1] = input_vec[break_mark]
         end_vec[1] = input_vec[-1]
     
-    
+        #Find the difference between the starts
         add_vec = np.array(start_vec - input_start).astype(int)
-
+        #Make sure input_all_starts contains only integers
         input_all_starts = np.array(input_all_starts).astype(int)
+        #Create start_mat with two parts
         start_mat = np.vstack((input_all_starts + add_vec[0], input_all_starts + add_vec[1]))
-
+    
+    #Get the length of the new repeats
     length_vec = (end_vec - start_vec + 1).astype(int)
+    #Create output
     output = (start_mat, length_vec)
 
     return output
@@ -449,9 +462,6 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
     out_length_vec = temp_bandwidth
     
     output = (out_mat,out_length_vec)
-    
-    # print('output:',out_mat)
-    # print('outputLength:',out_length_vec)
     
     return output
 
@@ -629,8 +639,7 @@ def _compare_and_cut(red, red_len, blue, blue_len):
                         union_length = np.vstack((red_length_vec,\
                                               blue_length_vec, purple_length))
                     
-                    print('MEGRE MAT:',union_mat)
-                    print('MERGE LENGTH:',union_length)
+               
                     union_mat, union_length = _merge_based_on_length(\
                                         union_mat, union_length, union_length)
                         
@@ -653,7 +662,6 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     
     # Isolate one row at a time, call it union_row
     for i in range(0, union_mat.shape[0]):
-        print('for')
         union_row = union_mat[i,:]
         union_row_width = np.array([union_length[i]]);
         union_row_block = reconstruct_full_block(union_row, union_row_width)
@@ -661,8 +669,7 @@ def _compare_and_cut(red, red_len, blue, blue_len):
         # until there are no overlaps
         
         if (np.sum(union_row_block[0]>1)) > 0:
-            print('if')
-            
+ 
             union_mat_rminds = np.vstack((union_mat_rminds, i))
             
             
@@ -700,41 +707,18 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     
     if union_length.ndim == 1:
         union_length = np.array([union_length]).T
-        #print('done')
-        #print(union_length)
-        
-    #print('hstack')
-    #print(union_mat)
-    #print(union_length)
-        
+ 
     totalArray = np.hstack((union_mat,union_length))
     totalArray = totalArray[np.argsort(totalArray[:, -1])]
-    # print('totalArray:',totalArray)
-    # print('sortArray:',totalArray[np.argsort(totalArray[:, -1])])
-    
-    # print('sn:',sn)
+ 
     union_mat = totalArray[:, 0:sn] 
-    # print('union_MAT:',union_mat)
     union_length = np.array([totalArray[:,-1]]).T
-    # print('union_LENGHT:',union_length)
-    
-    
-    #UM_inds = np.argsort((union_length))
-    
-    # print('union_mat:',union_mat)
-    # print('union_length:',union_length)
-    # #print('UM_inds:',UM_inds)
-
-    
-    #print('union_length:',union_length)
     output = (union_mat, union_length) 
     return output 
 
 
 
 def _merge_rows(input_mat, input_width):
-    
-    print('merge rows')
     
     """
     Merges rows that have at least one common repeat; said common repeat(s)
