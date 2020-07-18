@@ -1,164 +1,191 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 from scipy import signal
-"""
-find_initial_repeats
-
-We're completely recoding it
-
-@author: jorda
-
-Code for find_initial_repeats (lightup_lst_with_thresh_bw in MATLAB)
-up to line 63
-
-This is the updated version recoded by Jordan and Denise. 
-
-Update: this file defined the function as find_all_repeats instead of 
-find_initial_repeats. 
-"""
+from utilities import stretch_diags
 
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
+    """
+    Looks for the largest repeated structures in thresh_mat. Finds all 
+    repeated structures, represented as diagonals present in thresh_mat, 
+    and then stores them with their start/end indices and lengths in a 
+    list. As each diagonal is found, they are removed to avoid identifying
+    repeated sub-structures. 
+  
+    Args
+    ----
+        thresh_mat: np.array[int]
+            thresholded matrix that we extract diagonals from
+
+        bandwidth_vec: np.array[1D,int]
+            vector of lengths of diagonals to be found. Should be 1,2,3,..... n where n = num_timesteps
+
+        thresh_bw: int
+            smallest allowed diagonal length
+
+    Returns
+    -------
+        all_lst: np.array[int]
+            list of pairs of repeats that correspond to 
+            diagonals in thresh_mat
+    """
+
+     # Initialize the input and temporary variables
+    thresh_temp = thresh_mat
     
-    #bw_len = bandwidth_vec.shape[1]
+    #For removing already found diagonals 
+    Tbw = thresh_bw; 
+    # Interval list for non-overlapping pairs    
+    int_all =  np.empty((0,5), int) 
     
-    int_all = []
-    sint_all = []
-    eint_all = []
-    mint_all = []
+    # Interval list for the left side of the overlapping pairs
+    sint_all = np.empty((0,5), int)
     
-    for bw in bandwidth_vec:
+    # Interval list for the right side of the overlapping pairs
+    eint_all = np.empty((0,5), int) 
+    
+     # Interval list for the middle of the overlapping pairs if they exist
+    mint_all = np.empty((0,5), int) 
+
+    #Loop over all bandwidths
+    for bw in np.flip((bandwidth_vec)):
         if bw > thresh_bw:
-            # Use convolution mx to find diagonals of length bw
-            id_mat = np.identity(bw)
-            diagonal_mat = signal.convolve2d(thresh_mat, id_mat, 'valid')
+            #Use convolution matrix to find diagonals of length bw 
+            id_mat = np.identity(bw) 
+            # Search for diagonals of length band_width
+            diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
+        
+            # Mark where diagonals of length band_width start
+            diag_markers = (diagonal_mat == bw).astype(int)
             
-            # Mark where diagonals of length bw start
-            diag_markers = (diagonal_mat == bw)
-            
-            if np.sum(diag_markers) > 0:
+            if sum(diag_markers).any() > 0:
                 full_bw = bw
-                # 1) Search outside the overlapping shingles
-                # Search for paired starts
-                upper_tri = np.triu(diag_markers, full_bw)
-                (start_i, start_j) = upper_tri.nonzero()
-                num_nonoverlaps = start_i.shape[0]
                 
-                # Find the matching ends for the prevously found starts
+                #1) Non-Overlaps: Search outside the overlapping shingles
+                upper_tri = np.triu(diag_markers, full_bw)
+                
+                # Search for paired starts 
+                (start_i, start_j) = upper_tri.nonzero() 
+                start_i = start_i + 1
+                start_j = start_j + 1
+                # Find the matching ends for the previously found starts 
                 match_i = start_i + (full_bw - 1)
                 match_j = start_j + (full_bw - 1)
-                
                 # List pairs of starts with their ends and the widths of the
-                # non-overlapping intervals
-                int_lst = np.column_stack([start_i, match_i, start_j, match_j, full_bw * np.ones(num_nonoverlaps,1)])
-    
+                # non-overlapping interval
+                i_pairs = np.vstack((start_i[:], match_i[:])).T
+                j_pairs = np.vstack((start_j[:], match_j[:])).T
+                i_j_pairs = np.hstack((i_pairs, j_pairs))
+                width = np.repeat(full_bw, i_j_pairs.shape[0], axis=0)
+                width_col = width.T
+                int_lst = np.column_stack((i_pairs, j_pairs, width_col))
+                
                 # Add the new non-overlapping intervals to the full list of
                 # non-overlapping intervals
-                int_all.append(int_lst)
+                int_all = np.vstack((int_lst, int_all))
                 
                 # 2) Overlaps: Search only the overlaps in shingles
-                shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers), 
-                                                   (full_bw - 1))))
-                start_i_shin = np.array(shin_ovrlaps[0]) # row
-                start_j_shin = np.array(shin_ovrlaps[1]) # column
-                num_ovrlaps = start_i.shape[0]
+            # Search for paired starts 
+                shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
+                                                   (full_bw-1))))
                 
-                if(num_ovrlaps == 1 and start_i_shin == start_j_shin):
-                    sint_lst = np.column_stack([start_i_shin, (start_i_shin + (full_bw - 1)), start_j_shin, (start_j_shin + (full_bw - 1)), full_bw])
-                    sint_all.append(sint_lst)
+                #print('shin_ovrlaps:',shin_ovrlaps)
+                start_i_shin = np.array(shin_ovrlaps[0]+1) # row
+                start_j_shin = np.array(shin_ovrlaps[1]+1) # column
+                num_ovrlaps = len(start_i_shin)
+                #print('start_i_shin:',start_i_shin)
+                #print('start_j_shin:',start_j_shin)
+                if (num_ovrlaps == 1 and start_i_shin == start_j_shin):
+                    i_sshin = np.concatenate((start_i_shin,start_i_shin+ (full_bw - 1)),axis = None)
+                    j_sshin = np.concatenate((start_j_shin,start_j_shin+ (full_bw - 1)),axis = None)
+                    i_j_pairs = np.hstack((i_sshin,j_sshin))
+                    sint_lst = np.hstack((i_j_pairs,full_bw))
+                    sint_all = np.vstack((sint_all, sint_lst))
                     
                 elif num_ovrlaps > 0:
-                        # Since you are checking the overlaps you need to 
-                        # cut these intervals into pieces: left, right, and 
-                        # middle. NOTE: the middle interval may NOT exist.
-                        
-                        # Create vector of 1's that is the length of the 
-                        # number of overlapping intervals. This is used a lot. 
-                        ones_no = np.ones(num_ovrlaps,1)
-                        
-                        # 2a) Left Overlap
-                        K = start_j_shin - start_i_shin 
-                        # NOTE: matchJ - matchI will also equal this, since the 
-                        # intervals that are overlapping are the same length. 
-                        # Therefore the "left" non-overlapping section is the 
-                        # same length as the "right" non-overlapping section. 
-                        # It does NOT follow that the "middle" section is 
-                        # equal to either the "left" or "right" piece. It is
-                        # possible, but unlikely.
-                        
-                        sint_lst = np.column_stack([start_i_shin, (start_j_shin - ones_no), start_j_shin, (start_j_shin + K - ones_no), K])
-                        i_s = np.argsort(K)
-                        sint_lst = sint_lst[i_s,]
-                        
-                        # Remove pairs that fall below the bandwidth threshold
-                        cut_s = np.amin((sint_lst[:,4]).nonzero())
-                        sint_lst = sint_lst[cut_s:,]
-                        
-                        # Add new left overlapping intervals to the full list
-                        # of left overlapping intervals
-                        sint_all.append(sint_lst)
-                        
-                        # 2b) Right Overlap
-                        end_i_right = start_i_shin + (full_bw - 1)
-                        end_j_right = start_j_shin + (full_bw - 1)
-                        eint_lst = np.column_stack([(end_i_right + ones_no - K),
-                                                    end_i_right,
-                                                    (end_i_right + ones_no), 
-                                                    end_j_right, K])
-                        ie = np.argsort(K)
-                        eint_lst = eint_lst[ie,]
-                        
-                        # Remove pairs that fall below the bandwidth threshold
-                        cut_e = np.amin((eint_lst[:,4]).nonzero())
-                        eint_lst = eint_lst[cut_e:,]
-                        
-                        # Add the new right overlapping intervals to the full list
-                        # of right overlapping intervals
-                        eint_all.append(eint_lst)
-                        
-                        # 2b) Middle Overlap
-                        mnds = (end_i_right - start_j_shin - K + ones_no) > 0
-                        start_i_mid = (start_j_shin * mnds)
-                        end_i_mid = (end_i_right * (mnds) - K * (mnds))
-                        start_j_mid = (start_j_shin * (mnds) + K * (mnds))
-                        end_j_mid = (end_i_mid * mnds)
-                        km = (end_i_mid * (mnds) - start_j_mid * 
-                              (mnds) - K * (mnds) + ones_no * (mnds))
-                        
-                        if mnds.sum() > 0:
-                            mint_lst = np.column_stack([start_i_mid, end_i_mid,
-                                                        start_j_mid, end_j_mid,
-                                                        km])
-                            im = np.argsort(km)
-                            mint_lst = mint_lst[im,]
-                            
-                            # Add the new middle overlapping intervals to 
-                            # the full list of middle overlapping intervals
-                            mint_all.append(mint_lst)
-                            
-                        # 4) Remove found diagonals of length bw from consideration
-                        sdm = stretch_diags(diag_markers, bw)
-                        thresh_mat = thresh_mat - sdm
-                        
-                if thresh_mat.sum() == 0:
-                        break
-                            
-    # Combine non-overlapping intervals with the left, right, and middle parts
-    # of the overlapping intervals
-    ovrlap_lst = np.concatenate((sint_all, eint_all, mint_all), axis = 0)
-    all_lst = np.concatenate((int_all, ovrlap_lst))
-    all_lst = filter(None, all_lst)
+                    # Since you are checking the overlaps you need to cut these
+                    # intervals into pieces: left, right, and middle. NOTE: the
+                    # middle interval may NOT exist
+                    
+                    # Vector of 1's that is the length of the number of
+                    # overlapping intervals. This is used a lot. 
+                    ones_no = np.ones(num_ovrlaps);
+                    
+                    # 2a) Left Overlap
+                    K = start_j_shin - start_i_shin
+                    i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
+                    j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
+                    
+                    sint_lst = np.column_stack((i_sshin,j_sshin,K.T))
+                    
+                    i_s = np.argsort(K) # Return the indices that would sort K
+                    sint_lst = sint_lst[i_s,]
+                    # Remove the pairs that fall below the bandwidth threshold
+                    cut_s = np.argwhere((sint_lst[:,4] > Tbw))
+                    cut_s = cut_s.T
+                    sint_lst = sint_lst[cut_s][0]
 
-    # Sort the list by bandwidth size
-    I = np.argsort(all_lst[:,4])
-    all_lst = all_lst[I,]                     
+                    # Add the new left overlapping intervals to the full list
+                    # of left overlapping intervals
+                    sint_all = np.vstack((sint_all,sint_lst))
+                    
+                    # 2b) Right Overlap
+                    end_i_shin = start_i_shin + (full_bw-1)
+                    end_j_shin = start_j_shin + (full_bw-1)
+                
+                    i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, end_i_shin[:])).T
+                    j_eshin = np.vstack((end_i_shin[:] + ones_no[:], end_j_shin[:])).T
+                    eint_lst = np.column_stack((i_eshin,j_eshin,K.T))
+                
+                    i_e = np.lexsort(K) # Return the indices that would sort K
+                    eint_lst = eint_lst[i_e:,]
+                    
+                    # Remove the pairs that fall below the bandwidth threshold
+                    cut_e = np.argwhere((eint_lst[:,4] > Tbw))
+                    cut_e = cut_e.T
+                    eint_lst = eint_lst[cut_e][0]
     
-    return all_lst 
+                    # Add the new right overlapping intervals to the full list of
+                    # right overlapping intervals
+                    eint_all = np.vstack((eint_all,eint_lst))
 
-                
+                    # 2) Middle Overlap
+                    mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
+                    if sum(mnds) > 0:
+                        i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                        i_middle = i_middle.T
+                        i_middle = i_middle[np.all(i_middle != 0, axis=1)]
+
+
+                        j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                        j_middle = j_middle.T
+                        j_middle = j_middle[np.all(j_middle != 0, axis=1)]
+
+
+                        k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds] - K[mnds] + ones_no[mnds]))
+                        k_middle = k_middle.T
+                        k_middle = k_middle[np.all(k_middle != 0, axis=1)]
+
+                        mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
+
+                    # Remove the pairs that fall below the bandwidth threshold 
+                        cut_m = np.argwhere((mint_lst[:,4] > Tbw))
+                        cut_m = cut_m.T
+                        mint_lst = mint_lst[cut_m][0]
+                        mint_all = np.vstack((mint_all, mint_lst))
+                    
+                    # Remove found diagonals of length BW from consideration
+        SDM = stretch_diags(diag_markers, bw)
+        thresh_temp = thresh_temp - SDM
+
+        if thresh_temp.sum() == 0:
+            break
+        
+    out_lst = np.vstack((sint_all, eint_all, mint_all))
+    all_lst = np.vstack((int_all, out_lst))
     
+    inds = np.argsort(all_lst[:,4])
+    all_lst = np.array(all_lst)[inds]
     
-                
-                
-            
-            
+    all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
+    all_lst = all_lst[all_lst_in]
     
+    return(all_lst.astype(int))

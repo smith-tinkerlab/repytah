@@ -744,8 +744,10 @@ def find_complete_list(pair_list,song_length):
                 add_array = outputs[i]
                 add_mat = np.vstack([add_mat, add_array])
             else:
+                add_mat = np.empty((0))
                 next
             
+           
             new_mat = np.row_stack(add_mat)
         
         num_row = new_mat.shape[0] / 2
@@ -806,8 +808,23 @@ def find_complete_list(pair_list,song_length):
     lst_out = final_lst
         
     return lst_out
+ 
 
+pair_list= np.array([[8,8,14,14,1],
+[10,10,11,11,1],
+[14,14,56,56,1],
+[8,8,62,62,1],
+[56,56,62,62,1],
+[14,14,104,104,1],
+[62,62,104,104,1],
+[8,8,110,110,1],
+[56,56,110,110,1],
+[104,104,110,110,1],
+[4,14,52,62,11],
+[4,14,100,110,11],
+[26,71,74,119,46]])  
+song_length = 119
 
-    
+print(find_complete_list(pair_list, song_length))
     
     

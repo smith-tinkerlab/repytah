@@ -97,7 +97,6 @@ def find_complete_list(pair_list,song_length):
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
         
-        
         add_srows = find_add_srows(pair_list, int_snds, band_width)
         add_erows = find_add_mrows(pair_list, int_snds, band_width)
         add_mrows = find_add_erows(pair_list, int_ends, band_width)
