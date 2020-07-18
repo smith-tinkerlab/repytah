@@ -56,7 +56,7 @@ def find_all_repeats(thresh_mat, bw_vec):
         if sum(diag_markers).any() > 0:
             full_bw = bw
             
-            # 1) Search outside the overlapping shingles
+            # 1) Non-Overlaps: Search outside the overlapping shingles 
             upper_tri = np.triu(diag_markers, full_bw)
             # Search for paired starts 
             (start_i, start_j) = upper_tri.nonzero() 
