@@ -26,14 +26,14 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
         length of the repeats encoded in out_mat
     """
     # Sort the elements of full_bandwidth
-    temp_bandwidth = np.sort(full_bandwidth,axis=None)
+    temp_bandwidth = np.sort(full_bw,axis=None)
     
     # Return the indices that would sort full_bandwidth
-    bnds = np.argsort(full_bandwidth,axis=None) 
+    bnds = np.argsort(full_bw,axis=None) 
     temp_mat = full_mat[bnds,:] 
     
     # Find the unique elements of target_bandwidth
-    target_bandwidth = np.unique(target_bandwidth) 
+    target_bandwidth = np.unique(target_bw) 
     
     # Number of columns 
     target_size = target_bandwidth.shape[0] 
@@ -49,7 +49,7 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
             merge_bw = temp_mat[inds,:]
-            merged_mat = _merge_rows(merge_bw,test_bandwidth)
+            merged_mat = _merge_rows(merge_bw, np.array([test_bandwidth]))
             
             # Number of columns
             bandwidth_add_size = merged_mat.shape[0] 
@@ -66,22 +66,20 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
                 temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
     
             # Combine rows into a single matrix
-            bind_rows = [temp_mat,merged_mat]
-            temp_mat = np.concatenate(bind_rows)
+            temp_mat = np.vstack((temp_mat,merged_mat))
             
             # Indicates temp_bandwidth is an empty array
             if temp_bandwidth.size == 0: 
                 temp_bandwidth = np.concatenate(bandwidth_add)
             # Indicates temp_bandwidth is not an empty array
             elif temp_bandwidth.size > 0: 
-                bind_bw = [temp_bandwidth,bandwidth_add]
-                temp_bandwidth = np.concatenate(bind_bw)
-
-            # Sort the elements of temp_bandwidth
-            temp_bandwidth = np.sort(temp_bandwidth)
+                temp_bandwidth = np.concatenate((temp_bandwidth,bandwidth_add.flatten()))
             
             # Return the indices that would sort temp_bandwidth
             bnds = np.argsort(temp_bandwidth) 
+            
+            # Sort the elements of temp_bandwidth
+            temp_bandwidth = np.sort(temp_bandwidth)
             temp_mat = temp_mat[bnds,]
 
     out_mat = temp_mat
