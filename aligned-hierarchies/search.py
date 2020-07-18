@@ -65,6 +65,11 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     add_rows = np.empty((0))
     # Logical, which pairs of repeats have length greater than k?
     search_inds = (L[:,4] > k)
+    
+    #If there are no pairs of repeats that have a length greater than k
+    if sum(search_inds) == 0:
+        add_rows = np.full(1, False)
+        return add_rows
 
     #If there are no pairs of repeats that have a length greater than k
     if sum(search_inds) == 0:
@@ -105,8 +110,7 @@ def __find_add_erows(lst_no_anno, check_inds, k):
             one_lk = k*np.ones((1,l_num)).astype(int).flatten()         
             l_add = np.vstack((one_lsi,one_lei, one_lsj,one_lej,one_lk))
             l_add = np.transpose(l_add)
-            
-            
+     
             # Found pair of repeats on the right side
             two_lsi = L[lnds,0]             #Starting index of found repeat i 
             two_lei = L[lnds,1] - k         #Ending index of ofund repeat i
@@ -121,7 +125,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((l_add, l_add_left))
             else:
                 add_rows = np.vstack((add_rows, l_add, l_add_left))
-            
                 
         #Right Check: Check for CI on the right side of the pairs
         elif rnds.sum(axis = 0) > 0:
@@ -187,6 +190,12 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     
     #Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
+    
+    #If there are no pairs of repeats that have a length greater than k 
+    if sum(search_inds) == 0:
+        print("No pairs of repeats greater than k")
+        add_rows = np.full(1, False) 
+        return print("none", add_rows)
     
     #Multiply the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -294,7 +303,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
             else:
                 add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)  
      
-    return add_rows 
+            return add_rows 
 
 def __find_add_srows(lst_no_anno, check_inds, k):
     """
@@ -321,12 +330,19 @@ def __find_add_srows(lst_no_anno, check_inds, k):
         contained in larger repeats in lst_no_anno
             
     """
+    
+    L = lst_no_anno
 
     L = lst_no_anno 
     add_rows = np.empty((0))
 
     # Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
+    
+    #If there are no repeats greater than k 
+    if sum(search_inds) == 0: 
+        add_rows = np.full(1, False) 
+        return add_rows
 
     # Multipy the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -417,9 +433,8 @@ def __find_add_srows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-            
-            
-    return add_rows
+                
+                return add_rows
 
 def find_all_repeats(thresh_mat, bw_vec):
     """
@@ -438,13 +453,6 @@ def find_all_repeats(thresh_mat, bw_vec):
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
     
-    Returns
-    -------
-    all_lst: np.array
-        list of pairs of repeats that correspond to diagonals
-        in thresh_mat
-        
-    """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
@@ -467,6 +475,7 @@ def find_all_repeats(thresh_mat, bw_vec):
         id_mat = np.identity(bw) 
 
         # Search for diagonals of length band_width
+        
         diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
         
         # Mark where diagonals of length band_width start
@@ -489,6 +498,7 @@ def find_all_repeats(thresh_mat, bw_vec):
                 
             # List pairs of starts with their ends and the widths of the
             # non-overlapping intervals
+            
             i_pairs = np.vstack((start_i[:], match_i[:])).T
             j_pairs = np.vstack((start_j[:], match_j[:])).T
             i_j_pairs = np.hstack((i_pairs, j_pairs))
@@ -510,6 +520,7 @@ def find_all_repeats(thresh_mat, bw_vec):
             num_ovrlaps = len(start_i_shin)
             
             if num_ovrlaps > 0:
+            
                 # Since you are checking the overlaps you need to cut these
                 # intervals into pieces: left, right, and middle. NOTE: the
                 # middle interval may NOT exist
@@ -519,6 +530,7 @@ def find_all_repeats(thresh_mat, bw_vec):
                 ones_no = np.ones((num_ovrlaps)).astype(int)
 
                 # 2a) Left Overlap
+                
                 K = start_j_shin - start_i_shin  # NOTE: end_J_overlap - end_I_overlap will also equal this,
                                                 # possible, but unlikely.
     
@@ -532,7 +544,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                 #Is.reshape(np.size(Is), 1)
                 sint_lst = sint_lst[i_s,]
                 
-    
                 # Add the new left overlapping intervals to the full list
                 # of left overlapping intervals
                 sint_all = np.vstack((sint_all,sint_lst))
@@ -579,7 +590,7 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         if thresh_temp.sum() == 0:
             break 
-            
+      
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     
@@ -656,9 +667,9 @@ def find_complete_list_anno_only(pair_list, song_length):
 
 def find_complete_list(pair_list,song_length):
     """
-    Finds all smaller diagonals (and the associated pairs of repeats) that are
-    contained pair_list, which is composed of larger diagonals found in 
-    find_initial_repeats.
+    Finds all smaller diagonals (and the associated pairs of repeats) 
+    that are contained in pair_list, which is composed of larger 
+    diagonals found in find_initial_repeats.
         
     Args
     ----
@@ -676,9 +687,11 @@ def find_complete_list(pair_list,song_length):
     lst_out: np.array 
         list of pairs of repeats with smaller repeats added
     """
+    
     # Find the list of unique repeat lengths
     bw_found = np.unique(pair_list[:,4])
     bw_num = np.size(bw_found, axis=0)
+    longest_bw = bw_found[-1]
     
     # If the longest bandwidth is the length of the song, then remove that row
     if song_length == bw_found[-1]: 
@@ -721,13 +734,15 @@ def find_complete_list(pair_list,song_length):
         end_J = pair_list[bsnds:bend, 3] # Similar to definition for start_J
 
         all_vec_ends = np.concatenate((end_I,end_J),axis=None)
+
         int_ends = np.unique(all_vec_ends)
-    
+        
         # Part B: Use the current diagonal information to search for diagonals 
         #       of length BW contained in larger diagonals and thus were not
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
+        
         add_srows = __find_add_srows(pair_list, int_snds,band_width)
         add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
         add_erows = __find_add_erows(pair_list, int_ends, band_width)
@@ -760,12 +775,15 @@ def find_complete_list(pair_list,song_length):
     c = np.size(combine_mat,axis=0)
     
     # Again, find the list of unique repeat lengths
+    
     new_bw_found = np.unique(combine_mat[:,4])
     new_bw_num = np.size(new_bw_found,axis=0)
+
     full_lst = []
     
     # Step 3: Loop over the new list of found bandwidths to add the annotation
     #         markers to each found pair of repeats
+    
     for j in range(1,new_bw_num+1):
         new_bw = new_bw_found[j-1]
         
@@ -782,9 +800,21 @@ def find_complete_list(pair_list,song_length):
         else:
             new_bend = c
         
-        band_width_mat = np.array((combine_mat[new_bsnds:new_bend,]))
+        # Step 1: Isolate pairs of repeats in combine_mat that are length 
+        # bandwidth
+        starting = np.where(combine_mat[:,4] == band_width) 
+        # Select the first pair of repeats
+        new_bsnds = starting[0][0] 
+        
+        # Step 2: Isolate the indices of the ending pairs 
+        ending = np.where(combine_mat[:,4] > band_width)
+        if np.size(ending) == 0:
+            new_bends = c
+        else: 
+            new_bends = ending[0][0] - 1
+            
+        band_width_mat = np.array((combine_mat[new_bsnds:new_bends,]))
         length_band_width_mat = np.size(band_width_mat,axis=0)
-
         temp_anno_lst = np.concatenate((band_width_mat,\
                                         (np.zeros((length_band_width_mat,1))))\
                                         ,axis=1).astype(int)
@@ -795,7 +825,12 @@ def find_complete_list(pair_list,song_length):
         final_lst = np.vstack(full_lst)
         tem_final_lst = np.lexsort([final_lst[:,2], final_lst[:,0], final_lst[:,5],final_lst[:,4]])
         final_lst = final_lst[tem_final_lst,:]
-    
+   
     lst_out = final_lst
-    
+        
     return lst_out
+
+
+    
+    
+    

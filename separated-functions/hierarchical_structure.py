@@ -2,7 +2,10 @@ import numpy as np
 
 print("This is just a test")
 
-def hierarchical_structure(matrix_no,key_no,sn):
+
+
+
+def hierarchical_structure(matrix_no, key_no, sn):
     """
      Distills the repeats encoded in MATRIX_NO (and KEY_NO) to 
         the essential structure components and then builds the

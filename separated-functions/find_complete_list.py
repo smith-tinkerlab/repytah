@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np 
 
 def find_complete_list(pair_list,song_length):
     """
@@ -168,6 +168,7 @@ def find_complete_list(pair_list,song_length):
                                         (np.zeros((length_band_width_mat,1)))),axis=1).astype(int)
         
         # Part C: Get annotation markers for this bandwidth
+        temp_anno_lst = np.array(temp_anno_lst, ndmin=2)
         temp_anno_lst = add_annotations(temp_anno_lst, song_length)
         full_lst.append(temp_anno_lst)
         final_lst = np.vstack(full_lst)
@@ -175,3 +176,8 @@ def find_complete_list(pair_list,song_length):
     lst_out = final_lst
         
     return lst_out
+
+
+    
+    
+    

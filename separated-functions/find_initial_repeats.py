@@ -1,5 +1,3 @@
-#line 217: 
-#https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
 import numpy as np
 from scipy import signal
 from utilities import stretch_diags

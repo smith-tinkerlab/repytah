@@ -28,6 +28,9 @@ This file contains the following functions:
     
     * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
     from diagonal starts and lengths
+    
+    * stitches information from thresh_diags matrix into a single
+    row, song_pattern, that shows the timesteps containing repeats
 """
 
 import numpy as np
