@@ -134,22 +134,15 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         RL = desc_bw_vec[ri,:]
     
         #BLUE overlap 
-        blue = PNO[bi,:]
-   
+        blue = PNO[bi,:]  
         BL = desc_bw_vec[bi,:]
    
         # Compare the repeats in RED and BLUE, cutting the repeats in those
         # groups into non-overlapping pieces
-        union_mat, union_length = _compare_and_cut(red, RL, blue, BL)
-        
-   
+        union_mat, union_length = _compare_and_cut(red, RL, blue, BL)          
         PNO = np.delete(PNO, [ri,bi], axis = 0)
-        
-       
-        
         bw_vec = np.delete(desc_bw_vec, [ri,bi], axis = 0)
-        #bw_vec = np.delete(bw_vec, bi, axis = 0)
-    
+       
         if union_mat.size !=0:
             PNO = np.vstack((PNO, union_mat))
             bw_vec = np.vstack((bw_vec, union_length))
@@ -166,11 +159,9 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         #pieces first
         #Part 1: Sort the lengths in bw_vec and indices in descending order
         sort_bw_vec = np.sort(bw_vec,axis = 0)
-        desc_bw_vec = sort_bw_vec[::-1]
-   
+        desc_bw_vec = sort_bw_vec[::-1] 
         bw_inds = np.flip(np.argsort(bw_vec, axis = 0))
-        row_bw_inds = np.transpose(bw_inds).flatten()
-        
+        row_bw_inds = np.transpose(bw_inds).flatten()       
         PNO = PNO[(row_bw_inds),:]
         
         
