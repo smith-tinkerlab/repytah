@@ -41,7 +41,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     Finds pairs of repeated structures, representated as diagonals of a 
     certain length, k, that end at the same time step as 
     previously found pairs of repeated structures of the same length. 
-
     Args
     ----
     lst_no_anno: np.array
@@ -53,7 +52,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
         
     k: int
         length of repeats that we are looking for 
-
     Returns
     -------
     add_rows: np.array
@@ -165,19 +163,15 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     Finds pairs of repeated structures, represented as diagonals of a certain
     length, k, that neither start nor end at the same time steps as previously
     found pairs of repeated structures of the same length. 
-
     Args
     ----
         lst_no_anno: np.array 
             list of pairs of repeats
-
         check_inds: np.array
             list of ending indices for repeats of length k that we use to 
             check lst_no_anno for more repeats of length k 
-
         k: number
             length of repeats that we are looking for 
-
     Returns
     -------
         add_rows: np.array
@@ -303,7 +297,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
             else:
                 add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)  
      
-            return add_rows 
+    return add_rows 
 
 def __find_add_srows(lst_no_anno, check_inds, k):
     """
@@ -434,7 +428,8 @@ def __find_add_srows(lst_no_anno, check_inds, k):
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
                 
-                return add_rows
+        
+    return add_rows
 
 def find_all_repeats(thresh_mat, bw_vec):
     """
@@ -452,7 +447,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     bw_vec: np.array
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
-    
+    """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
@@ -473,7 +468,6 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         #Use convolution matrix to find diagonals of length bw 
         id_mat = np.identity(bw) 
-
         # Search for diagonals of length band_width
         
         diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
@@ -509,7 +503,6 @@ def find_all_repeats(thresh_mat, bw_vec):
             # Add the new non-overlapping intervals to the full list of
             # non-overlapping intervals
             int_all = np.vstack((int_lst, int_all))
-
             # 2) Overlaps: Search only the overlaps in shingles
             
             # Search for paired starts 
@@ -528,7 +521,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                 # Vector of 1's that is the length of the number of
                 # overlapping intervals. This is used a lot.
                 ones_no = np.ones((num_ovrlaps)).astype(int)
-
                 # 2a) Left Overlap
                 
                 K = start_j_shin - start_i_shin  # NOTE: end_J_overlap - end_I_overlap will also equal this,
@@ -829,8 +821,3 @@ def find_complete_list(pair_list,song_length):
     lst_out = final_lst
         
     return lst_out
-
-
-    
-    
-    

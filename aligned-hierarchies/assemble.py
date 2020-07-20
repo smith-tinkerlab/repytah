@@ -46,9 +46,48 @@ where they divided until there are only non-overlapping pieces left over.
 """
 import numpy as np
 from inspect import signature 
-from search import find_all_repeats
+from search import find_all_repeats, find_complete_list_anno_only
 from utilities import reconstruct_full_block
+from transform import remove_overlaps
  
+
+def get_annotation_lst (key_lst):
+    """
+     Gets one annotation marker vector, given vector of lengths key_lst.
+    
+    Args 
+    -----
+        key_lst: np.array[int]
+            Vector of lengths in ascending order
+    
+    Returns 
+    -----
+        anno_lst_out: np.array[int] 
+            Vector of one possible set of annotation markers for key_lst
+    """
+
+    # Initialize the temporary variable
+    num_rows = np.size(key_lst)
+    full_anno_lst = np.zeros(num_rows)
+
+    # Find the first instance of each length and give it 1 as an annotation
+    # marker
+    
+    unique_keys = np.unique(key_lst)
+    
+    for i in unique_keys:
+        index = np.where(key_lst==i)[0][0]
+        full_anno_lst[index] = 1
+        
+    # Add remaining annotations to anno list  
+    for i in range (0,np.size(full_anno_lst)-1):
+        if full_anno_lst[i] == 1:
+            current_anno = 2
+        else:
+            full_anno_lst[i]= current_anno
+            current_anno = current_anno+1
+    
+    return full_anno_lst.astype(int)
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
@@ -183,7 +222,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         
     output = (pattern_no_overlaps, pattern_no_overlaps_key)
     
-    return output 
+    return output  
 
 def check_overlaps(input_mat):
     
@@ -265,7 +304,6 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
     replicated and the starting indices of the repeats within it will be 
     returned. 
     
-
     Args
     ----
         input_vec: np.array 
@@ -773,7 +811,6 @@ def _merge_rows(input_mat, input_width):
         # Make sure the output is a 2d array
         merge_mat = np.array([merge_mat])
     return merge_mat.astype(int)
-
       
 def hierarchical_structure(matrix_no,key_no,sn):
     """
@@ -811,12 +848,20 @@ def hierarchical_structure(matrix_no,key_no,sn):
             full_matrix_NO
     """
     
-    breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
+    # breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
     
-    # Using PNO and PNO_KEY, we build a vector that tells us the order of the
-    # repeats of the essential structure components.
-    PNO = breakup_tuple[0]
-    PNO_key = breakup_tuple[1]
+    # # # Using PNO and PNO_KEY, we build a vector that tells us the order of the
+    # # # repeats of the essential structure components.
+    # PNO = breakup_tuple[0]
+    # PNO_key = breakup_tuple[1]
+    
+    PNO = np.array([[0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+
+    PNO_key = np.array([1,4,5,9,26])
 
     # Get the block representation for PNO, called PNO_BLOCK
     PNO_block = reconstruct_full_block(PNO, PNO_key)
@@ -824,6 +869,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
     # Assign a unique (nonzero) number for each row in PNO. We refer these 
     # unique numbers COLORS. 
     num_colors = PNO.shape[0]
+    
     num_timesteps = PNO.shape[1]
     
     # Create unique color identifier for num_colors
@@ -833,10 +879,13 @@ def hierarchical_structure(matrix_no,key_no,sn):
     color_lst = color_lst.reshape(np.size(color_lst),1)
     color_mat = np.tile(color_lst, (1, num_timesteps))
 
+
     # For each time step in row i that equals 1, change the value at that time
     # step to i
     PNO_color = color_mat * PNO
+
     PNO_color_vec = PNO_color.sum(axis=0)
+
     
     # Find where repeats exist in time, paying special attention to the starts
     # and ends of each repeat of an essential structure component
@@ -852,12 +901,14 @@ def hierarchical_structure(matrix_no,key_no,sn):
     # Shift PNO_BLOCK_VEC so that the zero blocks are marked at the correct
     # time steps with 1's
     if PNO_block_vec[0] == 0 :
-        one_vec = np.insert(one_vec, 1, 1)
+        one_vec = np.insert(one_vec, 0, 1)
     elif PNO_block_vec[0] == 1:
-        one_vec = np.insert(one_vec, 1, 0)
+        one_vec = np.insert(one_vec, 0, 0)
 
     # Assign one new unique number to all the zero blocks
+
     PNO_color_vec[one_vec == 1] = (num_colors + 1)
+    
     
     # We are only concerned with the order that repeats of the essential
     # structure components occur in. So we create a vector that only contains
@@ -867,15 +918,17 @@ def hierarchical_structure(matrix_no,key_no,sn):
     # We isolate the starting index of each repeat of the essential structure
     # components and save a binary vector with 1 at a time step if a repeat of
     # any essential structure component occurs there
-    # non_zero_inds = PNO_color_vec > 0
+    non_zero_inds = (PNO_color_vec > 0)
+    
     num_NZI = non_zero_inds.sum(axis=0)
 
-    PNO_color_inds_only = PNO_color_vec[non_zero_inds-1]
+    PNO_color_inds_only = PNO_color_vec[non_zero_inds]
     
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
     zero_inds_short = (PNO_color_inds_only == (num_colors + 1))
-    PNO_color_inds_only[zero_inds_short-1] = 0
+    
+    PNO_color_inds_only[zero_inds_short] = 0
 
     # Create a binary matrix SYMM_PNO_INDS_ONLY such that the (i,j) entry is 1
     # if the following three conditions are true: 
@@ -907,9 +960,12 @@ def hierarchical_structure(matrix_no,key_no,sn):
     
     # These pairs of repeated sublists are the basis of our hierarchical
     # representation.
-    NZI_lst = find_all_repeats(symm_PNO_inds_only, [0,num_NZI])                 
-    remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
+        
+    NZI_lst = find_all_repeats(symm_PNO_inds_only, np.arange(1,num_NZI+1))                 
     
+    ''' CHECK REMOVE INDS STUFF '''
+    remove_inds = (NZI_lst[:,0] == NZI_lst[:,2])
+
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
     # a pair (A,B) where A == B)
     if np.any(remove_inds == True):
@@ -922,7 +978,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
 
     output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
     (NZI_matrix_no,NZI_key_no) = output_tuple[1:3]
-                          
+     
     NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
 
     nzi_rows = NZI_pattern_block.shape[0]
@@ -967,23 +1023,29 @@ def hierarchical_structure(matrix_no,key_no,sn):
       
     full_key_inds = np.argsort(full_key, axis = 0)
     
+    
     # Switch to row
     full_key_inds = full_key_inds[:,0]
     full_key = np.sort(full_key, axis = 0)
     full_visualization = full_visualization[full_key_inds,:]
     full_matrix_no = full_matrix_no[full_key_inds,:]
-                        
+              
     # Remove rows of our hierarchical representation that contain only one
     # repeat        
     inds_remove = np.where(np.sum(full_matrix_no,1) <= 1)
-    inds_remove = np.array([1])
+    #inds_remove = np.array([1])
     full_key = np.delete(full_key, inds_remove, axis = 0)
 
     full_matrix_no = np.delete(full_matrix_no, inds_remove, axis = 0)
     full_visualization = np.delete(full_visualization, inds_remove, axis = 0)
 
+
     full_anno_lst = get_annotation_lst(full_key)
-                          
+            
+    # print('full_visualization:',full_visualization) 
+    # print('full_key:',full_key)
+    # print('full_matrix_no:',full_matrix_no)     
+    # print('full_anno_lst:',full_anno_lst)        
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
     return output
