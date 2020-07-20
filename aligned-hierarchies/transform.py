@@ -302,9 +302,10 @@ def remove_overlaps(input_mat, song_length):
     bw_vec = bw_vec[::-1]
     
 
-    mat_NO = np.array([])
-    key_NO = np.array([])
-    anno_NO = np.array([])
+    mat_NO = np.empty([0, song_length])
+    key_NO = np.empty([0, 1])
+    
+    anno_NO = np.empty([0, 1])
     all_overlap_lst = np.array([[0,0,0,0,0,0]])
     
 # While bw_vec still has entries
@@ -380,20 +381,12 @@ def remove_overlaps(input_mat, song_length):
         if np.sum(np.sum(pattern_mat)) > 0:
             
             # If there are lines to add, add them
-            if np.shape(mat_NO)[0] != 0:
-                mat_NO = np.vstack((mat_NO,pattern_mat))
-            else: 
-                mat_NO = np.array([pattern_mat])
+            mat_NO = np.vstack((mat_NO,pattern_mat))
             
-            if np.shape(key_NO)[0] != 0:
-                key_NO = np.vstack((key_NO,pattern_key))
-            else:
-                key_NO = np.array([[pattern_key]])
-                
-            if np.shape(anno_NO)[0] != 0:
-                anno_NO = np.vstack((anno_NO,anno_temp_lst))
-            else:
-                anno_NO = anno_temp_lst
+            key_NO = np.vstack((key_NO,pattern_key))
+
+            anno_NO = np.vstack((anno_NO,anno_temp_lst))
+
         
         if (bw_lst_out.size > 0):
             L = np.vstack((L,bw_lst_out))
@@ -417,6 +410,7 @@ def remove_overlaps(input_mat, song_length):
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
     if mat_NO.size>0:
+    
         
         masterArray = np.hstack((mat_NO,key_NO,anno_NO))
         cNum = masterArray.shape[1]
@@ -439,8 +433,8 @@ def remove_overlaps(input_mat, song_length):
     
     all_overlap_lst = np.delete(all_overlap_lst,0,0)
     
-    output = (lst_no_overlaps,matrix_no_overlaps,\
-              key_no_overlaps, annotations_no_overlaps,\
+    output = (lst_no_overlaps,matrix_no_overlaps.astype(int),\
+              key_no_overlaps.astype(int), annotations_no_overlaps.astype(int),\
                   all_overlap_lst)
     
     return output
