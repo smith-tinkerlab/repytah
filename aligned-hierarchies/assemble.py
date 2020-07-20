@@ -46,9 +46,48 @@ where they divided until there are only non-overlapping pieces left over.
 """
 import numpy as np
 from inspect import signature 
-from search import find_all_repeats
+from search import find_all_repeats, find_complete_list_anno_only
 from utilities import reconstruct_full_block
+from transform import remove_overlaps
  
+
+def get_annotation_lst (key_lst):
+    """
+     Gets one annotation marker vector, given vector of lengths key_lst.
+    
+    Args 
+    -----
+        key_lst: np.array[int]
+            Vector of lengths in ascending order
+    
+    Returns 
+    -----
+        anno_lst_out: np.array[int] 
+            Vector of one possible set of annotation markers for key_lst
+    """
+
+    # Initialize the temporary variable
+    num_rows = np.size(key_lst)
+    full_anno_lst = np.zeros(num_rows)
+
+    # Find the first instance of each length and give it 1 as an annotation
+    # marker
+    
+    unique_keys = np.unique(key_lst)
+    
+    for i in unique_keys:
+        index = np.where(key_lst==i)[0][0]
+        full_anno_lst[index] = 1
+        
+    # Add remaining annotations to anno list  
+    for i in range (0,np.size(full_anno_lst)-1):
+        if full_anno_lst[i] == 1:
+            current_anno = 2
+        else:
+            full_anno_lst[i]= current_anno
+            current_anno = current_anno+1
+    
+    return full_anno_lst.astype(int)
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
@@ -811,20 +850,20 @@ def hierarchical_structure(matrix_no,key_no,sn):
             full_matrix_NO
     """
     
-    breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
+    # breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
     
-    # # Using PNO and PNO_KEY, we build a vector that tells us the order of the
-    # # repeats of the essential structure components.
-    PNO = breakup_tuple[0]
-    PNO_key = breakup_tuple[1]
+    # # # Using PNO and PNO_KEY, we build a vector that tells us the order of the
+    # # # repeats of the essential structure components.
+    # PNO = breakup_tuple[0]
+    # PNO_key = breakup_tuple[1]
     
-    # PNO = np.array([[0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
-    #                 [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    #                 [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    #                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-    #                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+    PNO = np.array([[0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
 
-    # PNO_key = np.array([1,4,5,9,26])
+    PNO_key = np.array([1,4,5,9,26])
 
     # Get the block representation for PNO, called PNO_BLOCK
     PNO_block = reconstruct_full_block(PNO, PNO_key)
@@ -1005,10 +1044,10 @@ def hierarchical_structure(matrix_no,key_no,sn):
 
     full_anno_lst = get_annotation_lst(full_key)
             
-    print('full_visualization:',full_visualization) 
-    print('full_key:',full_key)
-    print('full_matrix_no:',full_matrix_no)     
-    print('full_anno_lst:',full_anno_lst)        
+    # print('full_visualization:',full_visualization) 
+    # print('full_key:',full_key)
+    # print('full_matrix_no:',full_matrix_no)     
+    # print('full_anno_lst:',full_anno_lst)        
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
     return output
