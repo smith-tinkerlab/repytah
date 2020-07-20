@@ -91,9 +91,10 @@ def get_annotation_lst (key_lst):
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
-    Distills repeats encoded in input_pattern_obj and bw_vec to the essential 
-    structure components, the set of repeats, so that no time step is contained 
-    in more than one repeat.
+    Extract repeats in input_pattern_obj that has the starting indices of the 
+    repeats, into the essential structure componets using bw_vec, that has the 
+    lengths of each repeat. The essential structure components are the 
+    smallest building blocks that form the basis for every repeat in the song. 
     
     Args
     ----
@@ -119,6 +120,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
             of essential structure components in
             pattern_no_overlaps 
     """
+   
     sig = signature(breakup_overlaps_by_intersect)
     params = sig.parameters 
     if len(params) < 3: 
@@ -130,88 +132,103 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     PNO = input_pattern_obj
     
     #Sort the bw_vec and the PNO so that we process the biggest pieces first
-    
-    #Part 1: Sort the lengths in bw_vec in descending order 
-    sort_bw_vec = np.sort(bw_vec)
-    desc_bw_vec = sort_bw_vec[::-1]
-    
-    #Part 2: Sort the indices of bw_vec in descending order 
-    bw_inds = np.argsort(desc_bw_vec, axis = 0)
-    row_bw_inds = np.transpose(bw_inds)
-    
-    
-    PNO = PNO[(row_bw_inds),:]
-    PNO = PNO.reshape(4,19)
-    
-    T_inds = np.nonzero(bw_vec == T) 
-    T_inds = np.array(T_inds) - 1  #Bends is converted into an array
 
-    if T_inds.size != 0: 
-        T_inds = max(bw_vec.shape) - 1
+    #Part 1: Sort the lengths in bw_vec in descending order 
+    sort_bw_vec = np.sort(bw_vec)   
+    desc_bw_vec = sort_bw_vec[::-1]
+
+    #Part 2: Sort the indices of bw_vec in descending order 
+    bw_inds = np.flip(np.argsort(bw_vec, axis = 0))
+    row_bw_inds = np.transpose(bw_inds).flatten()
+    PNO = PNO[row_bw_inds,:]
+    T_inds = np.nonzero(bw_vec == T) 
+    
+    T_inds = np.array(T_inds) - 1  
+    
+    if T_inds.size == 0: 
+        T_inds = max(bw_vec.shape) 
 
     PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
-    
+
     # Check stopping condition -- Are there overlaps?
-    while np.sum(PNO_block[ : T_inds, :]) > 0:
+    while np.sum(PNO_block[:T_inds,:]>1) > 0:
+        
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_PNO_block = check_overlaps(PNO_block)
-        
+
         # Remove the rows with bandwidth T or less from consideration
         overlaps_PNO_block[T_inds:, ] = 0
+
         overlaps_PNO_block[:,T_inds:] = 0
-        
+
         # Find the first two groups of repeats that overlap, calling one group
         # RED and the other group BLUE
-        [ri,bi] = overlaps_PNO_block.nonzero() 
-        [ri,bi] = np.where(overlaps_PNO_block !=0)
-        
+        [ri,bi] = overlaps_PNO_block.nonzero()
+        ri = ri[0]
+        bi = bi[0]
+     
+        #RED overlap 
         red = PNO[ri,:]
-        RL = bw_vec[ri,:]
-        
+        RL = desc_bw_vec[ri,:]
+    
+        #BLUE overlap 
         blue = PNO[bi,:]
-        BL = bw_vec[bi,:]
-        
+   
+        BL = desc_bw_vec[bi,:]
+   
         # Compare the repeats in RED and BLUE, cutting the repeats in those
         # groups into non-overlapping pieces
-        union_mat, union_length = compare_and_cut(red, RL, blue, BL)
+        union_mat, union_length = _compare_and_cut(red, RL, blue, BL)
+   
+        PNO = np.delete(PNO, [ri,bi], axis = 0)
+        #PNO = np.delete(PNO, bi, axis = 0)
+     
         
-        PNO = np.delete(PNO, ri, axis = 0)
-        PNO = np.delete(PNO, bi, axis = 0)
-
-        bw_vec = np.delete(bw_vec, ri, axis = 0)
-        bw_vec = np.delete(bw_vec, bi, axis = 0)
-        
-        PNO = np.vstack(PNO, union_mat) 
-        bw_vec = np.vstack(bw_vec, union_length)
+        bw_vec = np.delete(desc_bw_vec, [ri,bi], axis = 0)
+        #bw_vec = np.delete(bw_vec, bi, axis = 0)
+    
+        if union_mat.size !=0:
+            PNO = np.vstack((PNO, union_mat))
+            bw_vec = np.vstack((bw_vec, union_length))
+   
         
         # Check there are any repeats of length 1 that should be merged into
         # other groups of repeats of length 1 and merge them if necessary
         if sum(union_length == 1) > 0:
-            PNO, bw_vec = merge_based_on_length(PNO, bw_vec, 1)
+            PNO, bw_vec = _merge_based_on_length(PNO, bw_vec, 1)
+            
         
+      
         #AGAIN, Sort the bw_vec and the PNO so that we process the biggest 
         #pieces first
-        #Part 1: Sort the lengths in bw_vec in descending order 
-        sort_bw_vec = np.sort(bw_vec)
+        #Part 1: Sort the lengths in bw_vec and indices in descending order
+        sort_bw_vec = np.sort(bw_vec,axis = 0)
         desc_bw_vec = sort_bw_vec[::-1]
-        #Part 2: Sort the indices of bw_vec in descending order 
-        bw_inds = np.argsort(desc_bw_vec, axis = 0)
-        row_bw_inds = np.transpose(bw_inds)
-        
+   
+        bw_inds = np.flip(np.argsort(bw_vec, axis = 0))
+        row_bw_inds = np.transpose(bw_inds).flatten()
+        #print("row_bw_inds\n", row_bw_inds)
+    
+    
         PNO = PNO[(row_bw_inds),:]
+    
         
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
         # stopping condition
         #T_inds = np.nonzeros(bw_vec == T, 1) 
         T_inds = np.amin(desc_bw_vec == T) - 1
-        T_inds = np.array(T_inds) # Bends is converted into an array
-
-        if T_inds.size != 0:  
-            T_inds = max(desc_bw_vec.shape) - 1
-
+        if T_inds <0:
+            T_inds = np.array([])
+        else:
+            T_inds = np.array(T_inds) # Bends is converted into an array
+        
+        if T_inds.size == 0:  
+            T_inds = max(desc_bw_vec.shape) 
+            print(10,T_inds)
+        
         PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
-    
+     
     #Sort the lengths in bw_vec in ascending order 
     bw_vec = np.sort(desc_bw_vec)
     #Sort the indices of bw_vec in ascending order     
@@ -391,14 +408,12 @@ def __inds_to_rows(start_mat, row_length):
             matrix of one or two rows, with 1's where 
             the starting indices and 0's otherwise 
     """
-    
     if (start_mat.ndim == 1): 
         #Convert a 1D array into 2D array 
         start_mat = start_mat[None, : ]
     #Initialize mat_rows and new_mat
     mat_rows = start_mat.shape[0]
     new_mat = np.zeros((mat_rows,row_length))
-    
     for i in range(0, mat_rows):
         inds = start_mat[i,:]
         #Let the starting indices be 1
@@ -435,7 +450,7 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
     
     # Sort the elements of full_bandwidth
     temp_bandwidth = np.sort(full_bw,axis=None)
-    
+  
     # Return the indices that would sort full_bandwidth
     bnds = np.argsort(full_bw,axis=None) 
     temp_mat = full_mat[bnds,:] 
@@ -492,9 +507,10 @@ def _merge_based_on_length(full_mat,full_bw,target_bw):
 
     # Create output
     out_mat = temp_mat
-    out_length_vec = temp_bandwidth    
-    output = (out_mat,out_length_vec)
-    
+    out_length_vec = temp_bandwidth 
+    if out_length_vec.size != 1:      
+        out_length_vec = out_length_vec.reshape(-1,1)
+    output = (out_mat,out_length_vec) 
     return output
 
 
@@ -586,7 +602,6 @@ def _compare_and_cut(red, red_len, blue, blue_len):
             # Determine if the blocks intersect and call the intersection
             # purple
             purple = np.intersect1d(red_ri, blue_bi)
-            
             if purple.size != 0: 
             
                 # Remove purple from red_ri, call it red_minus_purple
@@ -645,12 +660,10 @@ def _compare_and_cut(red, red_len, blue, blue_len):
                 # and blue_bi, then we need to find where the purple starting
                 # indices are in all the blue_ri
                 purple_in_blue_mat, purple_length = __num_of_parts(purple, bi, start_blue)
-               
                 # Union purple_in_red_mat and purple_in_blue_mat to get
                 # purple_start, which stores all the purple indices              
                 purple_start = np.union1d(purple_in_red_mat[0], \
-                                          purple_in_blue_mat[0])
-                    
+                                          purple_in_blue_mat[0]) 
                 # Use purple_start to get new_purple with 1's where the repeats
                 # in the purple rows start and 0 otherwise.                 
                 new_purple = __inds_to_rows(purple_start, sn);
@@ -688,7 +701,7 @@ def _compare_and_cut(red, red_len, blue, blue_len):
                         union_mat = new_purple
                         union_length = np.array([purple_length])
                         break
-
+                
     # Check that there are no overlaps in each row of union_mat
     union_mat_add = np.empty((0,sn), int)
     union_mat_add_length = np.empty((0,1), int)
@@ -729,12 +742,12 @@ def _compare_and_cut(red, red_len, blue, blue_len):
     # Make sure union_length is a 2d vector
     if union_length.ndim == 1:
         union_length = np.array([union_length]).T
- 
-    totalArray = np.hstack((union_mat,union_length))
-    # Sort the totalArray and form the final output
-    totalArray = totalArray[np.argsort(totalArray[:, -1])]
-    union_mat = totalArray[:, 0:sn] 
-    union_length = np.array([totalArray[:,-1]]).T
+    if union_mat.size!=0:
+        totalArray = np.hstack((union_mat,union_length))
+        # Sort the totalArray and form the final output
+        totalArray = totalArray[np.argsort(totalArray[:, -1])]
+        union_mat = totalArray[:, 0:sn] 
+        union_length = np.array([totalArray[:,-1]]).T
     output = (union_mat, union_length) 
     return output 
 

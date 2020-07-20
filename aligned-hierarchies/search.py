@@ -447,7 +447,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     bw_vec: np.array
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
-    """
+     """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
