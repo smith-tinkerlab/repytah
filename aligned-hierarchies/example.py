@@ -1,5 +1,9 @@
 import scipy.io as sio
 import numpy as np
+from utilities import create_sdm, find_initial_repeats
+from search import find_complete_list
+from transform import remove_overlaps
+from assemble import hierarchical_structure
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
@@ -31,17 +35,26 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     # Get pairwise distance matrix/self dissimilarity matrix using cosine distance
     self_dissim_mat = create_sdm(fv_mat, num_fv_per_shingle)
+    
+    #print(self_dissim_mat)
+    
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh) 
     #think this is redund in python * np.ones((song_length,song_length))
     # Extract diagonals from thresholded distance matrix, saving the repeat pairs
     # the diagonals represent
+    
+    #print('thresh_dist_mat:',thresh_dist_mat)
 
-    all_lst = find_initial_repeats(thresh_dist_mat, np.arange(song_length+1), 0)
+    all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length+1), 0)
+    
+    #print(all_lst)
     
 #     # Find smaller repeats contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
+    
+    #print('complete_lst:',complete_lst)
 
      # Create dictionary of output variables
     outdict = {}
@@ -50,6 +63,10 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     if np.size(complete_lst) != 0:
         # Remove groups of repeats that overlap in time
         output_tuple = remove_overlaps(complete_lst, song_length)
+        
+        
+        #print(output_tuple)
+        
         (mat_no_overlaps, key_no_overlaps) = output_tuple[1:3]
         
         # Distill non-overlapping repeats into essential structure components and
@@ -89,6 +106,6 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 #Run on example file
 file_in = "input.csv"
 file_out = "hierarchical_out_file.mat"
-num_fv_per_shingle = 12
-thresh = 10
+num_fv_per_shingle = 3
+thresh = 0.01
 csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
