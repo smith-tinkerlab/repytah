@@ -89,6 +89,10 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     else: 
         T = thresh_bw
     
+    if (bw_vec.ndim == 1): 
+       #Convert a 1D array into 2D vector
+       bw_vec = bw_vec[None, : ].reshape(-1,1)
+   
     #Initialize input_pattern_obj 
     PNO = input_pattern_obj
     
