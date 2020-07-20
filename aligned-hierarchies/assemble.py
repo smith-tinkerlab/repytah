@@ -150,11 +150,13 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 
     PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
 
+
     # Check stopping condition -- Are there overlaps?
-    while np.sum(PNO_block[:T_inds,:]>1) > 0:
+    while np.sum(np.sum(PNO_block[:T_inds,:],axis = 0)>1) > 0:
         
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_PNO_block = check_overlaps(PNO_block)
+        
 
         # Remove the rows with bandwidth T or less from consideration
         overlaps_PNO_block[T_inds:, ] = 0
@@ -166,27 +168,20 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         [ri,bi] = overlaps_PNO_block.nonzero()
         ri = ri[0]
         bi = bi[0]
-     
         #RED overlap 
         red = PNO[ri,:]
         RL = desc_bw_vec[ri,:]
     
         #BLUE overlap 
-        blue = PNO[bi,:]
-   
+        blue = PNO[bi,:]  
         BL = desc_bw_vec[bi,:]
    
         # Compare the repeats in RED and BLUE, cutting the repeats in those
         # groups into non-overlapping pieces
-        union_mat, union_length = _compare_and_cut(red, RL, blue, BL)
-   
+        union_mat, union_length = _compare_and_cut(red, RL, blue, BL)          
         PNO = np.delete(PNO, [ri,bi], axis = 0)
-        #PNO = np.delete(PNO, bi, axis = 0)
-     
-        
         bw_vec = np.delete(desc_bw_vec, [ri,bi], axis = 0)
-        #bw_vec = np.delete(bw_vec, bi, axis = 0)
-    
+       
         if union_mat.size !=0:
             PNO = np.vstack((PNO, union_mat))
             bw_vec = np.vstack((bw_vec, union_length))
@@ -203,15 +198,11 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         #pieces first
         #Part 1: Sort the lengths in bw_vec and indices in descending order
         sort_bw_vec = np.sort(bw_vec,axis = 0)
-        desc_bw_vec = sort_bw_vec[::-1]
-   
+        desc_bw_vec = sort_bw_vec[::-1] 
         bw_inds = np.flip(np.argsort(bw_vec, axis = 0))
-        row_bw_inds = np.transpose(bw_inds).flatten()
-        #print("row_bw_inds\n", row_bw_inds)
-    
-    
+        row_bw_inds = np.transpose(bw_inds).flatten()       
         PNO = PNO[(row_bw_inds),:]
-    
+        
         
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
@@ -225,15 +216,15 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         
         if T_inds.size == 0:  
             T_inds = max(desc_bw_vec.shape) 
-            print(10,T_inds)
+            
         
         PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
      
     #Sort the lengths in bw_vec in ascending order 
-    bw_vec = np.sort(desc_bw_vec)
+    bw_vec = np.sort(desc_bw_vec,axis = 0)
     #Sort the indices of bw_vec in ascending order     
-    bw_inds = np.argsort(desc_bw_vec)
-   
+    bw_inds = np.argsort(desc_bw_vec,axis = 0)
+
     pattern_no_overlaps = PNO[bw_inds,:]
     pattern_no_overlaps_key = bw_vec
         
@@ -1062,5 +1053,4 @@ def hierarchical_structure(matrix_no,key_no,sn):
     output = (full_visualization,full_key,full_matrix_no,full_anno_lst)
     
     return output
-
 
