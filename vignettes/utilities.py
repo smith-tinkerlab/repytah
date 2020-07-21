@@ -28,12 +28,20 @@ This file contains the following functions:
     
     * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
     from diagonal starts and lengths
+    
+    * get_annotation_lst - Gets one annotation marker vector, given vector of
+    lengths key_lst.
+    
+    * get_annotation_lst - Generates the labels for a visualization
+    
 """
 
 import numpy as np
 from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
+
+
 
 def add_annotations(input_mat, song_length):
  
@@ -636,3 +644,77 @@ def __find_song_pattern(thresh_diags):
     song_pattern = pattern_base
     
     return song_pattern
+
+
+def get_annotation_lst (key_lst):
+    """
+     Gets one annotation marker vector, given vector of lengths key_lst.
+    
+    Args 
+    -----
+        key_lst: np.array[int]
+            Vector of lengths in ascending order
+    
+    Returns 
+    -----
+        anno_lst_out: np.array[int] 
+            Vector of one possible set of annotation markers for key_lst
+    """
+
+    # Initialize the temporary variable
+    num_rows = np.size(key_lst)
+    full_anno_lst = np.zeros(num_rows)
+
+    # Find the first instance of each length and give it 1 as an annotation
+    # marker
+    
+    unique_keys = np.unique(key_lst)
+    
+    for i in unique_keys:
+        index = np.where(key_lst==i)[0][0]
+        full_anno_lst[index] = 1
+        
+    # Add remaining annotations to anno list  
+    for i in range (0,np.size(full_anno_lst)-1):
+        if full_anno_lst[i] == 1:
+            current_anno = 2
+        else:
+            full_anno_lst[i]= current_anno
+            current_anno = current_anno+1
+    
+    return full_anno_lst.astype(int)
+
+def get_yLabels(width_vec, anno_vec):
+    
+    """
+     Generates the labels for a visualization with width_vec and ANNO_VEC
+    
+    Args 
+    -----
+    
+        width_vec: np.array[int]
+            Vector of widths for a visualization
+            
+        anno_vec: np.array[int]
+            Vector of annotations for a visualization
+    
+    Returns 
+    -----
+    
+        ylabels: np.array[str] 
+            Labels for the y-axis of a visualization
+        
+    """
+
+    num_rows = np.size(width_vec)
+    assert(num_rows == np.size(anno_vec))
+    
+    ylabels = np.array([0])
+    
+    for i in range(0,num_rows):
+        
+        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
+        
+        ylabels = np.append(ylabels, label )
+    
+    return ylabels
