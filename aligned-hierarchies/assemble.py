@@ -71,8 +71,7 @@ def get_annotation_lst (key_lst):
     full_anno_lst = np.zeros(num_rows)
 
     # Find the first instance of each length and give it 1 as an annotation
-    # marker
-    
+    # marker    
     unique_keys = np.unique(key_lst)
     
     for i in unique_keys:
@@ -136,7 +135,6 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     PNO = input_pattern_obj
     
     #Sort the bw_vec and the PNO so that we process the biggest pieces first
-
     #Part 1: Sort the lengths in bw_vec in descending order 
     sort_bw_vec = np.sort(bw_vec)   
     desc_bw_vec = sort_bw_vec[::-1]
@@ -145,8 +143,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     bw_inds = np.flip(np.argsort(bw_vec, axis = 0))
     row_bw_inds = np.transpose(bw_inds).flatten()
     PNO = PNO[row_bw_inds,:]
-    T_inds = np.nonzero(bw_vec == T) 
-    
+    T_inds = np.nonzero(bw_vec == T)     
     T_inds = np.array(T_inds) - 1  
     
     if T_inds.size == 0: 
@@ -154,17 +151,14 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 
     PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
 
-
     # Check stopping condition -- Are there overlaps?
     while np.sum(np.sum(PNO_block[:T_inds,:],axis = 0)>1) > 0:
         
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_PNO_block = check_overlaps(PNO_block)
         
-
         # Remove the rows with bandwidth T or less from consideration
         overlaps_PNO_block[T_inds:, ] = 0
-
         overlaps_PNO_block[:,T_inds:] = 0
 
         # Find the first two groups of repeats that overlap, calling one group
@@ -172,6 +166,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         [ri,bi] = overlaps_PNO_block.nonzero()
         ri = ri[0]
         bi = bi[0]
+       
         #RED overlap 
         red = PNO[ri,:]
         RL = desc_bw_vec[ri,:]
@@ -185,19 +180,17 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         union_mat, union_length = _compare_and_cut(red, RL, blue, BL)          
         PNO = np.delete(PNO, [ri,bi], axis = 0)
         bw_vec = np.delete(desc_bw_vec, [ri,bi], axis = 0)
-       
+        
+        # Stack the new repeats
         if union_mat.size !=0:
             PNO = np.vstack((PNO, union_mat))
             bw_vec = np.vstack((bw_vec, union_length))
-   
-        
+          
         # Check there are any repeats of length 1 that should be merged into
         # other groups of repeats of length 1 and merge them if necessary
         if sum(union_length == 1) > 0:
             PNO, bw_vec = _merge_based_on_length(PNO, bw_vec, 1)
             
-        
-      
         #AGAIN, Sort the bw_vec and the PNO so that we process the biggest 
         #pieces first
         #Part 1: Sort the lengths in bw_vec and indices in descending order
@@ -207,7 +200,6 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         row_bw_inds = np.transpose(bw_inds).flatten()       
         PNO = PNO[(row_bw_inds),:]
     
-        
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
         # stopping condition
@@ -233,6 +225,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     output = (pattern_no_overlaps, pattern_no_overlaps_key)
     
     return output  
+
 
 def check_overlaps(input_mat):
     
@@ -404,9 +397,11 @@ def __inds_to_rows(start_mat, row_length):
     if (start_mat.ndim == 1): 
         #Convert a 1D array into 2D array 
         start_mat = start_mat[None, : ]
+    
     #Initialize mat_rows and new_mat
     mat_rows = start_mat.shape[0]
     new_mat = np.zeros((mat_rows,row_length))
+    
     for i in range(0, mat_rows):
         inds = start_mat[i,:]
         #Let the starting indices be 1
@@ -705,9 +700,9 @@ def _compare_and_cut(red, red_len, blue, blue_len):
         union_row = union_mat[i,:]
         union_row_width = np.array([union_length[i]]);
         union_row_block = reconstruct_full_block(union_row, union_row_width)
-        # If there are at least one overlap, then compare and cut that row
-        # until there are no overlaps
         
+        # If there are at least one overlap, then compare and cut that row
+        # until there are no overlaps   
         if (np.sum(union_row_block[0]>1)) > 0:
             union_mat_rminds = np.vstack((union_mat_rminds, i))                       
             union_row_new, union_row_new_length = _compare_and_cut(union_row,\
@@ -732,15 +727,18 @@ def _compare_and_cut(red, red_len, blue, blue_len):
         union_mat = np.vstack((union_mat, union_mat_add))
     if union_mat_add_length.size!=0:
         union_length = np.vstack((np.array([union_length]).T, union_mat_add_length))
+   
     # Make sure union_length is a 2d vector
     if union_length.ndim == 1:
         union_length = np.array([union_length]).T
     if union_mat.size!=0:
         totalArray = np.hstack((union_mat,union_length))
+       
         # Sort the totalArray and form the final output
         totalArray = totalArray[np.argsort(totalArray[:, -1])]
         union_mat = totalArray[:, 0:sn] 
         union_length = np.array([totalArray[:,-1]]).T
+    
     output = (union_mat, union_length) 
     return output 
 
