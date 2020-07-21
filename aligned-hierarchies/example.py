@@ -3,7 +3,7 @@ import numpy as np
 from utilities import create_sdm, find_initial_repeats
 from search import find_complete_list
 from transform import remove_overlaps
-from assemble import hierarchical_structure
+from assemble import hierarchical_structure, hierarchical_structure_with_vis
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
@@ -49,12 +49,10 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
     all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length+1), 0)
     
-    #print(all_lst)
     
 #     # Find smaller repeats contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
     
-    #print('complete_lst:',complete_lst)
 
      # Create dictionary of output variables
     outdict = {}
@@ -68,7 +66,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         #print(output_tuple)
         
         (mat_no_overlaps, key_no_overlaps) = output_tuple[1:3]
-        
+
         # Distill non-overlapping repeats into essential structure components and
         # use them to build the hierarchical representation
         output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps, song_length)

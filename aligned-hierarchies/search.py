@@ -447,7 +447,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     bw_vec: np.array
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
-     """
+    """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
@@ -659,9 +659,9 @@ def find_complete_list_anno_only(pair_list, song_length):
 
 def find_complete_list(pair_list,song_length):
     """
-    Finds all smaller diagonals (and the associated pairs of repeats) 
-    that are contained in pair_list, which is composed of larger 
-    diagonals found in find_initial_repeats.
+    Finds all smaller diagonals (and the associated pairs of repeats) that are
+    contained pair_list, which is composed of larger diagonals found in 
+    find_initial_repeats.
         
     Args
     ----
@@ -679,11 +679,9 @@ def find_complete_list(pair_list,song_length):
     lst_out: np.array 
         list of pairs of repeats with smaller repeats added
     """
-    
     # Find the list of unique repeat lengths
     bw_found = np.unique(pair_list[:,4])
     bw_num = np.size(bw_found, axis=0)
-    longest_bw = bw_found[-1]
     
     # If the longest bandwidth is the length of the song, then remove that row
     if song_length == bw_found[-1]: 
@@ -726,15 +724,13 @@ def find_complete_list(pair_list,song_length):
         end_J = pair_list[bsnds:bend, 3] # Similar to definition for start_J
 
         all_vec_ends = np.concatenate((end_I,end_J),axis=None)
-
         int_ends = np.unique(all_vec_ends)
-        
+    
         # Part B: Use the current diagonal information to search for diagonals 
         #       of length BW contained in larger diagonals and thus were not
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        
         add_srows = __find_add_srows(pair_list, int_snds,band_width)
         add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
         add_erows = __find_add_erows(pair_list, int_ends, band_width)
@@ -767,15 +763,12 @@ def find_complete_list(pair_list,song_length):
     c = np.size(combine_mat,axis=0)
     
     # Again, find the list of unique repeat lengths
-    
     new_bw_found = np.unique(combine_mat[:,4])
     new_bw_num = np.size(new_bw_found,axis=0)
-
     full_lst = []
     
     # Step 3: Loop over the new list of found bandwidths to add the annotation
     #         markers to each found pair of repeats
-    
     for j in range(1,new_bw_num+1):
         new_bw = new_bw_found[j-1]
         
@@ -792,21 +785,9 @@ def find_complete_list(pair_list,song_length):
         else:
             new_bend = c
         
-        # Step 1: Isolate pairs of repeats in combine_mat that are length 
-        # bandwidth
-        starting = np.where(combine_mat[:,4] == band_width) 
-        # Select the first pair of repeats
-        new_bsnds = starting[0][0] 
-        
-        # Step 2: Isolate the indices of the ending pairs 
-        ending = np.where(combine_mat[:,4] > band_width)
-        if np.size(ending) == 0:
-            new_bends = c
-        else: 
-            new_bends = ending[0][0] - 1
-            
-        band_width_mat = np.array((combine_mat[new_bsnds:new_bends,]))
+        band_width_mat = np.array((combine_mat[new_bsnds:new_bend,]))
         length_band_width_mat = np.size(band_width_mat,axis=0)
+
         temp_anno_lst = np.concatenate((band_width_mat,\
                                         (np.zeros((length_band_width_mat,1))))\
                                         ,axis=1).astype(int)
@@ -817,7 +798,7 @@ def find_complete_list(pair_list,song_length):
         final_lst = np.vstack(full_lst)
         tem_final_lst = np.lexsort([final_lst[:,2], final_lst[:,0], final_lst[:,5],final_lst[:,4]])
         final_lst = final_lst[tem_final_lst,:]
-   
+    
     lst_out = final_lst
-        
+    
     return lst_out
