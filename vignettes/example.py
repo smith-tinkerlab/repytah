@@ -69,7 +69,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         # Distill non-overlapping repeats into essential structure components and
         # use them to build the hierarchical representation
-        output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps, song_length)
+        output_tuple = hierarchical_structure_with_vis(mat_no_overlaps, key_no_overlaps, song_length)
         (full_key, full_mat_no_overlaps) = output_tuple[1:3]
         
         outdict['full_key'] = full_key
