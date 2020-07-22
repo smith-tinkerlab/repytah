@@ -425,6 +425,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
     """
+    
     #First, find number of beats (columns) in pattern_mat: 
     #Check size of pattern_mat (in cases where there is only 1 pair of
     #repeated structures)
@@ -468,7 +469,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         sub_section[0,:] = repeated_struct
         
         #Creates pattern_block: Sums up each column after sliding repeated 
-        #sastructure i to the right bw - 1 times 
+        #structure i to the right bw - 1 times 
         for b in range(2, length + 1): 
     
             #Retrieve repeated structure i up to its (1 - b) position 
@@ -479,10 +480,10 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     
             #Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
-            
+
             #Replace part of sub_section with new_struct 
             sub_section[b - 1,:] = new_struct
-    
+
         #Replaces part of pattern_block with the sums of each column in 
         #sub_section 
         pattern_block[i,:] = np.sum(sub_section, axis = 0)
@@ -718,3 +719,5 @@ def get_yLabels(width_vec, anno_vec):
         ylabels = np.append(ylabels, label )
     
     return ylabels
+
+
