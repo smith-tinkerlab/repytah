@@ -152,7 +152,8 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         union_mat, union_length = _compare_and_cut(red, RL, blue, BL)          
         PNO = np.delete(PNO, [ri,bi], axis = 0)
         bw_vec = np.delete(desc_bw_vec, [ri,bi], axis = 0)
-       
+        
+        # Stack the new repeats
         if union_mat.size !=0:
             PNO = np.vstack((PNO, union_mat))
             bw_vec = np.vstack((bw_vec, union_length))
