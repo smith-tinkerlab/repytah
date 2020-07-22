@@ -81,7 +81,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     
     #Loop over check_inds
     for i in range(check_inds.size): 
-      
         ci = check_inds[i]
 
         # To check if the end index of the repeat "I" equals CI
@@ -98,7 +97,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
             
             # Number of rows in EJ_li 
             l_num = EJ_li.shape[0] 
-            
             
             # Found pair of repeats on the left side
             one_lsi = L[lnds,1] - k + 1     #Starting index of found repeat i
@@ -158,6 +156,7 @@ def __find_add_erows(lst_no_anno, check_inds, k):
                      
     return add_rows
 
+
 def __find_add_mrows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
@@ -187,9 +186,8 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     
     #If there are no pairs of repeats that have a length greater than k 
     if sum(search_inds) == 0:
-        print("No pairs of repeats greater than k")
         add_rows = np.full(1, False) 
-        return print("none", add_rows)
+        return add_rows
     
     #Multiply the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -226,7 +224,6 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                                     SJ_li*np.ones((1,l_num)),\
                                     (SJ_li + l_left_k - np.ones((1,l_num))),\
                                     l_left_k))
-            
             l_add_left = np.transpose(l_add_left)
         
             #Middle of left pair
@@ -254,7 +251,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                 
 
         #Right Check: Check for CI on the right side of the pairs
-        rnds = ((SJ < ci) & (EJ > (ci + k - 1)) == True); 
+        rnds = ((SJ < ci) & (EJ > (ci + k - 1)) == True)
 
         #Check that SI < CI and that EI > (CI + K - 1) indicating that there
         #is a repeat of length K with starting index CI contained in a larger
@@ -271,7 +268,6 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                                               L[rnds,2], (ci - 1) * \
                                               np.ones((1,r_num)), r_left_k))
             r_add_left = np.transpose(r_add_left)
-            #print(r_add_left)
 
             #Middle of right pair
             r_add_mid = np.vstack(((SI_ri + r_left_k),(SI_ri + r_left_k \
@@ -280,7 +276,6 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                                         (ci + k - 1)*np.ones((1,r_num)), \
                                         k*np.ones((1,r_num))))
             r_add_mid = np.transpose(r_add_mid)    
-            #print(r_add_mid)
 
             #Right side of right pair
             r_right_k = L[rnds, 3] - ((ci + k) - 1)*np.ones((1,r_num))
@@ -289,7 +284,6 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                                           (ci + k)*np.ones((1,r_num)), \
                                           L[rnds,3], r_right_k))
             r_add_right = np.transpose(r_add_right)
-            #print(r_add_right)
 
             # Add the found rows        
             if add_rows.size ==0:
@@ -298,6 +292,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)  
      
     return add_rows 
+
 
 def __find_add_srows(lst_no_anno, check_inds, k):
     """
@@ -325,8 +320,6 @@ def __find_add_srows(lst_no_anno, check_inds, k):
             
     """
     
-    L = lst_no_anno
-
     L = lst_no_anno 
     add_rows = np.empty((0))
 
@@ -352,8 +345,7 @@ def __find_add_srows(lst_no_anno, check_inds, k):
         # Check if the starting index of repeat "I" of pair of repeats "IJ" 
         # equals CI
         lnds = (SI == ci) 
-        #print("lnds:", lnds)
-        
+
         # If the sum across (row) is greater than 0 
         if lnds.sum(axis = 0) > 0: 
             # Find the 2nd entry of the row (lnds) whose starting index of 
@@ -379,14 +371,13 @@ def __find_add_srows(lst_no_anno, check_inds, k):
             two_lsj = SJ_li + k             #Starting index of found repeat j 
             two_lej = L[lnds, 3]            #Ending index of found repeat j
             two_lk = L[lnds, 4] - k         #Length of found pair of repeats
+            
             l_add_right = np.concatenate((two_lsi, two_lei, two_lsj, two_lej,\
                                           two_lk), axis = None)
-            
             l_add_right = np.vstack((two_lsi, two_lei, two_lsj, two_lej,two_lk))
             l_add_right = np.transpose(l_add_right)
     
             # Stack the found rows vertically 
-            
             if add_rows.size == 0:
                 add_rows = np.vstack((l_add, l_add_right))
             else:
@@ -422,14 +413,13 @@ def __find_add_srows(lst_no_anno, check_inds, k):
             r_add_right = np.transpose(r_add_right)
             
             # Stack the found rows vertically 
-           
             if add_rows.size == 0:
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-                
-        
+            
     return add_rows
+
 
 def find_all_repeats(thresh_mat, bw_vec):
     """
@@ -468,8 +458,8 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         #Use convolution matrix to find diagonals of length bw 
         id_mat = np.identity(bw) 
-        # Search for diagonals of length band_width
         
+        # Search for diagonals of length band_width
         diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
         
         # Mark where diagonals of length band_width start
@@ -492,7 +482,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                 
             # List pairs of starts with their ends and the widths of the
             # non-overlapping intervals
-            
             i_pairs = np.vstack((start_i[:], match_i[:])).T
             j_pairs = np.vstack((start_j[:], match_j[:])).T
             i_j_pairs = np.hstack((i_pairs, j_pairs))
@@ -503,8 +492,8 @@ def find_all_repeats(thresh_mat, bw_vec):
             # Add the new non-overlapping intervals to the full list of
             # non-overlapping intervals
             int_all = np.vstack((int_lst, int_all))
-            # 2) Overlaps: Search only the overlaps in shingles
             
+            # 2) Overlaps: Search only the overlaps in shingles
             # Search for paired starts 
             shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, 1),
                                                   (full_bw - 1))))
@@ -513,7 +502,6 @@ def find_all_repeats(thresh_mat, bw_vec):
             num_ovrlaps = len(start_i_shin)
             
             if num_ovrlaps > 0:
-            
                 # Since you are checking the overlaps you need to cut these
                 # intervals into pieces: left, right, and middle. NOTE: the
                 # middle interval may NOT exist
@@ -521,29 +509,25 @@ def find_all_repeats(thresh_mat, bw_vec):
                 # Vector of 1's that is the length of the number of
                 # overlapping intervals. This is used a lot.
                 ones_no = np.ones((num_ovrlaps)).astype(int)
-                # 2a) Left Overlap
                 
+                # 2a) Left Overlap
                 K = start_j_shin - start_i_shin  # NOTE: end_J_overlap - end_I_overlap will also equal this,
                                                 # possible, but unlikely.
-    
-                i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
-                
-                j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
+                i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:]\
+                                                       - ones_no[:]))).T
+                j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:]\
+                                                       + K - ones_no[:]))).T
                 sint_lst = np.column_stack((i_sshin,j_sshin,K.T))
         
-        
                 i_s = np.argsort(K) # Return the indices that would sort K
-                #Is.reshape(np.size(Is), 1)
                 sint_lst = sint_lst[i_s,]
                 
                 # Add the new left overlapping intervals to the full list
                 # of left overlapping intervals
                 sint_all = np.vstack((sint_all,sint_lst))
     
-    
                 # 2b) Right Overlap
                 end_i_shin = start_i_shin + (full_bw-1)
-                
                 end_j_shin = start_j_shin + (full_bw-1)
                 
                 i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, end_i_shin[:])).T
@@ -551,7 +535,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                 eint_lst = np.column_stack((i_eshin,j_eshin,K.T))
                 
                 i_e = np.lexsort(K) # Return the indices that would sort K
-                #Ie.reshape(np.size(Ie),1)
                 eint_lst = eint_lst[i_e:,]
     
                 # Add the new right overlapping intervals to the full list of
@@ -560,24 +543,23 @@ def find_all_repeats(thresh_mat, bw_vec):
                     
                 # 2) Middle Overlap
                 mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
-                
                 if sum(mnds) > 0:
-                    i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                    i_middle = (np.vstack((start_j_shin[:], end_i_shin[:]\
+                                           - K ))) * mnds
                     i_middle = i_middle.T
                     i_middle = i_middle[np.all(i_middle != 0, axis=1)]
                     
-                    
-                    j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                    j_middle = (np.vstack((start_j_shin[:] + K, \
+                                           end_i_shin[:])))  * mnds 
                     j_middle = j_middle.T
                     j_middle = j_middle[np.all(j_middle != 0, axis=1)]
                     
-                    
-                    k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds] - K[mnds] + ones_no[mnds]))
+                    k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds]\
+                                          - K[mnds] + ones_no[mnds]))
                     k_middle = k_middle.T
                     k_middle = k_middle[np.all(k_middle != 0, axis=1)]
  
                     mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
-                    
                     mint_all = np.vstack((mint_all, mint_lst))
         
         if thresh_temp.sum() == 0:
@@ -592,7 +574,9 @@ def find_all_repeats(thresh_mat, bw_vec):
     all_lst = np.unique(all_lst,axis=0)
     all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
     all_lst = all_lst[all_lst_in]
+    
     return((all_lst).astype(int))
+
 
 def find_complete_list_anno_only(pair_list, song_length):
     """
@@ -652,10 +636,12 @@ def find_complete_list_anno_only(pair_list, song_length):
     
     #Sort the list    
     out_list = np.concatenate(full_list)
-    tem_out_lst = np.lexsort([out_list[:,0], out_list[:,2], out_list[:,5],out_list[:,4]])
+    tem_out_lst = np.lexsort([out_list[:,0], out_list[:,2], out_list[:,5]\
+                              ,out_list[:,4]])
     out_list = out_list[tem_out_lst,:]
         
     return out_list
+
 
 def find_complete_list(pair_list,song_length):
     """
@@ -705,7 +691,6 @@ def find_complete_list(pair_list,song_length):
         
         # Convert bends into an array
         bend = np.array(bends)
-    
         if bend.size > 0:
             bend = np.amin(bend)
         else:
@@ -750,7 +735,6 @@ def find_complete_list(pair_list,song_length):
     if add_mat.size!=0:
         add_mat= np.delete(add_mat,0,0)
         
-      
     # Step 2: Combine pair_list and new_mat. Make sure that you don't have any
     #         double rows in add_mat. Then find the new list of found 
     #         bandwidths in combine_mat.
@@ -796,7 +780,8 @@ def find_complete_list(pair_list,song_length):
         temp_anno_lst = add_annotations(temp_anno_lst, song_length)
         full_lst.append(temp_anno_lst)
         final_lst = np.vstack(full_lst)
-        tem_final_lst = np.lexsort([final_lst[:,2], final_lst[:,0], final_lst[:,5],final_lst[:,4]])
+        tem_final_lst = np.lexsort([final_lst[:,2], final_lst[:,0], \
+                                    final_lst[:,5],final_lst[:,4]])
         final_lst = final_lst[tem_final_lst,:]
     
     lst_out = final_lst
