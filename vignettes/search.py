@@ -41,7 +41,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     Finds pairs of repeated structures, representated as diagonals of a 
     certain length, k, that end at the same time step as 
     previously found pairs of repeated structures of the same length. 
-
     Args
     ----
     lst_no_anno: np.array
@@ -53,7 +52,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
         
     k: int
         length of repeats that we are looking for 
-
     Returns
     -------
     add_rows: np.array
@@ -65,6 +63,11 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     add_rows = np.empty((0))
     # Logical, which pairs of repeats have length greater than k?
     search_inds = (L[:,4] > k)
+    
+    #If there are no pairs of repeats that have a length greater than k
+    if sum(search_inds) == 0:
+        add_rows = np.full(1, False)
+        return add_rows
 
     #If there are no pairs of repeats that have a length greater than k
     if sum(search_inds) == 0:
@@ -105,8 +108,7 @@ def __find_add_erows(lst_no_anno, check_inds, k):
             one_lk = k*np.ones((1,l_num)).astype(int).flatten()         
             l_add = np.vstack((one_lsi,one_lei, one_lsj,one_lej,one_lk))
             l_add = np.transpose(l_add)
-            
-            
+     
             # Found pair of repeats on the right side
             two_lsi = L[lnds,0]             #Starting index of found repeat i 
             two_lei = L[lnds,1] - k         #Ending index of ofund repeat i
@@ -121,7 +123,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((l_add, l_add_left))
             else:
                 add_rows = np.vstack((add_rows, l_add, l_add_left))
-            
                 
         #Right Check: Check for CI on the right side of the pairs
         elif rnds.sum(axis = 0) > 0:
@@ -162,19 +163,15 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     Finds pairs of repeated structures, represented as diagonals of a certain
     length, k, that neither start nor end at the same time steps as previously
     found pairs of repeated structures of the same length. 
-
     Args
     ----
         lst_no_anno: np.array 
             list of pairs of repeats
-
         check_inds: np.array
             list of ending indices for repeats of length k that we use to 
             check lst_no_anno for more repeats of length k 
-
         k: number
             length of repeats that we are looking for 
-
     Returns
     -------
         add_rows: np.array
@@ -187,6 +184,12 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     
     #Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
+    
+    #If there are no pairs of repeats that have a length greater than k 
+    if sum(search_inds) == 0:
+        print("No pairs of repeats greater than k")
+        add_rows = np.full(1, False) 
+        return print("none", add_rows)
     
     #Multiply the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -321,12 +324,19 @@ def __find_add_srows(lst_no_anno, check_inds, k):
         contained in larger repeats in lst_no_anno
             
     """
+    
+    L = lst_no_anno
 
     L = lst_no_anno 
     add_rows = np.empty((0))
 
     # Logical, which pair of repeats has a length greater than k 
     search_inds = (L[:,4] > k)
+    
+    #If there are no repeats greater than k 
+    if sum(search_inds) == 0: 
+        add_rows = np.full(1, False) 
+        return add_rows
 
     # Multipy the starting index of all repeats "I" by search_inds
     SI = np.multiply(L[:,0], search_inds)
@@ -417,8 +427,8 @@ def __find_add_srows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-            
-            
+                
+        
     return add_rows
 
 def find_all_repeats(thresh_mat, bw_vec):
@@ -437,13 +447,6 @@ def find_all_repeats(thresh_mat, bw_vec):
     bw_vec: np.array
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
-    
-    Returns
-    -------
-    all_lst: np.array
-        list of pairs of repeats that correspond to diagonals
-        in thresh_mat
-        
     """
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
@@ -465,8 +468,8 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         #Use convolution matrix to find diagonals of length bw 
         id_mat = np.identity(bw) 
-
         # Search for diagonals of length band_width
+        
         diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
         
         # Mark where diagonals of length band_width start
@@ -489,6 +492,7 @@ def find_all_repeats(thresh_mat, bw_vec):
                 
             # List pairs of starts with their ends and the widths of the
             # non-overlapping intervals
+            
             i_pairs = np.vstack((start_i[:], match_i[:])).T
             j_pairs = np.vstack((start_j[:], match_j[:])).T
             i_j_pairs = np.hstack((i_pairs, j_pairs))
@@ -499,7 +503,6 @@ def find_all_repeats(thresh_mat, bw_vec):
             # Add the new non-overlapping intervals to the full list of
             # non-overlapping intervals
             int_all = np.vstack((int_lst, int_all))
-
             # 2) Overlaps: Search only the overlaps in shingles
             
             # Search for paired starts 
@@ -510,6 +513,7 @@ def find_all_repeats(thresh_mat, bw_vec):
             num_ovrlaps = len(start_i_shin)
             
             if num_ovrlaps > 0:
+            
                 # Since you are checking the overlaps you need to cut these
                 # intervals into pieces: left, right, and middle. NOTE: the
                 # middle interval may NOT exist
@@ -517,8 +521,8 @@ def find_all_repeats(thresh_mat, bw_vec):
                 # Vector of 1's that is the length of the number of
                 # overlapping intervals. This is used a lot.
                 ones_no = np.ones((num_ovrlaps)).astype(int)
-
                 # 2a) Left Overlap
+                
                 K = start_j_shin - start_i_shin  # NOTE: end_J_overlap - end_I_overlap will also equal this,
                                                 # possible, but unlikely.
     
@@ -532,7 +536,6 @@ def find_all_repeats(thresh_mat, bw_vec):
                 #Is.reshape(np.size(Is), 1)
                 sint_lst = sint_lst[i_s,]
                 
-    
                 # Add the new left overlapping intervals to the full list
                 # of left overlapping intervals
                 sint_all = np.vstack((sint_all,sint_lst))
@@ -579,7 +582,7 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         if thresh_temp.sum() == 0:
             break 
-            
+      
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     

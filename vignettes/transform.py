@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 transform.py
-
 This script contains functions that take inputs and transform them to be of use in 
 bigger functions where they are called. They focus mainly on overlapping
 repeated structures and annotation markers.
-
 This file contains the following functions:
     
     * __create_anno_remove_overlaps - Turns rows of repeats into marked rows with 
@@ -176,7 +174,6 @@ def __create_anno_rows(k_mat,song_length):
     Turn the k_mat into marked rows with annotation markers for the start 
     indices and zeroes otherwise. Check if the proper sequence of annotation 
     markers was given and fix them if necessary.
-
     Args
     ----
     k_mat: np.array
@@ -195,7 +192,6 @@ def __create_anno_rows(k_mat,song_length):
         row that marks where non-overlapping repeats
         occur, marking the annotation markers for the
         start indices and zeroes otherwise.
-
     k_lst_out: np.array
         list of pairs of repeats of length BAND_WIDTH that
         contain no overlapping repeats with annotations marked.
@@ -248,6 +244,7 @@ def __create_anno_rows(k_mat,song_length):
     output = (pattern_row,k_lst_out)
     
     return output
+
 
 def remove_overlaps(input_mat, song_length):  
     """
@@ -302,9 +299,10 @@ def remove_overlaps(input_mat, song_length):
     bw_vec = bw_vec[::-1]
     
 
-    mat_NO = np.array([])
-    key_NO = np.array([])
-    anno_NO = np.array([])
+    mat_NO = np.empty([0, song_length])
+    key_NO = np.empty([0, 1])
+    
+    anno_NO = np.empty([0, 1])
     all_overlap_lst = np.array([[0,0,0,0,0,0]])
     
 # While bw_vec still has entries
@@ -380,20 +378,12 @@ def remove_overlaps(input_mat, song_length):
         if np.sum(np.sum(pattern_mat)) > 0:
             
             # If there are lines to add, add them
-            if np.shape(mat_NO)[0] != 0:
-                mat_NO = np.vstack((mat_NO,pattern_mat))
-            else: 
-                mat_NO = np.array([pattern_mat])
+            mat_NO = np.vstack((mat_NO,pattern_mat))
             
-            if np.shape(key_NO)[0] != 0:
-                key_NO = np.vstack((key_NO,pattern_key))
-            else:
-                key_NO = np.array([[pattern_key]])
-                
-            if np.shape(anno_NO)[0] != 0:
-                anno_NO = np.vstack((anno_NO,anno_temp_lst))
-            else:
-                anno_NO = anno_temp_lst
+            key_NO = np.vstack((key_NO,pattern_key))
+
+            anno_NO = np.vstack((anno_NO,anno_temp_lst))
+
         
         if (bw_lst_out.size > 0):
             L = np.vstack((L,bw_lst_out))
@@ -417,6 +407,7 @@ def remove_overlaps(input_mat, song_length):
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
     if mat_NO.size>0:
+    
         
         masterArray = np.hstack((mat_NO,key_NO,anno_NO))
         cNum = masterArray.shape[1]
@@ -439,8 +430,8 @@ def remove_overlaps(input_mat, song_length):
     
     all_overlap_lst = np.delete(all_overlap_lst,0,0)
     
-    output = (lst_no_overlaps,matrix_no_overlaps,\
-              key_no_overlaps, annotations_no_overlaps,\
+    output = (lst_no_overlaps,matrix_no_overlaps.astype(int),\
+              key_no_overlaps.astype(int), annotations_no_overlaps.astype(int),\
                   all_overlap_lst)
     
     return output
@@ -455,7 +446,6 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
     repeats of length band_width into individual rows. Each row will mark the 
     start and end time steps of a repeat with 1's and 0's otherwise. The array 
     is a visual record of where all of the repeats in a song start and end.
-
     Args
     ----
         k_mat: np.array
@@ -477,7 +467,6 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
             row vector of the length of the song that marks where 
             non-overlapping repeats occur with the repeats' corresponding 
             annotation markers and 0's otherwise
-
     Returns
     -------
         pattern_mat: np.array
@@ -524,4 +513,3 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
-
