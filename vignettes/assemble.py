@@ -433,7 +433,7 @@ def __merge_based_on_length(full_mat,full_bw,target_bw):
         if inds.sum() > 1:
             # Isolate rows that correspond to test_bandwidth and merge them
             merge_bw = temp_mat[inds,:]
-            merged_mat = _merge_rows(merge_bw,np.array([test_bandwidth]))
+            merged_mat = __merge_rows(merge_bw,np.array([test_bandwidth]))
             
             # Number of columns
             bandwidth_add_size = merged_mat.shape[0] 
@@ -718,7 +718,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     return output 
 
 
-def _merge_rows(input_mat, input_width):
+def __merge_rows(input_mat, input_width):
     
     """
     Merges rows that have at least one common repeat; said common repeat(s)
