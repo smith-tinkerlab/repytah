@@ -32,7 +32,7 @@ This file contains the following functions:
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
-    * get_annotation_lst - Generates the labels for a visualization
+    * get_yLabels - Generates the labels for a visualization
     
 """
 
@@ -40,8 +40,6 @@ import numpy as np
 from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
-
-
 
 def add_annotations(input_mat, song_length):
  
@@ -85,11 +83,9 @@ def add_annotations(input_mat, song_length):
     
     full_mat = up_tri_mat + low_tri_mat
     
-    
     # Stitches info from input_mat into a single row
     song_pattern = __find_song_pattern(full_mat)
     SPmax = max(song_pattern)
-    
     
     # Adds annotation markers to pairs of repeats
     for i in range(1,SPmax+1):
@@ -118,6 +114,7 @@ def add_annotations(input_mat, song_length):
     
     return anno_list
 
+
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
     Creates self-dissimilarity matrix; this matrix is found by creating audio 
@@ -141,6 +138,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
         shingles
     """
     [num_rows, num_columns] = fv_mat.shape
+    
     if num_fv_per_shingle == 1:
         mat_as = fv_mat
     else:
@@ -156,8 +154,10 @@ def create_sdm(fv_mat, num_fv_per_shingle):
 
     sdm_row = spd.pdist(mat_as.T, 'cosine')
     self_dissim_mat = spd.squareform(sdm_row)
+    
     return self_dissim_mat
   
+    
 def stretch_diags(thresh_diags, band_width):
     """
     Creates binary matrix with full length diagonals from binary matrix of
@@ -180,9 +180,7 @@ def stretch_diags(thresh_diags, band_width):
     """
     # Creates size of returned matrix
     n = thresh_diags.shape[0] + band_width - 1
-    
     temp_song_marks_out = np.zeros(n)
-    
     (jnds, inds) = thresh_diags.nonzero()
     
     subtemp = np.identity(band_width)
@@ -191,16 +189,15 @@ def stretch_diags(thresh_diags, band_width):
     # length band width
     for i in range(inds.shape[0]):
         tempmat = np.zeros((n,n))
-        
         tempmat[inds[i]:(inds[i] + band_width), 
                 jnds[i]:(jnds[i] + band_width)] = subtemp
-        
         temp_song_marks_out = temp_song_marks_out + tempmat
                 
     # Ensures that stretch_diag_mat is a binary matrix
     stretch_diag_mat = (temp_song_marks_out > 0)
     
     return stretch_diag_mat
+
 
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
@@ -216,7 +213,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             thresholded matrix that we extract diagonals from
 
         bandwidth_vec: np.array[1D,int]
-            vector of lengths of diagonals to be found. Should be 1,2,3,..... n where n = num_timesteps
+            vector of lengths of diagonals to be found. Should be 1,2,3,..... 
+            n where n = num_timesteps
 
         thresh_bw: int
             smallest allowed diagonal length
@@ -248,7 +246,6 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     #Loop over all bandwidths
     for bw in np.flip((bandwidth_vec)):
         if bw > thresh_bw:
-                        
             #Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
 
@@ -291,16 +288,15 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 # Search for paired starts 
                 shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
                                                   (full_bw-1))))
-                #print('shin_ovrlaps:',shin_ovrlaps)
                 start_i_shin = np.array(shin_ovrlaps[0]+1) # row
                 start_j_shin = np.array(shin_ovrlaps[1]+1) # column
                 num_ovrlaps = len(start_i_shin)
                 
-                
                 if (num_ovrlaps == 1 and start_i_shin == start_j_shin): 
-                    
-                    i_sshin = np.concatenate((start_i_shin,start_i_shin+ (full_bw - 1)),axis = None)
-                    j_sshin = np.concatenate((start_j_shin,start_j_shin+ (full_bw - 1)),axis = None)
+                    i_sshin = np.concatenate((start_i_shin,start_i_shin+ \
+                                              (full_bw - 1)),axis = None)
+                    j_sshin = np.concatenate((start_j_shin,start_j_shin+ \
+                                              (full_bw - 1)),axis = None)
                     i_j_pairs = np.hstack((i_sshin,j_sshin))
                     sint_lst = np.hstack((i_j_pairs,full_bw))
                     sint_all = np.vstack((sint_all, sint_lst))
@@ -317,8 +313,10 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # 2a) Left Overlap
                     K = start_j_shin - start_i_shin
                     
-                    i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] - ones_no[:]))).T
-                    j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + K - ones_no[:]))).T
+                    i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] -\
+                                                           ones_no[:]))).T
+                    j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] + \
+                                                           K - ones_no[:]))).T
                     sint_lst = np.column_stack((i_sshin,j_sshin,K.T))
                     
                     i_s = np.argsort(K) # Return the indices that would sort K
@@ -337,8 +335,10 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     end_i_shin = start_i_shin + (full_bw-1)
                     end_j_shin = start_j_shin + (full_bw-1)
                 
-                    i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, end_i_shin[:])).T
-                    j_eshin = np.vstack((end_i_shin[:] + ones_no[:], end_j_shin[:])).T
+                    i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, \
+                                         end_i_shin[:])).T
+                    j_eshin = np.vstack((end_i_shin[:] + ones_no[:], \
+                                         end_j_shin[:])).T
                     eint_lst = np.column_stack((i_eshin,j_eshin,K.T))
                 
                     i_e = np.lexsort(K) # Return the indices that would sort K
@@ -358,17 +358,21 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
                 
                     if sum(mnds) > 0:
-                        i_middle = (np.vstack((start_j_shin[:], end_i_shin[:] - K ))) * mnds
+                        i_middle = (np.vstack((start_j_shin[:], \
+                                               end_i_shin[:] - K ))) * mnds
                         i_middle = i_middle.T
                         i_middle = i_middle[np.all(i_middle != 0, axis=1)]
                         
                         
-                        j_middle = (np.vstack((start_j_shin[:] + K, end_i_shin[:])))  * mnds 
+                        j_middle = (np.vstack((start_j_shin[:] + K, \
+                                               end_i_shin[:])))  * mnds 
                         j_middle = j_middle.T
                         j_middle = j_middle[np.all(j_middle != 0, axis=1)]
                         
                         
-                        k_middle = np.vstack((end_i_shin[mnds] - start_j_shin[mnds] - K[mnds] + ones_no[mnds]))
+                        k_middle = np.vstack((end_i_shin[mnds] - \
+                                              start_j_shin[mnds] - K[mnds] \
+                                              + ones_no[mnds]))
                         k_middle = k_middle.T
                         k_middle = k_middle[np.all(k_middle != 0, axis=1)]
         
@@ -400,7 +404,6 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     return(all_lst.astype(int))
 
 
-
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
     Creates a record of when pairs of repeated structures occur, from the 
@@ -425,13 +428,12 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
     """
+    
     #First, find number of beats (columns) in pattern_mat: 
     #Check size of pattern_mat (in cases where there is only 1 pair of
     #repeated structures)
     if (pattern_mat.ndim == 1): 
         #Convert a 1D array into 2D array 
-        #From:
-        #https://stackoverflow.com/questions/3061761/numpy-array-dimensions
         pattern_mat = pattern_mat[None, : ]
         #Assign number of beats to sn 
         sn = pattern_mat.shape[1]
@@ -468,9 +470,8 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         sub_section[0,:] = repeated_struct
         
         #Creates pattern_block: Sums up each column after sliding repeated 
-        #sastructure i to the right bw - 1 times 
+        #structure i to the right bw - 1 times 
         for b in range(2, length + 1): 
-    
             #Retrieve repeated structure i up to its (1 - b) position 
             sub_struct_a = repeated_struct[0:(1 - b)]
     
@@ -479,19 +480,16 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     
             #Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
-            
+
             #Replace part of sub_section with new_struct 
             sub_section[b - 1,:] = new_struct
-    
+
         #Replaces part of pattern_block with the sums of each column in 
         #sub_section 
         pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
     
-#line 217: 
-#https://stackoverflow.com/questions/2828059/sorting-arrays-in-np-by-column
-
 
 def reformat(pattern_mat, pattern_key):
     """
@@ -557,7 +555,6 @@ def reformat(pattern_mat, pattern_key):
     return info_mat.astype(int)
 
 
-
 def __find_song_pattern(thresh_diags):
     """
     Stitches information from thresh_diags matrix into a single
@@ -584,21 +581,17 @@ def __find_song_pattern(thresh_diags):
     # Initialize song pattern base
     pattern_base = np.zeros((1,song_length), dtype = int).flatten()
    
-
     # Initialize group number
     pattern_num = 1
 
     col_sum = thresh_diags.sum(axis = 0)
-    
     check_inds = col_sum.nonzero() 
-  
     check_inds = check_inds[0]
     
     # Creates vector of song length
     pattern_mask = np.ones((1, song_length))
     pattern_out = (col_sum == 0)
     pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
-    
     
     while np.size(check_inds) != 0:
         # Takes first entry in check_inds
@@ -614,7 +607,6 @@ def __find_song_pattern(thresh_diags):
             while np.size(inds) != 0:
                 # Takes sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
-                
                 c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
                 c_mat = c_mat*pattern_mask
                 
@@ -628,7 +620,6 @@ def __find_song_pattern(thresh_diags):
                 # Removes all used elements of c_inds from
                 # check_inds and p_mask
                 check_inds = np.setdiff1d(check_inds, c_inds)
-
                 pattern_mask[c_inds] = 0
                
                 # Resets inds to c_inds with inds removed
@@ -667,7 +658,6 @@ def get_annotation_lst (key_lst):
 
     # Find the first instance of each length and give it 1 as an annotation
     # marker
-    
     unique_keys = np.unique(key_lst)
     
     for i in unique_keys:
@@ -684,6 +674,7 @@ def get_annotation_lst (key_lst):
     
     return full_anno_lst.astype(int)
 
+
 def get_yLabels(width_vec, anno_vec):
     
     """
@@ -691,7 +682,6 @@ def get_yLabels(width_vec, anno_vec):
     
     Args 
     -----
-    
         width_vec: np.array[int]
             Vector of widths for a visualization
             
@@ -700,21 +690,20 @@ def get_yLabels(width_vec, anno_vec):
     
     Returns 
     -----
-    
         ylabels: np.array[str] 
             Labels for the y-axis of a visualization
         
     """
-
+    #Determine number of rows to label
     num_rows = np.size(width_vec)
     assert(num_rows == np.size(anno_vec))
     
+    # Initialize the array
     ylabels = np.array([0])
     
+    #Loop over the array adding labels
     for i in range(0,num_rows):
-        
         label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
-        
         ylabels = np.append(ylabels, label )
     
     return ylabels
