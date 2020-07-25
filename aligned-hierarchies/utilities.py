@@ -29,6 +29,9 @@ This file contains the following functions:
     * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
     from diagonal starts and lengths
     
+    * __find_song_pattern - Stitches information about repeat locations from 
+    thresh_diags matrix into a single row. 
+    
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
