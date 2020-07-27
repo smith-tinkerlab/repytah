@@ -26,8 +26,10 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 
 The contributors for this package are:
 * Aligned Hierarchies
-    * [Jordan Moody](https://github.com/jormacmoo)
     * [Lizette Carpenter](https://github.com/lcarpenter20)
+    * [Jordan Moody](https://github.com/jormacmoo)
+    * [Chenhui Jia](https://github.com/Chenhui-Jia)
+    * [Sasha Yeutseyeva](https://github.com/sashayeu) 
     * [Eleanor Donaher](https://github.com/edonaher)
     * [Denise Nava](https://github.com/d-nava)
 
@@ -38,4 +40,4 @@ Original MATLAB code by Kinnaird can be found [here](https://github.com/kmkinnai
 
 ### Funding sources
 
-This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019 and was partially funded by the college's CFCD funding mechanism.
+This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019 and 2020, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
