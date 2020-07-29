@@ -73,6 +73,9 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     pattern_row = np.zeros((1,song_length)).astype(int)
     overlap_lst = np.array([])
     bw = band_width
+
+    if k_mat.ndim ==1:
+        k_mat = np.array([k_mat])
     
     # Step 0a: Find the number of distinct annotations
     anno_lst = k_mat[:,5] # Get the elements of k_mat's fifth column
