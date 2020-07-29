@@ -564,16 +564,17 @@ def find_all_repeats(thresh_mat, bw_vec):
         
         if thresh_temp.sum() == 0:
             break 
-      
+    
+    #Combine non-overlapping intervals with the left, right, and middle parts of the nonoverlapping intervals         
     out_lst = np.vstack((sint_all, eint_all, mint_all))
+    
+    inds = np.argsort(out_lst[:,4])
+    out_lst = np.array(out_lst)[inds]
+    
+    inds = np.argsort(int_all[:,4])
+    int_all = np.array(int_all)[inds]
+    
     all_lst = np.vstack((int_all, out_lst))
-    
-    inds = np.argsort(all_lst[:,4])
-    all_lst = np.array(all_lst)[inds]
-    
-    all_lst = np.unique(all_lst,axis=0)
-    all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
-    all_lst = all_lst[all_lst_in]
     
     return((all_lst).astype(int))
 
