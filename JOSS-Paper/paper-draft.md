@@ -32,6 +32,7 @@ AH is a python package that contributes to the efforts in the MIR community towa
 
 # Statement of need 
 
+In this paper, we introduce a python package, ah, which provides instructions to build aligned hierarchies from a given input. The input is a sequential stream of data and through the approach in [1] to the dimension reduction problem, our package creates representations, called aligned hierarchies. These representations are created by finding all repeated structures within the sequential stream of data. In the overarching vignette, called AH_example, which walks the user through the process and logic of the algorithm with examples and images, the sequential stream of data input is of a Mazurka score. This vignette highlights the structure of the algorithm, detailing when and from where functions are called. For clarity and deeper comprehension of how the aligned hierarchies are built, we distinguished the functions by their main purposes in the algorithm. Some are considered utilities functions since they are repeatedly used throughout the function by different modules. Others are responsible for finding and recording structures or managing the transformation of inputs for use in larger functions. Finally, there are functions that assemble every extracted information from the input digital score to create the essential structure of the aligned hierarchies. 
 
 
 # Mathematics
