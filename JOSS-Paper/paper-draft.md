@@ -30,9 +30,22 @@ bibliography: joss.bib
 AH is a python package that contributes to the efforts in the MIR community towards increased accessibility and reproducibility. This package is based on Katherine M. Kinnaird?s thesis $\textbf{\textit{Aligned Hierarchies for Sequential Data}$ and the accompanying MATLAB code. In Kinnaird's work, over 70 Matlab scripts build the Aligned Hierarchies. Improving upon Kinnaird's work, our package provides further accessibility and opportunity for reproducibility. Now written in python, ah creates aligned-hierarchies of music based data streams through finding and encoding repeated structures. The package is organized into four modules - utilities, search, transform and assemble - that work in tandem to extract and output the aligned hierarchies of music data. The package includes five vignettes that provide full detailed explanation of how each function works with examples and images. An overarching vignette is also provided with an example input of a Mazurka score that walks the user through the process and logic of the package. In addition to the framing and documentation of the package, ah includes unit tests for all functions and are organized by the modules. 
 
 
-# Statement of need 
+# 1. Introduction 
 
-In this paper, we introduce a python package, ah, which provides instructions to build aligned hierarchies from a given input. The input is a sequential stream of data and through the approach in [1] to the dimension reduction problem, our package creates representations, called aligned hierarchies. These representations are created by finding all repeated structures within the sequential stream of data. In the overarching vignette, called AH_example, which walks the user through the process and logic of the algorithm with examples and images, the sequential stream of data input is of a Mazurka score. This vignette highlights the structure of the algorithm, detailing when and from where functions are called. For clarity and deeper comprehension of how the aligned hierarchies are built, we distinguished the functions by their main purposes in the algorithm. Some are considered utilities functions since they are repeatedly used throughout the function by different modules. Others are responsible for finding and recording structures or managing the transformation of inputs for use in larger functions. Finally, there are functions that assemble every extracted information from the input digital score to create the essential structure of the aligned hierarchies. 
+In this paper, we introduce a python package, ah, which provides instructions to build aligned hierarchies from a given input. The input is a sequential stream of data and through the approach in [1] to the dimension reduction problem, our package creates representations, called aligned hierarchies. These representations are created by finding all repeated structures within the sequential stream of data. In the overarching vignette, called AH_example, which walks the user through the process and logic of the algorithm with examples and images, the sequential stream of data input is of a Mazurka score. This vignette highlights the structure of the algorithm, detailing when and from where functions are called. For clarity and deeper comprehension of how the aligned hierarchies are built, we distinguished the functions by their main purposes in the algorithm. Some are considered utilities functions since they are repeatedly used throughout the function by different modules. Others are responsible for finding and recording structures or managing the transformation of inputs for use in larger functions. Finally, there are functions that assemble every extracted information from the input digital score to create the essential structure of the aligned hierarchies....
+
+# 2. Related Work 
+
+Talk about librosa 
+
+# 3. The AH example 
+
+# 4. Module Organization 
+
+# 5. Other Features 
+
+# 6. Conclusions 
+
 
 
 # Mathematics
