@@ -41,6 +41,12 @@ Talk about librosa
 # 3. The AH example 
 
 # 4. Module Organization 
+- This package is made up of 4 modules, as well as an example module, which runs a full example. 
+- The utilities module includes functions that are repeatedly used throughout to allow larger functions in the modules to function
+- The search module has functions that find the various repeated structures and generate information about them, such as their width and annotations
+- The functions in the transform module change their inputs to be of use in the larger functions of assemble.py. The transformations mainly include removing overlapping repeats of the same width and annotation.
+- The assemble module assembles the aligned hierarchies with functions that first create the essential structure components and then piece them together to create the final product. 
+
 
 # 5. Other Features 
 
