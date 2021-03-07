@@ -13,7 +13,7 @@ of the song's essential  structure component by making none of the repeats
 overlap in time. When a repeats do overlap, these repeats undergo a process 
 where they divided until there are only non-overlapping pieces left over. 
 
-    * breakup_overlaps_by_intersect - Extract repeats in input_patter_obj that 
+    * breakup_overlaps_by_intersect - Extract repeats in input_pattern_obj that 
     has the starting indices of the repeats, into the essential structure 
     componets using bw_vec, that has the lengths of each repeat.
     
