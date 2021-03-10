@@ -13,19 +13,19 @@ of the song's essential  structure component by making none of the repeats
 overlap in time. When a repeats do overlap, these repeats undergo a process 
 where they divided until there are only non-overlapping pieces left over. 
 
-    * breakup_overlaps_by_intersect - Extract repeats in input_pattern_obj that 
+    * breakup_overlaps_by_intersect - Extracts repeats in input_pattern_obj that 
     has the starting indices of the repeats, into the essential structure 
     componets using bw_vec, that has the lengths of each repeat.
     
     * check_overlaps - Compares every pair of groups, determining if there are
-    any repeats in any repeats in any pairs of the groups that overlap. 
+    any repeats in any pairs of the groups that overlap. 
 
     * __compare_and_cut - Compares two rows of repeats labeled RED and BLUE, and
     determines if there are any overlaps in time between them. If there is, 
     then we cut the repeats in RED and BLUE into up to 3 pieces. 
 
-    * __nums_of_parts - Determine the number of blocks of consecutive time 
-    steps in a list of time steps. A block of consecutive time steps represent 
+    * __num_of_parts - Determines the number of blocks of consecutive time 
+    steps in a list of time steps. A block of consecutive time steps represents 
     a distilled section of a repeat.    
 
     * __inds_to_rows -  Expands a vector containing the starting indices of a 
@@ -34,17 +34,17 @@ where they divided until there are only non-overlapping pieces left over.
     0's.
 
     * __merge_based_on_length - Merges repeats that are the same length, as set 
-    by full_bandwidth, and are repeats of the same piece of structure
+    by full_bandwidth, and are repeats of the same piece of structure.
 
-    * merge_rows - Merges rows that have at least one common repeat; said 
-    common repeat(s) must occur at the same time step and be of common length
+    * __merge_rows - Merges rows that have at least one common repeat; said 
+    common repeat(s) must occur at the same time step and be of common length.
 
     * hierarchical_structure - Distills the repeats encoded in MATRIX_NO 
     (and KEY_NO) to the essential structure components and then builds the 
-    hierarchical representation
+    hierarchical representation.
     
     * hierarchical_structure_with_vis - Same as hierarchical_structure but this
-    also outputs visualizations of the hierarchical representations
+    also outputs visualizations of the hierarchical representations.
 
 """
 import numpy as np
@@ -87,6 +87,8 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
             of essential structure components in
             pattern_no_overlaps 
     """
+   
+    print('breakup_overlaps_by_intersect')
    
     sig = signature(breakup_overlaps_by_intersect)
     params = sig.parameters 
@@ -204,8 +206,8 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 def check_overlaps(input_mat):
     
     """
-    Compares every pair of groups, determining if there are any repeats in any
-    repeats in any pairs of the groups that overlap.
+    Compares every pair of groups, determining if there are any repeats in 
+    any pairs of the groups that overlap.
     
     Args
     ----
@@ -218,6 +220,8 @@ def check_overlaps(input_mat):
         logical array where (i,j) = 1 if row i of input matrix and row j
         of input matrix overlap and (i,j) = 0 elsewhere
     """
+    print('check_overlaps')
+    
     #Get number of rows and columns
     rs = input_mat.shape[0]
     ws = input_mat.shape[1]
@@ -271,211 +275,6 @@ def check_overlaps(input_mat):
     return overlaps_yn
 
 
-def __num_of_parts(input_vec, input_start, input_all_starts):   
-    """    
-    This function is used to determine the number of blocks of consecutive 
-    time steps in a list of time steps. A block of consecutive time steps
-    represent a distilled section of a repeat. This distilled section will be 
-    replicated and the starting indices of the repeats within it will be 
-    returned. 
-    
-    Args
-    ----
-        input_vec: np.array 
-            contains one or two parts of a repeat that are overlap(s) in time 
-            that may need to be replicated 
-            
-        input_start: np.array index 
-            starting index for the part to be replicated 
-        
-        input_all_starts: np.array indices 
-            starting indices for replication 
-    
-    Returns
-    -------
-        start_mat: np.array 
-            array of one or two rows, containing the starting indices of the 
-            replicated repeats 
-            
-        length_vec: np.array 
-            column vector containing the lengths of the replicated parts 
-    """
-    
-    # Determine where input_vec has a break
-    diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
-    diff_vec = np.insert(diff_vec,0,1)
-    break_mark = np.where(diff_vec > 1)[0]
-   
-    # input_vec is consecutive
-    if sum(break_mark) == 0: 
-        #Initialize start_vec and end_vec
-        start_vec = input_vec[0]
-        end_vec = input_vec[-1]
-        
-        #Find the difference between the starts
-        add_vec = start_vec - input_start
-        #Find the new start of the distilled section
-        start_mat = input_all_starts + add_vec
-
-    # input_vec has a break
-    else:
-        #Initialize start_vec and end_vec
-        start_vec = np.zeros((2,1))
-        end_vec =  np.zeros((2,1))
-        
-        #Find the start and end time step of the first part
-        start_vec[0] = input_vec[0]
-        end_vec[0] = input_vec[break_mark - 1]
-
-        #Find the start and end time step of the second part
-        start_vec[1] = input_vec[break_mark]
-        end_vec[1] = input_vec[-1]
-    
-        #Find the difference between the starts
-        add_vec = np.array(start_vec - input_start).astype(int)
-        #Make sure input_all_starts contains only integers
-        input_all_starts = np.array(input_all_starts).astype(int)
-        #Create start_mat with two parts
-        start_mat = np.vstack((input_all_starts + add_vec[0], \
-                               input_all_starts + add_vec[1]))
-    
-    #Get the length of the new repeats
-    length_vec = (end_vec - start_vec + 1).astype(int)
-    #Create output
-    output = (start_mat, length_vec)
-
-    return output
-
-
-def __inds_to_rows(start_mat, row_length):
-    """
-    Expands a vector containing the starting indices of a piece or two of a 
-    repeat into a matrix representation recording when these pieces occur in 
-    the song with 1's. All remaining entries are marked with 0's. 
-    
-    Args
-    ----
-        start_mat: np.array 
-            matrix of one or two rows, containing the 
-            starting indices 
-            
-        row_length: int 
-            length of the rows 
-            
-    Returns
-    -------
-        new_mat: np.array 
-            matrix of one or two rows, with 1's where 
-            the starting indices and 0's otherwise 
-    """
-    if (start_mat.ndim == 1): 
-        #Convert a 1D array into 2D array 
-        start_mat = start_mat[None, : ]
-    #Initialize mat_rows and new_mat
-    mat_rows = start_mat.shape[0]
-    new_mat = np.zeros((mat_rows,row_length))
-    for i in range(0, mat_rows):
-        inds = start_mat[i,:]
-        #Let the starting indices be 1
-        new_mat[i,inds] = 1;
-
-    return new_mat.astype(int)
-
-
-def __merge_based_on_length(full_mat,full_bw,target_bw):
-    
-    """
-    Merges repeats that are the same length, as set 
-    by full_bandwidth, and are repeats of the same piece of structure
-        
-    Args
-    ----
-    full_mat: np.array
-        binary matrix with ones where repeats start and zeroes otherwise
-        
-    full_bw: np.array
-        length of repeats encoded in input_mat
-    
-    target_bw: np.array
-        lengths of repeats that we seek to merge
-        
-    Returns
-    -------    
-    out_mat: np.array
-        binary matrix with ones where repeats start and zeros otherwise
-        with rows of full_mat merged if appropriate
-        
-    one_length_vec: np.array
-        length of the repeats encoded in out_mat
-    """
-    
-    # Sort the elements of full_bandwidth
-    temp_bandwidth = np.sort(full_bw,axis=None)
-  
-    # Return the indices that would sort full_bandwidth
-    bnds = np.argsort(full_bw,axis=None) 
-    temp_mat = full_mat[bnds,:] 
-    
-    # Find the unique elements of target_bandwidth
-    target_bandwidth = np.unique(target_bw) 
-    
-    # Number of columns 
-    target_size = target_bandwidth.shape[0] 
-    
-    for i in range(1,target_size+1):
-        test_bandwidth = target_bandwidth[i-1]
-        
-        # Check if temp_bandwidth is equal to test_bandwidth
-        inds = (temp_bandwidth == test_bandwidth) 
-        
-        # If the sum of all inds elements is greater than 1, then execute this 
-        # if statement
-        if inds.sum() > 1:
-            # Isolate rows that correspond to test_bandwidth and merge them
-            merge_bw = temp_mat[inds,:]
-            merged_mat = __merge_rows(merge_bw,np.array([test_bandwidth]))
-            
-            # Number of columns
-            bandwidth_add_size = merged_mat.shape[0] 
-            bandwidth_add = test_bandwidth * \
-            np.ones((bandwidth_add_size,1)).astype(int)
-         
-            if np.any(inds == True):
-                # Convert the boolean array inds into an array of integers
-                inds = np.array(inds).astype(int)
-                remove_inds = np.where(inds == 1)
-                
-                # Delete the rows that meet the condition set by remove_inds
-                temp_mat = np.delete(temp_mat,remove_inds,axis=0)
-                temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
-                     
-            # Combine rows into a single matrix
-            temp_mat = np.vstack((temp_mat,merged_mat))
-                    
-            # Indicates temp_bandwidth is an empty array
-            if temp_bandwidth.size == 0: 
-                temp_bandwidth = np.concatenate(bandwidth_add)
-            # Indicates temp_bandwidth is not an empty array
-            elif temp_bandwidth.size > 0: 
-                temp_bandwidth = np.concatenate((temp_bandwidth,\
-                                                 bandwidth_add.flatten()))
-
-            # Return the indices that would sort temp_bandwidth
-            bnds = np.argsort(temp_bandwidth) 
-            
-            # Sort the elements of temp_bandwidth
-            temp_bandwidth = np.sort(temp_bandwidth)
-            temp_mat = temp_mat[bnds,]
-
-    # Create output
-    out_mat = temp_mat
-    out_length_vec = temp_bandwidth 
-    if out_length_vec.size != 1:      
-        out_length_vec = out_length_vec.reshape(-1,1)
-    output = (out_mat,out_length_vec) 
-    return output
-
-
 def __compare_and_cut(red, red_len, blue, blue_len):
     
     """
@@ -506,7 +305,9 @@ def __compare_and_cut(red, red_len, blue, blue_len):
         union_length: np.array 
             vector containing the lengths of the repeats encoded in union_mat
     """
-    # Find the total time steps in red
+    print('__compare_and_cut')
+    
+    #Find the total time steps in red
     sn = red.shape[0]
     assert sn == blue.shape[0]
     
@@ -718,11 +519,217 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     return output 
 
 
+def __num_of_parts(input_vec, input_start, input_all_starts):   
+    """    
+    This function is used to determine the number of blocks of consecutive 
+    time steps in a list of time steps. A block of consecutive time steps
+    represents a distilled section of a repeat. This distilled section will be 
+    replicated and the starting indices of the repeats within it will be 
+    returned. 
+    
+    Args
+    ----
+        input_vec: np.array 
+            contains one or two parts of a repeat that are overlap(s) in time 
+            that may need to be replicated 
+            
+        input_start: np.array index 
+            starting index for the part to be replicated 
+        
+        input_all_starts: np.array indices 
+            starting indices for replication 
+    
+    Returns
+    -------
+        start_mat: np.array 
+            array of one or two rows, containing the starting indices of the 
+            replicated repeats 
+            
+        length_vec: np.array 
+            column vector containing the lengths of the replicated parts 
+    """
+    print('__num_of_parts')
+    # Determine where input_vec has a break
+    diff_vec = np.subtract(input_vec[1:], input_vec[:-1])
+    diff_vec = np.insert(diff_vec,0,1)
+    break_mark = np.where(diff_vec > 1)[0]
+   
+    # input_vec is consecutive
+    if sum(break_mark) == 0: 
+        #Initialize start_vec and end_vec
+        start_vec = input_vec[0]
+        end_vec = input_vec[-1]
+        
+        #Find the difference between the starts
+        add_vec = start_vec - input_start
+        #Find the new start of the distilled section
+        start_mat = input_all_starts + add_vec
+
+    # input_vec has a break
+    else:
+        #Initialize start_vec and end_vec
+        start_vec = np.zeros((2,1))
+        end_vec =  np.zeros((2,1))
+        
+        #Find the start and end time step of the first part
+        start_vec[0] = input_vec[0]
+        end_vec[0] = input_vec[break_mark - 1]
+
+        #Find the start and end time step of the second part
+        start_vec[1] = input_vec[break_mark]
+        end_vec[1] = input_vec[-1]
+    
+        #Find the difference between the starts
+        add_vec = np.array(start_vec - input_start).astype(int)
+        #Make sure input_all_starts contains only integers
+        input_all_starts = np.array(input_all_starts).astype(int)
+        #Create start_mat with two parts
+        start_mat = np.vstack((input_all_starts + add_vec[0], \
+                               input_all_starts + add_vec[1]))
+    
+    #Get the length of the new repeats
+    length_vec = (end_vec - start_vec + 1).astype(int)
+    #Create output
+    output = (start_mat, length_vec)
+
+    return output
+
+
+def __inds_to_rows(start_mat, row_length):
+    """
+    Expands a vector containing the starting indices of a piece or two of a 
+    repeat into a matrix representation recording when these pieces occur in 
+    the song with 1's. All remaining entries are marked with 0's. 
+    
+    Args
+    ----
+        start_mat: np.array 
+            matrix of one or two rows, containing the 
+            starting indices 
+            
+        row_length: int 
+            length of the rows 
+            
+    Returns
+    -------
+        new_mat: np.array 
+            matrix of one or two rows, with 1's where 
+            the starting indices and 0's otherwise 
+    """
+    print('__inds_to_rows')
+    if (start_mat.ndim == 1): 
+        #Convert a 1D array into 2D array 
+        start_mat = start_mat[None, : ]
+    #Initialize mat_rows and new_mat
+    mat_rows = start_mat.shape[0]
+    new_mat = np.zeros((mat_rows,row_length))
+    for i in range(0, mat_rows):
+        inds = start_mat[i,:]
+        #Let the starting indices be 1
+        new_mat[i,inds] = 1;
+
+    return new_mat.astype(int)
+
+
+def __merge_based_on_length(full_mat,full_bw,target_bw):
+    
+    """
+    Merges repeats that are the same length, as set 
+    by full_bandwidth, and are repeats of the same piece of structure.
+        
+    Args
+    ----
+    full_mat: np.array
+        binary matrix with ones where repeats start and zeroes otherwise
+        
+    full_bw: np.array
+        length of repeats encoded in input_mat
+    
+    target_bw: np.array
+        lengths of repeats that we seek to merge
+        
+    Returns
+    -------    
+    out_mat: np.array
+        binary matrix with ones where repeats start and zeros otherwise
+        with rows of full_mat merged if appropriate
+        
+    one_length_vec: np.array
+        length of the repeats encoded in out_mat
+    """
+    print('__merge_based_on_length')
+    # Sort the elements of full_bandwidth
+    temp_bandwidth = np.sort(full_bw,axis=None)
+  
+    # Return the indices that would sort full_bandwidth
+    bnds = np.argsort(full_bw,axis=None) 
+    temp_mat = full_mat[bnds,:] 
+    
+    # Find the unique elements of target_bandwidth
+    target_bandwidth = np.unique(target_bw) 
+    
+    # Number of columns 
+    target_size = target_bandwidth.shape[0] 
+    
+    for i in range(1,target_size+1):
+        test_bandwidth = target_bandwidth[i-1]
+        
+        # Check if temp_bandwidth is equal to test_bandwidth
+        inds = (temp_bandwidth == test_bandwidth) 
+        
+        # If the sum of all inds elements is greater than 1, then execute this 
+        # if statement
+        if inds.sum() > 1:
+            # Isolate rows that correspond to test_bandwidth and merge them
+            merge_bw = temp_mat[inds,:]
+            merged_mat = __merge_rows(merge_bw,np.array([test_bandwidth]))
+            
+            # Number of columns
+            bandwidth_add_size = merged_mat.shape[0] 
+            bandwidth_add = test_bandwidth * \
+            np.ones((bandwidth_add_size,1)).astype(int)
+         
+            if np.any(inds == True):
+                # Convert the boolean array inds into an array of integers
+                inds = np.array(inds).astype(int)
+                remove_inds = np.where(inds == 1)
+                
+                # Delete the rows that meet the condition set by remove_inds
+                temp_mat = np.delete(temp_mat,remove_inds,axis=0)
+                temp_bandwidth = np.delete(temp_bandwidth,remove_inds,axis=0)
+                     
+            # Combine rows into a single matrix
+            temp_mat = np.vstack((temp_mat,merged_mat))
+                    
+            # Indicates temp_bandwidth is an empty array
+            if temp_bandwidth.size == 0: 
+                temp_bandwidth = np.concatenate(bandwidth_add)
+            # Indicates temp_bandwidth is not an empty array
+            elif temp_bandwidth.size > 0: 
+                temp_bandwidth = np.concatenate((temp_bandwidth,\
+                                                 bandwidth_add.flatten()))
+
+            # Return the indices that would sort temp_bandwidth
+            bnds = np.argsort(temp_bandwidth) 
+            
+            # Sort the elements of temp_bandwidth
+            temp_bandwidth = np.sort(temp_bandwidth)
+            temp_mat = temp_mat[bnds,]
+
+    # Create output
+    out_mat = temp_mat
+    out_length_vec = temp_bandwidth 
+    if out_length_vec.size != 1:      
+        out_length_vec = out_length_vec.reshape(-1,1)
+    output = (out_mat,out_length_vec) 
+    return output
+
+
 def __merge_rows(input_mat, input_width):
     
     """
     Merges rows that have at least one common repeat; said common repeat(s)
-    must occur at the same time step and be of common length
+    must occur at the same time step and be of common length.
     
     Args
     ----
@@ -737,7 +744,7 @@ def __merge_rows(input_mat, input_width):
     merge_mat: np.array
         binary matrix with ones where repeats start and zeroes otherwise
     """
-       
+    print('__merge_rows')
     # Step 0: initialize temporary variables
     not_merge = input_mat    # Everything must be checked
     merge_mat = np.empty((0,input_mat.shape[1]), int) # Nothing has been merged yet
@@ -826,7 +833,7 @@ def hierarchical_structure(matrix_no,key_no,sn):
             hierarchical structure encoded in each row of
             full_matrix_NO
     """
-    
+    print('hierarchical_structure')
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
     
     # # Using PNO and PNO_KEY, we build a vector that tells us the order of the
@@ -1011,8 +1018,8 @@ def hierarchical_structure(matrix_no,key_no,sn):
 
 def hierarchical_structure_with_vis(matrix_no,key_no,sn):
     """
-     Distills the repeats encoded in MATRIX_NO (and KEY_NO) to the essential 
-     structure components and then builds the hierarchical representation
+     Same as hierarchical_structure but this also outputs visualizations
+     of the hierarchical representations.
     
     Args 
     -----

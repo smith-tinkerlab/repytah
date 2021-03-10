@@ -66,6 +66,7 @@ def add_annotations(input_mat, song_length):
     anno_list: array
         list of pairs of repeats with annotations marked. 
     """
+    print('add_annotations')
     num_rows = input_mat.shape[0]
     
     # Removes any already present annotation markers
@@ -140,6 +141,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
         self dissimilarity matrix with paired cosine distances between 
         shingles
     """
+    print('create_sdm')
     [num_rows, num_columns] = fv_mat.shape
     
     if num_fv_per_shingle == 1:
@@ -181,6 +183,7 @@ def stretch_diags(thresh_diags, band_width):
         logical matrix with diagonals of length band_width starting 
         at each entry prescribed in thresh_diag
     """
+    print('stretch_diags')
     # Creates size of returned matrix
     n = thresh_diags.shape[0] + band_width - 1
     temp_song_marks_out = np.zeros(n)
@@ -228,6 +231,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             list of pairs of repeats that correspond to 
             diagonals in thresh_mat
     """
+    print('find_initial_repeats')
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
@@ -431,7 +435,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
     """
-    
+    print('reconstruct_full_block')
     #First, find number of beats (columns) in pattern_mat: 
     #Check size of pattern_mat (in cases where there is only 1 pair of
     #repeated structures)
@@ -525,7 +529,7 @@ def reformat(pattern_mat, pattern_key):
             start and end organized 
 
     """
-
+    print('reformat')
     #Pre-allocate output array with zeros 
     info_mat = np.zeros((pattern_mat.shape[0], 5))
     
@@ -579,6 +583,7 @@ def __find_song_pattern(thresh_diags):
         row where each entry represents a time step and the group 
         that time step is a member of
     """
+    print('__find_song_pattern')
     song_length = thresh_diags.shape[0]
     
     # Initialize song pattern base
@@ -654,7 +659,7 @@ def get_annotation_lst (key_lst):
         anno_lst_out: np.array[int] 
             Vector of one possible set of annotation markers for key_lst
     """
-
+    print('get_annotation_lst')
     # Initialize the temporary variable
     num_rows = np.size(key_lst)
     full_anno_lst = np.zeros(num_rows)
@@ -697,6 +702,7 @@ def get_yLabels(width_vec, anno_vec):
             Labels for the y-axis of a visualization
         
     """
+    print('get_yLabels')
     #Determine number of rows to label
     num_rows = np.size(width_vec)
     assert(num_rows == np.size(anno_vec))

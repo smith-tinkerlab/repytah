@@ -58,7 +58,7 @@ def __find_add_erows(lst_no_anno, check_inds, k):
         list of newly found pairs of repeats of length k that are 
         contained in larger repeats in lst_no_anno
     """
-
+    print('__find_add_erows')
     L = lst_no_anno
     add_rows = np.empty((0))
     # Logical, which pairs of repeats have length greater than k?
@@ -177,6 +177,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
             list of newly found pairs of repeats of length K that are 
             contained in larger repeats in LST_NO_ANNO 
     """
+    print('__find_add_mrows')
     #Initialize list of pairs 
     L = lst_no_anno
     add_rows = np.empty((0))
@@ -319,6 +320,7 @@ def __find_add_srows(lst_no_anno, check_inds, k):
         contained in larger repeats in lst_no_anno
             
     """
+    print('__find_add_srows')
     
     L = lst_no_anno 
     add_rows = np.empty((0))
@@ -438,6 +440,7 @@ def find_all_repeats(thresh_mat, bw_vec):
         vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
     """
+    print('find_all_repeats')
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
     
@@ -600,6 +603,7 @@ def find_complete_list_anno_only(pair_list, song_length):
         list of pairs of repeats with smaller repeats added and with
         annotation markers
     """
+    print('find_complete_list_anno_only')
     # Find list of unique repeat lengths
     bw_found = np.unique(pair_list[:,4])
     bw_num = bw_found.shape[0]
@@ -666,6 +670,7 @@ def find_complete_list(pair_list,song_length):
     lst_out: np.array 
         list of pairs of repeats with smaller repeats added
     """
+    print('find_complete_list')
     # Find the list of unique repeat lengths
     bw_found = np.unique(pair_list[:,4])
     bw_num = np.size(bw_found, axis=0)
@@ -717,7 +722,7 @@ def find_complete_list(pair_list,song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        add_srows = __find_add_srows(pair_list, int_snds,band_width)
+        add_srows = __find_add_srows(pair_list, int_snds, band_width)
         add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
         add_erows = __find_add_erows(pair_list, int_ends, band_width)
        
