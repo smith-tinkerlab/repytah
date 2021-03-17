@@ -7,16 +7,22 @@ This script when imported as a module allows search.py, transform.py and
 assemble.py in the ah package to run smoothly. 
 
 This file contains the following functions:
-
-    * add_annotations - Adds annotations to each pair of repeated structures 
-    according to their length and order of occurence. 
-
+    
     * create_sdm - Creates a self-dissimilarity matrix; this matrix is found 
     by creating audio shingles from feature vectors, and finding cosine 
     distance between shingles. 
-
+    
     * find_initial_repeats - Finds all diagonals present in thresh_mat, 
     removing each diagonal as it is found.
+    
+    * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
+    from diagonal starts and lengths
+
+    * add_annotations - Adds annotations to each pair of repeated structures 
+    according to their length and order of occurence. 
+    
+    * __find_song_pattern - Stitches information about repeat locations from 
+    thresh_diags matrix into a single row. 
     
     * reconstruct_full_block - Creates a record of when pairs of repeated
     structures occur, from the first beat in the song to the last beat of the
@@ -25,13 +31,7 @@ This file contains the following functions:
     * reformat - Transforms a binary matrix representation of when repeats 
     occur in a song into a list of repeated structures detailing the length
     and occurence of each repeat.      
-    
-    * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
-    from diagonal starts and lengths
-    
-    * __find_song_pattern - Stitches information about repeat locations from 
-    thresh_diags matrix into a single row. 
-    
+        
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
@@ -43,81 +43,6 @@ import numpy as np
 from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
-
-def add_annotations(input_mat, song_length):
- 
-    """
-    Adds annotations to the pairs of repeats in input_mat   
-
-    Args
-    ----
-    input_mat: np.array
-        list of pairs of repeats. The first two columns refer to 
-        the first repeat of the pair. The third and fourth columns refer
-        to the second repeat of the pair. The fifth column refers to the
-        repeat lengths. The sixth column contains any previous annotations,
-        which will be removed.
-        
-    song_length: int
-        number of audio shingles in the song.
-    
-    Returns
-    -------
-    anno_list: array
-        list of pairs of repeats with annotations marked. 
-    """
-    print('add_annotations')
-    num_rows = input_mat.shape[0]
-    
-    # Removes any already present annotation markers
-    input_mat[:, 5] = 0
-    
-    # Find where repeats start
-    s_one = input_mat[:,0]  
-    s_two = input_mat[:,2]
-
-    # Creates matrix of all repeats
-    s_three = np.ones((num_rows,), dtype = int)
-    
-    up_tri_mat = sps.coo_matrix((s_three, 
-                                 (s_one-1, s_two-1)), shape = (song_length, 
-                                 song_length)).toarray()
-    
-    low_tri_mat = up_tri_mat.conj().transpose()
-    
-    full_mat = up_tri_mat + low_tri_mat
-    
-    # Stitches info from input_mat into a single row
-    song_pattern = __find_song_pattern(full_mat)
-    SPmax = max(song_pattern)
-    
-    # Adds annotation markers to pairs of repeats
-    for i in range(1,SPmax+1):
-        pinds = np.nonzero(song_pattern == i)     
-      
-        #One if annotation not already marked, 0 if it is
-        check_inds = (input_mat[:,5] == 0)
-        
-        for j in pinds[0]:
-            # Finds all starting pairs that contain time step j
-            # and DO NOT have an annotation
-            mark_inds = (s_one == j+1) + (s_two == j+1)  
-            mark_inds = (mark_inds > 0)  
-            mark_inds = check_inds * mark_inds
-           
-            # Adds found annotations to the relevant time steps
-            input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
-            
-            # Removes pairs of repeats with annotations from consideration
-            check_inds = check_inds ^ mark_inds
- 
-    temp_inds = np.argsort(input_mat[:,5])
-  
-    # Creates list of annotations
-    anno_list = input_mat[temp_inds,]
-    
-    return anno_list
-
 
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
@@ -162,49 +87,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     
     return self_dissim_mat
   
-    
-def stretch_diags(thresh_diags, band_width):
-    """
-    Creates binary matrix with full length diagonals from binary matrix of
-        diagonal starts and length of diagonals
-                                                                                 
-    Args
-    ----
-    thresh_diags: np.array
-        binary matrix where entries equal to 1 signal the existence 
-        of a diagonal
-    
-    band_width: int
-        length of encoded diagonals
-    
-    Returns
-    -------
-    stretch_diag_mat: np.array [boolean]
-        logical matrix with diagonals of length band_width starting 
-        at each entry prescribed in thresh_diag
-    """
-    print('stretch_diags')
-    # Creates size of returned matrix
-    n = thresh_diags.shape[0] + band_width - 1
-    temp_song_marks_out = np.zeros(n)
-    (jnds, inds) = thresh_diags.nonzero()
-    
-    subtemp = np.identity(band_width)
-    
-    # Expands each entry in thresh_diags into diagonal of
-    # length band width
-    for i in range(inds.shape[0]):
-        tempmat = np.zeros((n,n))
-        tempmat[inds[i]:(inds[i] + band_width), 
-                jnds[i]:(jnds[i] + band_width)] = subtemp
-        temp_song_marks_out = temp_song_marks_out + tempmat
-                
-    # Ensures that stretch_diag_mat is a binary matrix
-    stretch_diag_mat = (temp_song_marks_out > 0)
-    
-    return stretch_diag_mat
-
-
+      
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     """
     Looks for the largest repeated structures in thresh_mat. Finds all 
@@ -411,6 +294,206 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     return(all_lst.astype(int))
 
 
+def stretch_diags(thresh_diags, band_width):
+    """
+    Creates binary matrix with full length diagonals from binary matrix of
+        diagonal starts and length of diagonals
+                                                                                 
+    Args
+    ----
+    thresh_diags: np.array
+        binary matrix where entries equal to 1 signal the existence 
+        of a diagonal
+    
+    band_width: int
+        length of encoded diagonals
+    
+    Returns
+    -------
+    stretch_diag_mat: np.array [boolean]
+        logical matrix with diagonals of length band_width starting 
+        at each entry prescribed in thresh_diag
+    """
+    print('stretch_diags')
+    # Creates size of returned matrix
+    n = thresh_diags.shape[0] + band_width - 1
+    temp_song_marks_out = np.zeros(n)
+    (jnds, inds) = thresh_diags.nonzero()
+    
+    subtemp = np.identity(band_width)
+    
+    # Expands each entry in thresh_diags into diagonal of
+    # length band width
+    for i in range(inds.shape[0]):
+        tempmat = np.zeros((n,n))
+        tempmat[inds[i]:(inds[i] + band_width), 
+                jnds[i]:(jnds[i] + band_width)] = subtemp
+        temp_song_marks_out = temp_song_marks_out + tempmat
+                
+    # Ensures that stretch_diag_mat is a binary matrix
+    stretch_diag_mat = (temp_song_marks_out > 0)
+    
+    return stretch_diag_mat
+
+
+def add_annotations(input_mat, song_length):
+ 
+    """
+    Adds annotations to the pairs of repeats in input_mat   
+
+    Args
+    ----
+    input_mat: np.array
+        list of pairs of repeats. The first two columns refer to 
+        the first repeat of the pair. The third and fourth columns refer
+        to the second repeat of the pair. The fifth column refers to the
+        repeat lengths. The sixth column contains any previous annotations,
+        which will be removed.
+        
+    song_length: int
+        number of audio shingles in the song.
+    
+    Returns
+    -------
+    anno_list: array
+        list of pairs of repeats with annotations marked. 
+    """
+    print('add_annotations')
+    num_rows = input_mat.shape[0]
+    
+    # Removes any already present annotation markers
+    input_mat[:, 5] = 0
+    
+    # Find where repeats start
+    s_one = input_mat[:,0]  
+    s_two = input_mat[:,2]
+
+    # Creates matrix of all repeats
+    s_three = np.ones((num_rows,), dtype = int)
+    
+    up_tri_mat = sps.coo_matrix((s_three, 
+                                 (s_one-1, s_two-1)), shape = (song_length, 
+                                 song_length)).toarray()
+    
+    low_tri_mat = up_tri_mat.conj().transpose()
+    
+    full_mat = up_tri_mat + low_tri_mat
+    
+    # Stitches info from input_mat into a single row
+    song_pattern = __find_song_pattern(full_mat)
+    SPmax = max(song_pattern)
+    
+    # Adds annotation markers to pairs of repeats
+    for i in range(1,SPmax+1):
+        pinds = np.nonzero(song_pattern == i)     
+      
+        #One if annotation not already marked, 0 if it is
+        check_inds = (input_mat[:,5] == 0)
+        
+        for j in pinds[0]:
+            # Finds all starting pairs that contain time step j
+            # and DO NOT have an annotation
+            mark_inds = (s_one == j+1) + (s_two == j+1)  
+            mark_inds = (mark_inds > 0)  
+            mark_inds = check_inds * mark_inds
+           
+            # Adds found annotations to the relevant time steps
+            input_mat[:,5] = (input_mat[:,5] + i * mark_inds)
+            
+            # Removes pairs of repeats with annotations from consideration
+            check_inds = check_inds ^ mark_inds
+ 
+    temp_inds = np.argsort(input_mat[:,5])
+  
+    # Creates list of annotations
+    anno_list = input_mat[temp_inds,]
+    
+    return anno_list
+
+
+def __find_song_pattern(thresh_diags):
+    """
+    Stitches information from thresh_diags matrix into a single
+        row, song_pattern, that shows the timesteps containing repeats;
+        From the full matrix that decodes repeat beginnings (thresh_diags),
+        the locations, or beats, where these repeats start are found and
+        encoded into the song_pattern array
+
+    Args
+    ----
+    thresh_diags: np.array
+        binary matrix with 1 at the start of each repeat pair (SI,SJ) and 
+        0 elsewhere. 
+        WARNING: must be symmetric
+    
+    Returns
+    -------
+    song_pattern: np.array [shape = (1, song_length)]
+        row where each entry represents a time step and the group 
+        that time step is a member of
+    """
+    print('__find_song_pattern')
+    song_length = thresh_diags.shape[0]
+    
+    # Initialize song pattern base
+    pattern_base = np.zeros((1,song_length), dtype = int).flatten()
+   
+    # Initialize group number
+    pattern_num = 1
+
+    col_sum = thresh_diags.sum(axis = 0)
+    check_inds = col_sum.nonzero() 
+    check_inds = check_inds[0]
+    
+    # Creates vector of song length
+    pattern_mask = np.ones((1, song_length))
+    pattern_out = (col_sum == 0)
+    pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
+    
+    while np.size(check_inds) != 0:
+        # Takes first entry in check_inds
+        i = check_inds[0] 
+        
+        # Takes the corresponding row from thresh_diags
+        temp_row = thresh_diags[i,:]
+        
+        # Finds all time steps that i is close to
+        inds = temp_row.nonzero()
+        
+        if np.size(inds) != 0:
+            while np.size(inds) != 0:
+                # Takes sum of rows corresponding to inds and
+                # multiplies the sums against p_mask
+                c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
+                c_mat = c_mat*pattern_mask
+                
+                # Finds nonzero entries of c_mat
+                c_inds = c_mat.nonzero()
+                
+                # Gives all elements of c_inds the same grouping 
+                # number as i
+                pattern_base[c_inds] = pattern_num
+               
+                # Removes all used elements of c_inds from
+                # check_inds and p_mask
+                check_inds = np.setdiff1d(check_inds, c_inds)
+                pattern_mask[c_inds] = 0
+               
+                # Resets inds to c_inds with inds removed
+                inds = np.setdiff1d(c_inds, inds)
+                inds = np.array([inds])
+                
+            # Updates grouping number to prepare for next group
+            pattern_num = pattern_num + 1
+            
+        # Removes i from check_inds
+        check_inds = np.setdiff1d(check_inds, i)
+       
+    song_pattern = pattern_base
+    
+    return song_pattern
+
+
 def reconstruct_full_block(pattern_mat, pattern_key): 
     """
     Creates a record of when pairs of repeated structures occur, from the 
@@ -560,89 +643,6 @@ def reformat(pattern_mat, pattern_key):
                 info_mat[r, 4] = pattern_key[r]
                 
     return info_mat.astype(int)
-
-
-def __find_song_pattern(thresh_diags):
-    """
-    Stitches information from thresh_diags matrix into a single
-        row, song_pattern, that shows the timesteps containing repeats;
-        From the full matrix that decodes repeat beginnings (thresh_diags),
-        the locations, or beats, where these repeats start are found and
-        encoded into the song_pattern array
-
-    Args
-    ----
-    thresh_diags: np.array
-        binary matrix with 1 at the start of each repeat pair (SI,SJ) and 
-        0 elsewhere. 
-        WARNING: must be symmetric
-    
-    Returns
-    -------
-    song_pattern: np.array [shape = (1, song_length)]
-        row where each entry represents a time step and the group 
-        that time step is a member of
-    """
-    print('__find_song_pattern')
-    song_length = thresh_diags.shape[0]
-    
-    # Initialize song pattern base
-    pattern_base = np.zeros((1,song_length), dtype = int).flatten()
-   
-    # Initialize group number
-    pattern_num = 1
-
-    col_sum = thresh_diags.sum(axis = 0)
-    check_inds = col_sum.nonzero() 
-    check_inds = check_inds[0]
-    
-    # Creates vector of song length
-    pattern_mask = np.ones((1, song_length))
-    pattern_out = (col_sum == 0)
-    pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
-    
-    while np.size(check_inds) != 0:
-        # Takes first entry in check_inds
-        i = check_inds[0] 
-        
-        # Takes the corresponding row from thresh_diags
-        temp_row = thresh_diags[i,:]
-        
-        # Finds all time steps that i is close to
-        inds = temp_row.nonzero()
-        
-        if np.size(inds) != 0:
-            while np.size(inds) != 0:
-                # Takes sum of rows corresponding to inds and
-                # multiplies the sums against p_mask
-                c_mat = np.sum(thresh_diags[inds,:], axis = 1).flatten()
-                c_mat = c_mat*pattern_mask
-                
-                # Finds nonzero entries of c_mat
-                c_inds = c_mat.nonzero()
-                
-                # Gives all elements of c_inds the same grouping 
-                # number as i
-                pattern_base[c_inds] = pattern_num
-               
-                # Removes all used elements of c_inds from
-                # check_inds and p_mask
-                check_inds = np.setdiff1d(check_inds, c_inds)
-                pattern_mask[c_inds] = 0
-               
-                # Resets inds to c_inds with inds removed
-                inds = np.setdiff1d(c_inds, inds)
-                inds = np.array([inds])
-                
-            # Updates grouping number to prepare for next group
-            pattern_num = pattern_num + 1
-            
-        # Removes i from check_inds
-        check_inds = np.setdiff1d(check_inds, i)
-       
-    song_pattern = pattern_base
-    
-    return song_pattern
 
 
 def get_annotation_lst (key_lst):
