@@ -19,8 +19,8 @@ class TestExample(unittest.TestCase):
         """
         file_in = "input.csv"
         file_out = "hierarchical_out_file.mat"
-        num_fv_per_shingle = 12
-        thresh = 10
+        num_fv_per_shingle = 3
+        thresh = 0.01
         [fv_mat, num_fv_per_shingle] = csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh) 
         self.assertIs(type(fv_mat), numpy.ndarray, "Should be numpy array")
         self.assertIs(type(num_fv_per_shingle), int, "Should be integer")
