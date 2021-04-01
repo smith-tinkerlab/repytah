@@ -55,7 +55,7 @@ class test_utilities(unittest.TestCase):
         
     def test_stretch_diags(self):
         
-        thresh_diags = np.matrix([[0,0,1,0,0],
+        thresh_diags = np.array([[0,0,1,0,0],
                          [0,1,0,0,0],
                          [0,0,1,0,0],
                          [0,0,0,0,0],
