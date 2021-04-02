@@ -482,7 +482,7 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
             ands = (anno_lst == a)
             a_starts = np.concatenate((k_mat[ands,0], k_mat[ands,2]), axis=None)
             #Replace entries at each repeats' start time with "1"
-            pattern_mat[a-1, a_starts-1] = 1;
+            pattern_mat[a-1, a_starts-1] = 1
         
         #Creates row vector with the same dimensions of anno_lst   
         pattern_key = band_width * np.ones((anno_max, 1)).astype(int)
