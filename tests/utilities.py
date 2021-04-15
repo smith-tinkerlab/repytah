@@ -118,7 +118,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     thresh_temp = thresh_mat
     
     #For removing already found diagonals 
-    Tbw = thresh_bw; 
+    Tbw = thresh_bw
 
     # Interval list for non-overlapping pairs    
     int_all =  np.empty((0,5), int) 
@@ -197,7 +197,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     
                     # Vector of 1's that is the length of the number of
                     # overlapping intervals. This is used a lot. 
-                    ones_no = np.ones(num_ovrlaps);
+                    ones_no = np.ones(num_ovrlaps)
 
                     # 2a) Left Overlap
                     K = start_j_shin - start_i_shin

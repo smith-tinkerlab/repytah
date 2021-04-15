@@ -16,6 +16,7 @@ from assemble import __num_of_parts as num_of_parts
 from assemble import __inds_to_rows as inds_to_rows
 from assemble import __merge_based_on_length as merge_based_on_length
 from assemble import __merge_rows as merge_rows
+from assemble import hierarchical_structure
 import numpy as np
 
 
@@ -44,8 +45,7 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(),expect_output0.tolist())
         self.assertEqual(output[1].tolist(),expect_output1.tolist())
 
-        
-    
+
     def test_check_overlaps(self):
         input_mat = np.array([[1, 1, 0, 1, 0, 0,],
                              [1, 1, 1, 0, 1, 0],
@@ -66,6 +66,7 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), np.ndarray)
         self.assertEqual(np.size(output),np.size(expect_output))
         self.assertEqual(output.tolist(),expect_output.tolist())
+
 
     def test_compare_and_cut(self):
         red = np.array([1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -103,6 +104,7 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(),expect_output0.tolist())
         self.assertEqual(output[1],expect_output1)
     
+
     def test_num_of_parts_else_statement(self):
         input_vec = np.array([3, 5])
         input_start = np.array([3])
@@ -118,7 +120,6 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), tuple)
         self.assertEqual(output[0].tolist(),expect_output0.tolist())
         self.assertEqual(output[1].tolist(),expect_output1.tolist())
-
 
 
     def test_inds_to_rows(self):
@@ -151,6 +152,7 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(),expect_output0.tolist())
         self.assertEqual(output[1].tolist(),expect_output1.tolist())
 
+
     def test_merge_rows(self):
         input_mat = np.array([[0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0],
                       [1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0]])
@@ -165,7 +167,22 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output.tolist(),expect_output.tolist())
 
 
-    #def test_hierarchical_structure(self):
+    def test_hierarchical_structure(self):
+        input_matrix_no = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                              [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]])
+        input_key_no = np.array([[3],
+                                [5],
+                                [8],
+                                [8]])
+        input_sn = 19
+
+        output = hierarchical_structure(input_matrix_no,input_key_no,input_sn)
+
+        print(output)
+
+
 
         
         
