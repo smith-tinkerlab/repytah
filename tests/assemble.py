@@ -427,7 +427,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
                                           purple_in_blue_mat[0]) 
                 # Use purple_start to get new_purple with 1's where the repeats
                 # in the purple rows start and 0 otherwise.                 
-                new_purple = __inds_to_rows(purple_start, sn);
+                new_purple = __inds_to_rows(purple_start, sn)
                 if new_red.size != 0 or new_blue.size != 0:
         
                     # Form the outputs
@@ -471,7 +471,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     # Isolate one row at a time, call it union_row
     for i in range(0, union_mat.shape[0]):
         union_row = union_mat[i,:]
-        union_row_width = np.array([union_length[i]]);
+        union_row_width = np.array([union_length[i]])
         union_row_block = reconstruct_full_block(union_row, union_row_width)
         # If there are at least one overlap, then compare and cut that row
         # until there are no overlaps
@@ -620,7 +620,7 @@ def __inds_to_rows(start_mat, row_length):
     for i in range(0, mat_rows):
         inds = start_mat[i,:]
         #Let the starting indices be 1
-        new_mat[i,inds] = 1;
+        new_mat[i,inds] = 1
 
     return new_mat.astype(int)
 
@@ -980,8 +980,8 @@ def hierarchical_structure(matrix_no,key_no,sn):
         if np.size(find_two) == 0:
             find_two = sn
 
-        one_end = np.minimum(find_zero,find_two);
-        full_key[i] = one_end - one_start;
+        one_end = np.minimum(find_zero,find_two)
+        full_key[i] = one_end - one_start
       
     full_key_inds = np.argsort(full_key, axis = 0)
     

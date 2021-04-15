@@ -96,7 +96,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         
 #Run on example file
-file_in = "../input.csv"
+file_in = "input.csv"
 file_out = "hierarchical_out_file.mat"
 num_fv_per_shingle = 3
 thresh = 0.01
