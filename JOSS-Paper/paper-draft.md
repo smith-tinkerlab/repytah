@@ -38,8 +38,13 @@ In this paper, we introduce a python package, ah, which provides instructions to
 - include motivation for the paper and package 
 - include the packages we repy on, numpy etc.
 - why we chose to convert to python insetad of keeping MATLAB
+- related work: librosa, 
+- follows in the trend of MIR software 
 
-# I think package organization should go here 
+# statement of need 
+- look at a few JOSS papers 
+
+# I think package structure should go here 
 
 # Followed by AH example
 - similar to the AH_examples jupyter notebook 
@@ -50,7 +55,8 @@ In this paper, we introduce a python package, ah, which provides instructions to
 
 # 2. Related Work 
 
-Talk about librosa 
+Talk about librosa  
+- package inspiration 
 - inspired by the structure?
 - wanted something similar of use 
 - visualizations to help understanding, similar to librosa 
