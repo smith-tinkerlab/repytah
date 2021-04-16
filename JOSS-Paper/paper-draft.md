@@ -41,34 +41,30 @@ In this paper, we introduce a python package, ah, which provides instructions to
 - related work: librosa, 
 - follows in the trend of MIR software 
 
-# statement of need 
-- look at a few JOSS papers 
-
-# I think package structure should go here 
-
-# Followed by AH example
-- similar to the AH_examples jupyter notebook 
-- include diagrams from AH_examples: Something to try to visualize each step
-
-# Followed by Related Work? 
-
-
-# 2. Related Work 
-
 Talk about librosa  
 - package inspiration 
 - inspired by the structure?
 - wanted something similar of use 
 - visualizations to help understanding, similar to librosa 
 
-# 3. The AH example 
+# Statement of Need 
+- look at a few JOSS papers 
+    - these papers explain the problem at hand and what scientists do right now to overcome that problem
+    - at the end state that this package is a solution to this problem 
+    - intended users?
+    
 
-# 4. Module Organization 
+# Module Organization
 - This package is made up of 4 modules, as well as an example module, which runs a full example. 
 - The utilities module includes functions that are repeatedly used throughout to allow larger functions in the modules to function
 - The search module has functions that find the various repeated structures and generate information about them, such as their width and annotations
 - The functions in the transform module change their inputs to be of use in the larger functions of assemble.py. The transformations mainly include removing overlapping repeats of the same width and annotation.
 - The assemble module assembles the aligned hierarchies with functions that first create the essential structure components and then piece them together to create the final product. 
+
+
+# AH example
+- similar to the AH_examples jupyter notebook 
+- include diagrams from AH_examples: Something to try to visualize each step
 
 
 # 5. Other Features 
