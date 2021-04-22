@@ -1268,3 +1268,16 @@ def hierarchical_structure_with_vis(matrix_no,key_no,sn):
     plt.show()
     
     return output
+
+
+input_matrix_no = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+input_key_no = np.array([[5],
+                                [10]])
+input_sn = 20
+
+output = hierarchical_structure(input_matrix_no,input_key_no,input_sn)
+
+print(output[0])
+print(output[1])
+print(output[2])
