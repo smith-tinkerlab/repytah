@@ -1231,8 +1231,8 @@ def hierarchical_structure_with_vis(matrix_no,key_no,sn):
         if np.size(find_two) == 0:
             find_two = sn
 
-        one_end = np.minimum(find_zero,find_two);
-        full_key[i] = one_end - one_start;
+        one_end = np.minimum(find_zero,find_two)
+        full_key[i] = one_end - one_start
       
     full_key_inds = np.argsort(full_key, axis = 0)
     
