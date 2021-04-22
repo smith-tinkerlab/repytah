@@ -168,19 +168,22 @@ class test_utilities(unittest.TestCase):
 
 
     def test_hierarchical_structure(self):
-        input_matrix_no = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                              [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]])
-        input_key_no = np.array([[3],
-                                [5],
-                                [8],
-                                [8]])
-        input_sn = 19
+        input_matrix_no = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        input_key_no = np.array([[5],
+                                [10]])
+        input_sn = 20
 
         output = hierarchical_structure(input_matrix_no,input_key_no,input_sn)
 
-        print(output)
+        expect_output0 = np.array([[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]])
+        expect_output1 = np.array([[5]])
+        expect_output2 = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0]])
+
+        self.assertIs(type(output), tuple)
+        self.assertEqual(output[0].tolist(),expect_output0.tolist())
+        self.assertEqual(output[1].tolist(),expect_output1.tolist())
+        self.assertEqual(output[2].tolist(),expect_output2.tolist())
 
 
 
