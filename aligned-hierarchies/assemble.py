@@ -789,7 +789,8 @@ def __merge_rows(input_mat, input_width):
         merge_mat = np.array([merge_mat])
     
     return merge_mat.astype(int)
-      
+
+
 def hierarchical_structure(matrix_no,key_no,sn):
     """
      Distills the repeats encoded in MATRIX_NO (and KEY_NO) to the essential 
