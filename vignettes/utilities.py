@@ -699,7 +699,7 @@ def get_yLabels(width_vec, anno_vec):
     assert(num_rows == np.size(anno_vec))
     
     # Initialize the array
-    ylabels = np.array([0])
+    ylabels = np.array([])
     
     #Loop over the array adding labels
     for i in range(0,num_rows):

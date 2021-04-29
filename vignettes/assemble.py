@@ -1062,8 +1062,10 @@ def hierarchical_structure_with_vis(matrix_no,key_no,sn):
     twos = np.full((num_PNO_rows, sn), 2, dtype=int)
     vis_array = twos - (PNO_block + PNO)
     fig, ax = plt.subplots(1,1)
-    SDM = ax.imshow(vis_array, cmap='gray',aspect = 10)
+    SDM = ax.imshow(vis_array, cmap='gray',aspect = 10,interpolation='none')
     plt.title('Essential Structure Components')
+    locator_array = np.arange(len(PNO_yLabels))
+    ax.yaxis.set_major_locator(plticker.FixedLocator(locator_array))
     ax.set_yticklabels(PNO_yLabels)
     plt.show()
 
@@ -1262,11 +1264,11 @@ def hierarchical_structure_with_vis(matrix_no,key_no,sn):
     twos = np.full((num_vis_rows, sn), 2, dtype=int)
     vis_array = twos-(full_visualization+full_matrix_no)
     fig, ax = plt.subplots(1,1)
-    SDM = ax.imshow(vis_array, cmap='gray',aspect = 5)
+    SDM = ax.imshow(vis_array, cmap='gray',aspect = 5,interpolation='none')
+    locator_array = np.arange(len(vis_yLabels))
+    ax.yaxis.set_major_locator(plticker.FixedLocator(locator_array))
     plt.title('Complete Hierarchical Structure')
-    loc = plticker.MultipleLocator(base=1.0) # this locator puts ticks at regular intervals
-    ax.yaxis.set_major_locator(loc)
     ax.set_yticklabels(vis_yLabels)
     plt.show()
-    
+
     return output
