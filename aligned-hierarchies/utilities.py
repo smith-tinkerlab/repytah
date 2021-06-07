@@ -293,12 +293,10 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     
-    # Sort the output array first by repeat length, then by starts of j???
-    inds = np.argsort(all_lst[:,4])
+    # Sort the output array first by repeat length, then by starts of i and 
+    # finally by j
+    inds = np.lexsort((all_lst[:,2],all_lst[:,0],all_lst[:,4]))
     all_lst = np.array(all_lst)[inds]
-    
-    all_lst_in = np.lexsort((all_lst[:,0],all_lst[:,2],all_lst[:,4]))
-    all_lst = all_lst[all_lst_in]
     
     return(all_lst.astype(int))
 
@@ -532,64 +530,30 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         
     """
 
-    #First, find number of beats (columns) in pattern_mat: 
-    #Check size of pattern_mat (in cases where there is only 1 pair of
-    #repeated structures)
+    # Initialize the output
+    pattern_block = pattern_mat
+    
+    # Check size of pattern_mat (in cases where there is only 1 pair of
+    # repeated structures)
     if (pattern_mat.ndim == 1): 
-        #Convert a 1D array into 2D array 
+        # Convert a 1D array into 2D array 
         pattern_mat = pattern_mat[None, : ]
-        #Assign number of beats to sn 
-        sn = pattern_mat.shape[1]
-    else: 
-        #Assign number of beats to sn 
-        sn = pattern_mat.shape[1]
-        
-    #Assign number of repeated structures (rows) in pattern_mat to sb 
-    sb = pattern_mat.shape[0]
     
-    #Pre-allocating a sn by sb array of zeros 
-    pattern_block = np.zeros((sb,sn)).astype(int)  
-    
-    #Check if pattern_key is in vector row 
+    # Check if pattern_key is in vector row and initialize the length_vec
     if pattern_key.ndim != 1: 
-        #Convert pattern_key into a vector row 
-        length_vec = np.array([])
-        for i in pattern_key:
-            length_vec = np.append(length_vec, i).astype(int)
+        # Convert pattern_key into a vector row 
+        length_vec = pattern_key.flatten()
     else: 
-        length_vec = pattern_key 
+        length_vec = pattern_key
     
-    for i in range(sb):
-        #Retrieve all of row i of pattern_mat 
-        repeated_struct = pattern_mat[i,:]
+    # Find where the repeats start
+    results = np.where(pattern_mat == 1)
     
-        #Retrieve the length of the repeats encoded in row i of pattern_mat 
-        length = length_vec[i]
-    
-        #Pre-allocate a section of size length x sn for pattern_block
-        sub_section = np.zeros((length, sn))
-    
-        #Replace first row in block_zeros with repeated_structure 
-        sub_section[0,:] = repeated_struct
+    # Use the repeat length to create output
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+        pattern_block[x][results[1][j]:results[1][j]+length_vec[x]] = 1
+        pattern_block[x][results[1][j+1]:results[1][j+1]+length_vec[x]] = 1
         
-        #Creates pattern_block: Sums up each column after sliding repeated 
-        #structure i to the right bw - 1 times 
-        for b in range(2, length + 1): 
-            #Retrieve repeated structure i up to its (1 - b) position 
-            sub_struct_a = repeated_struct[0:(1 - b)]
-    
-            #Row vector with number of entries not included in sub_struct_a  
-            sub_struct_b = np.zeros((1,( b  - 1)))
-    
-            #Append sub_struct_b in front of sub_struct_a 
-            new_struct = np.append(sub_struct_b, sub_struct_a)
-
-            #Replace part of sub_section with new_struct 
-            sub_section[b - 1,:] = new_struct
-
-        #Replaces part of pattern_block with the sums of each column in 
-        #sub_section 
-        pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
     
