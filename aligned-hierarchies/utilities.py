@@ -604,7 +604,7 @@ def reformat(pattern_mat, pattern_key):
     Every row has a pair of repeated structure. The first two columns are 
     the time steps of when the first repeat of a repeated structure start and 
     end. Similarly, the second two columns are the time steps of when the 
-    second repeat of a repeated structure start and end. The fourth colum is 
+    second repeat of a repeated structure start and end. The fifth colum is 
     the length of the repeated structure. 
     
     reformat.py may be helpful when writing example inputs for aligned 
@@ -626,35 +626,21 @@ def reformat(pattern_mat, pattern_key):
 
     """
 
-    #Pre-allocate output array with zeros 
+    # Pre-allocate output array with zeros 
     info_mat = np.zeros((pattern_mat.shape[0], 5))
     
-    #Retrieve the index values of the repeats in pattern_mat 
+    # Retrieve the index values of the repeats in pattern_mat 
     results = np.where(pattern_mat == 1)
     
-    #1. Find the starting indices of the repeated structures row by row 
-    for r in range(pattern_mat.shape[0]):
-        #Find where the repeats start  
-        r_inds = (pattern_mat[r] == 1) 
-        inds = np.where(r_inds)
-        
-        #Retrieve the starting indices of the repeats 
-        s_ij = inds[0] 
-        
-        #Seperate the starting indices of the repeats 
-        i_ind = s_ij[0]
-        j_ind = s_ij[1]
-        
-        #2. Assign the time steps of the repeated structures into  info_mat
-        for x in results[0]:
-            #If the row equals the x-value of the repeat
-            if r == x:
-                info_mat[r, 0] = i_ind + 1
-                info_mat[r, 1] = i_ind + pattern_key[r] 
-                info_mat[r, 2] = j_ind + 1 
-                info_mat[r, 3] = j_ind + pattern_key[r]
-                info_mat[r, 4] = pattern_key[r]
-                
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+            
+            # Assign the time steps of the repeated structures into info_mat
+            info_mat[x,0] = results[1][j]+1
+            info_mat[x,1] = info_mat[x,0]+pattern_key[x]-1
+            info_mat[x,2] = results[1][j+1]+1
+            info_mat[x,3] = info_mat[x,2]+pattern_key[x]-1
+            info_mat[x,4] = pattern_key[x] 
+            
     return info_mat.astype(int)
 
 
@@ -680,19 +666,13 @@ def get_annotation_lst (key_lst):
 
     # Find the first instance of each length and give it 1 as an annotation
     # marker
-    unique_keys = np.unique(key_lst)
-    
-    for i in unique_keys:
-        index = np.where(key_lst==i)[0][0]
-        full_anno_lst[index] = 1
+    unique_keys = np.unique(key_lst,return_index=True)
+    full_anno_lst[unique_keys[1]] = 1
         
     # Add remaining annotations to anno list  
-    for i in range (0,np.size(full_anno_lst)-1):
-        if full_anno_lst[i] == 1:
-            current_anno = 2
-        else:
-            full_anno_lst[i]= current_anno
-            current_anno = current_anno+1
+    for i in range (0,np.size(full_anno_lst)):
+        if full_anno_lst[i] == 0:
+           full_anno_lst[i] =  full_anno_lst[i-1]+1
     
     return full_anno_lst.astype(int)
 
