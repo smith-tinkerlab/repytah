@@ -47,7 +47,7 @@ import scipy.spatial.distance as spd
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
     Creates self-dissimilarity matrix; this matrix is found by creating audio 
-    shingles from feature vectors, and finding cosine distance between 
+    shingles from feature vectors, and finding the cosine distance between 
     shingles.
     
     Args
@@ -396,7 +396,7 @@ def add_annotations(input_mat, song_length):
     for i in range(1,SPmax+1):
         pinds = np.nonzero(song_pattern == i)     
       
-        #One if annotation not already marked, 0 if it is
+        # One if annotation not already marked, zero if it is
         check_inds = (input_mat[:,5] == 0)
         
         for j in pinds[0]:
@@ -422,7 +422,7 @@ def add_annotations(input_mat, song_length):
 
 def __find_song_pattern(thresh_diags):
     """
-    Stitches information from thresh_diags matrix into a single
+        Stitches information from thresh_diags matrix into a single
         row, song_pattern, that shows the timesteps containing repeats;
         From the full matrix that decodes repeat beginnings (thresh_diags),
         the locations, or beats, where these repeats start are found and
@@ -549,7 +549,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     # Find where the repeats start
     results = np.where(pattern_mat == 1)
     
-    # Use the repeat length to create output
+    # Use the repeat length to create pattern_block
     for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
         pattern_block[x][results[1][j]:results[1][j]+length_vec[x]] = 1
         pattern_block[x][results[1][j+1]:results[1][j+1]+length_vec[x]] = 1
@@ -568,7 +568,7 @@ def reformat(pattern_mat, pattern_key):
     Every row has a pair of repeated structure. The first two columns are 
     the time steps of when the first repeat of a repeated structure start and 
     end. Similarly, the second two columns are the time steps of when the 
-    second repeat of a repeated structure start and end. The fifth colum is 
+    second repeat of a repeated structure start and end. The fifth column is 
     the length of the repeated structure. 
     
     reformat.py may be helpful when writing example inputs for aligned 
@@ -660,14 +660,15 @@ def get_yLabels(width_vec, anno_vec):
         
     """
 
-    #Determine number of rows to label
+    # Determine number of rows to label
     num_rows = np.size(width_vec)
+    # Make sure the sizes of width_vec and anno_vec are the same
     assert(num_rows == np.size(anno_vec))
     
     # Initialize the array
     ylabels = np.array([0])
     
-    #Loop over the array adding labels
+    # Loop over the array adding labels
     for i in range(0,num_rows):
         label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
         ylabels = np.append(ylabels, label )
