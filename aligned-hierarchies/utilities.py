@@ -123,12 +123,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
     # Initialize the input and temporary variables
     thresh_temp = thresh_mat
-    
-    # For removing already found diagonals 
-    Tbw = thresh_bw; 
 
     # Interval list for non-overlapping pairs    
-    int_all =  np.empty((0,5), int) 
+    int_all =  np.empty((0,5), int)
     
     # Interval list for the left side of the overlapping pairs
     sint_all = np.empty((0,5), int)
@@ -219,7 +216,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     sint_lst = sint_lst[i_s,]
                     
                     # Remove the pairs that fall below the bandwidth threshold
-                    cut_s = np.argwhere((sint_lst[:,4] > Tbw))
+                    cut_s = np.argwhere((sint_lst[:,4] > thresh_bw))
                     cut_s = cut_s.T
                     sint_lst = sint_lst[cut_s][0]
     
@@ -241,7 +238,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     eint_lst = eint_lst[i_e:,]
                     
                     # Remove the pairs that fall below the bandwidth threshold
-                    cut_e = np.argwhere((eint_lst[:,4] > Tbw))
+                    cut_e = np.argwhere((eint_lst[:,4] > thresh_bw))
                     cut_e = cut_e.T
                     eint_lst = eint_lst[cut_e][0]
     
@@ -274,9 +271,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         
                         mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
                                                 
-                        # Remove the pairs that fall below the 
-                        # bandwidth threshold 
-                        cut_m = np.argwhere((mint_lst[:,4] > Tbw))
+
+                        # Remove the pairs that fall below the bandwidth threshold 
+                        cut_m = np.argwhere((mint_lst[:,4] > thresh_bw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
                     
@@ -296,7 +293,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Sort the output array first by repeat length, then by starts of i and 
     # finally by j
     inds = np.lexsort((all_lst[:,2],all_lst[:,0],all_lst[:,4]))
-    all_lst = np.array(all_lst)[inds]
+    all_lst = all_lst[inds]
     
     return(all_lst.astype(int))
 
