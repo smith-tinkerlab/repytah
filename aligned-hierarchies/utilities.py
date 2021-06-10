@@ -15,8 +15,8 @@ This file contains the following functions:
     * find_initial_repeats - Finds all diagonals present in thresh_mat, 
     removing each diagonal as it is found.
     
-    * stretch_diags - Fill out diagonals in binary self dissimilarity matrix
-    from diagonal starts and lengths
+    * stretch_diags - Fills out diagonals in binary self dissimilarity matrix
+    from diagonal starts and lengths.
 
     * add_annotations - Adds annotations to each pair of repeated structures 
     according to their length and order of occurence. 
@@ -35,7 +35,7 @@ This file contains the following functions:
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
-    * get_yLabels - Generates the labels for a visualization
+    * get_yLabels - Generates the labels for a visualization.
     
 """
 
@@ -47,8 +47,8 @@ import scipy.spatial.distance as spd
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
     Creates self-dissimilarity matrix; this matrix is found by creating audio 
-    shingles from feature vectors, and finding cosine distance between 
-    shingles
+    shingles from feature vectors, and finding the cosine distance between 
+    shingles.
     
     Args
     ----
@@ -65,7 +65,9 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     self_dissim_mat: np.array 
         self dissimilarity matrix with paired cosine distances between 
         shingles
+        
     """
+    
     [num_rows, num_columns] = fv_mat.shape
     
     if num_fv_per_shingle == 1:
@@ -81,7 +83,11 @@ def create_sdm(fv_mat, num_fv_per_shingle):
             mat_as[((i-1)*num_rows+1)-1:(i*num_rows), : ] = fv_mat[:, 
                    i-1:(num_columns- num_fv_per_shingle + i)]
 
+    # Build the pairwise-cosine distance matrix between audio shingles
     sdm_row = spd.pdist(mat_as.T, 'cosine')
+    
+    # Build self dissimilarity matrix by changing the condensed 
+    # pairwise-cosine distance matrix to a redundant matrix
     self_dissim_mat = spd.squareform(sdm_row)
     
     return self_dissim_mat
@@ -112,6 +118,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         all_lst: np.array[int]
             list of pairs of repeats that correspond to 
             diagonals in thresh_mat
+            
     """
 
     # Initialize the input and temporary variables
@@ -126,13 +133,13 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Interval list for the right side of the overlapping pairs
     eint_all = np.empty((0,5), int) 
     
-     # Interval list for the middle of the overlapping pairs if they exist
+    # Interval list for the middle of the overlapping pairs if they exist
     mint_all = np.empty((0,5), int) 
 
-    #Loop over all bandwidths
+    # Loop over all bandwidths from n to 1
     for bw in np.flip((bandwidth_vec)):
         if bw > thresh_bw:
-            #Use convolution matrix to find diagonals of length bw 
+            # Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
 
             # Search for diagonals of length band_width
@@ -264,7 +271,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         
                         mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
                                                 
-                    # Remove the pairs that fall below the bandwidth threshold 
+
+                        # Remove the pairs that fall below the bandwidth threshold 
                         cut_m = np.argwhere((mint_lst[:,4] > thresh_bw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
@@ -277,10 +285,13 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
             if thresh_temp.sum() == 0:
                 break
-  
+    
+    # Combine all found pairs of repeats
     out_lst = np.vstack((sint_all, eint_all, mint_all))
     all_lst = np.vstack((int_all, out_lst))
     
+    # Sort the output array first by repeat length, then by starts of i and 
+    # finally by j
     inds = np.lexsort((all_lst[:,2],all_lst[:,0],all_lst[:,4]))
     all_lst = all_lst[inds]
     
@@ -290,7 +301,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 def stretch_diags(thresh_diags, band_width):
     """
     Creates binary matrix with full length diagonals from binary matrix of
-        diagonal starts and length of diagonals
+    diagonal starts and length of diagonals.
                                                                                  
     Args
     ----
@@ -306,6 +317,7 @@ def stretch_diags(thresh_diags, band_width):
     stretch_diag_mat: np.array [boolean]
         logical matrix with diagonals of length band_width starting 
         at each entry prescribed in thresh_diag
+        
     """
 
     # Creates size of returned matrix
@@ -332,7 +344,7 @@ def stretch_diags(thresh_diags, band_width):
 def add_annotations(input_mat, song_length):
  
     """
-    Adds annotations to the pairs of repeats in input_mat   
+    Adds annotations to the pairs of repeats in input_mat.
 
     Args
     ----
@@ -341,15 +353,16 @@ def add_annotations(input_mat, song_length):
         the first repeat of the pair. The third and fourth columns refer
         to the second repeat of the pair. The fifth column refers to the
         repeat lengths. The sixth column contains any previous annotations,
-        which will be removed.
+        which will be removed
         
     song_length: int
-        number of audio shingles in the song.
+        number of audio shingles in the song
     
     Returns
     -------
     anno_list: array
-        list of pairs of repeats with annotations marked. 
+        list of pairs of repeats with annotations marked
+        
     """
 
     num_rows = input_mat.shape[0]
@@ -380,7 +393,7 @@ def add_annotations(input_mat, song_length):
     for i in range(1,SPmax+1):
         pinds = np.nonzero(song_pattern == i)     
       
-        #One if annotation not already marked, 0 if it is
+        # One if annotation not already marked, zero if it is
         check_inds = (input_mat[:,5] == 0)
         
         for j in pinds[0]:
@@ -406,7 +419,7 @@ def add_annotations(input_mat, song_length):
 
 def __find_song_pattern(thresh_diags):
     """
-    Stitches information from thresh_diags matrix into a single
+        Stitches information from thresh_diags matrix into a single
         row, song_pattern, that shows the timesteps containing repeats;
         From the full matrix that decodes repeat beginnings (thresh_diags),
         the locations, or beats, where these repeats start are found and
@@ -424,6 +437,7 @@ def __find_song_pattern(thresh_diags):
     song_pattern: np.array [shape = (1, song_length)]
         row where each entry represents a time step and the group 
         that time step is a member of
+        
     """
 
     song_length = thresh_diags.shape[0]
@@ -492,7 +506,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     Creates a record of when pairs of repeated structures occur, from the 
     first beat in the song to the end. This record is a binary matrix with a 
     block of 1's for each repeat encoded in pattern_mat whose length 
-    is encoded in pattern_key
+    is encoded in pattern_key.
     
     Args
     ----
@@ -510,66 +524,33 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         binary matrix representation for pattern_mat 
         with blocks of 1's equal to the length's 
         prescribed in pattern_key
+        
     """
 
-    #First, find number of beats (columns) in pattern_mat: 
-    #Check size of pattern_mat (in cases where there is only 1 pair of
-    #repeated structures)
+    # Initialize the output
+    pattern_block = pattern_mat
+    
+    # Check size of pattern_mat (in cases where there is only 1 pair of
+    # repeated structures)
     if (pattern_mat.ndim == 1): 
-        #Convert a 1D array into 2D array 
+        # Convert a 1D array into 2D array 
         pattern_mat = pattern_mat[None, : ]
-        #Assign number of beats to sn 
-        sn = pattern_mat.shape[1]
-    else: 
-        #Assign number of beats to sn 
-        sn = pattern_mat.shape[1]
-        
-    #Assign number of repeated structures (rows) in pattern_mat to sb 
-    sb = pattern_mat.shape[0]
     
-    #Pre-allocating a sn by sb array of zeros 
-    pattern_block = np.zeros((sb,sn)).astype(int)  
-    
-    #Check if pattern_key is in vector row 
+    # Check if pattern_key is in vector row and initialize the length_vec
     if pattern_key.ndim != 1: 
-        #Convert pattern_key into a vector row 
-        length_vec = np.array([])
-        for i in pattern_key:
-            length_vec = np.append(length_vec, i).astype(int)
+        # Convert pattern_key into a vector row 
+        length_vec = pattern_key.flatten()
     else: 
-        length_vec = pattern_key 
+        length_vec = pattern_key
     
-    for i in range(sb):
-        #Retrieve all of row i of pattern_mat 
-        repeated_struct = pattern_mat[i,:]
+    # Find where the repeats start
+    results = np.where(pattern_mat == 1)
     
-        #Retrieve the length of the repeats encoded in row i of pattern_mat 
-        length = length_vec[i]
-    
-        #Pre-allocate a section of size length x sn for pattern_block
-        sub_section = np.zeros((length, sn))
-    
-        #Replace first row in block_zeros with repeated_structure 
-        sub_section[0,:] = repeated_struct
+    # Use the repeat length to create pattern_block
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+        pattern_block[x][results[1][j]:results[1][j]+length_vec[x]] = 1
+        pattern_block[x][results[1][j+1]:results[1][j+1]+length_vec[x]] = 1
         
-        #Creates pattern_block: Sums up each column after sliding repeated 
-        #structure i to the right bw - 1 times 
-        for b in range(2, length + 1): 
-            #Retrieve repeated structure i up to its (1 - b) position 
-            sub_struct_a = repeated_struct[0:(1 - b)]
-    
-            #Row vector with number of entries not included in sub_struct_a  
-            sub_struct_b = np.zeros((1,( b  - 1)))
-    
-            #Append sub_struct_b in front of sub_struct_a 
-            new_struct = np.append(sub_struct_b, sub_struct_a)
-
-            #Replace part of sub_section with new_struct 
-            sub_section[b - 1,:] = new_struct
-
-        #Replaces part of pattern_block with the sums of each column in 
-        #sub_section 
-        pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
     
@@ -584,7 +565,7 @@ def reformat(pattern_mat, pattern_key):
     Every row has a pair of repeated structure. The first two columns are 
     the time steps of when the first repeat of a repeated structure start and 
     end. Similarly, the second two columns are the time steps of when the 
-    second repeat of a repeated structure start and end. The fourth colum is 
+    second repeat of a repeated structure start and end. The fifth column is 
     the length of the repeated structure. 
     
     reformat.py may be helpful when writing example inputs for aligned 
@@ -606,41 +587,27 @@ def reformat(pattern_mat, pattern_key):
 
     """
 
-    #Pre-allocate output array with zeros 
+    # Pre-allocate output array with zeros 
     info_mat = np.zeros((pattern_mat.shape[0], 5))
     
-    #Retrieve the index values of the repeats in pattern_mat 
+    # Retrieve the index values of the repeats in pattern_mat 
     results = np.where(pattern_mat == 1)
     
-    #1. Find the starting indices of the repeated structures row by row 
-    for r in range(pattern_mat.shape[0]):
-        #Find where the repeats start  
-        r_inds = (pattern_mat[r] == 1) 
-        inds = np.where(r_inds)
-        
-        #Retrieve the starting indices of the repeats 
-        s_ij = inds[0] 
-        
-        #Seperate the starting indices of the repeats 
-        i_ind = s_ij[0]
-        j_ind = s_ij[1]
-        
-        #2. Assign the time steps of the repeated structures into  info_mat
-        for x in results[0]:
-            #If the row equals the x-value of the repeat
-            if r == x:
-                info_mat[r, 0] = i_ind + 1
-                info_mat[r, 1] = i_ind + pattern_key[r] 
-                info_mat[r, 2] = j_ind + 1 
-                info_mat[r, 3] = j_ind + pattern_key[r]
-                info_mat[r, 4] = pattern_key[r]
-                
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+            
+            # Assign the time steps of the repeated structures into info_mat
+            info_mat[x,0] = results[1][j]+1
+            info_mat[x,1] = info_mat[x,0]+pattern_key[x]-1
+            info_mat[x,2] = results[1][j+1]+1
+            info_mat[x,3] = info_mat[x,2]+pattern_key[x]-1
+            info_mat[x,4] = pattern_key[x] 
+            
     return info_mat.astype(int)
 
 
 def get_annotation_lst (key_lst):
     """
-     Gets one annotation marker vector, given vector of lengths key_lst.
+    Gets one annotation marker vector, given vector of lengths key_lst.
     
     Args 
     -----
@@ -651,6 +618,7 @@ def get_annotation_lst (key_lst):
     -----
         anno_lst_out: np.array[int] 
             Vector of one possible set of annotation markers for key_lst
+            
     """
 
     # Initialize the temporary variable
@@ -659,27 +627,20 @@ def get_annotation_lst (key_lst):
 
     # Find the first instance of each length and give it 1 as an annotation
     # marker
-    unique_keys = np.unique(key_lst)
-    
-    for i in unique_keys:
-        index = np.where(key_lst==i)[0][0]
-        full_anno_lst[index] = 1
+    unique_keys = np.unique(key_lst,return_index=True)
+    full_anno_lst[unique_keys[1]] = 1
         
     # Add remaining annotations to anno list  
-    for i in range (0,np.size(full_anno_lst)-1):
-        if full_anno_lst[i] == 1:
-            current_anno = 2
-        else:
-            full_anno_lst[i]= current_anno
-            current_anno = current_anno+1
+    for i in range (0,np.size(full_anno_lst)):
+        if full_anno_lst[i] == 0:
+           full_anno_lst[i] =  full_anno_lst[i-1]+1
     
     return full_anno_lst.astype(int)
 
 
-def get_yLabels(width_vec, anno_vec):
-    
+def get_yLabels(width_vec, anno_vec):   
     """
-     Generates the labels for a visualization with width_vec and ANNO_VEC
+    Generates the labels for a visualization with width_vec and ANNO_VEC.
     
     Args 
     -----
@@ -696,14 +657,15 @@ def get_yLabels(width_vec, anno_vec):
         
     """
 
-    #Determine number of rows to label
+    # Determine number of rows to label
     num_rows = np.size(width_vec)
+    # Make sure the sizes of width_vec and anno_vec are the same
     assert(num_rows == np.size(anno_vec))
     
     # Initialize the array
     ylabels = np.array([0])
     
-    #Loop over the array adding labels
+    # Loop over the array adding labels
     for i in range(0,num_rows):
         label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
         ylabels = np.append(ylabels, label )
