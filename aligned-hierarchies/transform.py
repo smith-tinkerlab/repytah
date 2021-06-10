@@ -117,7 +117,7 @@ def remove_overlaps(input_mat, song_length):
             # TWO: After removing the annotations that have overlaps, output
             #      bw_lst_out which only contains rows that have no overlaps
             # THREE: The annotations that have overlaps get removed from 
-            #      bw_lst_out and gets added to all_overlap_lst
+            #      bw_lst_out and gets added to overlap_lst
             
             tuple_of_outputs = __create_anno_remove_overlaps(bw_lst, song_length, bw)
             
