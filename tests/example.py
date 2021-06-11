@@ -1,3 +1,9 @@
+import sys
+import os
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path+"\\aligned-hierarchies")
+
 import scipy.io as sio
 import numpy as np
 from utilities import create_sdm, find_initial_repeats

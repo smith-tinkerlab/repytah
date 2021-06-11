@@ -4,12 +4,16 @@
 Unit tests for Aligned Hierarchies, transform.py
 """
 
-import os
 import sys
-sys.path.insert(0, os.path.abspath('../ah/aligned-hierarchies'))
+import os
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path+"\\aligned-hierarchies")
+    
 import unittest 
 import scipy.io 
 import numpy as np 
+
 from transform import *
 from transform import __create_anno_remove_overlaps as _TestTransform__create_anno_remove_overlaps
 from transform import __create_anno_rows as _TestTransform__create_anno_rows

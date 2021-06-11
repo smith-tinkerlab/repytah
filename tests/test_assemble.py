@@ -4,10 +4,15 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 """
 
-import os
 import sys
-sys.path.insert(0, os.path.abspath('../ah/aligned-hierarchies'))
+import os
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path+"\\aligned-hierarchies")
+    
 import unittest
+import numpy as np
+
 import assemble
 from assemble import breakup_overlaps_by_intersect
 from assemble import check_overlaps
@@ -17,7 +22,8 @@ from assemble import __inds_to_rows as inds_to_rows
 from assemble import __merge_based_on_length as merge_based_on_length
 from assemble import __merge_rows as merge_rows
 from assemble import hierarchical_structure
-import numpy as np
+
+
 
 
 class test_utilities(unittest.TestCase):

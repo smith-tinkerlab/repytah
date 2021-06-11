@@ -2,6 +2,7 @@
 """
 Unit tests for Aligned Hierarchies, utilities.py 
 """
+
 import unittest 
 
 import scipy.io
