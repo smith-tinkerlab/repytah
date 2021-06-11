@@ -109,11 +109,11 @@ def remove_overlaps(input_mat, song_length):
         
         if bw > 1:
             # Use __create_anno_remove_overlaps to do the following three things:
-            # ONE: Turn the bw_lst into marked rows with annotation markers for 
+            # ONE: Turn bw_lst into marked rows with annotation markers for 
             #      the start indices and 0's otherwise 
             # TWO: After removing the annotations that have overlaps, output
             #      bw_lst_out which only contains rows that have no overlaps
-            # THREE: The annotations that have overlaps get removed from 
+            # THREE: The annotations that have overlaps are removed from 
             #      bw_lst_out and gets added to overlap_lst
             
             tuple_of_outputs = __create_anno_remove_overlaps(bw_lst, song_length, bw)
@@ -129,7 +129,7 @@ def remove_overlaps(input_mat, song_length):
         else:            
             # Similar to the IF case, but for the case where bw = 1
             # Use __create_anno_rows to do the following two things:
-            # ONE: Turn the bw_lst into marked rows with annotation markers for 
+            # ONE: Turn bw_lst into marked rows with annotation markers for 
             #      the start indices and 0's otherwise 
             # TWO: In this case, there are no overlaps. Then bw_lst_out is just
             #      bw_lst. Also in this case, THREE from above does not exist
@@ -179,9 +179,9 @@ def remove_overlaps(input_mat, song_length):
 
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
-    if mat_NO.size>0:
+    if mat_NO.size > 0:
         masterArray = np.hstack((mat_NO,key_NO,anno_NO))
-        cNum = masterArray.shape[1]
+        cNum = masterArray.shape[1] # Number of columns
     
         ind = np.lexsort((masterArray[:,cNum-1], masterArray[:,cNum-2]))
         masterArray = masterArray[ind]
@@ -281,13 +281,12 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
         block_check = reconstruct_full_block(good_check,bw)
         
         # If there are any overlaps, remove the bad annotations from 
-        # both pattern_row and from k_lst_out
+        # pattern_row 
         if block_check.max() > 1:
             # Remove the bad annotations from pattern_row
             pattern_row[0,start_inds-1] = 0
     
-            # Remove the bad annotations from k_lst_out and add them to 
-            # overlap_lst
+            # Add the bad annotations to overlap_lst 
             remove_inds = ands
             temp_add = k_mat[remove_inds,:]
             
@@ -349,9 +348,9 @@ def __create_anno_rows(k_mat,song_length):
     """
     Turns the k_mat into marked rows with annotation markers for the start 
     indices and zeroes otherwise. After removing the annotations that have 
-    overlaps, the function outputs _k_lst_out_ which only contains rows that 
+    overlaps, the function outputs k_lst_out which only contains rows that 
     have no overlaps, then takes the annotations that have overlaps from 
-    _k_lst_out_ and puts them in _overlap_lst_. Lastly, it checks if the proper 
+    k_lst_out and puts them in _overlap_lst_. Lastly, it checks if the proper 
     sequence of annotation markers was given and fixes them if necessary.
 
     Args
