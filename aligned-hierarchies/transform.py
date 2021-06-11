@@ -13,13 +13,13 @@ This file contains the following functions:
     
     * __create_anno_remove_overlaps - Turns rows of repeats into marked rows with 
     annotation markers for the start indices and zeroes otherwise. After 
-    removing the annotations that have overlaps, creates separate arrays
-    for annotations with overlaps and annotations without overlaps. Finally,
-    the annotation markers are checked and fixed if necessary.
+    removing the annotations that have overlaps, the function creates separate 
+    arrays for annotations with overlaps and annotations without overlaps. 
+    Finally, the annotation markers are checked and fixed if necessary.
     
     * __create_anno_rows - Turns rows of repeats into marked rows with annotation
     markers for start indices and zeroes otherwise, then checks if the correct 
-    annotation markers were given and fixes the markers if necessary.
+    annotation markers were given and fixes the markers if necessary
     
     * __separate_anno_markers - Expands vector of non-overlapping repeats into
     a matrix representation. The matrix representation is a visual record of
@@ -33,8 +33,7 @@ from utilities import reconstruct_full_block, add_annotations
 def remove_overlaps(input_mat, song_length):  
     """
     Removes any pairs of repeat length and specific annotation marker 
-    where there exists at least one pair of repeats that do
-    overlap in time.
+    where there exists at least one pair of repeats that overlap in time
 
     Args
     ----
@@ -46,7 +45,7 @@ def remove_overlaps(input_mat, song_length):
         contains the annotation markers.
          
     song_length: int
-        The number of audio shingles
+        Number of audio shingles
  
     Returns
     -------
@@ -75,14 +74,12 @@ def remove_overlaps(input_mat, song_length):
 
     """
 
-    # Same list with repetitions removed
+    # Create a vector of unique repeat lengths
     bw_vec = np.unique(input_mat[:,4])
+    bw_vec = np.sort(bw_vec) # Sort list in ascending order
+    bw_vec = bw_vec[::-1] # Reverse list
     
     L = input_mat
-
-    # Sort list ascending, then reverse it
-    bw_vec = np.sort(bw_vec)
-    bw_vec = bw_vec[::-1]
     
     mat_NO = np.empty([0, song_length])
     key_NO = np.empty([0, 1])
@@ -130,7 +127,7 @@ def remove_overlaps(input_mat, song_length):
                 all_overlap_lst = np.vstack((all_overlap_lst, overlap_lst))
         
         else:            
-            # Similar to the IF case -- 
+            # Similar to the IF case, but for the case where bw = 1
             # Use __create_anno_rows to do the following two things:
             # ONE: Turn the bw_lst into marked rows with annotation markers for 
             #      the start indices and 0's otherwise 
@@ -145,9 +142,8 @@ def remove_overlaps(input_mat, song_length):
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
             
-            tuple_of_outputs = __separate_anno_markers(bw_lst_out, 
-                                                        song_length, bw, 
-                                                        pattern_row)
+            tuple_of_outputs = __separate_anno_markers(bw_lst_out, song_length, 
+                                                       bw, pattern_row)
             pattern_mat = tuple_of_outputs[0]
             pattern_key = np.array(tuple_of_outputs[1])
             anno_temp_lst = tuple_of_outputs[2]
@@ -212,11 +208,11 @@ def remove_overlaps(input_mat, song_length):
 
 def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     """
-    Turn k_mat into marked rows with annotation markers for the start indices 
+    Turns k_mat into marked rows with annotation markers for the start indices 
     and zeroes otherwise. After removing the annotations that have overlaps, 
-    output k_lst_out which only contains rows that have no overlaps. Then 
-    take the annotations that have overlaps from k_lst_out and put them in
-    overlap_lst. Lastly, check if the proper sequence of annotation markers 
+    the function outputs k_lst_out which only contains rows that have no overlaps, 
+    then takes the annotations that have overlaps from k_lst_out and puts them 
+    in overlap_lst. Lastly, it checks if the proper sequence of annotation markers 
     was given and fix them if necessary.
     
     Args
@@ -229,25 +225,25 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
         repeats, and the sixth column contains the annotation markers.
     
     song_length: int
-        number of audio shingles
+        Number of audio shingles
     
     band_width: int
-        the length of repeats encoded in k_mat
+        Length of repeats encoded in k_mat
     
     Returns
     -------
     pattern_row: np.array
-        row that marks where non-overlapping repeats occur, 
+        Row that marks where non-overlapping repeats occur, 
         marking the annotation markers for the start indices 
         and 0's otherwise
     
     k_lst_out: np.array
-        list of pairs of repeats of length band_width that 
+        List of pairs of repeats of length band_width that 
         contain no overlapping repeats with annotations
         marked
     
     overlap_lst: np.array
-        list of pairs of repeats of length band_width that
+        List of pairs of repeats of length band_width that
         contain overlapping repeats with annotations marked
 
     """
@@ -258,23 +254,23 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     overlap_lst = np.array([])
     bw = band_width
 
-    if k_mat.ndim ==1:
+    if k_mat.ndim == 1:
         k_mat = np.array([k_mat])
     
     # Step 0a: Find the number of distinct annotations
     anno_lst = k_mat[:,5] # Get the elements of k_mat's fifth column
-    anno_max = anno_lst.max(0) # Max in each column
+    anno_max = anno_lst.max(0) # Max in the annotation column
     
     # Step 1: Loop over the annotations
     for a in range (1,anno_max+1):
-        # Step 1a: Add 1's to pattern_row to the time steps where repeats with
-        # annotation a begin
-        ands = (anno_lst == a) # Check if anno_lst is equal to a
+        # Step 1a: Add 1's to pattern_row to the time steps where repeats 
+        # with annotation a begin
+        ands = (anno_lst == a) # Check if each element in anno_lst is equal to a
         bind_rows = [k_mat[ands,0],k_mat[ands,2]]
         start_inds = np.concatenate(bind_rows)
         pattern_row[0,(start_inds-1)] = a
 
-        # Step 2: check annotation by annotation
+        # Step 2: Check annotation by annotation
         # Start with row of 0's
         good_check = np.zeros((1,song_length)).astype(int) 
         good_check[0,start_inds-1] = 1 # Add 1 to all time steps where repeats 
@@ -284,8 +280,8 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
         # Using reconstruct_full_block to check for overlaps
         block_check = reconstruct_full_block(good_check,bw)
         
-        # If there are any overlaps, remove the bad annotations from both
-        # the pattern_row and from the k_lst_out
+        # If there are any overlaps, remove the bad annotations from 
+        # both pattern_row and from k_lst_out
         if block_check.max() > 1:
             # Remove the bad annotations from pattern_row
             pattern_row[0,start_inds-1] = 0
@@ -301,14 +297,14 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
                 overlap_lst = np.vstack((overlap_lst,temp_add))
             
             if np.any(remove_inds == True):
-                # Convert the boolean array rm_inds into an array of integers
+                # Convert the boolean array remove_inds into an array of integers
                 remove_inds = np.array(remove_inds).astype(int)
                 remove = np.where(remove_inds==1)
                 
                 # Delete the row that meets the condition set by remove_inds
                 k_mat = np.delete(k_mat,remove,axis=0)
                 
-            anno_lst = k_mat[:,5]
+            anno_lst = k_mat[:,5] # Update anno_lst
            
     inds_markers = np.unique(pattern_row)
     
@@ -351,9 +347,12 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
 
 def __create_anno_rows(k_mat,song_length):
     """
-    Turn the k_mat into marked rows with annotation markers for the start 
-    indices and zeroes otherwise. Check if the proper sequence of annotation 
-    markers was given and fix them if necessary.
+    Turns the k_mat into marked rows with annotation markers for the start 
+    indices and zeroes otherwise. After removing the annotations that have 
+    overlaps, the function outputs _k_lst_out_ which only contains rows that 
+    have no overlaps, then takes the annotations that have overlaps from 
+    _k_lst_out_ and puts them in _overlap_lst_. Lastly, it checks if the proper 
+    sequence of annotation markers was given and fixes them if necessary.
 
     Args
     ----
@@ -365,17 +364,18 @@ def __create_anno_rows(k_mat,song_length):
         repeats, and the sixth column contains the annotation markers.
                  
     song_length: int
-        song length, which is the number of audio shingles
+        Number of audio shingles
    
     Returns
     ------- 
     pattern_row: np.array
-        row that marks where non-overlapping repeats
+        Row that marks where non-overlapping repeats
         occur, marking the annotation markers for the
-        start indices and zeroes otherwise.
+        start indices and zeroes otherwise
+
     k_lst_out: np.array
-        list of pairs of repeats of length BAND_WIDTH that
-        contain no overlapping repeats with annotations marked.
+        List of pairs of repeats of length band_width that
+        contain no overlapping repeats with annotations marked
 
     """
 
@@ -442,39 +442,39 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
 
     Args
     ----
-        k_mat: np.array
-            List of pairs of repeats of length BAND_WIDTH with annotations 
-            marked. The first two columns refer to the start and end time
-            steps of the first repeat of the pair, the second two refer to 
-            the start and end time steps of second repeat of the pair, the 
-            fifth column refers to the length of the repeats, and the sixth 
-            column contains the annotation markers. We will be indexing into 
-            the sixth column to obtain a list of annotation markers. 
-        
-        sn: number
-            song length, which is the number of audio shingles
-        
-        band_width: number 
-            the length of repeats encoded in k_mat
-        
-        pattern_row: np.array
-            row vector of the length of the song that marks where 
-            non-overlapping repeats occur with the repeats' corresponding 
-            annotation markers and 0's otherwise
+    k_mat: np.array
+        List of pairs of repeats of length band_width with annotations 
+        marked. The first two columns refer to the start and end time
+        steps of the first repeat of the pair, the second two refer to 
+        the start and end time steps of second repeat of the pair, the 
+        fifth column refers to the length of the repeats, and the sixth 
+        column contains the annotation markers. We will be indexing into 
+        the sixth column to obtain a list of annotation markers. 
+    
+    sn: number
+        Number of audio shingles
+    
+    band_width: number 
+        Length of repeats encoded in k_mat
+    
+    pattern_row: np.array
+        Row vector of the length of the song that marks where 
+        non-overlapping repeats occur with the repeats' corresponding 
+        annotation markers and 0's otherwise
 
     Returns
     -------
-        pattern_mat: np.array
-            matrix representation where each row contains a group of repeats
-            marked 
-        
-        patter_key: np.array
-            column vector containing the lengths of the repeats encoded in 
-            each row of pattern_mat
-        
-        anno_id_lst: np.array 
-            column vector containing the annotation markers of the repeats 
-            encoded in each row of pattern_mat
+    pattern_mat: np.array
+        Matrix representation where each row contains a group of repeats
+        marked 
+    
+    patter_key: np.array
+        Column vector containing the lengths of the repeats encoded in 
+        each row of pattern_mat
+    
+    anno_id_lst: np.array 
+        Column vector containing the annotation markers of the repeats 
+        encoded in each row of pattern_mat
 
     """
 
@@ -486,7 +486,7 @@ def __separate_anno_markers(k_mat, sn, band_width, pattern_row):
     # the same number of rows as there are annotations and sn columns 
     pattern_mat = np.zeros((anno_max, sn), dtype = np.intp)
 
-    # Separate the annotions into individual rows 
+    # Separate the annotations into individual rows 
     if anno_max > 1: #If there are two or more annotations 
         # Loop through the list of annotation markers 
         for a in range (1,anno_max+1): 
