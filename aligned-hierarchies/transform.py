@@ -138,7 +138,7 @@ def remove_overlaps(input_mat, song_length):
             pattern_row = tuple_of_outputs[0]
             bw_lst_out = tuple_of_outputs[1]
             
-        if np.max(np.max(pattern_row)) > 0:
+        if np.max(pattern_row) > 0:
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
             
@@ -152,7 +152,7 @@ def remove_overlaps(input_mat, song_length):
             pattern_mat = []
             pattern_key = []
         
-        if np.sum(np.sum(pattern_mat)) > 0:
+        if np.sum(pattern_mat) > 0:
             # If there are lines to add, add them
             mat_NO = np.vstack((mat_NO,pattern_mat))
             key_NO = np.vstack((key_NO,pattern_key))
