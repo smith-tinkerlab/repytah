@@ -4,13 +4,16 @@ Unit tests for Aligned Hierarchies, search.py
 
 """
 
-import os
 import sys
-sys.path.insert(0, os.path.abspath('../ah/aligned-hierarchies'))
+import os
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path+"\\aligned-hierarchies")
+    
 import unittest
-import utilities
 import numpy as np
 
+import utilities
 import search
 from search import __find_add_srows as find_add_srows
 from search import __find_add_erows as find_add_erows

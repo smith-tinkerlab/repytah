@@ -4,12 +4,16 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 """
 
-import os
 import sys
-sys.path.insert(0, os.path.abspath('../ah/aligned-hierarchies'))
+import os
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path+"\\aligned-hierarchies")
+
 import unittest
-import utilities
 import numpy as np
+
+import utilities
 from utilities import __find_song_pattern as _test_find_song_pattern
 
 
