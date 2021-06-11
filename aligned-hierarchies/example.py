@@ -39,12 +39,12 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh) 
-    #think this is redund in python * np.ones((song_length,song_length))
+    # Think this is redund in python * np.ones((song_length,song_length))
     # Extract diagonals from thresholded distance matrix, saving the repeat pairs
     # the diagonals represent
 
     all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length+1), 0)
-    
+    # np.arrange(start,end),default length be 1. so output is [1,2,...,song_length]
     
      # Find smaller repeats contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
@@ -95,7 +95,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         sio.savemat(file_out, outdict)
 
         
-#Run on example file
+# Run on example file
 file_in = "input.csv"
 file_out = "hierarchical_out_file.mat"
 num_fv_per_shingle = 3
