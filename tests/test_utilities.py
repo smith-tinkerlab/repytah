@@ -135,9 +135,9 @@ class test_utilities(unittest.TestCase):
         output = utilities.find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw)
         
         expect_output = np.array([[1,1,1,1,1],
+                                  [1,1,4,4,1],
                                   [2,2,2,2,1],
                                   [3,3,3,3,1],
-                                  [1,1,4,4,1],
                                   [4,4,4,4,1]])
         
         # Test output type
@@ -166,9 +166,9 @@ class test_utilities(unittest.TestCase):
                                   [5,6,7,8,2],
                                   [7,8,9,10,2],
                                   [1,3,4,6,3],
+                                  [1,3,8,10,3],
                                   [2,4,5,7,3],
                                   [2,4,6,8,3],
-                                  [1,3,8,10,3],
                                   [1,10,1,10,10]])
         
         # Test output type
@@ -196,9 +196,9 @@ class test_utilities(unittest.TestCase):
         thresh_bw = 0
         output = utilities.find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw)
        
-        expect_output = np.array([[6,6,7,7,1],
+        expect_output = np.array([[1,1,10,10,1],
                                   [3,3,9,9,1],
-                                  [1,1,10,10,1],
+                                  [6,6,7,7,1],
                                   [7,7,11,11,1],
                                   [8,8,11,11,1],
                                   [6,8,5,7,3],
