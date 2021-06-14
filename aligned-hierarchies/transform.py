@@ -257,9 +257,10 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     if k_mat.ndim == 1:
         k_mat = np.array([k_mat])
     
-    # Step 0a: Find the number of distinct annotations
-    anno_lst = k_mat[:,5] # Get the elements of k_mat's fifth column
-    anno_max = anno_lst.max(0) # Max in the annotation column
+    # Step 0a: Find all distinct annotations
+    anno_lst = k_mat[:,5] # Get the elements of k_mat's fifth column,
+                          # which denotes the annotations
+    anno_max = anno_lst.max(0) # Max annotation
     
     # Step 1: Loop over the annotations
     for a in range (1,anno_max+1):
@@ -346,12 +347,11 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
 
 def __create_anno_rows(k_mat,song_length):
     """
-    Turns the k_mat into marked rows with annotation markers for the start 
-    indices and zeroes otherwise. After removing the annotations that have 
-    overlaps, the function outputs k_lst_out which only contains rows that 
-    have no overlaps, then takes the annotations that have overlaps from 
-    k_lst_out and puts them in _overlap_lst_. Lastly, it checks if the proper 
-    sequence of annotation markers was given and fixes them if necessary.
+    Turns a list of pairs of repeats with lengths of 1 into marked rows 
+    with annotation markers for the start indices and zeroes otherwise. 
+    The function also checks if the proper sequence of annotation markers 
+    was given and fixes them if necessary. It loops over all annotations 
+    in ascending order.
 
     Args
     ----
