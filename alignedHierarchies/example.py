@@ -1,9 +1,9 @@
 import scipy.io as sio
 import numpy as np
-from utilities import create_sdm, find_initial_repeats
-from search import find_complete_list
-from transform import remove_overlaps
-from assemble import hierarchical_structure, hierarchical_structure_with_vis
+from alignedHierarchies.utilities import create_sdm, find_initial_repeats
+from alignedHierarchies.search import find_complete_list
+from alignedHierarchies.transform import remove_overlaps
+from alignedHierarchies.assemble import hierarchical_structure, hierarchical_structure_with_vis
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
@@ -96,7 +96,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         
 # Run on example file
-file_in = "input.csv"
+file_in = "../input.csv"
 file_out = "hierarchical_out_file.mat"
 num_fv_per_shingle = 3
 thresh = 0.01

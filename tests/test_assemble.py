@@ -13,15 +13,15 @@ if module_path not in sys.path:
 import unittest
 import numpy as np
 
-import assemble
-from assemble import breakup_overlaps_by_intersect
-from assemble import check_overlaps
-from assemble import __compare_and_cut as compare_and_cut
-from assemble import __num_of_parts as num_of_parts
-from assemble import __inds_to_rows as inds_to_rows
-from assemble import __merge_based_on_length as merge_based_on_length
-from assemble import __merge_rows as merge_rows
-from assemble import hierarchical_structure
+import alignedHierarchies.assemble as assemble
+from alignedHierarchies.assemble import breakup_overlaps_by_intersect
+from alignedHierarchies.assemble import check_overlaps
+from alignedHierarchies.assemble import __compare_and_cut as compare_and_cut
+from alignedHierarchies.assemble import __num_of_parts as num_of_parts
+from alignedHierarchies.assemble import __inds_to_rows as inds_to_rows
+from alignedHierarchies.assemble import __merge_based_on_length as merge_based_on_length
+from alignedHierarchies.assemble import __merge_rows as merge_rows
+from alignedHierarchies.assemble import hierarchical_structure
 
 
 
