@@ -14,10 +14,10 @@ import unittest
 import scipy.io 
 import numpy as np 
 
-from alignedHierarchies.transform import *
-from alignedHierarchies.transform import __create_anno_remove_overlaps as _TestTransform__create_anno_remove_overlaps
-from alignedHierarchies.transform import __create_anno_rows as _TestTransform__create_anno_rows
-from alignedHierarchies.transform import __separate_anno_markers as _TestTransform__separate_anno_markers
+from transform import *
+from transform import __create_anno_remove_overlaps as _TestTransform__create_anno_remove_overlaps
+from transform import __create_anno_rows as _TestTransform__create_anno_rows
+from transform import __separate_anno_markers as _TestTransform__separate_anno_markers
 
 class TestTransform(unittest.TestCase): 
   

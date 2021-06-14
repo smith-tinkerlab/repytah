@@ -13,9 +13,8 @@ if module_path not in sys.path:
 import unittest
 import numpy as np
 
-import alignedHierarchies.utilities as utilities
-#import utilities
-from  alignedHierarchies.utilities import __find_song_pattern as _test_find_song_pattern
+import utilities
+from utilities import __find_song_pattern as _test_find_song_pattern
 
 
 class test_utilities(unittest.TestCase):
