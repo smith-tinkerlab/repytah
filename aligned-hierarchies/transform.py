@@ -83,7 +83,6 @@ def remove_overlaps(input_mat, song_length):
     
     mat_NO = np.empty([0, song_length])
     key_NO = np.empty([0, 1])
-    
     anno_NO = np.empty([0, 1])
     all_overlap_lst = np.array([[0,0,0,0,0,0]])
     
@@ -96,12 +95,12 @@ def remove_overlaps(input_mat, song_length):
         deleteArray = []
 
         for i in range(len(L)):
-            linebw = L[i][4]
-            if linebw == bw:
+            line_bw = L[i][4] # Repeat length in the ith row
+            if line_bw == bw:
                 if bw_lst.size == 0:
                     bw_lst = np.array([L[i]])
                 else:
-                    bw_lst = np.vstack((bw_lst,L[i]))
+                    bw_lst = np.vstack((bw_lst, L[i]))
                     
                 deleteArray.append(i)
                 
@@ -154,17 +153,18 @@ def remove_overlaps(input_mat, song_length):
         
         if np.sum(pattern_mat) > 0:
             # If there are lines to add, add them
-            mat_NO = np.vstack((mat_NO,pattern_mat))
-            key_NO = np.vstack((key_NO,pattern_key))
-            anno_NO = np.vstack((anno_NO,anno_temp_lst))
+            mat_NO = np.vstack((mat_NO, pattern_mat))
+            key_NO = np.vstack((key_NO, pattern_key))
+            anno_NO = np.vstack((anno_NO, anno_temp_lst))
         
         if (bw_lst_out.size > 0):
-            L = np.vstack((L,bw_lst_out))
+            L = np.vstack((L, bw_lst_out))
         
         # Create a new, sorted array
         ind = np.lexsort((L[:,0], L[:,4]))
         L = L[ind]
         
+        # Update bw_vec
         bw_vec = np.unique(L[:,4])
         bw_vec = np.sort(bw_vec)
         bw_vec = bw_vec[::-1]
@@ -197,13 +197,11 @@ def remove_overlaps(input_mat, song_length):
     # Set the outputs
     lst_no_overlaps = L
     all_overlap_lst = np.delete(all_overlap_lst,0,0)
-    output = (lst_no_overlaps,matrix_no_overlaps.astype(int),\
+    output = (lst_no_overlaps, matrix_no_overlaps.astype(int),\
               key_no_overlaps.astype(int), annotations_no_overlaps.astype(int),\
-                  all_overlap_lst)
+              all_overlap_lst)
     
     return output
-
-
 
 
 def __create_anno_remove_overlaps(k_mat,song_length,band_width):
@@ -234,8 +232,8 @@ def __create_anno_remove_overlaps(k_mat,song_length,band_width):
     -------
     pattern_row: np.array
         Row that marks where non-overlapping repeats occur, 
-        marking the annotation markers for the start indices 
-        and 0's otherwise
+        marking start indices with annotation markers and 
+        0's otherwise
     
     k_lst_out: np.array
         List of pairs of repeats of length band_width that 
@@ -368,9 +366,9 @@ def __create_anno_rows(k_mat,song_length):
     Returns
     ------- 
     pattern_row: np.array
-        Row that marks where non-overlapping repeats
-        occur, marking the annotation markers for the
-        start indices and zeroes otherwise
+        Row that marks where non-overlapping repeats occur, 
+        marking start indices with annotation markers and 
+        0's otherwise
 
     k_lst_out: np.array
         List of pairs of repeats of length band_width that
