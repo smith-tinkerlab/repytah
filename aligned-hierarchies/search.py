@@ -35,7 +35,7 @@ This file contains the following functions:
 
 import numpy as np
 from scipy import signal
-from alignedHierarchies.utilities import add_annotations
+from utilities import add_annotations
 
 
 def find_complete_list(pair_list,song_length):

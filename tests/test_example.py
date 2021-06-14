@@ -12,8 +12,8 @@ if module_path not in sys.path:
 import unittest 
 
 import scipy.io
-from alignedHierarchies.utilities import *
-from alignedHierarchies.example import *
+from utilities import * 
+from example import * 
 import numpy as np
 
 import os.path

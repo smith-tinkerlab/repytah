@@ -13,13 +13,13 @@ if module_path not in sys.path:
 import unittest
 import numpy as np
 
-import alignedHierarchies.utilities as utilities
-import alignedHierarchies.search as search
-from alignedHierarchies.search import __find_add_srows as find_add_srows
-from alignedHierarchies.search import __find_add_erows as find_add_erows
-from alignedHierarchies.search import __find_add_mrows as find_add_mrows
-from alignedHierarchies.search import find_all_repeats as find_all_repeats
-from alignedHierarchies.search import find_complete_list_anno_only as find_complete_list_anno_only
+import utilities
+import search
+from search import __find_add_srows as find_add_srows
+from search import __find_add_erows as find_add_erows
+from search import __find_add_mrows as find_add_mrows
+from search import find_all_repeats as find_all_repeats
+from search import find_complete_list_anno_only as find_complete_list_anno_only
 
 class test_search(unittest.TestCase):
 

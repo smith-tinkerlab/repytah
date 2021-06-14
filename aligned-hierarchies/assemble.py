@@ -48,7 +48,7 @@ are divided until there are only non-overlapping pieces left over.
 """
 
 import numpy as np
-from inspect import signature
+from inspect import signature 
 from search import find_all_repeats, find_complete_list_anno_only
 from utilities import reconstruct_full_block, get_annotation_lst, get_yLabels
 from transform import remove_overlaps
