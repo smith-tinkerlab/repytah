@@ -5,16 +5,15 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 import sys
 import os
-module_path = os.path.abspath(os.path.join('..'))
-if module_path not in sys.path:
-    sys.path.append(module_path+"\\aligned-hierarchies")
+# module_path = os.path.abspath(os.path.join('..'))
+# if module_path not in sys.path:
+#     sys.path.append(module_path+"\\aligned-hierarchies")
+sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest 
 
-import scipy.io
 from utilities import * 
-from example import * 
-import numpy as np
+from example import *
 
 import os.path
 from os import path

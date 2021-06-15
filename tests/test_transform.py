@@ -6,12 +6,12 @@ Unit tests for Aligned Hierarchies, transform.py
 
 import sys
 import os
-module_path = os.path.abspath(os.path.join('..'))
-if module_path not in sys.path:
-    sys.path.append(module_path+"\\aligned-hierarchies")
+# module_path = os.path.abspath(os.path.join('..'))
+# if module_path not in sys.path:
+#     sys.path.append(module_path+"\\aligned-hierarchies")
+sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
     
-import unittest 
-import scipy.io 
+import unittest
 import numpy as np 
 
 from transform import *
@@ -322,7 +322,7 @@ class TestTransform(unittest.TestCase):
         '''
         
         k_mat = np.array([[7, 12, 14, 19, 6, 1]])
-        sn = 19
+        song_length = 19
         band_width = 6
         pattern_row = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])
 
@@ -330,7 +330,7 @@ class TestTransform(unittest.TestCase):
         expect_pattern_key = np.array([6])        
         expect_anno_id_lst = np.array([[1]])
         
-        output_tuple = __separate_anno_markers(k_mat, sn, band_width, pattern_row)
+        output_tuple = __separate_anno_markers(k_mat, song_length, band_width, pattern_row)
         
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
@@ -364,7 +364,7 @@ class TestTransform(unittest.TestCase):
                           [11, 11, 18, 18, 1, 2],
                           [12, 12, 19, 19, 1, 5],
                           [16, 16, 18, 18, 1, 2]])
-        sn = 19
+        song_length = 19
         band_width = 1
         pattern_row = np.array([0, 1, 2, 3, 2, 0, 4, 1, 2, 3, 2, 5, 0, 4, 1, 2, 3, 2, 5])
 
@@ -384,7 +384,7 @@ class TestTransform(unittest.TestCase):
                                        [4],
                                        [5]])
         
-        output_tuple = __separate_anno_markers(k_mat, sn, band_width, pattern_row)
+        output_tuple = __separate_anno_markers(k_mat, song_length, band_width, pattern_row)
 
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
@@ -409,7 +409,7 @@ class TestTransform(unittest.TestCase):
         expect_all_overlap_lst = np.array([[1, 4, 11, 14, 4, 1],
                                            [4, 7, 14, 17, 4, 2]])
         
-        output_tuple = remove_overlaps(input_lst,song_length)
+        output_tuple = remove_overlaps(input_lst, song_length)
 
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
@@ -447,7 +447,7 @@ class TestTransform(unittest.TestCase):
                                            [16, 17,  9, 10, 2, 1],
                                            [16, 17, 18, 19, 2, 1]])
         
-        output_tuple = remove_overlaps(input_lst,song_length)
+        output_tuple = remove_overlaps(input_lst, song_length)
 
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
