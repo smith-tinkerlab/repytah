@@ -6,12 +6,12 @@ Unit tests for Aligned Hierarchies, transform.py
 
 import sys
 import os
-module_path = os.path.abspath(os.path.join('..'))
-if module_path not in sys.path:
-    sys.path.append(module_path+"\\aligned-hierarchies")
+# module_path = os.path.abspath(os.path.join('..'))
+# if module_path not in sys.path:
+#     sys.path.append(module_path+"\\aligned-hierarchies")
+sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
     
-import unittest 
-import scipy.io 
+import unittest
 import numpy as np 
 
 from transform import *
