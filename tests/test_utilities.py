@@ -4,11 +4,10 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 """
 
+from pathlib import Path
 import sys
-import os
-module_path = os.path.abspath(os.path.join('..'))
-if module_path not in sys.path:
-    sys.path.append(module_path+"\\aligned-hierarchies")
+path = str(Path(Path(__file__).parent.absolute()).parent.absolute())
+sys.path.insert(0, path)
 
 import unittest
 import numpy as np
@@ -18,23 +17,6 @@ from utilities import __find_song_pattern as _test_find_song_pattern
 
 
 class test_utilities(unittest.TestCase):
-
-    def test_add_annotations(self):
-        
-        input_mat = np.array([[1,1,2,2,1,1],
-                      [3,6,7,10,4,2]])
-        song_length = 16
-        output = utilities.add_annotations(input_mat, song_length)
-        expect_output = np.array([[1,1,2,2,1,1],[3,6,7,10,4,2]])
-        
-        # Test output type
-        self.assertIs(type(output), np.ndarray)
-        # Test output size
-        self.assertEqual(np.size(output),np.size(expect_output))
-        # Test output result
-        self.assertEqual(output.tolist(),expect_output.tolist())
-        
-    
     def test_create_sdm(self):
         
         my_data = np.array([[0,0.5,0,0,0,1,0,0],
@@ -57,28 +39,6 @@ class test_utilities(unittest.TestCase):
         # Test output result
         self.assertEqual(output.tolist(),expect_output.tolist())
         
-    def test_stretch_diags(self):
-        
-        thresh_diags = np.array([[0,0,1,0,0],
-                         [0,1,0,0,0],
-                         [0,0,1,0,0],
-                         [0,0,0,0,0],
-                         [0,0,0,0,0]])
-        band_width = 3
-        output = utilities.stretch_diags(thresh_diags,band_width)
-        
-        expect_output = [[False,False,False,False,False,False,False],
-                         [False,True,False,False,False,False,False],
-                         [ True,False,True,False,False,False,False],
-                         [False,True,False,True,False,False,False],
-                         [False,False,True,False,True,False,False],
-                         [False,False,False,False,False,False,False],
-                         [False,False,False,False,False,False,False]]
-        
-        # Test output type
-        self.assertIs(type(output), np.ndarray)
-        # Test output result
-        self.assertEqual(output.tolist(),expect_output)
         
     def test_find_initial_repeats(self):
         
@@ -208,6 +168,81 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), np.ndarray)
         # Test output result
         self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        
+    def test_stretch_diags(self):
+        
+        thresh_diags = np.array([[0,0,1,0,0],
+                         [0,1,0,0,0],
+                         [0,0,1,0,0],
+                         [0,0,0,0,0],
+                         [0,0,0,0,0]])
+        band_width = 3
+        output = utilities.stretch_diags(thresh_diags,band_width)
+        
+        expect_output = [[False,False,False,False,False,False,False],
+                         [False,True,False,False,False,False,False],
+                         [ True,False,True,False,False,False,False],
+                         [False,True,False,True,False,False,False],
+                         [False,False,True,False,True,False,False],
+                         [False,False,False,False,False,False,False],
+                         [False,False,False,False,False,False,False]]
+        
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output)
+        
+
+    def test_add_annotations(self):
+       
+        # Input with annotations correctly marked
+        input_mat = np.array([[1,1,2,2,1,1],
+                      [3,6,7,10,4,2]])
+        song_length = 16
+        output = utilities.add_annotations(input_mat, song_length)
+        expect_output = np.array([[1,1,2,2,1,1],[3,6,7,10,4,2]])
+        
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output size
+        self.assertEqual(np.size(output),np.size(expect_output))
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        # Input with annotations wrongly marked
+        input_mat = np.array([[1,1,2,2,1,0],
+                      [3,6,7,10,4,0]])
+        song_length = 16
+        output = utilities.add_annotations(input_mat, song_length)
+        expect_output = np.array([[1,1,2,2,1,1],[3,6,7,10,4,2]])
+        
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output size
+        self.assertEqual(np.size(output),np.size(expect_output))
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        
+    def test_find_song_pattern(self):
+        
+        thresh_diags = np.array([[1, 0, 0, 0, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 1, 1, 0, 0],
+                       [0, 1, 0, 1, 0],
+                       [0, 0, 0, 0, 1]])
+        output = _test_find_song_pattern(thresh_diags)
+       
+        expect_output = np.array([1,2,2,2,3])
+       
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output size
+        self.assertEqual(np.size(output),np.size(expect_output))
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+    
     
     def test_reconstruct_full_block(self):
         
@@ -247,8 +282,53 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output.ndim,2)
         # Test output result
         self.assertEqual(output.tolist(),expect_output.tolist())
-   
-    
+          
+        
+    def test_get_annotation_lst(self):
+        # Input with small size, all length different
+        key_lst = np.array([1,2,3,4,5])
+        output = utilities.get_annotation_lst (key_lst)
+        
+        expect_output = np.array([1,1,1,1,1])
+        
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        # Input with small size, all lengths equal
+        key_lst = np.array([1,1,1,1,1])
+        output = utilities.get_annotation_lst (key_lst)
+        
+        expect_output = np.array([1,2,3,4,5])
+        
+        # Input with big size
+        key_lst = np.array([1,1,3,4,5,5,6,6,7,7,9,11,11,11,11,11,11,11,11,12,
+                            16,16,16,16,17,17,18,20,20,20,20])
+        output = utilities.get_annotation_lst (key_lst)
+        
+        expect_output = np.array([1,2,1,1,1,2,1,2,1,2,1,1,2,3,4,5,6,7,8,1,
+                            1,2,3,4,1,2,1,1,2,3,4])
+        
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        
+    def test_get_yLabels(self):
+        width_vec = np.array([[1],[1],[3],[4],[4],[5],[5],[6],[6]])
+        anno_vec = np.array([1,2,1,1,2,1,1,1,2])
+        expect_output = np.array(['0','w = 1, a = 1' ,'w = 1, a = 2',
+                                  'w = 3, a = 1', 'w = 4, a = 1',
+                                  'w = 4, a = 2', 'w = 5, a = 1',
+                                  'w = 5, a = 1', 'w = 6, a = 1',
+                                  'w = 6, a = 2'])
+        
+        output = utilities.get_yLabels (width_vec,anno_vec)
+        
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output result
+        self.assertEqual(output.tolist(),expect_output.tolist())
+        
+        
     def test_reformat(self):
         
         pattern_mat = np.array([[0,0,0,0,1,0,0,0,0,1],
@@ -272,30 +352,6 @@ class test_utilities(unittest.TestCase):
         # Test output result
         self.assertEqual(output.tolist(),expect_output.tolist())
         
-    
-    def test_find_song_pattern(self):
-        
-        thresh_diags = np.array([[1, 0, 0, 0, 0],
-                       [0, 1, 1, 1, 0],
-                       [0, 1, 1, 0, 0],
-                       [0, 1, 0, 1, 0],
-                       [0, 0, 0, 0, 1]])
-        output = _test_find_song_pattern(thresh_diags)
-       
-        expect_output = np.array([1,2,2,2,3])
-        
-        # Test output result
-        self.assertEqual(output.tolist(),expect_output.tolist())
-        
-    def test_get_annotation_lst(self):
-        
-        key_lst = np.array([1,1,3,4,5])
-        output = utilities.get_annotation_lst (key_lst)
-        
-        expect_output = np.array([1,2,1,1,1])
-        
-        # Test output result
-        self.assertEqual(output.tolist(),expect_output.tolist())
                
          
 if __name__ == '__main__':

@@ -26,16 +26,16 @@ This file contains the following functions:
     
     * reconstruct_full_block - Creates a record of when pairs of repeated
     structures occur, from the first beat in the song to the last beat of the
-    song. Pairs of repeated structures are marked with 1's. 
-    
-    * reformat - Transforms a binary matrix representation of when repeats 
-    occur in a song into a list of repeated structures detailing the length
-    and occurence of each repeat.      
+    song. Pairs of repeated structures are marked with 1's.    
         
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
     * get_yLabels - Generates the labels for a visualization.
+    
+    * reformat - Transforms a binary matrix representation of when repeats 
+    occur in a song into a list of repeated structures detailing the length
+    and occurence of each repeat.   
     
 """
 
@@ -586,7 +586,75 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
+
+
+def get_annotation_lst (key_lst):
+    """
+    Gets one annotation marker vector, given vector of lengths key_lst.
     
+    Args 
+    -----
+        key_lst: np.array[int]
+            Array of lengths in ascending order
+    
+    Returns 
+    -----
+        anno_lst_out: np.array[int] 
+            Array of one possible set of annotation markers for key_lst
+            
+    """
+
+    # Initialize the temporary variable
+    num_rows = np.size(key_lst)
+    full_anno_lst = np.zeros(num_rows)
+
+    # Find the first instance of each length and give it 1 as an annotation
+    # marker
+    unique_keys = np.unique(key_lst,return_index=True)
+    full_anno_lst[unique_keys[1]] = 1
+        
+    # Add remaining annotations to anno list  
+    for i in range (0,np.size(full_anno_lst)):
+        if full_anno_lst[i] == 0:
+           full_anno_lst[i] =  full_anno_lst[i-1]+1
+    
+    return full_anno_lst.astype(int)
+
+
+def get_yLabels(width_vec, anno_vec):   
+    """
+    Generates the labels for a visualization with width_vec and ANNO_VEC.
+    
+    Args 
+    -----
+        width_vec: np.array[int]
+            Vector of widths for a visualization
+            
+        anno_vec: np.array[int]
+            Array of annotations for a visualization
+    
+    Returns 
+    -----
+        ylabels: np.array[str] 
+            Labels for the y-axis of a visualization
+        
+    """
+
+    # Determine number of rows to label
+    num_rows = np.size(width_vec)
+    # Make sure the sizes of width_vec and anno_vec are the same
+    assert(num_rows == np.size(anno_vec))
+    
+    # Initialize the array
+    ylabels = np.array([0])
+    
+    # Loop over the array adding labels
+    for i in range(0,num_rows):
+        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
+        ylabels = np.append(ylabels, label )
+    
+    return ylabels
+
 
 def reformat(pattern_mat, pattern_key):
     """
@@ -636,71 +704,3 @@ def reformat(pattern_mat, pattern_key):
             info_mat[x,4] = pattern_key[x] 
             
     return info_mat.astype(int)
-
-
-def get_annotation_lst (key_lst):
-    """
-    Gets one annotation marker vector, given vector of lengths key_lst.
-    
-    Args 
-    -----
-        key_lst: np.array[int]
-            Vector of lengths in ascending order
-    
-    Returns 
-    -----
-        anno_lst_out: np.array[int] 
-            Vector of one possible set of annotation markers for key_lst
-            
-    """
-
-    # Initialize the temporary variable
-    num_rows = np.size(key_lst)
-    full_anno_lst = np.zeros(num_rows)
-
-    # Find the first instance of each length and give it 1 as an annotation
-    # marker
-    unique_keys = np.unique(key_lst,return_index=True)
-    full_anno_lst[unique_keys[1]] = 1
-        
-    # Add remaining annotations to anno list  
-    for i in range (0,np.size(full_anno_lst)):
-        if full_anno_lst[i] == 0:
-           full_anno_lst[i] =  full_anno_lst[i-1]+1
-    
-    return full_anno_lst.astype(int)
-
-
-def get_yLabels(width_vec, anno_vec):   
-    """
-    Generates the labels for a visualization with width_vec and ANNO_VEC.
-    
-    Args 
-    -----
-        width_vec: np.array[int]
-            Vector of widths for a visualization
-            
-        anno_vec: np.array[int]
-            Vector of annotations for a visualization
-    
-    Returns 
-    -----
-        ylabels: np.array[str] 
-            Labels for the y-axis of a visualization
-        
-    """
-
-    # Determine number of rows to label
-    num_rows = np.size(width_vec)
-    # Make sure the sizes of width_vec and anno_vec are the same
-    assert(num_rows == np.size(anno_vec))
-    
-    # Initialize the array
-    ylabels = np.array([0])
-    
-    # Loop over the array adding labels
-    for i in range(0,num_rows):
-        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
-        ylabels = np.append(ylabels, label )
-    
-    return ylabels
