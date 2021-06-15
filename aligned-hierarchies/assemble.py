@@ -1303,7 +1303,7 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
 def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     """
      Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps) to the essential
-     structure components and then builds the hierarchical representation. Optional visualizations.
+     structure components and then builds the hierarchical representation. Optional visualizations of .
 
     Args
     -----
