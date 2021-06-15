@@ -70,7 +70,6 @@ class TestExample(unittest.TestCase):
         self.assertFalse(os.stat("hierarchical_out_file.mat").st_size == 0)
     
         
-    
 #os.stat("file").st_size == 0
 if __name__ == '__main__':
     unittest.main() 
