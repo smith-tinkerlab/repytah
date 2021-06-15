@@ -219,7 +219,7 @@ def check_overlaps(input_mat):
 
     # R_LEFT -- Every row of INPUT_MAT is repeated RS times to create a
     # submatrix. We stack these submatrices on top of each other.
-    compare_left = np.zeros((rs * rs), ws)
+    compare_left = np.zeros(((rs * rs), ws))
 
     for i in range(rs):
         compare_add = input_mat[i, :]
