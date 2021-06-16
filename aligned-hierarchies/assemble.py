@@ -44,7 +44,6 @@ are divided until there are only non-overlapping pieces left over.
     
     * hierarchical_structure_with_vis - Same as hierarchical_structure but this
     also outputs visualizations of the hierarchical representations.
-
 """
 
 import numpy as np
@@ -100,9 +99,9 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         bw_vec = bw_vec[None, :].reshape(-1, 1)
 
     # Initialize input_pattern_obj
-    PNO = input_pattern_obj
+    pno = input_pattern_obj
 
-    # Sort the bw_vec and the pattern_no_overlaps (PNO) so that we process the biggest pieces first
+    # Sort the bw_vec and the pattern_no_overlaps (pno) so that we process the biggest pieces first
 
     # Part 1: Sort the lengths in bw_vec in descending order
     desc_bw_vec = np.sort(bw_vec)[::-1]  # [::-1] reverses order
@@ -110,64 +109,62 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     # Part 2: Sort the indices of bw_vec in descending order
     bw_inds = np.flip(np.argsort(bw_vec, axis=0))
     row_bw_inds = np.transpose(bw_inds).flatten()
-    PNO = PNO[row_bw_inds, :]
+    pno = pno[row_bw_inds, :]
     T_inds = np.nonzero(bw_vec == T)
     T_inds = np.array(T_inds) - 1
 
     if T_inds.size == 0:
         T_inds = max(bw_vec.shape)
 
-    PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
+    pno_block = reconstruct_full_block(pno, desc_bw_vec)
 
     # Check stopping condition -- Are there overlaps?
-    while np.sum(np.sum(PNO_block[:T_inds, :], axis=0) > 1) > 0:
+    while np.sum(np.sum(pno_block[:T_inds, :], axis=0) > 1) > 0:
 
         # Find all overlaps by comparing the rows of repeats pairwise
-        overlaps_PNO_block = check_overlaps(PNO_block)
+        overlaps_pno_block = check_overlaps(pno_block)
 
         # Remove the rows with bandwidth T or less from consideration
-        overlaps_PNO_block[
-            T_inds:,
-        ] = 0
-        overlaps_PNO_block[:, T_inds:] = 0
+        overlaps_pno_block[T_inds:, ] = 0
+        overlaps_pno_block[:, T_inds:] = 0
 
         # Find the first two groups of repeats that overlap, calling one group
         # RED and the other group BLUE
-        [ri, bi] = overlaps_PNO_block.nonzero()
+        [ri, bi] = overlaps_pno_block.nonzero()
         ri = ri[0]
         bi = bi[0]
 
         # RED overlap
-        red = PNO[ri, :]
+        red = pno[ri, :]
         RL = desc_bw_vec[ri, :]
 
         # BLUE overlap
-        blue = PNO[bi, :]
+        blue = pno[bi, :]
         BL = desc_bw_vec[bi, :]
 
         # Compare the repeats in RED and BLUE, cutting the repeats in those
         # groups into non-overlapping pieces
         union_mat, union_length = __compare_and_cut(red, RL, blue, BL)
-        PNO = np.delete(PNO, [ri, bi], axis=0)
+        pno = np.delete(pno, [ri, bi], axis=0)
         bw_vec = np.delete(desc_bw_vec, [ri, bi], axis=0)
 
         # Stack the new repeats
         if union_mat.size != 0:
-            PNO = np.vstack((PNO, union_mat))
+            pno = np.vstack((pno, union_mat))
             bw_vec = np.vstack((bw_vec, union_length))
 
         # Check there are any repeats of length 1 that should be merged into
         # other groups of repeats of length 1 and merge them if necessary
         if sum(union_length == 1) > 0:
-            PNO, bw_vec = __merge_based_on_length(PNO, bw_vec, 1)
+            pno, bw_vec = __merge_based_on_length(pno, bw_vec, 1)
 
-        # AGAIN, Sort the bw_vec and the PNO so that we process the biggest
+        # AGAIN, Sort the bw_vec and the pno so that we process the biggest
         # pieces first
         # Part 1: Sort the lengths in bw_vec and indices in descending order
         desc_bw_vec = np.sort(bw_vec, axis=0)[::-1]
         bw_inds = np.flip(np.argsort(bw_vec, axis=0))
         row_bw_inds = np.transpose(bw_inds).flatten()
-        PNO = PNO[(row_bw_inds), :]
+        pno = pno[(row_bw_inds), :]
 
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
@@ -182,13 +179,13 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         if T_inds.size == 0:
             T_inds = max(desc_bw_vec.shape)
 
-        PNO_block = reconstruct_full_block(PNO, desc_bw_vec)
+        pno_block = reconstruct_full_block(pno, desc_bw_vec)
 
     # Sort the lengths in bw_vec in ascending order
     bw_vec = np.sort(desc_bw_vec, axis=0)
     # Sort the indices of bw_vec in ascending order
     bw_inds = np.argsort(desc_bw_vec, axis=0)
-    pattern_no_overlaps = PNO[bw_inds, :].reshape((PNO.shape[0], -1))
+    pattern_no_overlaps = pno[bw_inds, :].reshape((pno.shape[0], -1))
     pattern_no_overlaps_key = bw_vec
 
     output = (pattern_no_overlaps, pattern_no_overlaps_key)
@@ -217,7 +214,7 @@ def check_overlaps(input_mat):
     rs = input_mat.shape[0]
     ws = input_mat.shape[1]
 
-    # R_LEFT -- Every row of INPUT_MAT is repeated RS times to create a
+    # R_LEFT -- Every row of input_mat is repeated RS times to create a
     # submatrix. We stack these submatrices on top of each other.
     compare_left = np.zeros(((rs * rs), ws))
 
@@ -228,10 +225,10 @@ def check_overlaps(input_mat):
         b = (i + 1) * rs
         compare_left[a:b, :] = compare_add_mat
 
-    # R_RIGHT -- Stack RS copies of INPUT_MAT on top of itself
+    # R_RIGHT -- Stack RS copies of input_mat on top of itself
     compare_right = np.tile(input_mat, (rs, 1))
 
-    # If INPUT_MAT is not binary, create binary temporary objects
+    # If input_mat is not binary, create binary temporary objects
     compare_left = compare_left > 0
     compare_right = compare_right > 0
 
@@ -322,13 +319,13 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     if purple_block.sum() > 0:
 
         # Find number of blocks in red and in blue
-        LSR = max(start_red.shape)
-        LSB = max(start_blue.shape)
+        lsr = max(start_red.shape)
+        lsb = max(start_blue.shape)
 
         # Build the pairs of starting indices to search, where each pair
         # contains a starting index in red and a starting index in blue
-        red_inds = np.tile(start_red.transpose(), (LSB, 1))
-        blue_inds = np.tile(start_blue, (LSR, 1))
+        red_inds = np.tile(start_red.transpose(), (lsb, 1))
+        blue_inds = np.tile(start_blue, (lsr, 1))
         tem_blue = blue_inds[0][0]
         for i in range(0, blue_inds.shape[1]):
             for j in range(0, blue_inds.shape[0]):
@@ -341,7 +338,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
         union_length = np.array([])
 
         # Loop over all pairs of starting indices
-        for start_ind in range(0, LSR * LSB):
+        for start_ind in range(0, lsr * lsb):
 
             # Isolate one repeat in red and one repeat in blue
             ri = compare_inds[start_ind, 1]
@@ -506,11 +503,11 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     if union_length.ndim == 1:
         union_length = np.array([union_length]).T
     if union_mat.size != 0:
-        totalArray = np.hstack((union_mat, union_length))
-        # Sort the totalArray and form the final output
-        totalArray = totalArray[np.argsort(totalArray[:, -1])]
-        union_mat = totalArray[:, 0:sn]
-        union_length = np.array([totalArray[:, -1]]).T
+        total_array = np.hstack((union_mat, union_length))
+        # Sort the total_array and form the final output
+        total_array = total_array[np.argsort(total_array[:, -1])]
+        union_mat = total_array[:, 0:sn]
+        union_length = np.array([total_array[:, -1]]).T
 
     output = (union_mat, union_length)
 
@@ -677,7 +674,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
         test_bandwidth = target_bandwidth[i - 1]
 
         # Check if temp_bandwidth is equal to test_bandwidth
-        inds = temp_bandwidth == test_bandwidth
+        inds = (temp_bandwidth == test_bandwidth)
 
         # If the sum of all inds elements is greater than 1, then execute this
         # if statement
@@ -688,9 +685,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
 
             # Number of columns
             bandwidth_add_size = merged_mat.shape[0]
-            bandwidth_add = test_bandwidth * np.ones((bandwidth_add_size, 1)).astype(
-                int
-            )
+            bandwidth_add = test_bandwidth * np.ones((bandwidth_add_size, 1)).astype(int)
 
             if np.any(inds == True):
                 # Convert the boolean array inds into an array of integers
@@ -718,9 +713,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
 
             # Sort the elements of temp_bandwidth
             temp_bandwidth = np.sort(temp_bandwidth)
-            temp_mat = temp_mat[
-                bnds,
-            ]
+            temp_mat = temp_mat[bnds, ]
 
     # Create output
     out_mat = temp_mat
@@ -806,15 +799,15 @@ def __merge_rows(input_mat, input_width):
 
 def hierarchical_structure(matrix_no, key_no, sn):
     """
-     Distills the repeats encoded in MATRIX_NO (and KEY_NO) to the essential
+     Distills the repeats encoded in matrix_no (and key_no) to the essential
      structure components and then builds the hierarchical representation
 
     Args
     -----
-        matrix_NO: np.array[int]
+        matrix_no: np.array[int]
             binary matrix with 1's where repeats begin and 0's
             otherwise
-        key_NO: np.array[int]
+        key_no: np.array[int]
             vector containing the lengths of the repeats encoded in matrix_NO
         sn: int
             song length, which is the number of audio shingles
@@ -823,37 +816,37 @@ def hierarchical_structure(matrix_no, key_no, sn):
     -----
         full_visualization: np.array[int]
             binary matrix representation for
-            full_matrix_NO with blocks of 1's equal to
+            full_matrix_no with blocks of 1's equal to
             the length's prescribed in full_key
 
         full_key: np.array[int]
             vector containing the lengths of the hierarchical
-            structure encoded in full_matrix_NO
+            structure encoded in full_matrix_no
 
-        full_matrix_NO: np.array[int]
+        full_matrix_no: np.array[int]
             binary matrix with 1's where hierarchical
             structure begins and 0's otherwise
 
         full_anno_lst: np.array[int]
             vector containing the annotation markers of the
             hierarchical structure encoded in each row of
-            full_matrix_NO
+            full_matrix_no
     """
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
 
-    # Using PNO and PNO_KEY, we build a vector that tells us the order of the
+    # Using pno and pno_key, we build a vector that tells us the order of the
     # repeats of the essential structure components
-    PNO = breakup_tuple[0]
-    PNO_key = breakup_tuple[1]
+    pno = breakup_tuple[0]
+    pno_key = breakup_tuple[1]
 
-    # Get the block representation for PNO, called PNO_BLOCK
-    PNO_block = reconstruct_full_block(PNO, PNO_key)
+    # Get the block representation for pno, called pno_block
+    pno_block = reconstruct_full_block(pno, pno_key)
 
-    # Assign a unique (nonzero) number for each row in PNO. We refer these
+    # Assign a unique (nonzero) number for each row in pno. We refer these
     # unique numbers COLORS
-    num_colors = PNO.shape[0]
-    num_timesteps = PNO.shape[1]
+    num_colors = pno.shape[0]
+    num_timesteps = pno.shape[1]
 
     # Create unique color identifier for num_colors
     color_lst = np.arange(1, num_colors + 1)
@@ -864,28 +857,28 @@ def hierarchical_structure(matrix_no, key_no, sn):
 
     # For each time step in row i that equals 1, change the value at that time
     # step to i
-    PNO_color = color_mat * PNO
-    PNO_color_vec = PNO_color.sum(axis=0)
+    pno_color = color_mat * pno
+    pno_color_vec = pno_color.sum(axis=0)
 
     # Find where repeats exist in time, paying special attention to the starts
     # and ends of each repeat of an essential structure component
     # take sums down columns --- conv to logical
-    PNO_block_vec = (np.sum(PNO_block, axis=0)) > 0
-    PNO_block_vec = PNO_block_vec.astype(np.float32)
-    one_vec = PNO_block_vec[0 : sn - 1] - PNO_block_vec[1:sn]
+    pno_block_vec = (np.sum(pno_block, axis=0)) > 0
+    pno_block_vec = pno_block_vec.astype(np.float32)
+    one_vec = pno_block_vec[0 : sn - 1] - pno_block_vec[1:sn]
 
     # Find all the blocks of consecutive time steps that are not contained in
     # any of the essential structure components
     # We call these blocks zero blocks
-    # Shift PNO_BLOCK_VEC so that the zero blocks are marked at the correct
+    # Shift pno_block_vec so that the zero blocks are marked at the correct
     # time steps with 1's
-    if PNO_block_vec[0] == 0:
+    if pno_block_vec[0] == 0:
         one_vec = np.insert(one_vec, 0, 1)
-    elif PNO_block_vec[0] == 1:
+    elif pno_block_vec[0] == 1:
         one_vec = np.insert(one_vec, 0, 0)
 
     # Assign one new unique number to all the zero blocks
-    PNO_color_vec[one_vec == 1] = num_colors + 1
+    pno_color_vec[one_vec == 1] = num_colors + 1
 
     # We are only concerned with the order that repeats of the essential
     # structure components occur in. So we create a vector that only contains
@@ -895,16 +888,16 @@ def hierarchical_structure(matrix_no, key_no, sn):
     # We isolate the starting index of each repeat of the essential structure
     # components and save a binary vector with 1 at a time step if a repeat of
     # any essential structure component occurs there
-    non_zero_inds = PNO_color_vec > 0
-    num_NZI = non_zero_inds.sum(axis=0)
-    PNO_color_inds_only = PNO_color_vec[non_zero_inds]
+    non_zero_inds = (pno_color_vec > 0)
+    num_nzi = non_zero_inds.sum(axis=0)
+    pno_color_inds_only = pno_color_vec[non_zero_inds]
 
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
-    zero_inds_short = PNO_color_inds_only == (num_colors + 1)
-    PNO_color_inds_only[zero_inds_short] = 0
+    zero_inds_short = (pno_color_inds_only == (num_colors + 1))
+    pno_color_inds_only[zero_inds_short] = 0
 
-    # Create a binary matrix SYMM_PNO_INDS_ONLY such that the (i,j) entry is 1
+    # Create a binary matrix symm_pno_inds_only such that the (i,j) entry is 1
     # if the following three conditions are true:
     #     1) a repeat of an essential structure component is the i-th thing in
     #        the ordering
@@ -915,48 +908,48 @@ def hierarchical_structure(matrix_no, key_no, sn):
     #        same essential structure component.
 
     # If any of the above conditions are not true, then the (i,j) entry of
-    # SYMM_PNO_INDS_ONLY is 0.
+    # symm_pno_inds_only is 0.
 
     # Turn our pattern row into a square matrix by stacking that row the
     # number of times equal to the columns in that row
-    PNO_IO_mat = np.tile(PNO_color_inds_only, (num_NZI, 1))
-    PNO_IO_mat = PNO_IO_mat.astype(np.float32)
+    pno_io_mat = np.tile(pno_color_inds_only, (num_nzi, 1))
+    pno_io_mat = pno_io_mat.astype(np.float32)
 
-    PNO_IO_mask = (
-        (PNO_IO_mat > 0).astype(np.float32)
-        + (PNO_IO_mat.transpose() > 0).astype(np.float32)
+    pno_io_mask = (
+        (pno_io_mat > 0).astype(np.float32)
+        + (pno_io_mat.transpose() > 0).astype(np.float32)
     ) == 2
-    symm_PNO_inds_only = (
-        PNO_IO_mat.astype(np.float32) == PNO_IO_mat.transpose().astype(np.float32)
-    ) * PNO_IO_mask
+    symm_pno_inds_only = (
+        pno_io_mat.astype(np.float32) == pno_io_mat.transpose().astype(np.float32)
+    ) * pno_io_mask
 
-    # Extract all the diagonals in SYMM_PNO_INDS_ONLY and get pairs of
+    # Extract all the diagonals in symm_pno_inds_only and get pairs of
     # repeated sublists in the order that repeats of essential structure
     # components.
 
     # These pairs of repeated sublists are the basis of our hierarchical
     # representation.
 
-    NZI_lst = find_all_repeats(symm_PNO_inds_only, np.arange(1, num_NZI + 1))
-    remove_inds = NZI_lst[:, 0] == NZI_lst[:, 2]
+    nzi_lst = find_all_repeats(symm_pno_inds_only, np.arange(1, num_nzi + 1))
+    remove_inds = (nzi_lst[:, 0] == nzi_lst[:, 2])
 
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
     # a pair (A,B) where A == B)
     if np.any(remove_inds == True):
         remove_inds = np.array(remove_inds).astype(int)
         remove = np.where(remove_inds == 1)
-        NZI_lst = np.delete(NZI_lst, remove, axis=0)
+        nzi_lst = np.delete(nzi_lst, remove, axis=0)
 
-    # Add the annotation markers to the pairs in NZI_LST
-    NZI_lst_anno = find_complete_list_anno_only(NZI_lst, num_NZI)
+    # Add the annotation markers to the pairs in nzi_lst
+    nzi_lst_anno = find_complete_list_anno_only(nzi_lst, num_nzi)
 
     # Remove the overlaps
-    output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
-    (NZI_matrix_no, NZI_key_no) = output_tuple[1:3]
+    output_tuple = remove_overlaps(nzi_lst_anno, num_nzi)
+    (nzi_matrix_no, nzi_key_no) = output_tuple[1:3]
 
     # Reconstruct full block
-    NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
-    nzi_rows = NZI_pattern_block.shape[0]
+    nzi_pattern_block = reconstruct_full_block(nzi_matrix_no, nzi_key_no)
+    nzi_rows = nzi_pattern_block.shape[0]
 
     # Find where all blocks start and end
     pattern_starts = np.nonzero(non_zero_inds)[0]
@@ -967,14 +960,14 @@ def hierarchical_structure(matrix_no, key_no, sn):
     full_visualization = np.zeros((nzi_rows, sn))
     full_matrix_no = np.zeros((nzi_rows, sn))
 
-    for i in range(0, num_NZI):
-        repeated_sect = NZI_pattern_block[:, i].reshape(
-            np.shape(NZI_pattern_block)[0], 1
+    for i in range(0, num_nzi):
+        repeated_sect = nzi_pattern_block[:, i].reshape(
+            np.shape(nzi_pattern_block)[0], 1
         )
         full_visualization[:, pattern_starts[i] : pattern_ends[i] + 1] = np.tile(
             repeated_sect, (1, pattern_lengths[i])
         )
-        full_matrix_no[:, pattern_starts[i]] = NZI_matrix_no[:, i]
+        full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
 
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
     full_key = np.zeros((nzi_rows, 1))
@@ -1027,10 +1020,10 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
 
     Args
     -----
-        matrix_NO: np.array[int]
+        matrix_no: np.array[int]
             binary matrix with 1's where repeats begin and 0's
             otherwise
-        key_NO: np.array[int]
+        key_no: np.array[int]
             vector containing the lengths of the repeats encoded in matrix_NO
         sn: int
             song length, which is the number of audio shingles
@@ -1039,49 +1032,49 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     -----
         full_visualization: np.array[int]
             binary matrix representation for
-            full_matrix_NO with blocks of 1's equal to
+            full_matrix_no with blocks of 1's equal to
             the length's prescribed in full_key
 
         full_key: np.array[int]
             vector containing the lengths of the hierarchical
-            structure encoded in full_matrix_NO
+            structure encoded in full_matrix_no
 
-        full_matrix_NO: np.array[int]
+        full_matrix_no: np.array[int]
             binary matrix with 1's where hierarchical
             structure begins and 0's otherwise
 
         full_anno_lst: np.array[int]
             vector containing the annotation markers of the
             hierarchical structure encoded in each row of
-            full_matrix_NO
+            full_matrix_no
     """
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
 
-    # Using PNO and PNO_KEY, we build a vector that tells us the order of the
-    # repeats of the essential structure components.
-    PNO = breakup_tuple[0]
-    PNO_key = breakup_tuple[1]
+    # Using pno and pno_key, we build a vector that tells us the order of the
+    # repeats of the essential structure components
+    pno = breakup_tuple[0]
+    pno_key = breakup_tuple[1]
 
-    # Get the block representation for PNO, called PNO_BLOCK
-    PNO_block = reconstruct_full_block(PNO, PNO_key)
+    # Get the block representation for pno, called pno_block
+    pno_block = reconstruct_full_block(pno, pno_key)
 
     # IMAGE 1 construction
-    PNO_anno = get_annotation_lst(PNO_key)
-    PNO_yLabels = get_yLabels(PNO_key, PNO_anno)
-    num_PNO_rows = np.size(PNO, axis=0)
-    twos = np.full((num_PNO_rows, sn), 2, dtype=int)
-    vis_array = twos - (PNO_block + PNO)
+    pno_anno = get_annotation_lst(pno_key)
+    pno_yLabels = get_yLabels(pno_key, pno_anno)
+    num_pno_rows = np.size(pno, axis=0)
+    twos = np.full((num_pno_rows, sn), 2, dtype=int)
+    vis_array = twos - (pno_block + pno)
     fig, ax = plt.subplots(1, 1)
-    SDM = ax.imshow(vis_array, cmap="gray", aspect=10)
+    sdm = ax.imshow(vis_array, cmap="gray", aspect=10)
     plt.title("Essential Structure Components")
-    ax.set_yticklabels(PNO_yLabels)
+    ax.set_yticklabels(pno_yLabels)
     plt.show()
 
     # Assign a unique (nonzero) number for each row in PNO. We refer these
     # unique numbers COLORS.
-    num_colors = PNO.shape[0]
-    num_timesteps = PNO.shape[1]
+    num_colors = pno.shape[0]
+    num_timesteps = pno.shape[1]
 
     # Create unique color identifier for num_colors
     color_lst = np.arange(1, num_colors + 1)
@@ -1092,28 +1085,28 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
 
     # For each time step in row i that equals 1, change the value at that time
     # step to i
-    PNO_color = color_mat * PNO
-    PNO_color_vec = PNO_color.sum(axis=0)
+    pno_color = color_mat * pno
+    pno_color_vec = pno_color.sum(axis=0)
 
     # Find where repeats exist in time, paying special attention to the starts
     # and ends of each repeat of an essential structure component
     # take sums down columns --- conv to logical
-    PNO_block_vec = (np.sum(PNO_block, axis=0)) > 0
-    PNO_block_vec = PNO_block_vec.astype(np.float32)
-    one_vec = PNO_block_vec[0 : sn - 1] - PNO_block_vec[1:sn]
+    pno_block_vec = (np.sum(pno_block, axis=0)) > 0
+    pno_block_vec = pno_block_vec.astype(np.float32)
+    one_vec = pno_block_vec[0 : sn - 1] - pno_block_vec[1:sn]
 
     # Find all the blocks of consecutive time steps that are not contained in
-    # any of the essential structure components. We call these blocks zero
-    # blocks.
-    # Shift PNO_BLOCK_VEC so that the zero blocks are marked at the correct
+    # any of the essential structure components
+    # We call these blocks zero blocks
+    # Shift pno_block_vec so that the zero blocks are marked at the correct
     # time steps with 1's
-    if PNO_block_vec[0] == 0:
+    if pno_block_vec[0] == 0:
         one_vec = np.insert(one_vec, 0, 1)
-    elif PNO_block_vec[0] == 1:
+    elif pno_block_vec[0] == 1:
         one_vec = np.insert(one_vec, 0, 0)
 
     # Assign one new unique number to all the zero blocks
-    PNO_color_vec[one_vec == 1] = num_colors + 1
+    pno_color_vec[one_vec == 1] = num_colors + 1
 
     # We are only concerned with the order that repeats of the essential
     # structure components occur in. So we create a vector that only contains
@@ -1123,16 +1116,16 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     # We isolate the starting index of each repeat of the essential structure
     # components and save a binary vector with 1 at a time step if a repeat of
     # any essential structure component occurs there
-    non_zero_inds = PNO_color_vec > 0
-    num_NZI = non_zero_inds.sum(axis=0)
-    PNO_color_inds_only = PNO_color_vec[non_zero_inds]
+    non_zero_inds = (pno_color_vec > 0)
+    num_nzi = non_zero_inds.sum(axis=0)
+    pno_color_inds_only = pno_color_vec[non_zero_inds]
 
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
-    zero_inds_short = PNO_color_inds_only == (num_colors + 1)
-    PNO_color_inds_only[zero_inds_short] = 0
+    zero_inds_short = (pno_color_inds_only == (num_colors + 1))
+    pno_color_inds_only[zero_inds_short] = 0
 
-    # Create a binary matrix SYMM_PNO_INDS_ONLY such that the (i,j) entry is 1
+    # Create a binary matrix symm_pno_inds_only such that the (i,j) entry is 1
     # if the following three conditions are true:
     #     1) a repeat of an essential structure component is the i-th thing in
     #        the ordering
@@ -1143,86 +1136,83 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     #        same essential structure component.
 
     # If any of the above conditions are not true, then the (i,j) entry of
-    # SYMM_PNO_INDS_ONLY is 0.
+    # symm_pno_inds_only is 0.
 
     # Turn our pattern row into a square matrix by stacking that row the
     # number of times equal to the columns in that row
-    PNO_IO_mat = np.tile(PNO_color_inds_only, (num_NZI, 1))
-    PNO_IO_mat = PNO_IO_mat.astype(np.float32)
+    pno_io_mat = np.tile(pno_color_inds_only, (num_nzi, 1))
+    pno_io_mat = pno_io_mat.astype(np.float32)
 
-    PNO_IO_mask = (
-        (PNO_IO_mat > 0).astype(np.float32)
-        + (PNO_IO_mat.transpose() > 0).astype(np.float32)
+    pno_io_mask = (
+        (pno_io_mat > 0).astype(np.float32)
+        + (pno_io_mat.transpose() > 0).astype(np.float32)
     ) == 2
-    symm_PNO_inds_only = (
-        PNO_IO_mat.astype(np.float32) == PNO_IO_mat.transpose().astype(np.float32)
-    ) * PNO_IO_mask
+    symm_pno_inds_only = (
+        pno_io_mat.astype(np.float32) == pno_io_mat.transpose().astype(np.float32)
+    ) * pno_io_mask
 
     # IMAGE 2
     fig, ax = plt.subplots(1, 1)
-    SDM = ax.imshow(symm_PNO_inds_only, cmap="binary", aspect=0.8)
+    sdm = ax.imshow(symm_pno_inds_only, cmap="binary", aspect=0.8)
     plt.title(
-        "Diagonal Matrix of the Starting Indices of Essential Structure Component (1)"
+        "Diagonal Matrix of the Starting Indices of Essential Structure Components (1)"
     )
-    loc = plticker.MultipleLocator(
-        base=1.0
-    )  # this locator puts ticks at regular intervals
+    loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
     ax.yaxis.set_major_locator(loc)
     ax.xaxis.set_major_locator(loc)
     plt.show()
 
-    # Extract all the diagonals in SYMM_PNO_INDS_ONLY and get pairs of
+    # Extract all the diagonals in symm_pno_inds_only and get pairs of
     # repeated sublists in the order that repeats of essential structure
     # components.
 
     # These pairs of repeated sublists are the basis of our hierarchical
     # representation.
 
-    NZI_lst = find_all_repeats(symm_PNO_inds_only, np.arange(1, num_NZI + 1))
-    remove_inds = NZI_lst[:, 0] == NZI_lst[:, 2]
+    nzi_lst = find_all_repeats(symm_pno_inds_only, np.arange(1, num_nzi + 1))
+    remove_inds = (nzi_lst[:, 0] == nzi_lst[:, 2])
 
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
     # a pair (A,B) where A == B)
     if np.any(remove_inds == True):
         remove_inds = np.array(remove_inds).astype(int)
         remove = np.where(remove_inds == 1)
-        NZI_lst = np.delete(NZI_lst, remove, axis=0)
+        nzi_lst = np.delete(nzi_lst, remove, axis=0)
 
-    # Add the annotation markers to the pairs in NZI_LST
-    NZI_lst_anno = find_complete_list_anno_only(NZI_lst, num_NZI)
+    # Add the annotation markers to the pairs in nzi_lst
+    nzi_lst_anno = find_complete_list_anno_only(nzi_lst, num_nzi)
 
     # Remove the overlaps
-    output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
-    (NZI_matrix_no, NZI_key_no) = output_tuple[1:3]
-    NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
+    output_tuple = remove_overlaps(nzi_lst_anno, num_nzi)
+    (nzi_matrix_no, nzi_key_no) = output_tuple[1:3]
 
+    # Reconstruct full block
+    nzi_pattern_block = reconstruct_full_block(nzi_matrix_no, nzi_key_no)
+    nzi_rows = nzi_pattern_block.shape[0]
+    
     # IMAGE 3
     fig, ax = plt.subplots(1, 1)
-    SDM = ax.imshow(NZI_pattern_block, cmap="binary", aspect=0.8)
+    sdm = ax.imshow(nzi_pattern_block, cmap="binary", aspect=0.8)
     plt.title(
-        "Diagonal Matrix of the Starting Indices of Essential Structure Component (2)"
+        "Diagonal Matrix of the Starting Indices of Essential Structure Components (2)"
     )
-    loc = plticker.MultipleLocator(
-        base=1.0
-    )  # this locator puts ticks at regular intervals
+    loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
     ax.yaxis.set_major_locator(loc)
     ax.xaxis.set_major_locator(loc)
     plt.show()
 
     # IMAGE 4
     fig, ax = plt.subplots(1, 1)
-    SDM = ax.imshow((NZI_pattern_block + NZI_matrix_no), cmap="binary", aspect=0.8)
+    sdm = ax.imshow((nzi_pattern_block + nzi_matrix_no), cmap="binary", aspect=0.8)
     plt.title(
-        "Diagonal Matrix of the Starting Indices of Essential Structure Component (3)"
+        "Diagonal Matrix of the Starting Indices of Essential Structure Components (3)"
     )
-    loc = plticker.MultipleLocator(
-        base=1.0
-    )  # this locator puts ticks at regular intervals
+    loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
     ax.yaxis.set_major_locator(loc)
     ax.xaxis.set_major_locator(loc)
     plt.show()
 
-    nzi_rows = NZI_pattern_block.shape[0]
+    nzi_rows = nzi_pattern_block.shape[0]
 
     # Find where all blocks start and end
     pattern_starts = np.nonzero(non_zero_inds)[0]
@@ -1233,14 +1223,14 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     full_visualization = np.zeros((nzi_rows, sn))
     full_matrix_no = np.zeros((nzi_rows, sn))
 
-    for i in range(0, num_NZI):
-        repeated_sect = NZI_pattern_block[:, i].reshape(
-            np.shape(NZI_pattern_block)[0], 1
+    for i in range(0, num_nzi):
+        repeated_sect = nzi_pattern_block[:, i].reshape(
+            np.shape(nzi_pattern_block)[0], 1
         )
         full_visualization[:, pattern_starts[i] : pattern_ends[i] + 1] = np.tile(
             repeated_sect, (1, pattern_lengths[i])
         )
-        full_matrix_no[:, pattern_starts[i]] = NZI_matrix_no[:, i]
+        full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
 
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
     full_key = np.zeros((nzi_rows, 1))
@@ -1256,6 +1246,7 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
             find_zero = sn
 
         find_two = np.where(temp_row == 2)[0][0]
+
         if np.size(find_two) == 0:
             find_two = sn
 
@@ -1274,6 +1265,7 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     # repeat
     inds_remove = np.where(np.sum(full_matrix_no, 1) <= 1)
     full_key = np.delete(full_key, inds_remove, axis=0)
+
     full_matrix_no = np.delete(full_matrix_no, inds_remove, axis=0)
     full_visualization = np.delete(full_visualization, inds_remove, axis=0)
 
@@ -1288,11 +1280,9 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     twos = np.full((num_vis_rows, sn), 2, dtype=int)
     vis_array = twos - (full_visualization + full_matrix_no)
     fig, ax = plt.subplots(1, 1)
-    SDM = ax.imshow(vis_array, cmap="gray", aspect=5)
+    sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
     plt.title("Complete Hierarchical Structure")
-    loc = plticker.MultipleLocator(
-        base=1.0
-    )  # this locator puts ticks at regular intervals
+    loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
     ax.yaxis.set_major_locator(loc)
     ax.set_yticklabels(vis_yLabels)
     plt.show()
@@ -1302,15 +1292,15 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
 
 def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     """
-     Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps) to the essential
+     Distills the repeats encoded in matrix_no (and key_no) to the essential
      structure components and then builds the hierarchical representation. Optional visualizations of .
 
     Args
     -----
-        matrix_NO: np.array[int]
+        matrix_no: np.array[int]
             binary matrix with 1's where repeats begin and 0's
             otherwise
-        key_NO: np.array[int]
+        key_no: np.array[int]
             vector containing the lengths of the repeats encoded in matrix_NO
         sn: int
             song length, which is the number of audio shingles
@@ -1340,31 +1330,31 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
 
-    # Using PNO and PNO_KEY, we build a vector that tells us the order of the
-    # repeats of the essential structure components.
-    PNO = breakup_tuple[0]
-    PNO_key = breakup_tuple[1]
+    # Using pno and pno_key, we build a vector that tells us the order of the
+    # repeats of the essential structure components
+    pno = breakup_tuple[0]
+    pno_key = breakup_tuple[1]
 
-    # Get the block representation for PNO, called PNO_BLOCK
-    PNO_block = reconstruct_full_block(PNO, PNO_key)
+    # Get the block representation for pno, called pno_block
+    pno_block = reconstruct_full_block(pno, pno_key)
 
     if vis == True:
         # IMAGE 1 construction
-        PNO_anno = get_annotation_lst(PNO_key)
-        PNO_yLabels = get_yLabels(PNO_key, PNO_anno)
-        num_PNO_rows = np.size(PNO, axis=0)
-        twos = np.full((num_PNO_rows, sn), 2, dtype=int)
-        vis_array = twos - (PNO_block + PNO)
+        pno_anno = get_annotation_lst(pno_key)
+        pno_yLabels = get_yLabels(pno_key, pno_anno)
+        num_pno_rows = np.size(pno, axis=0)
+        twos = np.full((num_pno_rows, sn), 2, dtype=int)
+        vis_array = twos - (pno_block + pno)
         fig, ax = plt.subplots(1, 1)
-        SDM = ax.imshow(vis_array, cmap="gray", aspect=10)
+        sdm = ax.imshow(vis_array, cmap="gray", aspect=10)
         plt.title("Essential Structure Components")
-        ax.set_yticklabels(PNO_yLabels)
+        ax.set_yticklabels(pno_yLabels)
         plt.show()
 
     # Assign a unique (nonzero) number for each row in PNO. We refer these
     # unique numbers COLORS.
-    num_colors = PNO.shape[0]
-    num_timesteps = PNO.shape[1]
+    num_colors = pno.shape[0]
+    num_timesteps = pno.shape[1]
 
     # Create unique color identifier for num_colors
     color_lst = np.arange(1, num_colors + 1)
@@ -1375,28 +1365,28 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
 
     # For each time step in row i that equals 1, change the value at that time
     # step to i
-    PNO_color = color_mat * PNO
-    PNO_color_vec = PNO_color.sum(axis=0)
+    pno_color = color_mat * pno
+    pno_color_vec = pno_color.sum(axis=0)
 
     # Find where repeats exist in time, paying special attention to the starts
     # and ends of each repeat of an essential structure component
     # take sums down columns --- conv to logical
-    PNO_block_vec = (np.sum(PNO_block, axis=0)) > 0
-    PNO_block_vec = PNO_block_vec.astype(np.float32)
-    one_vec = PNO_block_vec[0 : sn - 1] - PNO_block_vec[1:sn]
+    pno_block_vec = (np.sum(pno_block, axis=0)) > 0
+    pno_block_vec = pno_block_vec.astype(np.float32)
+    one_vec = pno_block_vec[0 : sn - 1] - pno_block_vec[1:sn]
 
     # Find all the blocks of consecutive time steps that are not contained in
-    # any of the essential structure components. We call these blocks zero
-    # blocks.
-    # Shift PNO_BLOCK_VEC so that the zero blocks are marked at the correct
+    # any of the essential structure components
+    # We call these blocks zero blocks
+    # Shift pno_block_vec so that the zero blocks are marked at the correct
     # time steps with 1's
-    if PNO_block_vec[0] == 0:
+    if pno_block_vec[0] == 0:
         one_vec = np.insert(one_vec, 0, 1)
-    elif PNO_block_vec[0] == 1:
+    elif pno_block_vec[0] == 1:
         one_vec = np.insert(one_vec, 0, 0)
 
     # Assign one new unique number to all the zero blocks
-    PNO_color_vec[one_vec == 1] = num_colors + 1
+    pno_color_vec[one_vec == 1] = num_colors + 1
 
     # We are only concerned with the order that repeats of the essential
     # structure components occur in. So we create a vector that only contains
@@ -1406,16 +1396,16 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     # We isolate the starting index of each repeat of the essential structure
     # components and save a binary vector with 1 at a time step if a repeat of
     # any essential structure component occurs there
-    non_zero_inds = PNO_color_vec > 0
-    num_NZI = non_zero_inds.sum(axis=0)
-    PNO_color_inds_only = PNO_color_vec[non_zero_inds]
+    non_zero_inds = (pno_color_vec > 0)
+    num_nzi = non_zero_inds.sum(axis=0)
+    pno_color_inds_only = pno_color_vec[non_zero_inds]
 
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
-    zero_inds_short = PNO_color_inds_only == (num_colors + 1)
-    PNO_color_inds_only[zero_inds_short] = 0
+    zero_inds_short = (pno_color_inds_only == (num_colors + 1))
+    pno_color_inds_only[zero_inds_short] = 0
 
-    # Create a binary matrix SYMM_PNO_INDS_ONLY such that the (i,j) entry is 1
+    # Create a binary matrix symm_pno_inds_only such that the (i,j) entry is 1
     # if the following three conditions are true:
     #     1) a repeat of an essential structure component is the i-th thing in
     #        the ordering
@@ -1426,79 +1416,78 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     #        same essential structure component.
 
     # If any of the above conditions are not true, then the (i,j) entry of
-    # SYMM_PNO_INDS_ONLY is 0.
+    # symm_pno_inds_only is 0.
 
     # Turn our pattern row into a square matrix by stacking that row the
     # number of times equal to the columns in that row
-    PNO_IO_mat = np.tile(PNO_color_inds_only, (num_NZI, 1))
-    PNO_IO_mat = PNO_IO_mat.astype(np.float32)
+    pno_io_mat = np.tile(pno_color_inds_only, (num_nzi, 1))
+    pno_io_mat = pno_io_mat.astype(np.float32)
 
-    PNO_IO_mask = (
-        (PNO_IO_mat > 0).astype(np.float32)
-        + (PNO_IO_mat.transpose() > 0).astype(np.float32)
+    pno_io_mask = (
+        (pno_io_mat > 0).astype(np.float32)
+        + (pno_io_mat.transpose() > 0).astype(np.float32)
     ) == 2
-    symm_PNO_inds_only = (
-        PNO_IO_mat.astype(np.float32) == PNO_IO_mat.transpose().astype(np.float32)
-    ) * PNO_IO_mask
+    symm_pno_inds_only = (
+        pno_io_mat.astype(np.float32) == pno_io_mat.transpose().astype(np.float32)
+    ) * pno_io_mask
 
-    # IMAGE 2
     if vis == True:
+        # IMAGE 2
         fig, ax = plt.subplots(1, 1)
-        SDM = ax.imshow(symm_PNO_inds_only, cmap="binary", aspect=0.8)
+        sdm = ax.imshow(symm_pno_inds_only, cmap="binary", aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of Essential Structure Component (1)"
+            "Diagonal Matrix of the Starting Indices of Essential Structure Components (1)"
         )
-        loc = plticker.MultipleLocator(
-            base=1.0
-        )  # this locator puts ticks at regular intervals
+        loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
         ax.yaxis.set_major_locator(loc)
         ax.xaxis.set_major_locator(loc)
         plt.show()
 
-    # Extract all the diagonals in SYMM_PNO_INDS_ONLY and get pairs of
+    # Extract all the diagonals in symm_pno_inds_only and get pairs of
     # repeated sublists in the order that repeats of essential structure
     # components.
 
     # These pairs of repeated sublists are the basis of our hierarchical
     # representation.
 
-    NZI_lst = find_all_repeats(symm_PNO_inds_only, np.arange(1, num_NZI + 1))
-    remove_inds = NZI_lst[:, 0] == NZI_lst[:, 2]
+    nzi_lst = find_all_repeats(symm_pno_inds_only, np.arange(1, num_nzi + 1))
+    remove_inds = (nzi_lst[:, 0] == nzi_lst[:, 2])
 
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
     # a pair (A,B) where A == B)
     if np.any(remove_inds == True):
         remove_inds = np.array(remove_inds).astype(int)
         remove = np.where(remove_inds == 1)
-        NZI_lst = np.delete(NZI_lst, remove, axis=0)
+        nzi_lst = np.delete(nzi_lst, remove, axis=0)
 
-    # Add the annotation markers to the pairs in NZI_LST
-    NZI_lst_anno = find_complete_list_anno_only(NZI_lst, num_NZI)
+    # Add the annotation markers to the pairs in nzi_lst
+    nzi_lst_anno = find_complete_list_anno_only(nzi_lst, num_nzi)
 
     # Remove the overlaps
-    output_tuple = remove_overlaps(NZI_lst_anno, num_NZI)
-    (NZI_matrix_no, NZI_key_no) = output_tuple[1:3]
-    NZI_pattern_block = reconstruct_full_block(NZI_matrix_no, NZI_key_no)
+    output_tuple = remove_overlaps(nzi_lst_anno, num_nzi)
+    (nzi_matrix_no, nzi_key_no) = output_tuple[1:3]
+
+    # Reconstruct full block
+    nzi_pattern_block = reconstruct_full_block(nzi_matrix_no, nzi_key_no)
+    nzi_rows = nzi_pattern_block.shape[0]
 
     if vis == True:
         # IMAGE 3
         fig, ax = plt.subplots(1, 1)
-        SDM = ax.imshow(NZI_pattern_block, cmap="binary", aspect=0.8)
+        sdm = ax.imshow(nzi_pattern_block, cmap="binary", aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of Essential Structure Component (2)"
+            "Diagonal Matrix of the Starting Indices of Essential Structure Components (2)"
         )
-        loc = plticker.MultipleLocator(
-            base=1.0
-        )  # this locator puts ticks at regular intervals
+        loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
         ax.yaxis.set_major_locator(loc)
         ax.xaxis.set_major_locator(loc)
         plt.show()
 
         # IMAGE 4
         fig, ax = plt.subplots(1, 1)
-        SDM = ax.imshow((NZI_pattern_block + NZI_matrix_no), cmap="binary", aspect=0.8)
+        sdm = ax.imshow((nzi_pattern_block + nzi_matrix_no), cmap="binary", aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of Essential Structure Component (3)"
+            "Diagonal Matrix of the Starting Indices of Essential Structure Components (3)"
         )
         loc = plticker.MultipleLocator(
             base=1.0
@@ -1507,7 +1496,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
         ax.xaxis.set_major_locator(loc)
         plt.show()
 
-    nzi_rows = NZI_pattern_block.shape[0]
+    nzi_rows = nzi_pattern_block.shape[0]
 
     # Find where all blocks start and end
     pattern_starts = np.nonzero(non_zero_inds)[0]
@@ -1518,14 +1507,14 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     full_visualization = np.zeros((nzi_rows, sn))
     full_matrix_no = np.zeros((nzi_rows, sn))
 
-    for i in range(0, num_NZI):
-        repeated_sect = NZI_pattern_block[:, i].reshape(
-            np.shape(NZI_pattern_block)[0], 1
+    for i in range(0, num_nzi):
+        repeated_sect = nzi_pattern_block[:, i].reshape(
+            np.shape(nzi_pattern_block)[0], 1
         )
         full_visualization[:, pattern_starts[i] : pattern_ends[i] + 1] = np.tile(
             repeated_sect, (1, pattern_lengths[i])
         )
-        full_matrix_no[:, pattern_starts[i]] = NZI_matrix_no[:, i]
+        full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
 
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
     full_key = np.zeros((nzi_rows, 1))
@@ -1541,6 +1530,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
             find_zero = sn
 
         find_two = np.where(temp_row == 2)[0][0]
+
         if np.size(find_two) == 0:
             find_two = sn
 
@@ -1559,6 +1549,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     # repeat
     inds_remove = np.where(np.sum(full_matrix_no, 1) <= 1)
     full_key = np.delete(full_key, inds_remove, axis=0)
+
     full_matrix_no = np.delete(full_matrix_no, inds_remove, axis=0)
     full_visualization = np.delete(full_visualization, inds_remove, axis=0)
 
@@ -1574,11 +1565,9 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
         twos = np.full((num_vis_rows, sn), 2, dtype=int)
         vis_array = twos - (full_visualization + full_matrix_no)
         fig, ax = plt.subplots(1, 1)
-        SDM = ax.imshow(vis_array, cmap="gray", aspect=5)
+        sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
         plt.title("Complete Hierarchical Structure")
-        loc = plticker.MultipleLocator(
-            base=1.0
-        )  # this locator puts ticks at regular intervals
+        loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
         ax.yaxis.set_major_locator(loc)
         ax.set_yticklabels(vis_yLabels)
         plt.show()
