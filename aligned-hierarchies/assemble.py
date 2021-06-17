@@ -957,8 +957,8 @@ def hierarchical_structure(matrix_no, key_no, sn):
     pattern_ends = np.insert(pattern_ends, np.shape(pattern_ends)[1], sn - 1)
     pattern_lengths = np.array(pattern_ends - pattern_starts + 1)
 
-    full_visualization = np.zeros((nzi_rows, sn))
-    full_matrix_no = np.zeros((nzi_rows, sn))
+    full_visualization = np.zeros((nzi_rows, sn), dtype=int)
+    full_matrix_no = np.zeros((nzi_rows, sn), dtype=int)
 
     for i in range(0, num_nzi):
         repeated_sect = nzi_pattern_block[:, i].reshape(
@@ -970,7 +970,7 @@ def hierarchical_structure(matrix_no, key_no, sn):
         full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
 
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
-    full_key = np.zeros((nzi_rows, 1))
+    full_key = np.zeros((nzi_rows, 1), dtype=int)
     find_key_mat = full_visualization + full_matrix_no
 
     for i in range(0, nzi_rows):
