@@ -294,6 +294,10 @@ class test_utilities(unittest.TestCase):
         
         expect_output = np.array([1, 1, 1, 1, 1])
         
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output size
+        self.assertEqual(np.size(output), np.size(expect_output))
         # Test output result
         self.assertEqual(output.tolist(), expect_output.tolist())
         
@@ -304,13 +308,19 @@ class test_utilities(unittest.TestCase):
         expect_output = np.array([1, 2, 3, 4, 5])
         
         # Input with big size
-        key_lst = np.array([ 1,  1,  3,  4,  5,  5,  6,  6,  7,  7,  9, 11, 11, 11, 11, 11, 
-                            11, 11, 11, 12, 16, 16, 16, 16, 17, 17, 18, 20, 20, 20, 20])
+        key_lst = np.array([ 1,  1,  3,  4,  5,  5,  6,  6,  7,  7,  9, 11,
+                            11, 11, 11, 11, 11, 11, 11, 12, 16, 16, 16, 16, 
+                            17, 17, 18, 20, 20, 20, 20])
         output = utilities.get_annotation_lst(key_lst)
         
-        expect_output = np.array([1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 2, 3, 4, 5, 
-                                  6, 7, 8, 1, 1, 2, 3, 4, 1, 2, 1, 1, 2, 3, 4])
+        expect_output = np.array([1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 2, 3, 
+                                  4, 5, 6, 7, 8, 1, 1, 2, 3, 4, 1, 2, 1, 1, 
+                                  2, 3, 4])
         
+        # Test output type
+        self.assertIs(type(output), np.ndarray)
+        # Test output size
+        self.assertEqual(np.size(output), np.size(expect_output))
         # Test output result
         self.assertEqual(output.tolist(), expect_output.tolist())
         

@@ -33,9 +33,9 @@ This file contains the following functions:
     
     * get_yLabels - Generates the labels for a visualization.
     
-    * reformat - Transforms a binary matrix representation of when repeats 
-    occur in a song into a list of repeated structures detailing the length
-    and occurence of each repeat.   
+    * reformat [Only used for creating test examples] - Transforms a binary 
+    matrix representation of when repeats occur in a song into a list of 
+    repeated structures detailing the length and occurence of each repeat.   
     
 """
 
@@ -75,13 +75,13 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     else:
         mat_as = np.zeros(((num_rows * num_fv_per_shingle),
                            (num_columns - num_fv_per_shingle + 1)))
-        for i in range(1, num_fv_per_shingle+1):
+        for i in range(1, num_fv_per_shingle + 1):
             # Use feature vectors to create an audio shingle
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
-            mat_as[((i-1)*num_rows+1)-1:(i*num_rows), : ] = fv_mat[:, 
-                   i-1:(num_columns- num_fv_per_shingle + i)]
+            mat_as[((i - 1)*num_rows + 1) - 1:(i*num_rows), : ] = fv_mat[:, 
+                               i - 1:(num_columns- num_fv_per_shingle + i)]
 
     # Build the pairwise-cosine distance matrix between audio shingles
     sdm_row = spd.pdist(mat_as.T, 'cosine')
@@ -137,7 +137,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     mint_all = np.empty((0,5), int) 
 
     # Loop over all bandwidths from n to 1
-    for bw in np.flip((bandwidth_vec)):
+    for bw in np.flip(bandwidth_vec):
         if bw > thresh_bw:
             # Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
@@ -180,9 +180,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 
                 # Search for paired starts 
                 shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
-                                                  (full_bw-1))))
-                start_i_shin = np.array(shin_ovrlaps[0]+1) # row
-                start_j_shin = np.array(shin_ovrlaps[1]+1) # column
+                                                  (full_bw - 1))))
+                start_i_shin = np.array(shin_ovrlaps[0] + 1) # row
+                start_j_shin = np.array(shin_ovrlaps[1]  +1) # column
                 num_ovrlaps = len(start_i_shin)
                 
                 if (num_ovrlaps == 1 and start_i_shin == start_j_shin): 
@@ -225,8 +225,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     sint_all = np.vstack((sint_all,sint_lst))
                     
                     # 2b) Right Overlap
-                    end_i_shin = start_i_shin + (full_bw-1)
-                    end_j_shin = start_j_shin + (full_bw-1)
+                    end_i_shin = start_i_shin + (full_bw - 1)
+                    end_j_shin = start_j_shin + (full_bw - 1)
                 
                     i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, \
                                          end_i_shin[:])).T
@@ -368,7 +368,7 @@ def add_annotations(input_mat, song_length):
     num_rows = input_mat.shape[0]
     
     # Removes any already present annotation markers
-    input_mat[:, 5] = 0
+    input_mat[:,5] = 0
     
     # Find where repeats start
     s_one = input_mat[:,0]  
@@ -378,7 +378,7 @@ def add_annotations(input_mat, song_length):
     s_three = np.ones((num_rows,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, 
-                                 (s_one-1, s_two-1)), shape = (song_length, 
+                                 (s_one - 1, s_two - 1)), shape = (song_length, 
                                  song_length)).toarray()
     
     low_tri_mat = up_tri_mat.conj().transpose()
@@ -390,7 +390,7 @@ def add_annotations(input_mat, song_length):
     SPmax = max(song_pattern)
     
     # Adds annotation markers to pairs of repeats
-    for i in range(1,SPmax+1):
+    for i in range(1, SPmax + 1):
         pinds = np.nonzero(song_pattern == i)     
       
         # One if annotation not already marked, zero if it is
@@ -399,7 +399,7 @@ def add_annotations(input_mat, song_length):
         for j in pinds[0]:
             # Finds all starting pairs that contain time step j
             # and DO NOT have an annotation
-            mark_inds = (s_one == j+1) + (s_two == j+1)  
+            mark_inds = (s_one == j + 1) + (s_two == j + 1)  
             mark_inds = (mark_inds > 0)  
             mark_inds = check_inds * mark_inds
            
@@ -573,7 +573,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
             sub_struct_a = repeated_struct[0:(1 - b)]
     
             # Row vector with number of entries not included in sub_struct_a  
-            sub_struct_b = np.zeros((1,( b  - 1)))
+            sub_struct_b = np.zeros((1,( b - 1)))
     
             # Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
@@ -616,7 +616,7 @@ def get_annotation_lst (key_lst):
     # Add remaining annotations to anno list  
     for i in range (0,np.size(full_anno_lst)):
         if full_anno_lst[i] == 0:
-           full_anno_lst[i] =  full_anno_lst[i-1]+1
+           full_anno_lst[i] =  full_anno_lst[i - 1] + 1
     
     return full_anno_lst.astype(int)
 
@@ -645,7 +645,7 @@ def get_yLabels(width_vec, anno_vec):
     # Make sure the sizes of width_vec and anno_vec are the same
     assert(num_rows == np.size(anno_vec))
     
-    # Initialize the array
+    # Initialize the array with 0 as the origin
     ylabels = np.array([0])
     
     # Loop over the array adding labels
@@ -669,8 +669,9 @@ def reformat(pattern_mat, pattern_key):
     second repeat of a repeated structure start and end. The fifth column is 
     the length of the repeated structure. 
     
-    reformat.py may be helpful when writing example inputs for aligned 
-    hiearchies.
+    Reformat is not used in the main process for creating the
+    aligned-hierarchies. It is helpful when writing example inputs for 
+    the tests.
     
     Args
     ----
@@ -694,13 +695,13 @@ def reformat(pattern_mat, pattern_key):
     # Retrieve the index values of the repeats in pattern_mat 
     results = np.where(pattern_mat == 1)
     
-    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size - 1,2))):
             
             # Assign the time steps of the repeated structures into info_mat
-            info_mat[x,0] = results[1][j]+1
-            info_mat[x,1] = info_mat[x,0]+pattern_key[x]-1
-            info_mat[x,2] = results[1][j+1]+1
-            info_mat[x,3] = info_mat[x,2]+pattern_key[x]-1
+            info_mat[x,0] = results[1][j] + 1
+            info_mat[x,1] = info_mat[x,0]+pattern_key[x] - 1
+            info_mat[x,2] = results[1][j+1] + 1
+            info_mat[x,3] = info_mat[x,2]+pattern_key[x] - 1
             info_mat[x,4] = pattern_key[x] 
             
     return info_mat.astype(int)
