@@ -26,16 +26,16 @@ This file contains the following functions:
     
     * reconstruct_full_block - Creates a record of when pairs of repeated
     structures occur, from the first beat in the song to the last beat of the
-    song. Pairs of repeated structures are marked with 1's. 
-    
-    * reformat - Transforms a binary matrix representation of when repeats 
-    occur in a song into a list of repeated structures detailing the length
-    and occurence of each repeat.      
+    song. Pairs of repeated structures are marked with 1's.    
         
     * get_annotation_lst - Gets one annotation marker vector, given vector of
     lengths key_lst.
     
     * get_yLabels - Generates the labels for a visualization.
+    
+    * reformat [Only used for creating test examples] - Transforms a binary 
+    matrix representation of when repeats occur in a song into a list of 
+    repeated structures detailing the length and occurence of each repeat.   
     
 """
 
@@ -75,13 +75,13 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     else:
         mat_as = np.zeros(((num_rows * num_fv_per_shingle),
                            (num_columns - num_fv_per_shingle + 1)))
-        for i in range(1, num_fv_per_shingle+1):
+        for i in range(1, num_fv_per_shingle + 1):
             # Use feature vectors to create an audio shingle
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
-            mat_as[((i-1)*num_rows+1)-1:(i*num_rows), : ] = fv_mat[:, 
-                   i-1:(num_columns- num_fv_per_shingle + i)]
+            mat_as[((i - 1)*num_rows + 1) - 1:(i*num_rows), : ] = fv_mat[:, 
+                               i - 1:(num_columns- num_fv_per_shingle + i)]
 
     # Build the pairwise-cosine distance matrix between audio shingles
     sdm_row = spd.pdist(mat_as.T, 'cosine')
@@ -137,7 +137,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     mint_all = np.empty((0,5), int) 
 
     # Loop over all bandwidths from n to 1
-    for bw in np.flip((bandwidth_vec)):
+    for bw in np.flip(bandwidth_vec):
         if bw > thresh_bw:
             # Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
@@ -180,9 +180,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 
                 # Search for paired starts 
                 shin_ovrlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
-                                                  (full_bw-1))))
-                start_i_shin = np.array(shin_ovrlaps[0]+1) # row
-                start_j_shin = np.array(shin_ovrlaps[1]+1) # column
+                                                  (full_bw - 1))))
+                start_i_shin = np.array(shin_ovrlaps[0] + 1) # row
+                start_j_shin = np.array(shin_ovrlaps[1]  +1) # column
                 num_ovrlaps = len(start_i_shin)
                 
                 if (num_ovrlaps == 1 and start_i_shin == start_j_shin): 
@@ -225,8 +225,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     sint_all = np.vstack((sint_all,sint_lst))
                     
                     # 2b) Right Overlap
-                    end_i_shin = start_i_shin + (full_bw-1)
-                    end_j_shin = start_j_shin + (full_bw-1)
+                    end_i_shin = start_i_shin + (full_bw - 1)
+                    end_j_shin = start_j_shin + (full_bw - 1)
                 
                     i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, \
                                          end_i_shin[:])).T
@@ -293,7 +293,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Sort the output array first by repeat length, then by starts of i and 
     # finally by j
     inds = np.lexsort((all_lst[:,2],all_lst[:,0],all_lst[:,4]))
-    all_lst = all_lst[inds]
+    all_lst = np.array(all_lst)[inds]
     
     return(all_lst.astype(int))
 
@@ -368,7 +368,7 @@ def add_annotations(input_mat, song_length):
     num_rows = input_mat.shape[0]
     
     # Removes any already present annotation markers
-    input_mat[:, 5] = 0
+    input_mat[:,5] = 0
     
     # Find where repeats start
     s_one = input_mat[:,0]  
@@ -378,7 +378,7 @@ def add_annotations(input_mat, song_length):
     s_three = np.ones((num_rows,), dtype = int)
     
     up_tri_mat = sps.coo_matrix((s_three, 
-                                 (s_one-1, s_two-1)), shape = (song_length, 
+                                 (s_one - 1, s_two - 1)), shape = (song_length, 
                                  song_length)).toarray()
     
     low_tri_mat = up_tri_mat.conj().transpose()
@@ -390,7 +390,7 @@ def add_annotations(input_mat, song_length):
     SPmax = max(song_pattern)
     
     # Adds annotation markers to pairs of repeats
-    for i in range(1,SPmax+1):
+    for i in range(1, SPmax + 1):
         pinds = np.nonzero(song_pattern == i)     
       
         # One if annotation not already marked, zero if it is
@@ -399,7 +399,7 @@ def add_annotations(input_mat, song_length):
         for j in pinds[0]:
             # Finds all starting pairs that contain time step j
             # and DO NOT have an annotation
-            mark_inds = (s_one == j+1) + (s_two == j+1)  
+            mark_inds = (s_one == j + 1) + (s_two == j + 1)  
             mark_inds = (mark_inds > 0)  
             mark_inds = check_inds * mark_inds
            
@@ -527,33 +527,134 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         
     """
 
-    # Initialize the output
-    pattern_block = pattern_mat
     
+    # First, find number of beats (columns) in pattern_mat: 
     # Check size of pattern_mat (in cases where there is only 1 pair of
     # repeated structures)
     if (pattern_mat.ndim == 1): 
-        # Convert a 1D array into 2D array 
+        #Convert a 1D array into 2D array 
         pattern_mat = pattern_mat[None, : ]
-    
-    # Check if pattern_key is in vector row and initialize the length_vec
-    if pattern_key.ndim != 1: 
-        # Convert pattern_key into a vector row 
-        length_vec = pattern_key.flatten()
+        #Assign number of beats to sn 
+        sn = pattern_mat.shape[1]
     else: 
-        length_vec = pattern_key
-    
-    # Find where the repeats start
-    results = np.where(pattern_mat == 1)
-    
-    # Use the repeat length to create pattern_block
-    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
-        pattern_block[x][results[1][j]:results[1][j]+length_vec[x]] = 1
-        pattern_block[x][results[1][j+1]:results[1][j+1]+length_vec[x]] = 1
+        #Assign number of beats to sn 
+        sn = pattern_mat.shape[1]
         
+    # Assign number of repeated structures (rows) in pattern_mat to sb 
+    sb = pattern_mat.shape[0]
+    
+    # Pre-allocating a sn by sb array of zeros 
+    pattern_block = np.zeros((sb,sn)).astype(int)  
+    
+    # Check if pattern_key is in vector row 
+    if pattern_key.ndim != 1: 
+        #Convert pattern_key into a vector row 
+       length_vec = pattern_key.flatten()
+    else: 
+        length_vec = pattern_key 
+    
+    for i in range(sb):
+        # Retrieve all of row i of pattern_mat 
+        repeated_struct = pattern_mat[i,:]
+    
+        # Retrieve the length of the repeats encoded in row i of pattern_mat 
+        length = length_vec[i]
+    
+        # Pre-allocate a section of size length x sn for pattern_block
+        sub_section = np.zeros((length, sn))
+    
+        # Replace first row in block_zeros with repeated_structure 
+        sub_section[0,:] = repeated_struct
+        
+        # Creates pattern_block: Sums up each column after sliding repeated 
+        # structure i to the right bw - 1 times 
+        for b in range(2, length + 1): 
+            # Retrieve repeated structure i up to its (1 - b) position 
+            sub_struct_a = repeated_struct[0:(1 - b)]
+    
+            # Row vector with number of entries not included in sub_struct_a  
+            sub_struct_b = np.zeros((1,( b - 1)))
+    
+            # Append sub_struct_b in front of sub_struct_a 
+            new_struct = np.append(sub_struct_b, sub_struct_a)
+
+            # Replace part of sub_section with new_struct 
+            sub_section[b - 1,:] = new_struct
+
+        # Replaces part of pattern_block with the sums of each column in 
+        # sub_section 
+        pattern_block[i,:] = np.sum(sub_section, axis = 0)
     
     return pattern_block
+
+
+def get_annotation_lst (key_lst):
+    """
+    Gets one annotation marker vector, given vector of lengths key_lst.
     
+    Args 
+    -----
+        key_lst: np.array[int]
+            Array of lengths in ascending order
+    
+    Returns 
+    -----
+        anno_lst_out: np.array[int] 
+            Array of one possible set of annotation markers for key_lst
+            
+    """
+
+    # Initialize the temporary variable
+    num_rows = np.size(key_lst)
+    full_anno_lst = np.zeros(num_rows)
+
+    # Find the first instance of each length and give it 1 as an annotation
+    # marker
+    unique_keys = np.unique(key_lst,return_index=True)
+    full_anno_lst[unique_keys[1]] = 1
+        
+    # Add remaining annotations to anno list  
+    for i in range (0,np.size(full_anno_lst)):
+        if full_anno_lst[i] == 0:
+           full_anno_lst[i] =  full_anno_lst[i - 1] + 1
+    
+    return full_anno_lst.astype(int)
+
+
+def get_yLabels(width_vec, anno_vec):   
+    """
+    Generates the labels for a visualization with width_vec and ANNO_VEC.
+    
+    Args 
+    -----
+        width_vec: np.array[int]
+            Vector of widths for a visualization
+            
+        anno_vec: np.array[int]
+            Array of annotations for a visualization
+    
+    Returns 
+    -----
+        ylabels: np.array[str] 
+            Labels for the y-axis of a visualization
+        
+    """
+
+    # Determine number of rows to label
+    num_rows = np.size(width_vec)
+    # Make sure the sizes of width_vec and anno_vec are the same
+    assert(num_rows == np.size(anno_vec))
+    
+    # Initialize the array with 0 as the origin
+    ylabels = np.array([0])
+    
+    # Loop over the array adding labels
+    for i in range(0,num_rows):
+        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
+        ylabels = np.append(ylabels, label )
+    
+    return ylabels
+
 
 def reformat(pattern_mat, pattern_key):
     """
@@ -568,8 +669,9 @@ def reformat(pattern_mat, pattern_key):
     second repeat of a repeated structure start and end. The fifth column is 
     the length of the repeated structure. 
     
-    reformat.py may be helpful when writing example inputs for aligned 
-    hiearchies.
+    Reformat is not used in the main process for creating the
+    aligned-hierarchies. It is helpful when writing example inputs for 
+    the tests.
     
     Args
     ----
@@ -593,81 +695,13 @@ def reformat(pattern_mat, pattern_key):
     # Retrieve the index values of the repeats in pattern_mat 
     results = np.where(pattern_mat == 1)
     
-    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size-1,2))):
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size - 1,2))):
             
             # Assign the time steps of the repeated structures into info_mat
-            info_mat[x,0] = results[1][j]+1
-            info_mat[x,1] = info_mat[x,0]+pattern_key[x]-1
-            info_mat[x,2] = results[1][j+1]+1
-            info_mat[x,3] = info_mat[x,2]+pattern_key[x]-1
+            info_mat[x,0] = results[1][j] + 1
+            info_mat[x,1] = info_mat[x,0]+pattern_key[x] - 1
+            info_mat[x,2] = results[1][j+1] + 1
+            info_mat[x,3] = info_mat[x,2]+pattern_key[x] - 1
             info_mat[x,4] = pattern_key[x] 
             
     return info_mat.astype(int)
-
-
-def get_annotation_lst (key_lst):
-    """
-    Gets one annotation marker vector, given vector of lengths key_lst.
-    
-    Args 
-    -----
-        key_lst: np.array[int]
-            Vector of lengths in ascending order
-    
-    Returns 
-    -----
-        anno_lst_out: np.array[int] 
-            Vector of one possible set of annotation markers for key_lst
-            
-    """
-
-    # Initialize the temporary variable
-    num_rows = np.size(key_lst)
-    full_anno_lst = np.zeros(num_rows)
-
-    # Find the first instance of each length and give it 1 as an annotation
-    # marker
-    unique_keys = np.unique(key_lst,return_index=True)
-    full_anno_lst[unique_keys[1]] = 1
-        
-    # Add remaining annotations to anno list  
-    for i in range (0,np.size(full_anno_lst)):
-        if full_anno_lst[i] == 0:
-           full_anno_lst[i] =  full_anno_lst[i-1]+1
-    
-    return full_anno_lst.astype(int)
-
-
-def get_yLabels(width_vec, anno_vec):   
-    """
-    Generates the labels for a visualization with width_vec and ANNO_VEC.
-    
-    Args 
-    -----
-        width_vec: np.array[int]
-            Vector of widths for a visualization
-            
-        anno_vec: np.array[int]
-            Vector of annotations for a visualization
-    
-    Returns 
-    -----
-        ylabels: np.array[str] 
-            Labels for the y-axis of a visualization
-        
-    """
-
-    # Determine number of rows to label
-    num_rows = np.size(width_vec)
-    # Make sure the sizes of width_vec and anno_vec are the same
-    assert(num_rows == np.size(anno_vec))
-    
-    # Initialize the array
-    ylabels = np.array([0])
-    
-    # Loop over the array adding labels
-    for i in range(0,num_rows):
-        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
-        ylabels = np.append(ylabels, label )
-    
-    return ylabels
