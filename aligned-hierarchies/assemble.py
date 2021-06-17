@@ -1220,8 +1220,8 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
     pattern_ends = np.insert(pattern_ends, np.shape(pattern_ends)[1], sn - 1)
     pattern_lengths = np.array(pattern_ends - pattern_starts + 1)
 
-    full_visualization = np.zeros((nzi_rows, sn))
-    full_matrix_no = np.zeros((nzi_rows, sn))
+    full_visualization = np.zeros((nzi_rows, sn), dtype=int)
+    full_matrix_no = np.zeros((nzi_rows, sn), dtype=int)
 
     for i in range(0, num_nzi):
         repeated_sect = nzi_pattern_block[:, i].reshape(
@@ -1233,7 +1233,7 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
         full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
 
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
-    full_key = np.zeros((nzi_rows, 1))
+    full_key = np.zeros((nzi_rows, 1), dtype=int)
     find_key_mat = full_visualization + full_matrix_no
 
     for i in range(0, nzi_rows):
@@ -1329,7 +1329,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     """
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
-
+    
     # Using pno and pno_key, we build a vector that tells us the order of the
     # repeats of the essential structure components
     pno = breakup_tuple[0]
@@ -1337,7 +1337,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
 
     # Get the block representation for pno, called pno_block
     pno_block = reconstruct_full_block(pno, pno_key)
-
+    
     if vis == True:
         # IMAGE 1 construction
         pno_anno = get_annotation_lst(pno_key)
@@ -1350,7 +1350,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
         plt.title("Essential Structure Components")
         ax.set_yticklabels(pno_yLabels)
         plt.show()
-
+        
     # Assign a unique (nonzero) number for each row in PNO. We refer these
     # unique numbers COLORS.
     num_colors = pno.shape[0]
@@ -1374,7 +1374,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     pno_block_vec = (np.sum(pno_block, axis=0)) > 0
     pno_block_vec = pno_block_vec.astype(np.float32)
     one_vec = pno_block_vec[0 : sn - 1] - pno_block_vec[1:sn]
-
+    
     # Find all the blocks of consecutive time steps that are not contained in
     # any of the essential structure components
     # We call these blocks zero blocks
@@ -1399,6 +1399,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     non_zero_inds = (pno_color_vec > 0)
     num_nzi = non_zero_inds.sum(axis=0)
     pno_color_inds_only = pno_color_vec[non_zero_inds]
+    
 
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
@@ -1504,20 +1505,22 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     pattern_ends = np.insert(pattern_ends, np.shape(pattern_ends)[1], sn - 1)
     pattern_lengths = np.array(pattern_ends - pattern_starts + 1)
 
-    full_visualization = np.zeros((nzi_rows, sn))
-    full_matrix_no = np.zeros((nzi_rows, sn))
-
+    full_visualization = np.zeros((nzi_rows, sn), dtype=int)
+    full_matrix_no = np.zeros((nzi_rows, sn), dtype=int)
+    
     for i in range(0, num_nzi):
         repeated_sect = nzi_pattern_block[:, i].reshape(
             np.shape(nzi_pattern_block)[0], 1
         )
+        
         full_visualization[:, pattern_starts[i] : pattern_ends[i] + 1] = np.tile(
             repeated_sect, (1, pattern_lengths[i])
         )
+        
         full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
-
+       
     # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
-    full_key = np.zeros((nzi_rows, 1))
+    full_key = np.zeros((nzi_rows, 1), dtype=int)
     find_key_mat = full_visualization + full_matrix_no
 
     for i in range(0, nzi_rows):
@@ -1544,7 +1547,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
     full_key = np.sort(full_key, axis=0)
     full_visualization = full_visualization[full_key_inds, :]
     full_matrix_no = full_matrix_no[full_key_inds, :]
-
+    
     # Remove rows of our hierarchical representation that contain only one
     # repeat
     inds_remove = np.where(np.sum(full_matrix_no, 1) <= 1)
