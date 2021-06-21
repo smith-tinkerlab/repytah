@@ -342,7 +342,6 @@ def stretch_diags(thresh_diags, band_width):
 
 
 def add_annotations(input_mat, song_length):
- 
     """
     Adds annotations to the pairs of repeats in input_mat.
 
@@ -526,7 +525,6 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         prescribed in pattern_key
         
     """
-
     
     # First, find number of beats (columns) in pattern_mat: 
     # Check size of pattern_mat (in cases where there is only 1 pair of

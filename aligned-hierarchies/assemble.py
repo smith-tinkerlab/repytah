@@ -85,6 +85,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
             vector containing the lengths of the repeats
             of essential structure components in
             pattern_no_overlaps
+            
     """
 
     sig = signature(breakup_overlaps_by_intersect)
@@ -169,7 +170,6 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
         # stopping condition
-        # T_inds = np.nonzeros(bw_vec == T, 1)
         T_inds = np.amin(desc_bw_vec == T) - 1
         if T_inds < 0:
             T_inds = np.array([])
@@ -208,6 +208,7 @@ def check_overlaps(input_mat):
     overlaps_yn: np.array(bool)
         logical array where (i,j) = 1 if row i of input matrix and row j
         of input matrix overlap and (i,j) = 0 elsewhere
+        
     """
 
     # Get number of rows and columns
@@ -291,6 +292,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
             non-overlapping repeats cut from red and blue
         union_length: np.array
             vector containing the lengths of the repeats encoded in union_mat
+            
     """
 
     # Find the total time steps in red
@@ -542,6 +544,7 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
 
         length_vec: np.array
             column vector containing the lengths of the replicated parts
+            
     """
 
     # Determine where input_vec has a break
@@ -615,6 +618,7 @@ def __inds_to_rows(start_mat, row_length):
         new_mat: np.array
             matrix of one or two rows, with 1's where
             the starting indices and 0's otherwise
+            
     """
 
     if start_mat.ndim == 1:
@@ -655,6 +659,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
 
     one_length_vec: np.array
         length of the repeats encoded in out_mat
+        
     """
 
     # Sort the elements of full_bandwidth
@@ -741,6 +746,7 @@ def __merge_rows(input_mat, input_width):
     -------
     merge_mat: np.array
         binary matrix with ones where repeats start and zeroes otherwise
+        
     """
 
     # Step 0: initialize temporary variables
@@ -1047,6 +1053,7 @@ def hierarchical_structure_with_vis(matrix_no, key_no, sn):
             vector containing the annotation markers of the
             hierarchical structure encoded in each row of
             full_matrix_no
+            
     """
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
@@ -1326,6 +1333,7 @@ def hierarchical_structure_test(matrix_no, key_no, sn, vis=False):
             vector containing the annotation markers of the
             hierarchical structure encoded in each row of
             full_matrix_NO
+            
     """
 
     breakup_tuple = breakup_overlaps_by_intersect(matrix_no, key_no, 0)
