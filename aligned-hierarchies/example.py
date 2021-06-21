@@ -3,7 +3,7 @@ import numpy as np
 from utilities import create_sdm, find_initial_repeats
 from search import find_complete_list
 from transform import remove_overlaps
-from assemble import hierarchical_structure, hierarchical_structure_with_vis
+from assemble import hierarchical_structure_with_vis
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
@@ -39,18 +39,16 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh) 
-    # Think this is redund in python * np.ones((song_length,song_length))
+    
     # Extract diagonals from thresholded distance matrix, saving the repeat pairs
     # the diagonals represent
-
-    all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length+1), 0)
-    # np.arrange(start,end),default length be 1. so output is [1,2,...,song_length]
+    all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length + 1), 0)
     
-     # Find smaller repeats contained within larger repeats
+    # Find smaller repeats contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
     
 
-     # Create dictionary of output variables
+    # Create dictionary of output variables
     outdict = {}
     outdict['thresh'] = thresh
     
