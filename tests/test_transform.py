@@ -105,7 +105,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_large_input_no_overlaps_bw_1(self):
         """
         Tests if __create_anno_remove_overlaps works with a large matrix
-        containing no overlaps and having bandwidth 1
+        containing no overlaps and having bandwidth equal to 1
         """
 
         input_mat = np.array([[8,   8,   14,  14,  1, 1],
@@ -352,6 +352,31 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
         self.assertTrue((output_tuple[2] == expect_anno_id_lst).all())
+
+    def test_separate_anno_markers_small_input(self):
+        """
+        Tests if __separate_anno_markers works with a small matrix
+        """
+
+        k_mat = np.array([[3, 3, 9,  9,  1, 1],
+                          [3, 3, 15, 15, 1, 1],
+                          [5, 5, 12, 12, 1, 2]])
+        song_length = 19
+        band_width = 1
+        pattern_row = np.array([0, 0, 1, 0, 2, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0])
+
+        expect_pattern_mat = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]])
+        expect_pattern_key = np.array([[1],
+                                       [1]])
+        expect_anno_id_lst = np.array([[1],
+                                       [2]])
+
+        output_tuple = __separate_anno_markers(k_mat, song_length, band_width, pattern_row)
+
+        self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
+        self.assertTrue((output_tuple[1] == expect_pattern_key).all())
+        self.assertTrue((output_tuple[2] == expect_anno_id_lst).all())
     
     def test_separate_anno_markers_large_input(self):
         """
@@ -432,8 +457,37 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
         self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
+
+    def test_remove_overlaps_small_input_without_overlaps(self):
+        """
+        Tests if remove_overlaps works with a small matrix containing
+        no overlaps
+        """
+
+        input_lst = np.array([[1, 1, 10, 10, 1, 1],
+                              [7, 7, 13, 13, 1, 1],
+                              [3, 4, 17, 18, 2, 1]])
+
+        song_length = 20
+
+        expect_lst_no_overlaps = np.array([[1, 1, 10, 10, 1, 1],
+                                           [7, 7, 13, 13, 1, 1],
+                                           [3, 4, 17, 18, 2, 1]])
+        expect_matrix_no_overlaps = np.array([[1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                                              [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]])
+        expect_key_no_overlaps = np.array([1, 2])
+        expect_annotations_no_overlaps = np.array([1, 1])
+        expect_all_overlap_lst = np.empty([0, 6])
+
+        output_tuple = remove_overlaps(input_lst, song_length)
+
+        self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
+        self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
+        self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
+        self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
     
-    def test_remove_overlaps_big_input_with_overlaps(self):
+    def test_remove_overlaps_large_input_with_overlaps(self):
         """
         Tests if remove_overlaps works with a large matrix containing overlaps
         """
