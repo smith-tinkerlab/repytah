@@ -15,6 +15,7 @@ Welcome to aligned-hierarchies's documentation!
    transform
    assemble
    search_doc
+   example
 
    
 
