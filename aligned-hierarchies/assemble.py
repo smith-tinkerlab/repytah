@@ -40,10 +40,9 @@ are divided until there are only non-overlapping pieces left over.
 
     * hierarchical_structure - Distills the repeats encoded in MATRIX_NO 
     (and KEY_NO) to the essential structure components and then builds the 
-    hierarchical representation.
+    hierarchical representation. Optionally outputs visualizations of the 
+    hierarchical representations.
     
-    * hierarchical_structure_with_vis - Same as hierarchical_structure but this
-    also outputs visualizations of the hierarchical representations.
 """
 
 import numpy as np
