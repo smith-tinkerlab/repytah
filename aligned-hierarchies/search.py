@@ -3,6 +3,10 @@
 """
 search.py 
 
+This script holds functions used to find and record the diagonals in the
+thresholded matrix, T. These functions prepare the found diagonals to later
+be transformed and assembled.
+
 This file contains the following functions:
     
     * find_complete_list - Finds all smaller diagonals (and the associated 
@@ -274,7 +278,7 @@ def __find_add_srows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((l_add, l_add_right))
             else:
                 add_rows = np.vstack((add_rows, l_add, l_add_right))
-            
+
     # Right Check: check for CI on the right side of the pairs 
         # Check if the the starting index of repeat "J" of the pair "IJ" 
         # equals CI
@@ -309,7 +313,8 @@ def __find_add_srows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-            
+    # (REQUIRE A REVIEW) actually I'm not sure if we need to get rid of duplicate arrays here,
+    # I want to hear your opinions (the result of test__find_add_erows also contains duplicate arrays)
     return add_rows
 
 
@@ -431,10 +436,13 @@ def __find_add_erows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-                     
+
+     # Same question with find_add_srows
     return add_rows
 
 
+# (REQUIRE A REVIEW) Not sure if we still need find_add_srows and find_add_erows
+# The first two conditions seem to be included in the find_add_mrows
 def __find_add_mrows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain

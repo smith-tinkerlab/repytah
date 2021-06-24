@@ -87,7 +87,7 @@ class test_search(unittest.TestCase):
         lst_no_anno = np.array([[ 1, 15, 31, 45, 15],
                                 [ 1, 10, 46, 55, 10],
                                 [31, 40, 46, 55, 10],
-                                [10, 20, 40, 50, 15]])
+                                [10, 20, 40, 50, 11]])
         check_inds = np.array([1, 31, 46])
         k = 10
         
