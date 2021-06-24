@@ -175,7 +175,7 @@ def remove_overlaps(input_mat, song_length):
         key_no_overlaps = key_no
         annotations_no_overlaps = anno_no
         
-    # Set the outputs
+    # Set the output
     lst_no_overlaps = L
     all_overlap_lst = np.delete(all_overlap_lst, 0, 0)
     output = (lst_no_overlaps, matrix_no_overlaps.astype(int), key_no_overlaps.astype(int),
@@ -321,6 +321,7 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
         overlap_lst = np.unique(overlap_lst, axis=0)
         overlap_lst = add_annotations(overlap_lst, song_length)
 
+    # Set the output
     output = (pattern_row.flatten(), k_lst_out, overlap_lst)
     
     return output
@@ -403,6 +404,7 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
     # Create the list of annotations from pattern_mat
     anno_id_lst = np.arange(anno_max).reshape(anno_max, 1)+1
     
+    # Set the output
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
