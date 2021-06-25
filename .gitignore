@@ -4,6 +4,8 @@ __pycache__
 __pycache__
 
 # Packages
+*.egg
+*.egg-info
 dist
 build
 eggs
