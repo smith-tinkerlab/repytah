@@ -5,9 +5,6 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 import sys
 import os
-# module_path = os.path.abspath(os.path.join('..'))
-# if module_path not in sys.path:
-#     sys.path.append(module_path+"\\aligned-hierarchies")
 sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest
@@ -22,7 +19,6 @@ from assemble import __inds_to_rows as inds_to_rows
 from assemble import __merge_based_on_length as merge_based_on_length
 from assemble import __merge_rows as merge_rows
 from assemble import hierarchical_structure
-
 
 class test_utilities(unittest.TestCase):
 
@@ -239,6 +235,26 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[1].tolist(), expect_output1.tolist())
         self.assertEqual(output[2].tolist(), expect_output2.tolist())
 
-         
+    def test_hierarchical_structure_equal_with_boolean(self):
+        """
+        Tests if hierarchical_structure gives the same output for vis=True and vis=False as
+        visualizations are just shown
+        """
+
+        input_matrix_no = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        input_key_no = np.array([[5],
+                                 [10]])
+        input_sn = 20
+
+        output_false = hierarchical_structure(input_matrix_no, input_key_no, input_sn) # default vis=False
+        output_true = hierarchical_structure(input_matrix_no, input_key_no, input_sn, vis=True)
+
+        self.assertEqual(output_false[0].tolist(), output_true[0].tolist())
+        self.assertEqual(output_false[1].tolist(), output_true[1].tolist())
+        self.assertEqual(output_false[2].tolist(), output_true[2].tolist())
+        self.assertEqual(output_false[3].tolist(), output_true[3].tolist())
+
+
 if __name__ == '__main__':
     unittest.main()
