@@ -352,11 +352,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
         add_rows = np.full(1, False)
         return add_rows
 
-    # If there are no pairs of repeats that have a length greater than k
-    if sum(search_inds) == 0:
-        add_rows = np.full(1, False)
-        return add_rows
-
     # Multiply ending index of all repeats "I" by search_inds
     EI = np.multiply(L[:,1], search_inds)
     # Multipy ending index of all repeats "J" by search_inds
