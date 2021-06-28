@@ -23,7 +23,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     num_fv_per_shingle: int
         number of feature vectors per shingle. Provides "context" of each individual
-        time step, so that for notes CDE if num_fv_per_shingle = 2 shingles would be CD, DE
+        time step, so that for notes CDE if num_fv_per_shingle=2 shingles would be CD, DE
         
     thresh: int
         maximum threshold value. Largest length repeated structure to search for.
