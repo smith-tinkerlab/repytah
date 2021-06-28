@@ -3,11 +3,9 @@
 Unit tests for Aligned Hierarchies, utilities.py 
 """
 
+import pandas as pd
 import sys
 import os
-# module_path = os.path.abspath(os.path.join('..'))
-# if module_path not in sys.path:
-#     sys.path.append(module_path+"\\aligned-hierarchies")
 sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest 
@@ -20,14 +18,14 @@ from os import path
 
 class TestExample(unittest.TestCase): 
     
-    #Tests specific to create_sdm 
+    # Tests specific to create_sdm 
     def test_csv_to_aligned_hierarchies_none_returned(self): 
         """
         EXPLANATION 
         Tests that nothing is returned.   
         """
 
-        file_in = "input.csv"
+        file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
         file_out = "hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
@@ -43,7 +41,7 @@ class TestExample(unittest.TestCase):
         Tests that a file is saved.   
         """
 
-        file_in = "input.csv"
+        file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
         file_out = "hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
@@ -59,7 +57,7 @@ class TestExample(unittest.TestCase):
         Tests that the file saved isn't empty.   
         """
 
-        file_in = "input.csv"
+        file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
         file_out = "hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01

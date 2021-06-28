@@ -76,11 +76,16 @@ def remove_overlaps(input_mat, song_length):
     bw_vec = np.sort(bw_vec)[::-1]  # Sort list in ascending order
                                     # and then reverse
 
+    # Create a copy of the input matrix
     L = input_mat
     
+    # For creating matrix_no_overlaps, key_no_overlaps and 
+    # annotations_no_overlaps later
     mat_no = np.empty([0, song_length])
     key_no = np.empty([0, 1])
     anno_no = np.empty([0, 1])
+
+    # Create the list of all overlaps
     all_overlap_lst = np.array([[0, 0, 0, 0, 0, 0]])
     
     # While bw_vec still has entries
@@ -97,9 +102,11 @@ def remove_overlaps(input_mat, song_length):
                     bw_lst = np.array([L[i]])
                 else:
                     bw_lst = np.vstack((bw_lst, L[i]))
-                    
+
+                # Add the row being traversed to delete_array    
                 delete_array.append(i)
-                
+
+        # Delete the row being traversed from L       
         L = np.delete(L, delete_array, 0)
        
         # Use __create_anno_remove_overlaps to do the following three things:
@@ -140,6 +147,7 @@ def remove_overlaps(input_mat, song_length):
             anno_no = np.vstack((anno_no, anno_temp_lst))
         
         if bw_lst_out.size > 0:
+            # Add rows that have no overlaps
             L = np.vstack((L, bw_lst_out))
         
         # Create a new, sorted array
@@ -159,6 +167,7 @@ def remove_overlaps(input_mat, song_length):
 
         bw_vec = bw_vec[cut_index:np.shape(bw_vec)[0]]
 
+    # Extract matrix_no_overlaps, key_no_overlaps and annotations_no_overlaps
     if mat_no.size > 0:
         master_array = np.hstack((mat_no, key_no, anno_no))
         col_num = master_array.shape[1] # Number of columns
@@ -175,7 +184,7 @@ def remove_overlaps(input_mat, song_length):
         key_no_overlaps = key_no
         annotations_no_overlaps = anno_no
         
-    # Set the outputs
+    # Set the output
     lst_no_overlaps = L
     all_overlap_lst = np.delete(all_overlap_lst, 0, 0)
     output = (lst_no_overlaps, matrix_no_overlaps.astype(int), key_no_overlaps.astype(int),
@@ -285,7 +294,7 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
 
             anno_lst = k_mat[:, 5]  # Update anno_lst
 
-    # Step 2: Check that in fact each annotation has a repeat associated to it
+    # Step 3: Check that in fact each annotation has a repeat associated to it
     inds_markers = np.unique(pattern_row)
     
     # If any element of inds_markers is equal to zero, then remove this index
@@ -321,6 +330,7 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
         overlap_lst = np.unique(overlap_lst, axis=0)
         overlap_lst = add_annotations(overlap_lst, song_length)
 
+    # Set the output
     output = (pattern_row.flatten(), k_lst_out, overlap_lst)
     
     return output
@@ -403,6 +413,7 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
     # Create the list of annotations from pattern_mat
     anno_id_lst = np.arange(anno_max).reshape(anno_max, 1)+1
     
+    # Set the output
     output = (pattern_mat, pattern_key, anno_id_lst)
     
     return output
