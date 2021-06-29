@@ -1,5 +1,8 @@
 import scipy.io as sio
 import numpy as np
+import pandas as pd
+import os
+
 from utilities import create_sdm, find_initial_repeats
 from search import find_complete_list
 from transform import remove_overlaps
@@ -7,7 +10,7 @@ from assemble import hierarchical_structure
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
-    Example of full aligned hierarchies pathway
+    Example of full aligned hierarchies pathway 
     
     Args
     ----
@@ -20,18 +23,18 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     num_fv_per_shingle: int
         number of feature vectors per shingle. Provides "context" of each individual
-        time step, so that for notes CDE if num_fv_per_shingle = 2 shingles would be CD, DE
+        time step, so that for notes CDE if num_fv_per_shingle=2 shingles would be CD, DE
         
     thresh: int
         maximum threshold value. Largest length repeated structure to search for.
     
     Returns
+    
     -------
     none: .mat file is saved. Contains variables created for aligned hierarchies. 
     """
     # Import file of feature vectors
-    with open(file_in, 'r', newline='\n') as f:
-        fv_mat = np.loadtxt(f, delimiter = ',')
+    fv_mat = file_in
     
     # Get pairwise distance matrix/self dissimilarity matrix using cosine distance
     self_dissim_mat = create_sdm(fv_mat, num_fv_per_shingle)
@@ -40,15 +43,15 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh) 
     
-    # Extract diagonals from thresholded distance matrix, saving the repeat pairs
+    # Extract the diagonals from thresholded distance matrix, saving the repeat pairs
     # the diagonals represent
     all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length + 1), 0)
     
-    # Find smaller repeats contained within larger repeats
+    # Find smaller repeats which are contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
     
 
-    # Create dictionary of output variables
+    # Create the dictionary of output variables
     outdict = {}
     outdict['thresh'] = thresh
     
@@ -75,26 +78,26 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         outdict['partial_num_blocks'] = np.sum(mat_no_overlaps)
         outdict['num_partials'] = 1
         
-        # Create output file
+        # Create the output file
         sio.savemat(file_out, outdict)
         
     else:
         outdict['full_key'] = []
         outdict['full_mat_no_overlaps'] = []
         
-        # Save empty list of partial representations for use in comparison code
+        # Save the empty list of partial representations for use in comparison code
         outdict['partial_reps'] = []
         outdict['partial_key'] = []
         outdict['partial_widths'] = []
         outdict['partial_num_blocks'] = []
         outdict['num_partials'] = 0
         
-        # Create output file
+        # Create the output file
         sio.savemat(file_out, outdict)
 
         
 # Run on example file
-file_in = "input.csv"
+file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
 file_out = "hierarchical_out_file.mat"
 num_fv_per_shingle = 3
 thresh = 0.01

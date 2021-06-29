@@ -27,6 +27,7 @@ jobs:
         pip install numpy
         pip install scipy
         pip install matplotlib
+        pip install pandas
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: |
