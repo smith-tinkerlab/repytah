@@ -6,9 +6,6 @@ Unit tests for Aligned Hierarchies, search.py
 
 import sys
 import os
-# module_path = os.path.abspath(os.path.join('..'))
-# if module_path not in sys.path:
-#     sys.path.append(module_path+"\\aligned-hierarchies")
 sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
     
 import unittest
@@ -87,7 +84,7 @@ class test_search(unittest.TestCase):
         lst_no_anno = np.array([[ 1, 15, 31, 45, 15],
                                 [ 1, 10, 46, 55, 10],
                                 [31, 40, 46, 55, 10],
-                                [10, 20, 40, 50, 15]])
+                                [10, 20, 40, 50, 11]])
         check_inds = np.array([1, 31, 46])
         k = 10
         
