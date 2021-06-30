@@ -1084,9 +1084,10 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
         plt.title("Complete Hierarchical Structure")
-        loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
-        ax.yaxis.set_major_locator(loc)
-        ax.set_yticklabels(vis_yLabels)
+        #loc = plticker.MultipleLocator(base=1.0)  # this locator puts ticks at regular intervals
+        #ax.yaxis.set_major_locator(loc)
+        ax.set_yticks(np.arange(0,np.size(vis_yLabels)-1))
+        ax.set_yticklabels(vis_yLabels[1:])
         plt.show()
 
     return output
