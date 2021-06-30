@@ -1,8 +1,62 @@
-# ah package
+# mirah
 
-This python package builds the Aligned Hierarchies for music-based data streams. For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
+A Python package for building Aligned Hierarchies for music-based data streams.
 
-## Elements of the package
+<!-- Badges
+[![PyPI](https://img.shields.io/pypi/v/librosa.svg)](https://pypi.python.org/pypi/librosa)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/librosa/badges/version.svg)](https://anaconda.org/conda-forge/librosa)
+[![License](https://img.shields.io/pypi/l/librosa.svg)](https://github.com/librosa/librosa/blob/main/LICENSE.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.591533.svg)](https://doi.org/10.5281/zenodo.591533)
+
+[![CI](https://github.com/librosa/librosa/actions/workflows/ci.yml/badge.svg)](https://github.com/librosa/librosa/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/librosa/librosa/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/librosa/librosa) -->
+
+For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
+
+## Documentation
+
+See (link to website) for a complete reference manual and introductory tutorials.
+
+This [example](link to example vignette) tutorial will show you a usage of the package from start to finish.
+
+## Installation
+
+The latest stable release is available on PyPI, and you can install it by running:
+
+```bash
+pip install mirah
+```
+
+Anaconda users can install using `conda-forge`:
+
+```bash
+conda install -c conda-forge mirah
+```
+
+To build mirah from source, say `python setup.py build`.
+Then, to install mirah, say `python setup.py install`.
+
+Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
+
+```bash
+unzip mirah.zip
+pip install -e mirah
+```
+
+or
+
+```bash
+git clone https://github.com/smith-tinkerlab/mirah.git
+pip install -e mirah
+```
+
+By calling `pip list` you should see `mirah` now as an installed package:
+
+```bash
+mirah (0.x.x, /path/to/mirah)
+```
+
+## Current and Future Work - Elements of the Package
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given music-based data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
   * Includes walk through file example.py using supplied input.csv
@@ -12,6 +66,8 @@ This python package builds the Aligned Hierarchies for music-based data streams.
 * _Forthcoming_ Start-End and S_NL diagrams
 * _Forthcoming_ SuPP and MaPP representations
 
+<!-- this block should be part of documentation website
+
 ### Modules
 
 * [Aligned Hierarchies](https://github.com/smith-tinkerlab/ah/tree/master/aligned-hierarchies)
@@ -19,24 +75,18 @@ This python package builds the Aligned Hierarchies for music-based data streams.
   * [utilities.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/utilities.py) - Includes utility functions that allow larger functions in other modules to function.
   * [search.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/search.py) - Includes functions that find structures and information about those structures.
   * [transform.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/transform.py) - Includes functions that transform inputs to be of use in larger functions in assemble.py.
-  * [assemble.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/assemble.py) - Includes functions that create the hierarchical structure and build the aligned hierarchies.
+  * [assemble.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/assemble.py) - Includes functions that create the hierarchical structure and build the aligned hierarchies. -->
 
-## Contributors
+### MATLAB code
 
-The contributors for this package are:
+The original code to this project was written in MATLAB by Katherine M. Kinnaird. It can be found [here](https://github.com/kmkinnaird/ThesisCode).
 
-* Aligned Hierarchies
-  * [Lizette Carpenter](https://github.com/lcarpenter20)
-  * [Jordan Moody](https://github.com/jormacmoo)
-  * [Chenhui Jia](https://github.com/Chenhui-Jia)
-  * [Sasha Yeutseyeva](https://github.com/sashayeu)
-  * [Eleanor Donaher](https://github.com/edonaher)
-  * [Denise Nava](https://github.com/d-nava)
+### Acknowledgements
 
-### Matlab code
+This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) from 2019 to 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
 
-Original MATLAB code by Kinnaird can be found [here](https://github.com/kmkinnaird/ThesisCode).
+### Citing
 
-### Funding sources
+Please cite `mirah` using the following:
 
-This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019 and 2020, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
+K. M. Kinnaird, et al. mirah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.0.0.9000, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/ah](https://github.com/smith-tinkerlab/ah).
