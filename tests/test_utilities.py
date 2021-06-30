@@ -4,15 +4,12 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 """
 
-import os
-import sys
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../mirah'))
-
 import unittest
 import numpy as np
 
-import utilities
-from utilities import __find_song_pattern as _test_find_song_pattern
+
+from mirah import * 
+from mirah.utilities import __find_song_pattern as _test_find_song_pattern
 
 
 class test_utilities(unittest.TestCase):

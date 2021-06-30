@@ -3,17 +3,14 @@
 """
 Unit tests for Aligned Hierarchies, transform.py
 """
-
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../mirah'))
     
 import unittest
 import numpy as np 
 
-from transform import *
-from transform import __create_anno_remove_overlaps as _TestTransform__create_anno_remove_overlaps
-from transform import __separate_anno_markers as _TestTransform__separate_anno_markers 
+from mirah import * 
+from mirah.transform import *
+from mirah.transform import __create_anno_remove_overlaps as _TestTransform__create_anno_remove_overlaps
+from mirah.transform import __separate_anno_markers as _TestTransform__separate_anno_markers 
 
 
 class TestTransform(unittest.TestCase): 
