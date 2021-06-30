@@ -6,7 +6,7 @@ Unit tests for Aligned Hierarchies, transform.py
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
+sys.path.append(os.path.join(os.path.dirname('__file__'), '../mirah'))
     
 import unittest
 import numpy as np 
@@ -649,7 +649,6 @@ class TestTransform(unittest.TestCase):
         expect_all_overlap_lst = np.empty([0, 6])
         
         output_tuple = remove_overlaps(input_lst, song_length)
-        print('output:', output_tuple)
 
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
