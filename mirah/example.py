@@ -3,10 +3,10 @@ import numpy as np
 import pandas as pd
 import os
 
-from utilities import create_sdm, find_initial_repeats
-from search import find_complete_list
-from transform import remove_overlaps
-from assemble import hierarchical_structure
+from .utilities import create_sdm, find_initial_repeats
+from .search import find_complete_list
+from .transform import remove_overlaps
+from .assemble import hierarchical_structure
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
@@ -97,8 +97,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         
 # Run on example file
-file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
-file_out = "hierarchical_out_file.mat"
-num_fv_per_shingle = 3
-thresh = 0.01
-csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+# file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
+# file_out = "hierarchical_out_file.mat"
+# num_fv_per_shingle = 3
+# thresh = 0.01
+# csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)

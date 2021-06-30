@@ -5,20 +5,21 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
+# sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest
 import numpy as np
+from mirah import * 
 
-import assemble
-from assemble import breakup_overlaps_by_intersect
-from assemble import check_overlaps
-from assemble import __compare_and_cut as compare_and_cut
-from assemble import __num_of_parts as num_of_parts
-from assemble import __inds_to_rows as inds_to_rows
-from assemble import __merge_based_on_length as merge_based_on_length
-from assemble import __merge_rows as merge_rows
-from assemble import hierarchical_structure
+#import mirah.assemble
+from mirah.assemble import breakup_overlaps_by_intersect
+from mirah.assemble import check_overlaps
+from mirah.assemble import __compare_and_cut as compare_and_cut
+from mirah.assemble import __num_of_parts as num_of_parts
+from mirah.assemble import __inds_to_rows as inds_to_rows
+from mirah.assemble import __merge_based_on_length as merge_based_on_length
+from mirah.assemble import __merge_rows as merge_rows
+from mirah.assemble import hierarchical_structure
 
 class test_utilities(unittest.TestCase):
 
