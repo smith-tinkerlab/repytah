@@ -31,8 +31,15 @@ setup(
         'matplotlib'
     ],
     extras_require={
-        'dev': ['check-manifest'],
-        'test': ['coverage'],
+        'docs': [
+            'sphinx != 1.3.1',
+            'sphinx_rtd_theme==0.5.*',
+            'sphinx-multiversion >= 0.2.3',
+            'sphinx-gallery >= 0.7',
+            'spinxcontrib-svg2pdfconverter',
+            'presets'
+                ],
+        'tests': ['pytest']
     },
     project_urls={ 
         'Bug Reports': 'https://github.com/smith-tinkerlab/ah/issues',
@@ -40,6 +47,6 @@ setup(
     },
     package_data={'mirah': ['input.csv']},
     include_package_data=True,
-    license_file = ('LICENSE.md'),
+    license_file = 'LICENSE.md',
     license='MIT'
 )
