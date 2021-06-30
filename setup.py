@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='mirah',  
-    version='0.0.0-alpha',
+    version='0.0.0a0',
     description='mirah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -23,12 +23,10 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    package_dir={'': 'src'},
-    packages=find_packages(where='src'),
     python_requires='>=3.6, <4',
     install_requires=[
         'numpy >= 1.15.0',
-        'scipy.io', 
+        'scipy', 
         'pandas',
         'matplotlib'
     ],
@@ -43,7 +41,5 @@ setup(
     package_data={'mirah': ['input.csv']},
     include_package_data=True,
     license_file = ('LICENSE.md'),
-    license='MIT',
-    license_file_content_type = 'text/markdown',
-
+    license='MIT'
 )
