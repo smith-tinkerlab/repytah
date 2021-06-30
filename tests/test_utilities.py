@@ -6,7 +6,7 @@ Unit tests for Aligned Hierarchies, utilities.py
 
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
+sys.path.append(os.path.join(os.path.dirname('__file__'), '../mirah'))
 
 import unittest
 import numpy as np
