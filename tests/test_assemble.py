@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Unit tests for Aligned Hierarchies, utilities.py
+Unit tests for Aligned Hierarchies, assemble.py
 """
-
-import sys
-import os
-# sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest
 import numpy as np
-from mirah import * 
 
-#import mirah.assemble
+from mirah import * 
 from mirah.assemble import breakup_overlaps_by_intersect
 from mirah.assemble import check_overlaps
 from mirah.assemble import __compare_and_cut as compare_and_cut

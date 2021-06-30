@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Unit tests for Aligned Hierarchies, utilities.py 
+Unit tests for Aligned Hierarchies, example.py 
 """
 
 import pandas as pd
-import sys
 import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../mirah'))
-
 import unittest 
 
-from utilities import * 
-from example import *
+from mirah import * 
+from mirah.utilities import * 
+from mirah.example import *
 
 import os.path
 from os import path
