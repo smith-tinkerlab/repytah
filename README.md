@@ -89,4 +89,4 @@ This code was developed as part of Smith College's Summer Undergraduate Research
 
 Please cite `mirah` using the following:
 
-K. M. Kinnaird, et al. mirah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.0.0.9000, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/ah](https://github.com/smith-tinkerlab/ah).
+K. M. Kinnaird, et al. mirah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.0.0-alpha, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/ah](https://github.com/smith-tinkerlab/ah).
