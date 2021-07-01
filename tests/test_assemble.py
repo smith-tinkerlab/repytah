@@ -6,7 +6,6 @@ Unit tests for Aligned Hierarchies, assemble.py
 import unittest
 import numpy as np
 
-from mirah import * 
 from mirah.assemble import breakup_overlaps_by_intersect
 from mirah.assemble import check_overlaps
 from mirah.assemble import __compare_and_cut as compare_and_cut
@@ -16,7 +15,7 @@ from mirah.assemble import __merge_based_on_length as merge_based_on_length
 from mirah.assemble import __merge_rows as merge_rows
 from mirah.assemble import hierarchical_structure
 
-class test_utilities(unittest.TestCase):
+class TestAssemble(unittest.TestCase):
 
     def test_breakup_overlaps_by_intersect(self):
         """

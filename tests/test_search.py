@@ -7,7 +7,7 @@ Unit tests for Aligned Hierarchies, search.py
 import unittest
 import numpy as np
 
-from mirah import * 
+from mirah.search import find_complete_list
 from mirah.search import __find_add_srows as find_add_srows
 from mirah.search import __find_add_erows as find_add_erows
 from mirah.search import __find_add_mrows as find_add_mrows
@@ -15,7 +15,7 @@ from mirah.search import find_all_repeats as find_all_repeats
 from mirah.search import find_complete_list_anno_only as find_complete_list_anno_only
 
 
-class test_search(unittest.TestCase):
+class TestSearch(unittest.TestCase):
 
     def test_find_complete_list(self):
         
@@ -35,7 +35,7 @@ class test_search(unittest.TestCase):
 
         song_length = 119
 
-        output = search.find_complete_list(input_mat, song_length)
+        output = find_complete_list(input_mat, song_length)
 
         expect_output = np.array([[  8,   8,  14,  14,  1, 1],
                                   [  8,   8,  56,  56,  1, 1],
