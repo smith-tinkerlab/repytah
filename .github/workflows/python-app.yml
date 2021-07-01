@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
+    branches: [ pkg-main ]
   pull_request:
-    branches: [ master ]
+    branches: [ pkg-main ]
 
 jobs:
   build:
@@ -29,6 +29,11 @@ jobs:
         pip install matplotlib
         pip install pandas
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Install mirah
+      run: |
+        pip install -e .[tests]
     - name: Test with pytest
       run: |
         pytest
+    
+          
