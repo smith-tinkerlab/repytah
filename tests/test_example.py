@@ -4,14 +4,11 @@ Unit tests for Aligned Hierarchies, example.py
 """
 
 import pandas as pd
-import os
 import unittest 
 
-from mirah import * 
 from mirah.utilities import * 
 from mirah.example import *
 
-import os.path
 from os import path
 
 class TestExample(unittest.TestCase): 
@@ -19,7 +16,6 @@ class TestExample(unittest.TestCase):
     # Tests specific to create_sdm 
     def test_csv_to_aligned_hierarchies_none_returned(self): 
         """
-        EXPLANATION 
         Tests that nothing is returned.   
         """
 
@@ -35,7 +31,6 @@ class TestExample(unittest.TestCase):
 
     def test_csv_to_aligned_hierarchies_file_saved(self): 
         """
-        EXPLANATION 
         Tests that a file is saved.   
         """
 
@@ -51,7 +46,6 @@ class TestExample(unittest.TestCase):
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
-        EXPLANATION 
         Tests that the file saved isn't empty.   
         """
 

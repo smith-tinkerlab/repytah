@@ -7,8 +7,7 @@ Unit tests for Aligned Hierarchies, utilities.py
 import unittest
 import numpy as np
 
-
-from mirah import * 
+from mirah import utilities
 from mirah.utilities import __find_song_pattern as _test_find_song_pattern
 
 
