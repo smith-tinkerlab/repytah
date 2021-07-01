@@ -862,7 +862,9 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(vis_array, cmap="gray", aspect=10)
         plt.title("Essential Structure Components")
+        # Set the number of ticks and set tick intervals to be equal 
         ax.set_yticks(np.arange(0,np.size(pno_yLabels)-1))
+        # Set the ticklabels along the y axis and remove 0 in vis_yLabels
         ax.set_yticklabels(pno_yLabels[1:])
         plt.show()
         
@@ -1085,7 +1087,9 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
         plt.title("Complete Hierarchical Structure")
+        # Set the number of ticks and set tick intervals to be equal 
         ax.set_yticks(np.arange(0,np.size(vis_yLabels)-1))
+        # Set the ticklabels along the y axis and remove 0 in vis_yLabels
         ax.set_yticklabels(vis_yLabels[1:])
         plt.show()
 
