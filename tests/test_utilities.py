@@ -11,7 +11,7 @@ from mirah.utilities import *
 from mirah.utilities import __find_song_pattern as find_song_pattern
 
 
-class test_utilities(unittest.TestCase):
+class TestUtilities(unittest.TestCase):
 
     def test_create_sdm(self):
         

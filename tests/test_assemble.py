@@ -15,7 +15,7 @@ from mirah.assemble import __merge_based_on_length as merge_based_on_length
 from mirah.assemble import __merge_rows as merge_rows
 from mirah.assemble import hierarchical_structure
 
-class test_utilities(unittest.TestCase):
+class TestAssemble(unittest.TestCase):
 
     def test_breakup_overlaps_by_intersect(self):
         """

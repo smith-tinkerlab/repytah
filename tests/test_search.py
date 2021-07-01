@@ -15,7 +15,7 @@ from mirah.search import find_all_repeats as find_all_repeats
 from mirah.search import find_complete_list_anno_only as find_complete_list_anno_only
 
 
-class test_search(unittest.TestCase):
+class TestSearch(unittest.TestCase):
 
     def test_find_complete_list(self):
         
