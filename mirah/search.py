@@ -313,8 +313,7 @@ def __find_add_srows(lst_no_anno, check_inds, k):
                 add_rows = np.vstack((r_add,r_add_right))
             else:
                 add_rows = np.vstack((add_rows, r_add, r_add_right))
-    # (REQUIRE A REVIEW) actually I'm not sure if we need to get rid of duplicate arrays here,
-    # I want to hear your opinions (the result of test__find_add_erows also contains duplicate arrays)
+    
     return add_rows
 
 
@@ -436,8 +435,6 @@ def __find_add_erows(lst_no_anno, check_inds, k):
     return add_rows
 
 
-# (REQUIRE A REVIEW) Not sure if we still need find_add_srows and find_add_erows
-# The first two conditions seem to be included in the find_add_mrows
 def __find_add_mrows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
