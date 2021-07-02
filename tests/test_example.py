@@ -11,6 +11,7 @@ from mirah.example import *
 
 from os import path
 
+
 class TestExample(unittest.TestCase): 
     
     # Tests specific to create_sdm 
@@ -28,7 +29,6 @@ class TestExample(unittest.TestCase):
 
         self.assertIs(output, None, "Should be none")
 
-
     def test_csv_to_aligned_hierarchies_file_saved(self): 
         """
         Tests that a file is saved.   
@@ -42,7 +42,6 @@ class TestExample(unittest.TestCase):
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
 
         self.assertTrue(path.exists("hierarchical_out_file.mat"))
-
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
@@ -58,7 +57,6 @@ class TestExample(unittest.TestCase):
 
         self.assertFalse(os.stat("hierarchical_out_file.mat").st_size == 0)
     
-        
-#os.stat("file").st_size == 0
+
 if __name__ == '__main__':
     unittest.main() 
