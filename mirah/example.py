@@ -29,10 +29,19 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         maximum threshold value. Largest length repeated structure to search for.
     
     Returns
-    
     -------
     none: .mat file is saved. Contains variables created for aligned hierarchies. 
+
+    Example
+    --------
+    ### Run on example file
+    >>> file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
+    >>> file_out = "hierarchical_out_file.mat"
+    >>> num_fv_per_shingle = 3
+    >>> thresh = 0.01
+    >>> csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
     """
+    
     # Import file of feature vectors
     fv_mat = file_in
     
@@ -94,11 +103,3 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         
         # Create the output file
         sio.savemat(file_out, outdict)
-
-        
-# Run on example file
-# file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
-# file_out = "hierarchical_out_file.mat"
-# num_fv_per_shingle = 3
-# thresh = 0.01
-# csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
