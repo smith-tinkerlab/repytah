@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -9,11 +9,11 @@ setup(
     description='mirah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/smith-tinkerlab/aht',
+    url='https://github.com/smith-tinkerlab/ah',
     author='Katherine M. Kinnaird, Smith Tinkerlab',
     author_email='kkinnaird@smith.edu',
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',
@@ -26,7 +26,7 @@ setup(
     python_requires='>=3.6, <4',
     install_requires=[
         'numpy >= 1.15.0',
-        'scipy', 
+        'scipy >= 1.0.0', 
         'pandas',
         'matplotlib'
     ],
