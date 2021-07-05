@@ -13,7 +13,7 @@ This file contains the following functions:
     pairs of repeats) that are contained pair_list, which is composed of 
     larger diagonals found in find_initial_repeats.
 
-    * __find_add_mrows - Finds pairs of repeated structures, represented as 
+    * __find_add_rows - Finds pairs of repeated structures, represented as 
     diagonals of a certain length, k, that neither start nor end at the same 
     time steps as previously found pairs of repeated structures of the same 
     length. 
@@ -109,7 +109,7 @@ def find_complete_list(pair_list, song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
+        add_mrows = __find_add_rows(pair_list, int_snds, band_width)
        
         # Check if any of the arrays are empty
         # Add the new pairs of repeats to the temporary list add_mat
@@ -174,7 +174,7 @@ def find_complete_list(pair_list, song_length):
     return lst_out
 
 
-def __find_add_mrows(lst_no_anno, check_inds, k): 
+def __find_add_rows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
     length, k, that neither start nor end at the same time steps as previously
@@ -507,7 +507,7 @@ def find_complete_list_anno_only(pair_list, song_length):
         out_lst:
             List of pairs of repeats with smaller repeats added and with
             annotation markers
-            
+
     """
 
     # Find list of unique repeat lengths
