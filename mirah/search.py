@@ -12,14 +12,6 @@ This file contains the following functions:
     * find_complete_list - Finds all smaller diagonals (and the associated 
     pairs of repeats) that are contained pair_list, which is composed of 
     larger diagonals found in find_initial_repeats.
-    
-    * __find_add_srows - Finds pairs of repeated structures, represented as 
-    diagonals of a certain length, k, that start at the same time step as 
-    previously found pairs of repeated structures of the same length. 
-    
-    * __find_add_erows - Finds pairs of repeated structures, represented as 
-    diagonals of a certain length, k, that end at the same time step as 
-    previously found pairs of repeated structures of the same length.
 
     * __find_add_mrows - Finds pairs of repeated structures, represented as 
     diagonals of a certain length, k, that neither start nor end at the same 
@@ -51,18 +43,18 @@ def find_complete_list(pair_list,song_length):
     Args
     ----
     pair_list: np.array
-        list of pairs of repeats found in earlier step
+        List of pairs of repeats found in earlier step
         (bandwidths MUST be in ascending order). If you have
         run find_initial_repeats before this script,
         then pair_list will be ordered correctly. 
            
     song_length: int
-        song length, which is the number of audio shingles.
+        Song length, which is the number of audio shingles.
    
     Returns
     -------  
     lst_out: np.array 
-        list of pairs of repeats with smaller repeats added
+        List of pairs of repeats with smaller repeats added
         
     """
     
@@ -117,20 +109,12 @@ def find_complete_list(pair_list,song_length):
         #       detected because they were contained in larger diagonals that
         #       were removed by our method of eliminating diagonals in
         #       descending order by size
-        # add_srows = __find_add_srows(pair_list, int_snds, band_width)
         add_mrows = __find_add_mrows(pair_list, int_snds, band_width)
-        # add_erows = __find_add_erows(pair_list, int_ends, band_width)
        
         # Check if any of the arrays are empty
         # Add the new pairs of repeats to the temporary list add_mat
         if add_mrows.size != 0:  
             add_mat=np.vstack((add_mat,add_mrows))
-           
-        # if add_srows.size != 0:
-        #     add_mat=np.vstack((add_mat,add_srows))
-        #
-        # if add_erows.size != 0:
-        #     add_mat=np.vstack((add_mat,add_erows))
            
     # Remove the empty row
     if add_mat.size != 0:
@@ -197,18 +181,18 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
     found pairs of repeated structures of the same length. 
     Args
     ----
-        lst_no_anno: np.array 
-            list of pairs of repeats
-        check_inds: np.array
-            list of ending indices for repeats of length k that we use to 
-            check lst_no_anno for more repeats of length k 
-        k: number
-            length of repeats that we are looking for 
+    lst_no_anno: np.array 
+        List of pairs of repeats
+    check_inds: np.array
+        List of ending indices for repeats of length k that we use to 
+        check lst_no_anno for more repeats of length k 
+    k: number
+        Length of repeats that we are looking for 
     Returns
     -------
-        add_rows: np.array
-            list of newly found pairs of repeats of length K that are 
-            contained in larger repeats in LST_NO_ANNO 
+    add_rows: np.array
+        List of newly found pairs of repeats of length K that are 
+        contained in larger repeats in lst_no_anno 
             
     """
 
@@ -242,7 +226,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
         # Left Check: check for CI on the left side of the pairs
         lnds = ((SI <= ci) & (EI >= (ci + k -1)) == True)
         
-        # Check that SI < CI and that EI > (CI + K - 1) indicating that there
+        # Check that SI <= CI and that EI >= (CI + K - 1) indicating that there
         # is a repeat of length k with starting index CI contained in a larger
         # repeat which is the left repeat of a pair
         if lnds.sum(axis = 0) > 0:
@@ -288,7 +272,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
         # Right Check: Check for CI on the right side of the pairs
         rnds = ((SJ <= ci) & (EJ >= (ci + k - 1)) == True)
 
-        # Check that SI < CI and that EI > (CI + K - 1) indicating that there
+        # Check that SI <= CI and that EI >= (CI + K - 1) indicating that there
         # is a repeat of length K with starting index CI contained in a larger
         # repeat which is the right repeat of a pair
         if rnds.sum(axis = 0) > 0:
@@ -326,7 +310,7 @@ def __find_add_mrows(lst_no_anno, check_inds, k):
             else:
                 add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)
 
-    # remove rows with length 0
+    # Remove rows with length 0
     for i in range(np.size(add_rows, axis=0) - 1, -1, -1):
         if (add_rows[i][4] == 0):
             add_rows = np.delete(add_rows, i, axis=0)
@@ -345,10 +329,10 @@ def find_all_repeats(thresh_mat, bw_vec):
     Args
     ----
     thresh_mat: np.array
-        thresholded matrix that we extract diagonals from
+        Thresholded matrix that we extract diagonals from
     
     bw_vec: np.array
-        vector of lengths of diagonals to be found
+        Vector of lengths of diagonals to be found
         Should be 1,2,3,..., n where n = number of timesteps. 
         
     """
@@ -506,16 +490,16 @@ def find_complete_list_anno_only(pair_list, song_length):
     Args
     ----
     pair_list: 
-        list of pairs of repeats
+        List of pairs of repeats
         WARNING: bandwidths must be in ascending order
         
     song_length: int
-        number of audio shingles in song
+        Number of audio shingles in song
         
     Returns
     -------
     out_lst:
-        list of pairs of repeats with smaller repeats added and with
+        List of pairs of repeats with smaller repeats added and with
         annotation markers
     """
 
