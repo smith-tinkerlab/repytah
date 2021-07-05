@@ -41,7 +41,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_find_initial_repeats(self):
         """
-        Tests if find_initial_repeats find the correct largest repeated structures
+        Tests if find_initial_repeats finds all the large repeated structures 
         represented as diagonals in thresh_mat
         """
         

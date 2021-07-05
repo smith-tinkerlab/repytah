@@ -52,19 +52,19 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     
     Args
     ----
-    fv_mat: np.array
-        Matrix of feature vectors where each column is a timestep and each row
-        includes feature information i.e. an array of 144 columns/beats and 12
-        rows corresponding to chroma values
-        
-    num_fv_per_shingle: int
-        Number of feature vectors per audio shingle
+        fv_mat: np.array
+            Matrix of feature vectors where each column is a timestep and each row
+            includes feature information i.e. an array of 144 columns/beats and 12
+            rows corresponding to chroma values
+            
+        num_fv_per_shingle: int
+            Number of feature vectors per audio shingle
     
     Returns
     -------
-    self_dissim_mat: np.array 
-        Self dissimilarity matrix with paired cosine distances between 
-        shingles
+        self_dissim_mat: np.array 
+            Self dissimilarity matrix with paired cosine distances between 
+            shingles
         
     """
     
@@ -103,21 +103,21 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
   
     Args
     ----
-    thresh_mat: np.array[int]
-        Thresholded matrix that we extract diagonals from
+        thresh_mat: np.array[int]
+            Thresholded matrix that we extract diagonals from
 
-    bandwidth_vec: np.array[1D,int]
-        Vector of lengths of diagonals to be found. Should be 1,2,3,..... 
-        n where n = num_timesteps
+        bandwidth_vec: np.array[1D,int]
+            Vector of lengths of diagonals to be found. Should be 1,2,3,..... 
+            n where n = num_timesteps
 
-    thresh_bw: int
-        Mmallest allowed diagonal length
+        thresh_bw: int
+            Smallest allowed diagonal length
 
     Returns
     -------
-    all_lst: np.array[int]
-        List of pairs of repeats that correspond to 
-        diagonals in thresh_mat
+        all_lst: np.array[int]
+            List of pairs of repeats that correspond to 
+            diagonals in thresh_mat
             
     """
 
@@ -301,22 +301,22 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 def stretch_diags(thresh_diags, band_width):
     """
     Creates binary matrix with full length diagonals from binary matrix of
-    diagonal starts and length of diagonals.
+    diagonal starts and length of diagonals
                                                                                  
     Args
     ----
-    thresh_diags: np.array
-        Binary matrix where entries equal to 1 signal the existence 
-        of a diagonal
-    
-    band_width: int
-        Length of encoded diagonals
+        thresh_diags: np.array
+            Binary matrix where entries equal to 1 signal the existence 
+            of a diagonal
+        
+        band_width: int
+            Length of encoded diagonals
     
     Returns
     -------
-    stretch_diag_mat: np.array [boolean]
-        Logical matrix with diagonals of length band_width starting 
-        at each entry prescribed in thresh_diag
+        stretch_diag_mat: np.array [boolean]
+            Logical matrix with diagonals of length band_width starting 
+            at each entry prescribed in thresh_diag
         
     """
 
@@ -347,20 +347,20 @@ def add_annotations(input_mat, song_length):
 
     Args
     ----
-    input_mat: np.array
-        List of pairs of repeats. The first two columns refer to 
-        the first repeat of the pair. The third and fourth columns refer
-        to the second repeat of the pair. The fifth column refers to the
-        repeat lengths. The sixth column contains any previous annotations,
-        which will be removed
-        
-    song_length: int
-        Number of audio shingles in the song
+        input_mat: np.array
+            List of pairs of repeats. The first two columns refer to 
+            the first repeat of the pair. The third and fourth columns refer
+            to the second repeat of the pair. The fifth column refers to the
+            repeat lengths. The sixth column contains any previous annotations,
+            which will be removed
+            
+        song_length: int
+            Number of audio shingles in the song
     
     Returns
     -------
-    anno_list: array
-        List of pairs of repeats with annotations marked
+        anno_list: array
+            List of pairs of repeats with annotations marked
         
     """
 
@@ -418,24 +418,24 @@ def add_annotations(input_mat, song_length):
 
 def __find_song_pattern(thresh_diags):
     """
-        Stitches information from thresh_diags matrix into a single
-        row, song_pattern, that shows the timesteps containing repeats;
-        From the full matrix that decodes repeat beginnings (thresh_diags),
-        the locations, or beats, where these repeats start are found and
-        encoded into the song_pattern array
+    Stitches information from thresh_diags matrix into a single
+    row, song_pattern, that shows the timesteps containing repeats;
+    From the full matrix that decodes repeat beginnings (thresh_diags),
+    the locations, or beats, where these repeats start are found and
+    encoded into the song_pattern array
 
     Args
     ----
-    thresh_diags: np.array
-        Binary matrix with 1 at the start of each repeat pair (SI,SJ) and 
-        0 elsewhere. 
-        WARNING: must be symmetric
+        thresh_diags: np.array
+            Binary matrix with 1 at the start of each repeat pair (SI,SJ) and 
+            0 elsewhere. 
+            WARNING: must be symmetric
     
     Returns
     -------
-    song_pattern: np.array [shape = (1, song_length)]
-        Row where each entry represents a time step and the group 
-        that time step is a member of
+        song_pattern: np.array [shape = (1, song_length)]
+            Row where each entry represents a time step and the group 
+            that time step is a member of
         
     """
 
@@ -509,20 +509,20 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     
     Args
     ----
-    pattern_mat: np.array
-        Binary matrix with 1's where repeats begin 
-        and 0's otherwise
-     
-    pattern_key: np.array
-        Vector containing the lengths of the repeats 
-        encoded in each row of pattern_mat
+        pattern_mat: np.array
+            Binary matrix with 1's where repeats begin 
+            and 0's otherwise
+        
+        pattern_key: np.array
+            Vector containing the lengths of the repeats 
+            encoded in each row of pattern_mat
 
     Returns
     -------
-    pattern_block: np.array
-        Binary matrix representation for pattern_mat 
-        with blocks of 1's equal to the length's 
-        prescribed in pattern_key
+        pattern_block: np.array
+            Binary matrix representation for pattern_mat 
+            with blocks of 1's equal to the length's 
+            prescribed in pattern_key
         
     """
     
@@ -592,13 +592,13 @@ def get_annotation_lst (key_lst):
     
     Args 
     -----
-    key_lst: np.array[int]
-        Array of lengths in ascending order
+        key_lst: np.array[int]
+            Array of lengths in ascending order
     
     Returns 
     -----
-    anno_lst_out: np.array[int] 
-        Array of one possible set of annotation markers for key_lst
+        anno_lst_out: np.array[int] 
+            Array of one possible set of annotation markers for key_lst
             
     """
 
@@ -625,16 +625,16 @@ def get_yLabels(width_vec, anno_vec):
     
     Args 
     -----
-    width_vec: np.array[int]
-        Vector of widths for a visualization
-        
-    anno_vec: np.array[int]
-        Array of annotations for a visualization
+        width_vec: np.array[int]
+            Vector of widths for a visualization
+            
+        anno_vec: np.array[int]
+            Array of annotations for a visualization
     
     Returns 
     -----
-    ylabels: np.array[str] 
-        Labels for the y-axis of a visualization
+        ylabels: np.array[str] 
+            Labels for the y-axis of a visualization
         
     """
 
@@ -673,17 +673,17 @@ def reformat(pattern_mat, pattern_key):
     
     Args
     ----
-    pattern_mat: np.array 
-        Binary array with 1's where repeats start and 0's otherwise 
-    
-    pattern_key: np.array 
-        Array with the lengths of each repeated structure in pattern_mat
+        pattern_mat: np.array 
+            Binary array with 1's where repeats start and 0's otherwise 
+        
+        pattern_key: np.array 
+            Array with the lengths of each repeated structure in pattern_mat
             
     Returns
     -------
-    info_mat: np.array 
-        Array with the time steps of when the pairs of repeated structures 
-        start and end organized 
+        info_mat: np.array 
+            Array with the time steps of when the pairs of repeated structures 
+            start and end organized 
 
     """
 
