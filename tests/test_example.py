@@ -17,7 +17,7 @@ class TestExample(unittest.TestCase):
     # Tests specific to create_sdm 
     def test_csv_to_aligned_hierarchies_none_returned(self): 
         """
-        Tests that nothing is returned.   
+        Tests that nothing is returned 
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
@@ -31,7 +31,7 @@ class TestExample(unittest.TestCase):
 
     def test_csv_to_aligned_hierarchies_file_saved(self): 
         """
-        Tests that a file is saved.   
+        Tests that a file is saved 
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
@@ -45,7 +45,7 @@ class TestExample(unittest.TestCase):
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
-        Tests that the file saved isn't empty.   
+        Tests that the file saved isn't empty
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
