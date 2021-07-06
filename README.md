@@ -1,4 +1,4 @@
-# mirah
+# repytah
 
 A Python package for building Aligned Hierarchies for music-based data streams.
 
@@ -24,36 +24,36 @@ This [example](link to example vignette) tutorial will show you a usage of the p
 The latest stable release is available on PyPI, and you can install it by running:
 
 ```bash
-pip install mirah
+pip install repytah
 ```
 
 Anaconda users can install using `conda-forge`:
 
 ```bash
-conda install -c conda-forge mirah
+conda install -c conda-forge repytah
 ```
 
-To build mirah from source, say `python setup.py build`.
-Then, to install mirah, say `python setup.py install`.
+To build repytah from source, say `python setup.py build`.
+Then, to install repytah, say `python setup.py install`.
 
 Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
 
 ```bash
-unzip mirah.zip
-pip install -e mirah
+unzip repytah.zip
+pip install -e repytah
 ```
 
 or
 
 ```bash
-git clone https://github.com/smith-tinkerlab/mirah.git
-pip install -e mirah
+git clone https://github.com/smith-tinkerlab/repytah.git
+pip install -e repytah
 ```
 
-By calling `pip list` you should see `mirah` now as an installed package:
+By calling `pip list` you should see `repytah` now as an installed package:
 
 ```bash
-mirah (0.x.x, /path/to/mirah)
+repytah (0.x.x, /path/to/repytah)
 ```
 
 ## Current and Future Work - Elements of the Package
@@ -87,6 +87,6 @@ This code was developed as part of Smith College's Summer Undergraduate Research
 
 ### Citing
 
-Please cite `mirah` using the following:
+Please cite `repytah` using the following:
 
-K. M. Kinnaird, et al. mirah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.0.0-alpha, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/ah](https://github.com/smith-tinkerlab/ah).
+K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.0.0-alpha, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/ah](https://github.com/smith-tinkerlab/ah).

@@ -1,4 +1,4 @@
-name = "mirah"
+name = "repytah"
 
 #from .version import __version__
 from .search import *

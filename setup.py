@@ -4,9 +4,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='mirah',  
+    name='repytah',  
     version='0.0.0a0',
-    description='mirah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
+    description='repytah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/smith-tinkerlab/ah',
@@ -45,7 +45,7 @@ setup(
         'Bug Reports': 'https://github.com/smith-tinkerlab/ah/issues',
         'Source': 'https://github.com/smith-tinkerlab/ah',
     },
-    package_data={'mirah': ['input.csv']},
+    package_data={'repytah': ['input.csv']},
     include_package_data=True,
     license_file = 'LICENSE.md',
     license='MIT'
