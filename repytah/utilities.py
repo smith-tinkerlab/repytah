@@ -4,7 +4,7 @@
 utilities.py 
 
 This script when imported as a module allows search.py, transform.py and 
-assemble.py in the mirah package to run smoothly. 
+assemble.py in the repytah package to run smoothly. 
 
 This file contains the following functions:
     

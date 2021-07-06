@@ -6,8 +6,8 @@ Unit tests for Aligned Hierarchies, example.py
 import pandas as pd
 import unittest 
 
-from mirah.utilities import * 
-from mirah.example import *
+from repytah.utilities import * 
+from repytah.example import *
 
 from os import path
 
