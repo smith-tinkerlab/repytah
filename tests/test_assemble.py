@@ -1,26 +1,22 @@
 # -*- coding: utf-8 -*-
 """
-Unit tests for Aligned Hierarchies, utilities.py
+Unit tests for Aligned Hierarchies, assemble.py
 """
-
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
 
 import unittest
 import numpy as np
 
-import assemble
-from assemble import breakup_overlaps_by_intersect
-from assemble import check_overlaps
-from assemble import __compare_and_cut as compare_and_cut
-from assemble import __num_of_parts as num_of_parts
-from assemble import __inds_to_rows as inds_to_rows
-from assemble import __merge_based_on_length as merge_based_on_length
-from assemble import __merge_rows as merge_rows
-from assemble import hierarchical_structure
+from repytah.assemble import breakup_overlaps_by_intersect
+from repytah.assemble import check_overlaps
+from repytah.assemble import __compare_and_cut as compare_and_cut
+from repytah.assemble import __num_of_parts as num_of_parts
+from repytah.assemble import __inds_to_rows as inds_to_rows
+from repytah.assemble import __merge_based_on_length as merge_based_on_length
+from repytah.assemble import __merge_rows as merge_rows
+from repytah.assemble import hierarchical_structure
 
-class test_utilities(unittest.TestCase):
+
+class TestAssemble(unittest.TestCase):
 
     def test_breakup_overlaps_by_intersect(self):
         """
@@ -50,7 +46,6 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(), expect_output0.tolist())
         self.assertEqual(output[1].tolist(), expect_output1.tolist())
 
-
     def test_check_overlaps(self):
         """
         Tests if check_overlaps gives the correct output with the correct data type
@@ -77,7 +72,6 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(np.size(output), np.size(expect_output))
         self.assertEqual(output.tolist(), expect_output.tolist())
 
-
     def test_compare_and_cut(self):
         """
         Tests if __compare_and_cut gives the correct output accessible via a tuple 
@@ -91,19 +85,17 @@ class test_utilities(unittest.TestCase):
 
         output = compare_and_cut(red, red_len, blue, blue_len)
 
-        expect_output0  =np.array ([[1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
-                                    [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-                                    [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]])
+        expect_output0 = np.array([[1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
+                                   [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+                                   [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]])
 
         expect_output1 = np.array([[1],
                                    [1],
                                    [2]])
 
-
         self.assertIs(type(output), tuple)
         self.assertEqual(output[0].tolist(), expect_output0.tolist())
         self.assertEqual(output[1].tolist(), expect_output1.tolist())
-
 
     def test_num_of_parts_if_statement(self):
         """
@@ -124,7 +116,6 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), tuple)
         self.assertEqual(output[0].tolist(), expect_output0.tolist())
         self.assertEqual(output[1], expect_output1)
-    
 
     def test_num_of_parts_else_statement(self):
         """
@@ -149,7 +140,6 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(), expect_output0.tolist())
         self.assertEqual(output[1].tolist(), expect_output1.tolist())
 
-
     def test_inds_to_rows(self):
         """
         Tests if __inds_to_rows gives the correct output with the correct data type
@@ -166,7 +156,6 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), np.ndarray)
         self.assertEqual(np.size(output), np.size(expect_output))
         self.assertEqual(output.tolist(), expect_output.tolist())
-
 
     def test_merge_based_on_length(self):
         """
@@ -192,7 +181,6 @@ class test_utilities(unittest.TestCase):
         self.assertEqual(output[0].tolist(), expect_output0.tolist())
         self.assertEqual(output[1].tolist(), expect_output1.tolist())
 
-
     def test_merge_rows(self):
         """
         Tests if __merge_rows gives the correct output with the correct data type
@@ -210,7 +198,6 @@ class test_utilities(unittest.TestCase):
         self.assertIs(type(output), np.ndarray)
         self.assertEqual(np.size(output), np.size(expect_output))
         self.assertEqual(output.tolist(), expect_output.tolist())
-
 
     def test_hierarchical_structure(self):
         """
@@ -247,7 +234,7 @@ class test_utilities(unittest.TestCase):
                                  [10]])
         input_sn = 20
 
-        output_false = hierarchical_structure(input_matrix_no, input_key_no, input_sn) # default vis=False
+        output_false = hierarchical_structure(input_matrix_no, input_key_no, input_sn)  # default vis=False
         output_true = hierarchical_structure(input_matrix_no, input_key_no, input_sn, vis=True)
 
         self.assertEqual(output_false[0].tolist(), output_true[0].tolist())

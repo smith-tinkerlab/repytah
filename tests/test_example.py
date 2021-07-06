@@ -1,32 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-Unit tests for Aligned Hierarchies, utilities.py 
+Unit tests for Aligned Hierarchies, example.py 
 """
 
 import pandas as pd
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname('__file__'), '../aligned-hierarchies'))
-
 import unittest 
 
-from utilities import * 
-from example import *
+from repytah.utilities import * 
+from repytah.example import *
 
-import os.path
 from os import path
+
 
 class TestExample(unittest.TestCase): 
     
     # Tests specific to create_sdm 
     def test_csv_to_aligned_hierarchies_none_returned(self): 
         """
-        EXPLANATION 
-        Tests that nothing is returned.   
+        Tests that nothing is returned 
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
-        file_out = "hierarchical_out_file.mat"
+        file_out = "tests/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
@@ -34,39 +29,34 @@ class TestExample(unittest.TestCase):
 
         self.assertIs(output, None, "Should be none")
 
-
     def test_csv_to_aligned_hierarchies_file_saved(self): 
         """
-        EXPLANATION 
-        Tests that a file is saved.   
+        Tests that a file is saved 
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
-        file_out = "hierarchical_out_file.mat"
+        file_out = "tests/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
 
-        self.assertTrue(path.exists("hierarchical_out_file.mat"))
-
+        self.assertTrue(path.exists("tests/hierarchical_out_file.mat"))
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
-        EXPLANATION 
-        Tests that the file saved isn't empty.   
+        Tests that the file saved isn't empty
         """
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
-        file_out = "hierarchical_out_file.mat"
+        file_out = "tests/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
 
-        self.assertFalse(os.stat("hierarchical_out_file.mat").st_size == 0)
+        self.assertFalse(os.stat("tests/hierarchical_out_file.mat").st_size == 0)
     
-        
-#os.stat("file").st_size == 0
+
 if __name__ == '__main__':
     unittest.main() 

@@ -1,0 +1,41 @@
+*.py[co]
+__pycache__
+
+# Packages
+*.egg
+*.egg-info
+dist
+bin
+var
+sdist
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+tests/result_images/
+
+# Data files
+*.mat
+
+# Mac OS X cruft
+*.DS_Store
+._*
+
+# Sphinx stuff
+docs/generated/
+docs/_build/
+docs/auto_examples/
+
+# Vim
+*.swp
+
+# Testing and checkpoints
+.ipynb_checkpoints
+.coverage.*
+coverage.xml
+
+#IDE
+.idea/
+.vscode/settings.json
