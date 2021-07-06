@@ -47,6 +47,5 @@ setup(
     },
     package_data={'repytah': ['input.csv']},
     include_package_data=True,
-    license_file = 'LICENSE.md',
     license='MIT'
 )
