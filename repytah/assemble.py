@@ -70,24 +70,24 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 
     Args
     ----
-        input_pattern_obj: np.array
+        input_pattern_obj: np.ndarray
             Binary matrix with 1's where repeats begin
             and 0's otherwise.
 
-        bw_vec: np.array
+        bw_vec: np.ndarray
             Vector containing the lengths of the repeats
             encoded in input_pattern_obj.
 
-        thresh_bw: number
+        thresh_bw: int
             Smallest allowable repeat length.
 
     Returns
     -------
-        pattern_no_overlaps: np.array
+        pattern_no_overlaps: np.ndrray
             Binary matrix with 1's where repeats of
             essential structure components begin.
 
-        pattern_no_overlaps_key: np.array
+        pattern_no_overlaps_key: np.ndarray
             Vector containing the lengths of the repeats
             of essential structure components in
             pattern_no_overlaps.
@@ -207,12 +207,12 @@ def check_overlaps(input_mat):
 
     Args
     ----
-        input_mat: np.array(int)
+        input_mat: np.array[int]
             Matrix to be checked for overlaps.
 
     Returns
     -------
-        overlaps_yn: np.array(bool)
+        overlaps_yn: np.array[bool]
             Logical array where (i,j) = 1 if row i of input matrix and row j
             of input matrix overlap and (i,j) = 0 elsewhere.
             
@@ -278,27 +278,27 @@ def __compare_and_cut(red, red_len, blue, blue_len):
 
     Args
     ----
-        red: np.array
+        red: np.ndarray
             Binary row vector encoding a set of repeats with 1's where each
             repeat starts and 0's otherwise.
 
-        red_len: number
+        red_len: int
             Length of repeats encoded in red.
 
-        blue: np.array
+        blue: np.ndarray
             Binary row vector encoding a set of repeats with 1's where each
             repeat starts and 0's otherwise.
 
-        blue_len: number
+        blue_len: int
             Length of repeats encoded in blue.
 
     Returns
     -------
-        union_mat: np.array
+        union_mat: np.ndarray
             Binary matrix representation of up to three rows encoding
             non-overlapping repeats cut from red and blue.
 
-        union_length: np.array
+        union_length: np.ndarray
             Vector containing the lengths of the repeats encoded in union_mat.
             
     """
@@ -538,23 +538,23 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
 
     Args
     ----
-        input_vec: np.array
+        input_vec: np.ndarray
             Vector that contains one or two parts of a repeat that are 
             overlap(s) in time that may need to be replicated
 
-        input_start: np.array index
+        input_start: np.ndarray 
             Starting index for the part to be replicated.
 
-        input_all_starts: np.array indices
+        input_all_starts: np.ndarray 
             Starting indices for replication.
 
     Returns
     -------
-        start_mat: np.array
+        start_mat: np.ndarray
             Array of one or two rows, containing the starting indices of the
             replicated repeats.
 
-        length_vec: np.array
+        length_vec: np.ndarray
             Column vector containing the lengths of the replicated parts.
             
     """
@@ -618,7 +618,7 @@ def __inds_to_rows(start_mat, row_length):
 
     Args
     ----
-        start_mat: np.array
+        start_mat: np.ndarray
             Matrix of one or two rows, containing the starting indices.
 
         row_length: int
@@ -626,7 +626,7 @@ def __inds_to_rows(start_mat, row_length):
 
     Returns
     -------
-        new_mat: np.array
+        new_mat: np.ndarray
             Matrix of one or two rows, with 1's where the starting indices 
             and 0's otherwise.
             
@@ -653,22 +653,22 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
 
     Args
     ----
-        full_mat: np.array
+        full_mat: np.ndarray
             Binary matrix with ones where repeats start and zeroes otherwise.
 
-        full_bw: np.array
+        full_bw: np.ndarray
             Length of repeats encoded in input_mat.
 
-        target_bw: np.array
+        target_bw: np.ndarray
             Lengths of repeats that we seek to merge.
 
     Returns
     -------
-        out_mat: np.array
+        out_mat: np.ndarray
             Binary matrix with ones where repeats start and zeros otherwise
             with rows of full_mat merged if appropriate.
 
-        one_length_vec: np.array
+        one_length_vec: np.ndarray
             Length of the repeats encoded in out_mat.
         
     """
@@ -748,7 +748,7 @@ def __merge_rows(input_mat, input_width):
 
     Args
     ----
-        input_mat: np.array
+        input_mat: np.ndarray
             Binary matrix with ones where repeats start and zeroes otherwise.
 
         input_width: int
@@ -756,7 +756,7 @@ def __merge_rows(input_mat, input_width):
 
     Returns
     -------
-        merge_mat: np.array
+        merge_mat: np.ndarray
             Binary matrix with ones where repeats start and zeroes otherwise.
         
     """
@@ -824,10 +824,10 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
 
     Args
     -----
-        matrix_no: np.array[int]
+        matrix_no: np.ndarray[int]
             Binary matrix with 1's where repeats begin and 0's otherwise.
 
-        key_no: np.array[int]
+        key_no: np.ndarray[int]
             Vector containing the lengths of the repeats encoded in matrix_no.
 
         sn: int
@@ -838,20 +838,20 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
 
     Returns
     -----
-        full_visualization: np.array[int]
+        full_visualization: np.ndarray[int]
             Binary matrix representation for full_matrix_no 
             with blocks of 1's equal to the length's prescribed 
             in full_key.
 
-        full_key: np.array[int]
+        full_key: np.ndarray[int]
             Vector containing the lengths of the hierarchical
             structure encoded in full_matrix_no.
 
-        full_matrix_no: np.array[int]
+        full_matrix_no: np.ndarray[int]
             Binary matrix with 1's where hierarchical
             structure begins and 0's otherwise.
 
-        full_anno_lst: np.array[int]
+        full_anno_lst: np.ndarray[int]
             Vector containing the annotation markers of the
             hierarchical structure encoded in each row of
             full_matrix_no.

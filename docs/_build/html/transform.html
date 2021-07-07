@@ -98,7 +98,7 @@ have no overlaps, then takes the annotations that have overlaps from
 k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
 sequence of annotation markers was given and fix them if necessary.</p>
 <dl class="simple">
-<dt>k_mat: np.array</dt><dd><p>List of pairs of repeats of length 1 with annotations
+<dt>k_mat: np.ndarray</dt><dd><p>List of pairs of repeats of length 1 with annotations
 marked. The first two columns refer to the first repeat
 of the pair, the second two refer to the second repeat of
 the pair, the fifth column refers to the length of the
@@ -113,13 +113,13 @@ repeats, and the sixth column contains the annotation markers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><ul class="simple">
-<li><p><strong>pattern_row</strong> (<em>np.array</em>) – Row that marks where non-overlapping repeats occur,
+<li><p><strong>pattern_row</strong> (<em>np.ndarray</em>) – Row that marks where non-overlapping repeats occur,
 marking start indices with annotation markers and
 0’s otherwise.</p></li>
-<li><p><strong>k_lst_out</strong> (<em>np.array</em>) – List of pairs of repeats of length band_width that
+<li><p><strong>k_lst_out</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width that
 contain no overlapping repeats with annotations
 marked.</p></li>
-<li><p><strong>overlap_lst</strong> (<em>np.array</em>) – List of pairs of repeats of length band_width that
+<li><p><strong>overlap_lst</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width that
 contain overlapping repeats with annotations marked.</p></li>
 </ul>
 </p>
@@ -140,7 +140,7 @@ visual record of where all of the repeats in a song start and end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>k_mat</strong> (<em>np.array</em>) – List of pairs of repeats of length band_width with annotations
+<li><p><strong>k_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width with annotations
 marked. The first two columns refer to the start and end time
 steps of the first repeat of the pair, the second two refer to
 the start and end time steps of second repeat of the pair, the
@@ -149,18 +149,18 @@ column contains the annotation markers. We will be indexing into
 the sixth column to obtain a list of annotation markers.</p></li>
 <li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles.</p></li>
 <li><p><strong>band_width</strong> (<em>int</em>) – Length of repeats encoded in k_mat.</p></li>
-<li><p><strong>pattern_row</strong> (<em>np.array</em>) – Row vector of the length of the song that marks where
+<li><p><strong>pattern_row</strong> (<em>np.ndarray</em>) – Row vector of the length of the song that marks where
 non-overlapping repeats occur with the repeats’ corresponding
 annotation markers and 0’s otherwise.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Matrix representation where each row contains a group of repeats
+<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Matrix representation where each row contains a group of repeats
 marked.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Column vector containing the lengths of the repeats encoded in
+<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Column vector containing the lengths of the repeats encoded in
 each row of pattern_mat.</p></li>
-<li><p><strong>anno_id_lst</strong> (<em>np.array</em>) – Column vector containing the annotation markers of the repeats
+<li><p><strong>anno_id_lst</strong> (<em>np.ndarray</em>) – Column vector containing the annotation markers of the repeats
 encoded in each row of pattern_mat.</p></li>
 </ul>
 </p>
@@ -176,7 +176,7 @@ where there exists at least one pair of repeats that overlap in time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.array</em><em>(</em><em>int</em><em>)</em>) – List of pairs of repeats with annotations marked. The first
+<li><p><strong>input_mat</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – List of pairs of repeats with annotations marked. The first
 two columns refer to the first repeat or the pair, the second
 two refer to the second repeat of the pair, the fifth column
 refers to the length of the repeats, and the sixth column
@@ -186,16 +186,16 @@ contains the annotation markers.</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>lst_no_overlaps</strong> (<em>np.array(int)</em>) – List of pairs of repeats with annotations marked. All the
+<li><p><strong>lst_no_overlaps</strong> (<em>np.ndarray[int]</em>) – List of pairs of repeats with annotations marked. All the
 repeats of a given length and with a specific annotation
 marker do not overlap in time.</p></li>
-<li><p><strong>matrix_no_overlaps</strong> (<em>np.array(int)</em>) – Matrix representation of lst_no_overlaps with one row for
+<li><p><strong>matrix_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Matrix representation of lst_no_overlaps with one row for
 each group of repeats.</p></li>
-<li><p><strong>key_no_overlaps</strong> (<em>np.array(int)</em>) – Vector containing the lengths of the repeats encoded in
+<li><p><strong>key_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Vector containing the lengths of the repeats encoded in
 each row of matrix_no_overlaps.</p></li>
-<li><p><strong>annotations_no_overlaps</strong> (<em>np.array(int)</em>) – Vector containing the annotation markers of the repeats
+<li><p><strong>annotations_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Vector containing the annotation markers of the repeats
 encoded in each row of matrix_no_overlaps.</p></li>
-<li><p><strong>all_overlap_lst</strong> (<em>np.array(int)</em>) – List of pairs of repeats with annotations marked removed
+<li><p><strong>all_overlap_lst</strong> (<em>np.ndarray[int]</em>) – List of pairs of repeats with annotations marked removed
 from input_mat. For each pair of repeat length and specific
 annotation marker, there exist at least one pair of repeats
 that do overlap in time.</p></li>

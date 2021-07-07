@@ -39,7 +39,7 @@ def remove_overlaps(input_mat, song_length):
 
     Args
     ----
-        input_mat: np.array(int)
+        input_mat: np.ndarray[int]
             List of pairs of repeats with annotations marked. The first 
             two columns refer to the first repeat or the pair, the second 
             two refer to the second repeat of the pair, the fifth column 
@@ -51,24 +51,24 @@ def remove_overlaps(input_mat, song_length):
  
     Returns
     -------
-        lst_no_overlaps: np.array(int)
+        lst_no_overlaps: np.ndarray[int]
             List of pairs of repeats with annotations marked. All the 
             repeats of a given length and with a specific annotation 
             marker do not overlap in time.
             
-        matrix_no_overlaps: np.array(int)
+        matrix_no_overlaps: np.ndarray[int]
             Matrix representation of lst_no_overlaps with one row for 
             each group of repeats.
             
-        key_no_overlaps: np.array(int)
+        key_no_overlaps: np.ndarray[int]
             Vector containing the lengths of the repeats encoded in 
             each row of matrix_no_overlaps.
             
-        annotations_no_overlaps: np.array(int)
+        annotations_no_overlaps: np.ndarray[int]
             Vector containing the annotation markers of the repeats 
             encoded in each row of matrix_no_overlaps.
             
-        all_overlap_lst: np.array(int)
+        all_overlap_lst: np.ndarray[int]
             List of pairs of repeats with annotations marked removed 
             from input_mat. For each pair of repeat length and specific 
             annotation marker, there exist at least one pair of repeats 
@@ -216,7 +216,7 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
         
         Args
         ----
-        k_mat: np.array
+        k_mat: np.ndarray
             List of pairs of repeats of length 1 with annotations 
             marked. The first two columns refer to the first repeat
             of the pair, the second two refer to the second repeat of
@@ -231,17 +231,17 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
     
     Returns
     -------
-        pattern_row: np.array
+        pattern_row: np.ndarray
             Row that marks where non-overlapping repeats occur, 
             marking start indices with annotation markers and 
             0's otherwise.
         
-        k_lst_out: np.array
+        k_lst_out: np.ndarray
             List of pairs of repeats of length band_width that 
             contain no overlapping repeats with annotations
             marked.
         
-        overlap_lst: np.array
+        overlap_lst: np.ndarray
             List of pairs of repeats of length band_width that
             contain overlapping repeats with annotations marked.
 
@@ -362,7 +362,7 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
 
     Args
     ----
-        k_mat: np.array
+        k_mat: np.ndarray
             List of pairs of repeats of length band_width with annotations 
             marked. The first two columns refer to the start and end time
             steps of the first repeat of the pair, the second two refer to 
@@ -377,22 +377,22 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
         band_width: int
             Length of repeats encoded in k_mat.
         
-        pattern_row: np.array
+        pattern_row: np.ndarray
             Row vector of the length of the song that marks where 
             non-overlapping repeats occur with the repeats' corresponding 
             annotation markers and 0's otherwise.
 
     Returns
     -------
-        pattern_mat: np.array
+        pattern_mat: np.ndarray
             Matrix representation where each row contains a group of repeats
             marked.
         
-        pattern_key: np.array
+        pattern_key: np.ndarray
             Column vector containing the lengths of the repeats encoded in 
             each row of pattern_mat.
         
-        anno_id_lst: np.array 
+        anno_id_lst: np.ndarray 
             Column vector containing the annotation markers of the repeats 
             encoded in each row of pattern_mat.
 

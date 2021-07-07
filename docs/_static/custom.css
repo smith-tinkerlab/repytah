@@ -1,14 +1,14 @@
 /* Sidebar header */
 .wy-side-nav-search, .wy-nav-top {
-    background: #0f468d;
+    background: #207CB1;
   }
 
 /* Sidebar */
 .wy-nav-side {
-    background: #302c2f;
+    background: #002855;
 }
 
 /* Caption text */
 span.caption-text {
-  color: #194096;
+  color: #F2A900;
 }
