@@ -11,7 +11,7 @@ This file contains the following functions:
     
     * find_complete_list
         Finds all smaller diagonals (and the associated pairs of repeats) 
-        that are contained pair_list, which is composed of larger diagonals 
+        that are contained in pair_list, which is composed of larger diagonals 
         found in find_initial_repeats.
 
     * __find_add_rows 
@@ -45,7 +45,7 @@ def find_complete_list(pair_list, song_length):
         
     Args
     ----
-        pair_list: np.array
+        pair_list: np.ndarray
             List of pairs of repeats found in earlier step
             (bandwidths MUST be in ascending order). If you have
             run find_initial_repeats before this script,
@@ -56,7 +56,7 @@ def find_complete_list(pair_list, song_length):
    
     Returns
     -------  
-        lst_out: np.array 
+        lst_out: np.ndarray 
             List of pairs of repeats with smaller repeats added.
         
     """
@@ -185,19 +185,19 @@ def __find_add_rows(lst_no_anno, check_inds, k):
 
     Args
     ----
-        lst_no_anno: np.array 
+        lst_no_anno: np.ndarray 
             List of pairs of repeats.
 
-        check_inds: np.array
+        check_inds: np.ndarray
             List of ending indices for repeats of length k that we use to 
             check lst_no_anno for more repeats of length k.
 
-        k: number
-            Length of repeats that we are looking for .
+        k: int
+            Length of repeats that we are looking for.
 
     Returns
     -------
-        add_rows: np.array
+        add_rows: np.ndarray
             List of newly found pairs of repeats of length K that are 
             contained in larger repeats in lst_no_anno .
                 
@@ -338,10 +338,10 @@ def find_all_repeats(thresh_mat, bw_vec):
         
     Args
     ----
-        thresh_mat: np.array
+        thresh_mat: np.ndarray
             Thresholded matrix that we extract diagonals from.
         
-        bw_vec: np.array
+        bw_vec: np.ndarray
             Vector of lengths of diagonals to be found
             Should be 1,2,3,..., n where n = number of timesteps. 
     
@@ -504,7 +504,7 @@ def find_complete_list_anno_only(pair_list, song_length):
     
     Args
     ----
-        pair_list: 
+        pair_list: np.ndarray
             List of pairs of repeats.
             WARNING: Bandwidths must be in ascending order.
             
@@ -513,7 +513,7 @@ def find_complete_list_anno_only(pair_list, song_length):
         
     Returns
     -------
-        out_lst:
+        out_lst: np.ndarray
             List of pairs of repeats with smaller repeats added and with
             annotation markers.
 

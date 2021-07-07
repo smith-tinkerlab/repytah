@@ -127,7 +127,7 @@ the locations, or beats, where these repeats start are found and
 encoded into the song_pattern array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix with 1 at the start of each repeat pair (SI,SJ) and
+<dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix with 1 at the start of each repeat pair (SI,SJ) and
 0 elsewhere.
 WARNING: Must be symmetric.</p>
 </dd>
@@ -136,7 +136,7 @@ WARNING: Must be symmetric.</p>
 that time step is a member of.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array [shape = (1, song_length)]</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -148,7 +148,7 @@ that time step is a member of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.array</em>) – List of pairs of repeats. The first two columns refer to
+<li><p><strong>input_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats. The first two columns refer to
 the first repeat of the pair. The third and fourth columns
 refer to the second repeat of the pair. The fifth column
 refers to the repeat lengths. The sixth column contains any
@@ -160,7 +160,7 @@ previous annotations, which will be removed.</p></li>
 <dd class="field-even"><p><strong>anno_list</strong> – List of pairs of repeats with annotations marked.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -174,7 +174,7 @@ shingles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fv_mat</strong> (<em>np.array</em>) – Matrix of feature vectors where each column is a timestep and each
+<li><p><strong>fv_mat</strong> (<em>np.ndarray</em>) – Matrix of feature vectors where each column is a timestep and each
 row includes feature information i.e. an array of 144 columns/beats
 and 12 rows corresponding to chroma values.</p></li>
 <li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle.</p></li>
@@ -184,7 +184,7 @@ and 12 rows corresponding to chroma values.</p></li>
 <dd class="field-even"><p><strong>self_dissim_mat</strong> – Self dissimilarity matrix with paired cosine distances between shingles.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -200,8 +200,8 @@ repeated sub-structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
-<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be
+<li><p><strong>thresh_mat</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
+<li><p><strong>bandwidth_vec</strong> (<em>np.ndarray</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be
 1,2,3,….. n where n = num_timesteps.</p></li>
 <li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length.</p></li>
 </ul>
@@ -211,7 +211,7 @@ repeated sub-structures.</p>
 thresh_mat.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array[int]</p>
+<dd class="field-odd"><p>np.ndarray[int]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -222,13 +222,13 @@ thresh_mat.</p>
 <dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order.</p>
+<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array[int]</p>
+<dd class="field-odd"><p>np.ndarray[int]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,15 +240,15 @@ thresh_mat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>width_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization.</p></li>
-<li><p><strong>anno_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization.</p></li>
+<li><p><strong>width_vec</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization.</p></li>
+<li><p><strong>anno_vec</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>ylabels</strong> – Labels for the y-axis of a visualization.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array[str]</p>
+<dd class="field-odd"><p>np.ndarray[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -263,8 +263,8 @@ encoded in pattern_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats encoded in
+<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats encoded in
 each row of pattern_mat.</p></li>
 </ul>
 </dd>
@@ -273,7 +273,7 @@ each row of pattern_mat.</p></li>
 of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -296,8 +296,8 @@ the tests.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary array with 1’s where repeats start and 0’s otherwise.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Array with the lengths of each repeated structure in pattern_mat.</p></li>
+<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Binary array with 1’s where repeats start and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Array with the lengths of each repeated structure in pattern_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -305,7 +305,7 @@ the tests.</p>
 start and end organized.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -318,7 +318,7 @@ diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix where entries equal to 1 signal the existence
+<li><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix where entries equal to 1 signal the existence
 of a diagonal.</p></li>
 <li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals.</p></li>
 </ul>
@@ -328,7 +328,7 @@ of a diagonal.</p></li>
 at each entry prescribed in thresh_diag.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array [boolean]</p>
+<dd class="field-odd"><p>np.ndarray[bool]</p>
 </dd>
 </dl>
 </dd></dl>

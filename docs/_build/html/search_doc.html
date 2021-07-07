@@ -63,7 +63,7 @@ be transformed and assembled.</p>
 <div><ul class="simple">
 <li><dl class="simple">
 <dt>find_complete_list</dt><dd><p>Finds all smaller diagonals (and the associated pairs of repeats)
-that are contained pair_list, which is composed of larger diagonals
+that are contained in pair_list, which is composed of larger diagonals
 found in find_initial_repeats.</p>
 </dd>
 </dl>
@@ -101,10 +101,10 @@ found pairs of repeated structures of the same length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lst_no_anno</strong> (<em>np.array</em>) – List of pairs of repeats.</p></li>
-<li><p><strong>check_inds</strong> (<em>np.array</em>) – List of ending indices for repeats of length k that we use to
+<li><p><strong>lst_no_anno</strong> (<em>np.ndarray</em>) – List of pairs of repeats.</p></li>
+<li><p><strong>check_inds</strong> (<em>np.ndarray</em>) – List of ending indices for repeats of length k that we use to
 check lst_no_anno for more repeats of length k.</p></li>
-<li><p><strong>k</strong> (<em>number</em>) – Length of repeats that we are looking for .</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Length of repeats that we are looking for.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -112,7 +112,7 @@ check lst_no_anno for more repeats of length k.</p></li>
 contained in larger repeats in lst_no_anno .</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -127,8 +127,8 @@ there is no smallest bandwidth size as we are looking for all diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em>) – Thresholded matrix that we extract diagonals from.</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.array</em>) – Vector of lengths of diagonals to be found
+<li><p><strong>thresh_mat</strong> (<em>np.ndarray</em>) – Thresholded matrix that we extract diagonals from.</p></li>
+<li><p><strong>bw_vec</strong> (<em>np.ndarray</em>) – Vector of lengths of diagonals to be found
 Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 </ul>
 </dd>
@@ -144,7 +144,7 @@ find_initial_repeats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pair_list</strong> (<em>np.array</em>) – List of pairs of repeats found in earlier step
+<li><p><strong>pair_list</strong> (<em>np.ndarray</em>) – List of pairs of repeats found in earlier step
 (bandwidths MUST be in ascending order). If you have
 run find_initial_repeats before this script,
 then pair_list will be ordered correctly.</p></li>
@@ -155,7 +155,7 @@ then pair_list will be ordered correctly.</p></li>
 <dd class="field-even"><p><strong>lst_out</strong> – List of pairs of repeats with smaller repeats added.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -169,17 +169,17 @@ start/end indices and lengths.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pair_list</strong> – List of pairs of repeats.
+<li><p><strong>pair_list</strong> (<em>np.ndarray</em>) – List of pairs of repeats.
 WARNING: Bandwidths must be in ascending order.</p></li>
 <li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in song.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of pairs of repeats with smaller repeats added and with
+<dd class="field-even"><p><strong>out_lst</strong> – List of pairs of repeats with smaller repeats added and with
 annotation markers.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>out_lst</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
