@@ -61,46 +61,55 @@ be transformed and assembled.</p>
 <p>This file contains the following functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>find_complete_list - Finds all smaller diagonals (and the associated</p></li>
+<li><dl class="simple">
+<dt>find_complete_list</dt><dd><p>Finds all smaller diagonals (and the associated pairs of repeats)
+that are contained pair_list, which is composed of larger diagonals
+found in find_initial_repeats.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__find_add_rows</dt><dd><p>Finds pairs of repeated structures, represented as diagonals of a
+certain length, k, that neither start nor end at the same time steps
+as previously found pairs of repeated structures of the same length.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_all_repeats</dt><dd><p>Finds all the diagonals present in thresh_mat. This function is nearly
+identical to find_initial_repeats, with two crucial differences. First,
+we do not remove diagonals after we find them. Second, there is no
+smallest bandwidth size as we are looking for all diagonals.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_complete_list_anno_only</dt><dd><p>Finds annotations for all pairs of repeats found in find_all_repeats.
+This list contains all the pairs of repeated structures with their
+start/end indices and lengths.</p>
+</dd>
+</dl>
+</li>
 </ul>
-<p>pairs of repeats) that are contained pair_list, which is composed of
-larger diagonals found in find_initial_repeats.</p>
-<ul class="simple">
-<li><p>__find_add_rows - Finds pairs of repeated structures, represented as</p></li>
-</ul>
-<p>diagonals of a certain length, k, that neither start nor end at the same
-time steps as previously found pairs of repeated structures of the same
-length.</p>
-<ul class="simple">
-<li><p>find_all_repeats - Finds all the diagonals present in thresh_mat. This</p></li>
-</ul>
-<p>function is nearly identical to find_initial_repeats, with two crucial
-differences. First, we do not remove diagonals after we find them. Second,
-there is no smallest bandwidth size as we are looking for all diagonals.</p>
-<ul class="simple">
-<li><p>find_complete_list_anno_only - Finds annotations for all pairs of</p></li>
-</ul>
-<p>repeats found in find_all_repeats. This list contains all the pairs of
-repeated structures with their start/end indices and lengths.</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="repytah.search.__find_add_rows">
 <code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">__find_add_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lst_no_anno</span></em>, <em class="sig-param"><span class="n">check_inds</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.__find_add_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds pairs of repeated structures, represented as diagonals of a certain
 length, k, that neither start nor end at the same time steps as previously
-found pairs of repeated structures of the same length</p>
+found pairs of repeated structures of the same length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lst_no_anno</strong> (<em>np.array</em>) – List of pairs of repeats</p></li>
+<li><p><strong>lst_no_anno</strong> (<em>np.array</em>) – List of pairs of repeats.</p></li>
 <li><p><strong>check_inds</strong> (<em>np.array</em>) – List of ending indices for repeats of length k that we use to
-check lst_no_anno for more repeats of length k</p></li>
-<li><p><strong>k</strong> (<em>number</em>) – Length of repeats that we are looking for</p></li>
+check lst_no_anno for more repeats of length k.</p></li>
+<li><p><strong>k</strong> (<em>number</em>) – Length of repeats that we are looking for .</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>add_rows</strong> – List of newly found pairs of repeats of length K that are
-contained in larger repeats in lst_no_anno</p>
+contained in larger repeats in lst_no_anno .</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -118,7 +127,7 @@ there is no smallest bandwidth size as we are looking for all diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em>) – Thresholded matrix that we extract diagonals from</p></li>
+<li><p><strong>thresh_mat</strong> (<em>np.array</em>) – Thresholded matrix that we extract diagonals from.</p></li>
 <li><p><strong>bw_vec</strong> (<em>np.array</em>) – Vector of lengths of diagonals to be found
 Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 </ul>
@@ -131,7 +140,7 @@ Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 <code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">find_complete_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pair_list</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.find_complete_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all smaller diagonals (and the associated pairs of repeats) that are
 contained pair_list, which is composed of larger diagonals found in
-find_initial_repeats</p>
+find_initial_repeats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -139,11 +148,11 @@ find_initial_repeats</p>
 (bandwidths MUST be in ascending order). If you have
 run find_initial_repeats before this script,
 then pair_list will be ordered correctly.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Song length, which is the number of audio shingles</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>lst_out</strong> – List of pairs of repeats with smaller repeats added</p>
+<dd class="field-even"><p><strong>lst_out</strong> – List of pairs of repeats with smaller repeats added.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -160,14 +169,14 @@ start/end indices and lengths.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pair_list</strong> – List of pairs of repeats
-WARNING: bandwidths must be in ascending order</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in song</p></li>
+<li><p><strong>pair_list</strong> – List of pairs of repeats.
+WARNING: Bandwidths must be in ascending order.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in song.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of pairs of repeats with smaller repeats added and with
-annotation markers</p>
+annotation markers.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>out_lst</p>
