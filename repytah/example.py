@@ -10,20 +10,20 @@ from .assemble import hierarchical_structure
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
-    Example of full aligned hierarchies pathway 
+    Example of full aligned hierarchies pathway.
     
     Args
     ----
         file_in: str
             Name of .csv file to be processed. Contains features across time steps to be analyzed
-            - example-  chroma features
+            - example - chroma features.
         
         file_out: str
-            Name of file where output will be stored
+            Name of file where output will be stored.
         
         num_fv_per_shingle: int
             Number of feature vectors per shingle. Provides "context" of each individual
-            time step, so that for notes CDE if num_fv_per_shingle=2 shingles would be CD, DE
+            time step, so that for notes CDE if num_fv_per_shingle=2 shingles would be CD, DE.
             
         thresh: int
             Maximum threshold value. Largest length repeated structure to search for.
