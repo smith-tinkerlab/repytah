@@ -109,8 +109,6 @@ following rules before submitting:
   import repytah; print("Repytah", repytah.__version__)
   ```
 
-  Note: We also import packages "os" and "signature", which have the same version as users' python version.
-
 ## Documentation
 
 You can edit the documentation using any text editor and then generate
