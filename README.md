@@ -19,6 +19,12 @@ See (link to website) for a complete reference manual and introductory tutorials
 
 This [example](link to example vignette) tutorial will show you a usage of the package from start to finish.
 
+## Statement of Need
+
+### Problems addressed
+
+### Audience
+
 ## Installation
 
 The latest stable release is available on PyPI, and you can install it by running:
