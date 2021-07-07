@@ -6,37 +6,54 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Assemble &#8212; aligned-hierarchies  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <title>Assemble &#8212; repytah  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Search" href="search_doc.html" />
-    <link rel="prev" title="Transform" href="transform.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="Transform" href="transform.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="search_doc.html" title="Search"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="transform.html" title="Transform"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Assemble</a></li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <section id="assemble">
 <h1>Assemble<a class="headerlink" href="#assemble" title="Permalink to this headline">¶</a></h1>
-<section id="module-assemble">
-<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-assemble" title="Permalink to this headline">¶</a></h2>
+<section id="module-repytah.assemble">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-repytah.assemble" title="Permalink to this headline">¶</a></h2>
 <p>assemble.py</p>
 <p>This script finds and forms the essential structure components, which are the
 smallest building blocks that form every repeat in the song.</p>
@@ -46,70 +63,84 @@ repeats in time. When repeats do overlap, they undergo a process where they
 are divided until there are only non-overlapping pieces left over.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>breakup_overlaps_by_intersect - Extracts repeats in input_pattern_obj that</p></li>
-</ul>
-<p>has the starting indices of the repeats, into the essential structure
-componets using bw_vec, that has the lengths of each repeat.</p>
-<ul class="simple">
-<li><p>check_overlaps - Compares every pair of groups, determining if there are</p></li>
-</ul>
-<p>any repeats in any pairs of the groups that overlap.</p>
-<ul class="simple">
-<li><p>__compare_and_cut - Compares two rows of repeats labeled RED and BLUE, and</p></li>
-</ul>
-<p>determines if there are any overlaps in time between them. If there are overlaps,
+<li><dl class="simple">
+<dt>breakup_overlaps_by_intersect</dt><dd><p>Extracts repeats in input_pattern_obj that has the starting indices
+of the repeats, into the essential structure componets using bw_vec,
+that has the lengths of each repeat.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>check_overlaps</dt><dd><p>Compares every pair of groups, determining if there are any repeats
+in any pairs of the groups that overlap.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__compare_and_cut</dt><dd><p>Compares two rows of repeats labeled RED and BLUE, and determines if
+there are any overlaps in time between them. If there are overlaps,
 we cut the repeats in RED and BLUE into up to 3 pieces.</p>
-<ul class="simple">
-<li><p>__num_of_parts - Determines the number of blocks of consecutive time</p></li>
-</ul>
-<p>steps in a list of time steps. A block of consecutive time steps represents
-a distilled section of a repeat.</p>
-<ul class="simple">
-<li><p>__inds_to_rows -  Expands a vector containing the starting indices of a</p></li>
-</ul>
-<p>piece or two of a repeat into a matrix representation recording when these
-pieces occur in the song with 1’s. All remaining entries are marked with
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__num_of_parts</dt><dd><p>Determines the number of blocks of consecutive time steps in a list
+of time steps. A block of consecutive time steps represents a
+distilled section of a repeat.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__inds_to_rows</dt><dd><p>Expands a vector containing the starting indices of a piece or two
+of a repeat into a matrix representation recording when these pieces
+occur in the song with 1’s. All remaining entries are marked with
 0’s.</p>
-<ul class="simple">
-<li><p>__merge_based_on_length - Merges repeats that are the same length, as set</p></li>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__merge_based_on_length</dt><dd><p>Merges repeats that are the same length, as set by full_bandwidth,
+and are repeats of the same piece of structure.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common repeat(s)
+must occur at the same time step and be of a common length.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>hierarchical_structure</dt><dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
+structure components and then builds the hierarchical representation.
+Optionally outputs visualizations of the hierarchical representations.</p>
+</dd>
+</dl>
+</li>
 </ul>
-<p>by full_bandwidth, and are repeats of the same piece of structure.</p>
-<ul class="simple">
-<li><p>__merge_rows - Merges rows that have at least one common repeat. These</p></li>
-</ul>
-<p>common repeat(s) must occur at the same time step and be of a common length.</p>
-<ul class="simple">
-<li><p>hierarchical_structure - Distills the repeats encoded in MATRIX_NO</p></li>
-</ul>
-<p>(and KEY_NO) to the essential structure components and then builds the
-hierarchical representation.</p>
-<ul class="simple">
-<li><p>hierarchical_structure_with_vis - Same as hierarchical_structure but this</p></li>
-</ul>
-<p>also outputs visualizations of the hierarchical representations.</p>
 </div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.__compare_and_cut">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">__compare_and_cut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">red_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue_len</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.__compare_and_cut" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.assemble.__compare_and_cut">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__compare_and_cut</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">red</span></em>, <em class="sig-param"><span class="n">red_len</span></em>, <em class="sig-param"><span class="n">blue</span></em>, <em class="sig-param"><span class="n">blue_len</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__compare_and_cut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two rows of repeats labeled RED and BLUE, and determines if there
 are any overlaps in time between them. If there is, then we cut the
 repeats in RED and BLUE into up to 3 pieces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<em>np.array</em>) – binary row vector encoding a set of repeats with 1’s where each
-repeat starts and 0’s otherwise</p></li>
-<li><p><strong>red_len</strong> (<em>number</em>) – length of repeats encoded in red</p></li>
-<li><p><strong>blue</strong> (<em>np.array</em>) – binary row vector encoding a set of repeats with 1’s where each
-repeat starts and 0’s otherwise</p></li>
-<li><p><strong>blue_len</strong> (<em>number</em>) – length of repeats encoded in blue</p></li>
+<li><p><strong>red</strong> (<em>np.array</em>) – Binary row vector encoding a set of repeats with 1’s where each
+repeat starts and 0’s otherwise.</p></li>
+<li><p><strong>red_len</strong> (<em>number</em>) – Length of repeats encoded in red.</p></li>
+<li><p><strong>blue</strong> (<em>np.array</em>) – Binary row vector encoding a set of repeats with 1’s where each
+repeat starts and 0’s otherwise.</p></li>
+<li><p><strong>blue_len</strong> (<em>number</em>) – Length of repeats encoded in blue.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>union_mat</strong> (<em>np.array</em>) – binary matrix representation of up to three rows encoding
-non-overlapping repeats cut from red and blue</p></li>
-<li><p><strong>union_length</strong> (<em>np.array</em>) – vector containing the lengths of the repeats encoded in union_mat</p></li>
+<li><p><strong>union_mat</strong> (<em>np.array</em>) – Binary matrix representation of up to three rows encoding
+non-overlapping repeats cut from red and blue.</p></li>
+<li><p><strong>union_length</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats encoded in union_mat.</p></li>
 </ul>
 </p>
 </dd>
@@ -117,22 +148,21 @@ non-overlapping repeats cut from red and blue</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.__inds_to_rows">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">__inds_to_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.__inds_to_rows" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.assemble.__inds_to_rows">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__inds_to_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_mat</span></em>, <em class="sig-param"><span class="n">row_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__inds_to_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expands a vector containing the starting indices of a piece or two of a
 repeat into a matrix representation recording when these pieces occur in
 the song with 1’s. All remaining entries are marked with 0’s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.array</em>) – matrix of one or two rows, containing the
-starting indices</p></li>
-<li><p><strong>row_length</strong> (<em>int</em>) – length of the rows</p></li>
+<li><p><strong>start_mat</strong> (<em>np.array</em>) – Matrix of one or two rows, containing the starting indices.</p></li>
+<li><p><strong>row_length</strong> (<em>int</em>) – Length of the rows.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>new_mat</strong> – matrix of one or two rows, with 1’s where
-the starting indices and 0’s otherwise</p>
+<dd class="field-even"><p><strong>new_mat</strong> – Matrix of one or two rows, with 1’s where the starting indices
+and 0’s otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -141,23 +171,23 @@ the starting indices and 0’s otherwise</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.__merge_based_on_length">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">__merge_based_on_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_bw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.__merge_based_on_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges repeats that are the same length, as set
-by full_bandwidth, and are repeats of the same piece of structure.</p>
+<dt id="repytah.assemble.__merge_based_on_length">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__merge_based_on_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_mat</span></em>, <em class="sig-param"><span class="n">full_bw</span></em>, <em class="sig-param"><span class="n">target_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__merge_based_on_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges repeats that are the same length, as set by full_bandwidth,
+and are repeats of the same piece of structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>full_mat</strong> (<em>np.array</em>) – binary matrix with ones where repeats start and zeroes otherwise</p></li>
-<li><p><strong>full_bw</strong> (<em>np.array</em>) – length of repeats encoded in input_mat</p></li>
-<li><p><strong>target_bw</strong> (<em>np.array</em>) – lengths of repeats that we seek to merge</p></li>
+<li><p><strong>full_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
+<li><p><strong>full_bw</strong> (<em>np.array</em>) – Length of repeats encoded in input_mat.</p></li>
+<li><p><strong>target_bw</strong> (<em>np.array</em>) – Lengths of repeats that we seek to merge.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>out_mat</strong> (<em>np.array</em>) – binary matrix with ones where repeats start and zeros otherwise
-with rows of full_mat merged if appropriate</p></li>
-<li><p><strong>one_length_vec</strong> (<em>np.array</em>) – length of the repeats encoded in out_mat</p></li>
+<li><p><strong>out_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeros otherwise
+with rows of full_mat merged if appropriate.</p></li>
+<li><p><strong>one_length_vec</strong> (<em>np.array</em>) – Length of the repeats encoded in out_mat.</p></li>
 </ul>
 </p>
 </dd>
@@ -165,19 +195,19 @@ with rows of full_mat merged if appropriate</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.__merge_rows">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">__merge_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_width</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.__merge_rows" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.assemble.__merge_rows">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__merge_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">input_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__merge_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merges rows that have at least one common repeat; said common repeat(s)
 must occur at the same time step and be of common length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.array</em>) – binary matrix with ones where repeats start and zeroes otherwise</p></li>
-<li><p><strong>input_width</strong> (<em>int</em>) – length of repeats encoded in input_mat</p></li>
+<li><p><strong>input_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
+<li><p><strong>input_width</strong> (<em>int</em>) – Length of repeats encoded in input_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>merge_mat</strong> – binary matrix with ones where repeats start and zeroes otherwise</p>
+<dd class="field-even"><p><strong>merge_mat</strong> – Binary matrix with ones where repeats start and zeroes otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -186,9 +216,9 @@ must occur at the same time step and be of common length.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.__num_of_parts">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">__num_of_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_all_starts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.__num_of_parts" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function is used to determine the number of blocks of consecutive
+<dt id="repytah.assemble.__num_of_parts">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__num_of_parts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_vec</span></em>, <em class="sig-param"><span class="n">input_start</span></em>, <em class="sig-param"><span class="n">input_all_starts</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__num_of_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the number of blocks of consecutive
 time steps in a list of time steps. A block of consecutive time steps
 represents a distilled section of a repeat. This distilled section will be
 replicated and the starting indices of the repeats within it will be
@@ -196,17 +226,17 @@ returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_vec</strong> (<em>np.array</em>) – contains one or two parts of a repeat that are overlap(s) in time
-that may need to be replicated</p></li>
-<li><p><strong>input_start</strong> (<em>np.array index</em>) – starting index for the part to be replicated</p></li>
-<li><p><strong>input_all_starts</strong> (<em>np.array indices</em>) – starting indices for replication</p></li>
+<li><p><strong>input_vec</strong> (<em>np.array</em>) – Vector that contains one or two parts of a repeat that are overlap(s)
+in time that may need to be replicated.</p></li>
+<li><p><strong>input_start</strong> (<em>np.array index</em>) – Starting index for the part to be replicated.</p></li>
+<li><p><strong>input_all_starts</strong> (<em>np.array indices</em>) – Starting indices for replication.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.array</em>) – array of one or two rows, containing the starting indices of the
-replicated repeats</p></li>
-<li><p><strong>length_vec</strong> (<em>np.array</em>) – column vector containing the lengths of the replicated parts</p></li>
+<li><p><strong>start_mat</strong> (<em>np.array</em>) – Array of one or two rows, containing the starting indices of the
+replicated repeats.</p></li>
+<li><p><strong>length_vec</strong> (<em>np.array</em>) – Column vector containing the lengths of the replicated parts.</p></li>
 </ul>
 </p>
 </dd>
@@ -214,29 +244,29 @@ replicated repeats</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.breakup_overlaps_by_intersect">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">breakup_overlaps_by_intersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_pattern_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract repeats in input_pattern_obj that has the starting indices of the
+<dt id="repytah.assemble.breakup_overlaps_by_intersect">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">breakup_overlaps_by_intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_pattern_obj</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts repeats in input_pattern_obj that has the starting indices of the
 repeats, into the essential structure componets using bw_vec, that has the
 lengths of each repeat. The essential structure components are the
 smallest building blocks that form every repeat in the song.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_pattern_obj</strong> (<em>np.array</em>) – binary matrix with 1’s where repeats begin
-and 0’s otherwise</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.array</em>) – vector containing the lengths of the repeats
-encoded in input_pattern_obj</p></li>
-<li><p><strong>thresh_bw</strong> (<em>number</em>) – the smallest allowable repeat length</p></li>
+<li><p><strong>input_pattern_obj</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin
+and 0’s otherwise.</p></li>
+<li><p><strong>bw_vec</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats
+encoded in input_pattern_obj.</p></li>
+<li><p><strong>thresh_bw</strong> (<em>number</em>) – Smallest allowable repeat length.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_no_overlaps</strong> (<em>np.array</em>) – binary matrix with 1’s where repeats of
-essential structure components begin</p></li>
-<li><p><strong>pattern_no_overlaps_key</strong> (<em>np.array</em>) – vector containing the lengths of the repeats
+<li><p><strong>pattern_no_overlaps</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats of
+essential structure components begin.</p></li>
+<li><p><strong>pattern_no_overlaps_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats
 of essential structure components in
-pattern_no_overlaps</p></li>
+pattern_no_overlaps.</p></li>
 </ul>
 </p>
 </dd>
@@ -244,17 +274,17 @@ pattern_no_overlaps</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.check_overlaps">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">check_overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.check_overlaps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares every pair of groups, determining if there are any repeats in
+<dt id="repytah.assemble.check_overlaps">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">check_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.check_overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares every pair of groups and determines if there are any repeats in
 any pairs of the groups that overlap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_mat</strong> (<em>np.array</em><em>(</em><em>int</em><em>)</em>) – matrix to be checked for overlaps</p>
+<dd class="field-odd"><p><strong>input_mat</strong> (<em>np.array</em><em>(</em><em>int</em><em>)</em>) – Matrix to be checked for overlaps.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>overlaps_yn</strong> – logical array where (i,j) = 1 if row i of input matrix and row j
-of input matrix overlap and (i,j) = 0 elsewhere</p>
+<dd class="field-even"><p><strong>overlaps_yn</strong> – Logical array where (i,j) = 1 if row i of input matrix and row j
+of input matrix overlap and (i,j) = 0 elsewhere.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array(bool)</p>
@@ -263,33 +293,32 @@ of input matrix overlap and (i,j) = 0 elsewhere</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="assemble.hierarchical_structure">
-<span class="sig-prename descclassname"><span class="pre">assemble.</span></span><span class="sig-name descname"><span class="pre">hierarchical_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_no</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_no</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
-structure components and then builds the hierarchical representation</p>
-</div></blockquote>
+<dt id="repytah.assemble.hierarchical_structure">
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no</span></em>, <em class="sig-param"><span class="n">key_no</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
+structure components and then builds the hierarchical representation.
+Optionally shows visualizations of the hierarchical structure via the vis argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – binary matrix with 1’s where repeats begin and 0’s
-otherwise</p></li>
-<li><p><strong>key_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – vector containing the lengths of the repeats encoded in matrix_NO</p></li>
-<li><p><strong>sn</strong> (<em>int</em>) – song length, which is the number of audio shingles</p></li>
+<li><p><strong>matrix_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>key_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no.</p></li>
+<li><p><strong>sn</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
+<li><p><strong>vis</strong> (<em>bool</em>) – Shows visualizations if True (default = False).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>full_visualization</strong> (<em>np.array[int]</em>) – binary matrix representation for
-full_matrix_no with blocks of 1’s equal to
-the length’s prescribed in full_key</p></li>
-<li><p><strong>full_key</strong> (<em>np.array[int]</em>) – vector containing the lengths of the hierarchical
-structure encoded in full_matrix_no</p></li>
-<li><p><strong>full_matrix_no</strong> (<em>np.array[int]</em>) – binary matrix with 1’s where hierarchical
-structure begins and 0’s otherwise</p></li>
-<li><p><strong>full_anno_lst</strong> (<em>np.array[int]</em>) – vector containing the annotation markers of the
+<li><p><strong>full_visualization</strong> (<em>np.array[int]</em>) – Binary matrix representation for full_matrix_no
+with blocks of 1’s equal to the length’s prescribed
+in full_key.</p></li>
+<li><p><strong>full_key</strong> (<em>np.array[int]</em>) – Vector containing the lengths of the hierarchical
+structure encoded in full_matrix_no.</p></li>
+<li><p><strong>full_matrix_no</strong> (<em>np.array[int]</em>) – Binary matrix with 1’s where hierarchical
+structure begins and 0’s otherwise.</p></li>
+<li><p><strong>full_anno_lst</strong> (<em>np.array[int]</em>) – Vector containing the annotation markers of the
 hierarchical structure encoded in each row of
-full_matrix_no</p></li>
+full_matrix_no.</p></li>
 </ul>
 </p>
 </dd>
@@ -300,39 +329,33 @@ full_matrix_no</p></li>
 </section>
 
 
+            <div class="clearer"></div>
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">aligned-hierarchies</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Modules:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Assemble</a><ul>
+<li><a class="reference internal" href="#module-repytah.assemble">Functions</a></li>
+</ul>
+</li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="transform.html" title="previous chapter">Transform</a></li>
-      <li>Next: <a href="search_doc.html" title="next chapter">Search</a></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="transform.html"
+                        title="previous chapter">Transform</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="search_doc.html"
+                        title="next chapter">Search</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/assemble.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -343,32 +366,32 @@ full_matrix_no</p></li>
     </div>
 </div>
 <script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/assemble.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="search_doc.html" title="Search"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="transform.html" title="Transform"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Assemble</a></li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Smith Tinker Lab Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
   </body>
 </html>

@@ -6,143 +6,110 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Search &#8212; aligned-hierarchies  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <title>Search &#8212; repytah  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Example" href="example.html" />
-    <link rel="prev" title="Assemble" href="assemble.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="next" title="Example of Creating Aligned Hierarchies for a Mazurka Score" href="example_vignette.html" />
+    <link rel="prev" title="Assemble" href="assemble.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="example_vignette.html" title="Example of Creating Aligned Hierarchies for a Mazurka Score"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="assemble.html" title="Assemble"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Search</a></li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <section id="search">
 <h1>Search<a class="headerlink" href="#search" title="Permalink to this headline">¶</a></h1>
-<section id="module-search">
-<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-search" title="Permalink to this headline">¶</a></h2>
+<section id="module-repytah.search">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-repytah.search" title="Permalink to this headline">¶</a></h2>
 <p>search.py</p>
+<p>This script holds functions used to find and record the diagonals in the
+thresholded matrix, T. These functions prepare the found diagonals to later
+be transformed and assembled.</p>
 <p>This file contains the following functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>find_complete_list - Finds all smaller diagonals (and the associated</p></li>
-</ul>
-<p>pairs of repeats) that are contained pair_list, which is composed of
-larger diagonals found in find_initial_repeats.</p>
-<ul class="simple">
-<li><p>__find_add_srows - Finds pairs of repeated structures, represented as</p></li>
-</ul>
-<p>diagonals of a certain length, k, that start at the same time step as
-previously found pairs of repeated structures of the same length.</p>
-<ul class="simple">
-<li><p>__find_add_erows - Finds pairs of repeated structures, represented as</p></li>
-</ul>
-<p>diagonals of a certain length, k, that end at the same time step as
-previously found pairs of repeated structures of the same length.</p>
-<ul class="simple">
-<li><p>__find_add_mrows - Finds pairs of repeated structures, represented as</p></li>
-</ul>
-<p>diagonals of a certain length, k, that neither start nor end at the same
-time steps as previously found pairs of repeated structures of the same
-length.</p>
-<ul class="simple">
-<li><p>find_all_repeats - Finds all the diagonals present in thresh_mat. This</p></li>
-</ul>
-<p>function is nearly identical to find_initial_repeats, with two crucial
-differences. First, we do not remove diagonals after we find them. Second,
-there is no smallest bandwidth size as we are looking for all diagonals.</p>
-<ul class="simple">
-<li><p>find_complete_list_anno_only - Finds annotations for all pairs of</p></li>
-</ul>
-<p>repeats found in find_all_repeats. This list contains all the pairs of
-repeated structures with their start/end indices and lengths.</p>
-</div></blockquote>
-<dl class="py function">
-<dt class="sig sig-object py" id="search.__find_add_erows">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">__find_add_erows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst_no_anno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.__find_add_erows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds pairs of repeated structures, representated as diagonals of a
-certain length, k, that end at the same time step as
-previously found pairs of repeated structures of the same length.
-:param lst_no_anno: list of pairs of repeats
-:type lst_no_anno: np.array
-:param check_inds: list of ending indices for repeats of length k that we use</p>
-<blockquote>
-<div><p>to check lst_anno_no for more repeats of length k</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>k</strong> (<em>int</em>) – length of repeats that we are looking for</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>add_rows</strong> – list of newly found pairs of repeats of length k that are
-contained in larger repeats in lst_no_anno</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<li><dl class="simple">
+<dt>find_complete_list</dt><dd><p>Finds all smaller diagonals (and the associated pairs of repeats)
+that are contained pair_list, which is composed of larger diagonals
+found in find_initial_repeats.</p>
 </dd>
 </dl>
-</dd></dl>
-
+</li>
+<li><dl class="simple">
+<dt>__find_add_rows</dt><dd><p>Finds pairs of repeated structures, represented as diagonals of a
+certain length, k, that neither start nor end at the same time steps
+as previously found pairs of repeated structures of the same length.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_all_repeats</dt><dd><p>Finds all the diagonals present in thresh_mat. This function is nearly
+identical to find_initial_repeats, with two crucial differences. First,
+we do not remove diagonals after we find them. Second, there is no
+smallest bandwidth size as we are looking for all diagonals.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_complete_list_anno_only</dt><dd><p>Finds annotations for all pairs of repeats found in find_all_repeats.
+This list contains all the pairs of repeated structures with their
+start/end indices and lengths.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="search.__find_add_mrows">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">__find_add_mrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst_no_anno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.__find_add_mrows" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.search.__find_add_rows">
+<code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">__find_add_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lst_no_anno</span></em>, <em class="sig-param"><span class="n">check_inds</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.__find_add_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds pairs of repeated structures, represented as diagonals of a certain
 length, k, that neither start nor end at the same time steps as previously
-found pairs of repeated structures of the same length.
-:param lst_no_anno: list of pairs of repeats
-:type lst_no_anno: np.array
-:param check_inds: list of ending indices for repeats of length k that we use to</p>
-<blockquote>
-<div><p>check lst_no_anno for more repeats of length k</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>k</strong> (<em>number</em>) – length of repeats that we are looking for</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>add_rows</strong> – list of newly found pairs of repeats of length K that are
-contained in larger repeats in LST_NO_ANNO</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="search.__find_add_srows">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">__find_add_srows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst_no_anno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.__find_add_srows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds pairs of repeated structures, representated as diagonals of a
-certain length, k, that start at the same time step as previously found
-pairs of repeated structures of the same length.</p>
+found pairs of repeated structures of the same length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lst_no_anno</strong> (<em>np.array</em>) – list of pairs of repeats</p></li>
-<li><p><strong>check_inds</strong> (<em>np.array</em>) – list of ending indices for repeats of length k that we
-use to check lst_no_anno for more repeats of length k</p></li>
-<li><p><strong>k</strong> (<em>int</em>) – length of repeats that we are looking for</p></li>
+<li><p><strong>lst_no_anno</strong> (<em>np.array</em>) – List of pairs of repeats.</p></li>
+<li><p><strong>check_inds</strong> (<em>np.array</em>) – List of ending indices for repeats of length k that we use to
+check lst_no_anno for more repeats of length k.</p></li>
+<li><p><strong>k</strong> (<em>number</em>) – Length of repeats that we are looking for .</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>add_rows</strong> – List of newly found pairs of repeats of length K that are
-contained in larger repeats in lst_no_anno</p>
+contained in larger repeats in lst_no_anno .</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -151,18 +118,17 @@ contained in larger repeats in lst_no_anno</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="search.find_all_repeats">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">find_all_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.find_all_repeats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds all the diagonals present in thresh_mat. This function is
-nearly identical to find_initial_repeats, with two crucial
-differences. First, we do not remove diagonals after we
-find them. Second, there is no smallest bandwidth size
-as we are looking for all diagonals.</p>
+<dt id="repytah.search.find_all_repeats">
+<code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">find_all_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.find_all_repeats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all the diagonals present in thresh_mat. This function is nearly
+identical to find_initial_repeats, with two crucial differences.
+First, we do not remove diagonals after we find them. Second,
+there is no smallest bandwidth size as we are looking for all diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em>) – thresholded matrix that we extract diagonals from</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.array</em>) – vector of lengths of diagonals to be found
+<li><p><strong>thresh_mat</strong> (<em>np.array</em>) – Thresholded matrix that we extract diagonals from.</p></li>
+<li><p><strong>bw_vec</strong> (<em>np.array</em>) – Vector of lengths of diagonals to be found
 Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 </ul>
 </dd>
@@ -170,23 +136,23 @@ Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="search.find_complete_list">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">find_complete_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.find_complete_list" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.search.find_complete_list">
+<code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">find_complete_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pair_list</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.find_complete_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all smaller diagonals (and the associated pairs of repeats) that are
 contained pair_list, which is composed of larger diagonals found in
 find_initial_repeats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pair_list</strong> (<em>np.array</em>) – list of pairs of repeats found in earlier step
+<li><p><strong>pair_list</strong> (<em>np.array</em>) – List of pairs of repeats found in earlier step
 (bandwidths MUST be in ascending order). If you have
 run find_initial_repeats before this script,
 then pair_list will be ordered correctly.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – song length, which is the number of audio shingles.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>lst_out</strong> – list of pairs of repeats with smaller repeats added</p>
+<dd class="field-even"><p><strong>lst_out</strong> – List of pairs of repeats with smaller repeats added.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -195,22 +161,22 @@ then pair_list will be ordered correctly.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="search.find_complete_list_anno_only">
-<span class="sig-prename descclassname"><span class="pre">search.</span></span><span class="sig-name descname"><span class="pre">find_complete_list_anno_only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#search.find_complete_list_anno_only" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds annotations for all pairs of repeats found in find_all_repeats. This
-list contains all the pairs of repeated structures with their start/end
-indices and lengths.</p>
+<dt id="repytah.search.find_complete_list_anno_only">
+<code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">find_complete_list_anno_only</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pair_list</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.find_complete_list_anno_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds annotations for all pairs of repeats found in find_all_repeats.
+This list contains all the pairs of repeated structures with their
+start/end indices and lengths.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pair_list</strong> – list of pairs of repeats
-WARNING: bandwidths must be in ascending order</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – number of audio shingles in song</p></li>
+<li><p><strong>pair_list</strong> – List of pairs of repeats.
+WARNING: Bandwidths must be in ascending order.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in song.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of pairs of repeats with smaller repeats added and with
-annotation markers</p>
+<dd class="field-even"><p>List of pairs of repeats with smaller repeats added and with
+annotation markers.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>out_lst</p>
@@ -222,40 +188,33 @@ annotation markers</p>
 </section>
 
 
+            <div class="clearer"></div>
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">aligned-hierarchies</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Modules:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Example</a></li>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Search</a><ul>
+<li><a class="reference internal" href="#module-repytah.search">Functions</a></li>
+</ul>
+</li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="assemble.html" title="previous chapter">Assemble</a></li>
-      <li>Next: <a href="example.html" title="next chapter">Example</a></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="assemble.html"
+                        title="previous chapter">Assemble</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_vignette.html"
+                        title="next chapter">Example of Creating Aligned Hierarchies for a Mazurka Score</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/search_doc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -266,32 +225,32 @@ annotation markers</p>
     </div>
 </div>
 <script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/search_doc.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="example_vignette.html" title="Example of Creating Aligned Hierarchies for a Mazurka Score"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="assemble.html" title="Assemble"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Search</a></li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Smith Tinker Lab Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
   </body>
 </html>

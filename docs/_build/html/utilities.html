@@ -6,98 +6,134 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Utilities &#8212; aligned-hierarchies  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <title>Utilities &#8212; repytah  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Transform" href="transform.html" />
-    <link rel="prev" title="Welcome to aligned-hierarchies’s documentation!" href="index.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="Installation" href="installation.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transform.html" title="Transform"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Utilities</a></li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <section id="utilities">
 <h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
-<section id="module-utilities">
-<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-utilities" title="Permalink to this headline">¶</a></h2>
+<section id="module-repytah.utilities">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-repytah.utilities" title="Permalink to this headline">¶</a></h2>
 <p>utilities.py</p>
 <p>This script when imported as a module allows search.py, transform.py and
-assemble.py in the ah package to run smoothly.</p>
+assemble.py in the repytah package to run smoothly.</p>
 <p>This file contains the following functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>create_sdm - Creates a self-dissimilarity matrix; this matrix is found</p></li>
-</ul>
-<p>by creating audio shingles from feature vectors, and finding cosine
+<li><dl class="simple">
+<dt>create_sdm</dt><dd><p>Creates a self-dissimilarity matrix; this matrix is found
+by creating audio shingles from feature vectors, and finding cosine
 distance between shingles.</p>
-<ul class="simple">
-<li><p>find_initial_repeats - Finds all diagonals present in thresh_mat,</p></li>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_initial_repeats</dt><dd><p>Finds all diagonals present in thresh_mat, removing each diagonal
+as it is found.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>stretch_diags</dt><dd><p>Fills out diagonals in binary self dissimilarity matrix from diagonal
+starts and lengths.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>add_annotations</dt><dd><p>Adds annotations to each pair of repeated structures according to
+their length and order of occurence.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__find_song_pattern</dt><dd><p>Stitches information about repeat locations from thresh_diags matrix
+into a single row.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>reconstruct_full_block</dt><dd><p>Creates a record of when pairs of repeated structures occur, from
+the first beat in the song to the last beat of the song. Pairs of
+repeated structures are marked with 1’s.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>get_annotation_lst</dt><dd><p>Gets one annotation marker vector, given vector of lengths key_lst.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>get_yLabels</dt><dd><p>Generates the labels for a visualization.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>reformat [Only used for creating test examples]</dt><dd><p>Transforms a binary matrix representation of when repeats occur in
+a song into a list of repeated structures detailing the length and
+occurence of each repeat.</p>
+</dd>
+</dl>
+</li>
 </ul>
-<p>removing each diagonal as it is found.</p>
-<ul class="simple">
-<li><p>stretch_diags - Fills out diagonals in binary self dissimilarity matrix</p></li>
-</ul>
-<p>from diagonal starts and lengths.</p>
-<ul class="simple">
-<li><p>add_annotations - Adds annotations to each pair of repeated structures</p></li>
-</ul>
-<p>according to their length and order of occurence.</p>
-<ul class="simple">
-<li><p>__find_song_pattern - Stitches information about repeat locations from</p></li>
-</ul>
-<p>thresh_diags matrix into a single row.</p>
-<ul class="simple">
-<li><p>reconstruct_full_block - Creates a record of when pairs of repeated</p></li>
-</ul>
-<p>structures occur, from the first beat in the song to the last beat of the
-song. Pairs of repeated structures are marked with 1’s.</p>
-<ul class="simple">
-<li><p>get_annotation_lst - Gets one annotation marker vector, given vector of</p></li>
-</ul>
-<p>lengths key_lst.</p>
-<ul class="simple">
-<li><p>get_yLabels - Generates the labels for a visualization.</p></li>
-<li><p>reformat [Only used for creating test examples] - Transforms a binary</p></li>
-</ul>
-<p>matrix representation of when repeats occur in a song into a list of
-repeated structures detailing the length and occurence of each repeat.</p>
 </div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.__find_song_pattern">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">__find_song_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_diags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.__find_song_pattern" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Stitches information from thresh_diags matrix into a single
+<dt id="repytah.utilities.__find_song_pattern">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">__find_song_pattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.__find_song_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stitches information from thresh_diags matrix into a single
 row, song_pattern, that shows the timesteps containing repeats;
 From the full matrix that decodes repeat beginnings (thresh_diags),
 the locations, or beats, where these repeats start are found and
-encoded into the song_pattern array</p>
-</div></blockquote>
+encoded into the song_pattern array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.array</em>) – binary matrix with 1 at the start of each repeat pair (SI,SJ) and
+<dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix with 1 at the start of each repeat pair (SI,SJ) and
 0 elsewhere.
-WARNING: must be symmetric</p>
+WARNING: Must be symmetric.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>song_pattern</strong> – row where each entry represents a time step and the group
-that time step is a member of</p>
+<dd class="field-even"><p><strong>song_pattern</strong> – Row where each entry represents a time step and the group
+that time step is a member of.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array [shape = (1, song_length)]</p>
@@ -106,22 +142,22 @@ that time step is a member of</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.add_annotations">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">add_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.add_annotations">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds annotations to the pairs of repeats in input_mat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.array</em>) – list of pairs of repeats. The first two columns refer to
-the first repeat of the pair. The third and fourth columns refer
-to the second repeat of the pair. The fifth column refers to the
-repeat lengths. The sixth column contains any previous annotations,
-which will be removed</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – number of audio shingles in the song</p></li>
+<li><p><strong>input_mat</strong> (<em>np.array</em>) – List of pairs of repeats. The first two columns refer to
+the first repeat of the pair. The third and fourth columns
+refer to the second repeat of the pair. The fifth column
+refers to the repeat lengths. The sixth column contains any
+previous annotations, which will be removed.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in the song.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_list</strong> – list of pairs of repeats with annotations marked</p>
+<dd class="field-even"><p><strong>anno_list</strong> – List of pairs of repeats with annotations marked.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>array</p>
@@ -130,23 +166,22 @@ which will be removed</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.create_sdm">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">create_sdm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_fv_per_shingle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.create_sdm">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates self-dissimilarity matrix; this matrix is found by creating audio
 shingles from feature vectors, and finding the cosine distance between
 shingles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fv_mat</strong> (<em>np.array</em>) – matrix of feature vectors where each column is a timestep and each row
+<li><p><strong>fv_mat</strong> (<em>np.array</em>) – Matrix of feature vectors where each column is a timestep and each row
 includes feature information i.e. an array of 144 columns/beats and 12
-rows corresponding to chroma values</p></li>
-<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – number of feature vectors per audio shingle</p></li>
+rows corresponding to chroma values.</p></li>
+<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self_dissim_mat</strong> – self dissimilarity matrix with paired cosine distances between
-shingles</p>
+<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self dissimilarity matrix with paired cosine distances between shingles.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -155,8 +190,8 @@ shingles</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.find_initial_repeats">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">find_initial_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.find_initial_repeats">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Looks for the largest repeated structures in thresh_mat. Finds all
 repeated structures, represented as diagonals present in thresh_mat,
 and then stores them with their start/end indices and lengths in a
@@ -165,15 +200,15 @@ repeated sub-structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – thresholded matrix that we extract diagonals from</p></li>
-<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – vector of lengths of diagonals to be found. Should be 1,2,3,…..
-n where n = num_timesteps</p></li>
-<li><p><strong>thresh_bw</strong> (<em>int</em>) – smallest allowed diagonal length</p></li>
+<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
+<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be
+1,2,3,….. n where n = num_timesteps.</p></li>
+<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>all_lst</strong> – list of pairs of repeats that correspond to
-diagonals in thresh_mat</p>
+<dd class="field-even"><p><strong>all_lst</strong> – List of pairs of repeats that correspond to diagonals in
+thresh_mat.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[int]</p>
@@ -182,15 +217,15 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.get_annotation_lst">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">get_annotation_lst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_lst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.get_annotation_lst" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets one annotation marker vector, given vector of lengths key_lst.</p>
+<dt id="repytah.utilities.get_annotation_lst">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_annotation_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order</p>
+<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst</p>
+<dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[int]</p>
@@ -199,18 +234,18 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.get_yLabels">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">get_yLabels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anno_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.get_yLabels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the labels for a visualization with width_vec and ANNO_VEC.</p>
+<dt id="repytah.utilities.get_yLabels">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_yLabels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_yLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the labels for a visualization with width_vec and anno_vec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>width_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization</p></li>
-<li><p><strong>anno_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization</p></li>
+<li><p><strong>width_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization.</p></li>
+<li><p><strong>anno_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>ylabels</strong> – Labels for the y-axis of a visualization</p>
+<dd class="field-even"><p><strong>ylabels</strong> – Labels for the y-axis of a visualization.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[str]</p>
@@ -219,8 +254,8 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.reconstruct_full_block">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">reconstruct_full_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.reconstruct_full_block">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a record of when pairs of repeated structures occur, from the
 first beat in the song to the end. This record is a binary matrix with a
 block of 1’s for each repeat encoded in pattern_mat whose length
@@ -228,16 +263,14 @@ is encoded in pattern_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – binary matrix with 1’s where repeats begin
-and 0’s otherwise</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – vector containing the lengths of the repeats
-encoded in each row of pattern_mat</p></li>
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats encoded in
+each row of pattern_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pattern_block</strong> – binary matrix representation for pattern_mat
-with blocks of 1’s equal to the length’s
-prescribed in pattern_key</p>
+<dd class="field-even"><p><strong>pattern_block</strong> – Binary matrix representation for pattern_mat with blocks
+of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -246,10 +279,10 @@ prescribed in pattern_key</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.reformat">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">reformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reformat" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.reformat">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a binary array with 1’s where repeats start and 0’s
-otherwise into an a list of repeated stuctures. This list consists of
+otherwise into a list of repeated stuctures. This list consists of
 information about the repeats including length, when they occur and when
 they end.</p>
 <p>Every row has a pair of repeated structure. The first two columns are
@@ -263,13 +296,13 @@ the tests.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – binary array with 1’s where repeats start and 0’s otherwise</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – array with the lengths of each repeated structure in pattern_mat</p></li>
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary array with 1’s where repeats start and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Array with the lengths of each repeated structure in pattern_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>info_mat</strong> – array with the time steps of when the pairs of repeated structures
-start and end organized</p>
+<dd class="field-even"><p><strong>info_mat</strong> – Array with the time steps of when the pairs of repeated structures
+start and end organized.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -278,21 +311,21 @@ start and end organized</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utilities.stretch_diags">
-<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">stretch_diags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_diags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_width</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.stretch_diags">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates binary matrix with full length diagonals from binary matrix of
 diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_diags</strong> (<em>np.array</em>) – binary matrix where entries equal to 1 signal the existence
-of a diagonal</p></li>
-<li><p><strong>band_width</strong> (<em>int</em>) – length of encoded diagonals</p></li>
+<li><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix where entries equal to 1 signal the existence
+of a diagonal.</p></li>
+<li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>stretch_diag_mat</strong> – logical matrix with diagonals of length band_width starting
-at each entry prescribed in thresh_diag</p>
+<dd class="field-even"><p><strong>stretch_diag_mat</strong> – Logical matrix with diagonals of length band_width starting
+at each entry prescribed in thresh_diag.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array [boolean]</p>
@@ -304,40 +337,33 @@ at each entry prescribed in thresh_diag</p>
 </section>
 
 
+            <div class="clearer"></div>
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">aligned-hierarchies</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Modules:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Example</a></li>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utilities</a><ul>
+<li><a class="reference internal" href="#module-repytah.utilities">Functions</a></li>
+</ul>
+</li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to aligned-hierarchies’s documentation!</a></li>
-      <li>Next: <a href="transform.html" title="next chapter">Transform</a></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="transform.html"
+                        title="next chapter">Transform</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/utilities.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -348,32 +374,32 @@ at each entry prescribed in thresh_diag</p>
     </div>
 </div>
 <script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/utilities.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transform.html" title="Transform"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Utilities</a></li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Smith Tinker Lab Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
   </body>
 </html>
