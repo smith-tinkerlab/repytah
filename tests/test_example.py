@@ -9,7 +9,7 @@ import unittest
 from repytah.utilities import * 
 from repytah.example import *
 
-from os import path
+import os
 
 
 class TestExample(unittest.TestCase): 
@@ -45,7 +45,7 @@ class TestExample(unittest.TestCase):
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, 
                                    thresh)
 
-        self.assertTrue(path.exists("tests/hierarchical_out_file.mat"))
+        self.assertTrue(os.path.exists("tests/hierarchical_out_file.mat"))
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
