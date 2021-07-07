@@ -3,9 +3,7 @@
 
 ## How to contribute
 
-The preferred way to contribute to repytah is to fork the
-[main repository](https://github.com/smith-tinkerlab/repytah) on
-GitHub:
+The preferred way to contribute to repytah is to fork the [main repository](https://github.com/smith-tinkerlab/repytah) on GitHub:
 
 1. Fork the [project repository](https://github.com/smith-tinkerlab/repytah):
    click on the 'Fork' button near the top of the page. This creates
@@ -52,12 +50,7 @@ GitHub:
    git push -u origin my-feature
    ```
 
-Finally, go to the web page of the your fork of the repytah repo,
-and click 'Pull request' to send your changes to the maintainers for
-review. This will send an email to the committers.
-
-(If any of the above seems like magic to you, then look up the
-[Git documentation](http://git-scm.com/documentation) on the web.)
+7. Finally, go to the web page of the your fork of the repytah repo, and click 'Pull request' to send your changes to the maintainers for review. This will send an email to the committers. (If any of the above seems like magic to you, then look up the [Git documentation](http://git-scm.com/documentation) on the web.)
 
 It is recommended to check that your contribution complies with the
 following rules before submitting a pull request:
@@ -113,8 +106,9 @@ following rules before submitting:
   import sys; print("Python", sys.version)
   import numpy; print("NumPy", numpy.__version__)
   import scipy; print("SciPy", scipy.__version__)
-  import repytah; print("repytah", repytah.__version__)
+  import repytah; print("Repytah", repytah._version_)
   ```
+  Note: We also import packages "os" and "signature", which have the same version as users' python version.
 
 ## Documentation
 
