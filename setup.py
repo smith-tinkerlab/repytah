@@ -9,9 +9,8 @@ setup(
     description='repytah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/smith-tinkerlab/ah',
-    author='Katherine M. Kinnaird, Smith Tinkerlab',
-    author_email='kkinnaird@smith.edu',
+    url='https://github.com/smith-tinkerlab/repytah',
+    author='Smith Tinker Lab, Katherine M. Kinnaird (PI)',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -42,8 +41,8 @@ setup(
         'tests': ['pytest']
     },
     project_urls={ 
-        'Bug Reports': 'https://github.com/smith-tinkerlab/ah/issues',
-        'Source': 'https://github.com/smith-tinkerlab/ah',
+        'Bug Reports': 'https://github.com/smith-tinkerlab/repytah/issues',
+        'Source': 'https://github.com/smith-tinkerlab/repytah',
     },
     package_data={'repytah': ['input.csv']},
     include_package_data=True,
