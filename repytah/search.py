@@ -271,9 +271,11 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             
             # Add the found rows        
             if add_rows.size == 0:
-                add_rows = np.vstack((l_add_left, l_add_mid, l_add_right)).astype(int)
+                add_rows = np.vstack((l_add_left, l_add_mid, 
+                                      l_add_right)).astype(int)
             else:
-                add_rows = np.vstack((add_rows, l_add_left, l_add_mid, l_add_right)).astype(int)    
+                add_rows = np.vstack((add_rows, l_add_left, 
+                                      l_add_mid, l_add_right)).astype(int)    
                 
 
         # Right Check: Check for CI on the right side of the pairs
@@ -313,9 +315,11 @@ def __find_add_rows(lst_no_anno, check_inds, k):
 
             # Add the found rows        
             if add_rows.size == 0:
-                add_rows = np.vstack((r_add_left, r_add_mid, r_add_right)).astype(int)
+                add_rows = np.vstack((r_add_left, r_add_mid, 
+                                      r_add_right)).astype(int)
             else:
-                add_rows = np.vstack((add_rows, r_add_left, r_add_mid, r_add_right)).astype(int)
+                add_rows = np.vstack((add_rows, r_add_left, 
+                                      r_add_mid, r_add_right)).astype(int)
 
     # Remove rows with length 0
     for i in range(np.size(add_rows, axis=0) - 1, -1, -1):
@@ -442,8 +446,10 @@ def find_all_repeats(thresh_mat, bw_vec):
                 end_i_shin = start_i_shin + (full_bw-1)
                 end_j_shin = start_j_shin + (full_bw-1)
                 
-                i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, end_i_shin[:])).T
-                j_eshin = np.vstack((end_i_shin[:] + ones_no[:], end_j_shin[:])).T
+                i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K, 
+                                     end_i_shin[:])).T
+                j_eshin = np.vstack((end_i_shin[:] + ones_no[:], 
+                                     end_j_shin[:])).T
                 eint_lst = np.column_stack((i_eshin,j_eshin,K.T))
                 
                 i_e = np.lexsort(K) # Return the indices that would sort K
