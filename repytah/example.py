@@ -1,7 +1,5 @@
 import scipy.io as sio
 import numpy as np
-import pandas as pd
-import os
 
 from .utilities import create_sdm, find_initial_repeats
 from .search import find_complete_list
@@ -15,46 +13,53 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     Args
     ----
         file_in: str
-            Name of .csv file to be processed. Contains features across time steps to be analyzed
-            - example - chroma features.
+            Name of .csv file to be processed. Contains features across time
+            steps to be analyzed - example - chroma features.
         
         file_out: str
             Name of file where output will be stored.
         
         num_fv_per_shingle: int
-            Number of feature vectors per shingle. Provides "context" of each individual
-            time step, so that for notes CDE if num_fv_per_shingle=2 shingles would be CD, DE.
+            Number of feature vectors per shingle. Provides "context" of each
+            individual time step, so that for notes CDE if num_fv_per_shingle=2
+            shingles would be CD, DE.
             
         thresh: int
-            Maximum threshold value. Largest length repeated structure to search for.
+            Maximum threshold value. Largest length repeated structure to 
+            search for.
     
     Returns
     -------
-        none: .mat file is saved. Contains variables created for aligned hierarchies. 
+        none: .mat file is saved. Contains variables created for aligned 
+            hierarchies. 
 
     Example
     --------
     ### Run on example file
-    >>> file_in = pd.read_csv(os.path.join(os.path.dirname(__file__), "../input.csv")).to_numpy()
+    >>> file_in = pd.read_csv(os.path.join(os.path.dirname(__file__),
+                              "../input.csv")).to_numpy()
     >>> file_out = "hierarchical_out_file.mat"
     >>> num_fv_per_shingle = 3
     >>> thresh = 0.01
-    >>> csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+    >>> csv_to_aligned_hierarchies(file_in, file_out, 
+                                   num_fv_per_shingle, thresh)
     """
     
     # Import file of feature vectors
     fv_mat = file_in
     
-    # Get pairwise distance matrix/self dissimilarity matrix using cosine distance
+    # Get pairwise distance matrix/self dissimilarity matrix using cosine 
+    # distance
     self_dissim_mat = create_sdm(fv_mat, num_fv_per_shingle)
     
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh) 
     
-    # Extract the diagonals from thresholded distance matrix, saving the repeat pairs
-    # the diagonals represent
-    all_lst = find_initial_repeats(thresh_dist_mat, np.arange(1,song_length + 1), 0)
+    # Extract the diagonals from thresholded distance matrix, saving the 
+    # repeat pairs the diagonals represent
+    all_lst = find_initial_repeats(thresh_dist_mat, 
+                                   np.arange(1,song_length + 1), 0)
     
     # Find smaller repeats which are contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
@@ -71,16 +76,17 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         
         (mat_no_overlaps, key_no_overlaps) = output_tuple[1:3]
 
-        # Distill non-overlapping repeats into essential structure components and
-        # use them to build the hierarchical representation
-        output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps, song_length,True)
+        # Distill non-overlapping repeats into essential structure components 
+        # and use them to build the hierarchical representation
+        output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps,
+                                              song_length,True)
         (full_key, full_mat_no_overlaps) = output_tuple[1:3]
         
         outdict['full_key'] = full_key
         outdict['full_mat_no_overlaps'] = full_mat_no_overlaps
         
-        # Save list of partial representations contatining only the full hierarchical
-        # representation for use in comparison code
+        # Save list of partial representations contatining only the full 
+        # hierarchical representation for use in comparison code
         outdict['partial_reps'] = [full_mat_no_overlaps]
         outdict['partial_key'] = [full_key]
         outdict['partial_widths'] = song_length
@@ -94,7 +100,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         outdict['full_key'] = []
         outdict['full_mat_no_overlaps'] = []
         
-        # Save the empty list of partial representations for use in comparison code
+        # Save the empty list of partial representations for use in comparison 
+        # code
         outdict['partial_reps'] = []
         outdict['partial_key'] = []
         outdict['partial_widths'] = []
