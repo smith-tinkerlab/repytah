@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Transform" href="transform.html" />
-    <link rel="prev" title="installation" href="installation.html" /> 
+    <link rel="prev" title="Installation" href="installation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -38,7 +38,7 @@
           <a href="transform.html" title="Transform"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="installation"
+          <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Utilities</a></li> 
@@ -52,8 +52,8 @@
             
   <section id="utilities">
 <h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
-<section id="module-utilities">
-<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-utilities" title="Permalink to this headline">¶</a></h2>
+<section id="module-repytah.utilities">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-repytah.utilities" title="Permalink to this headline">¶</a></h2>
 <p>utilities.py</p>
 <p>This script when imported as a module allows search.py, transform.py and
 assemble.py in the repytah package to run smoothly.</p>
@@ -97,8 +97,8 @@ song. Pairs of repeated structures are marked with 1’s.</p>
 repeated structures detailing the length and occurence of each repeat.</p>
 </div></blockquote>
 <dl class="py function">
-<dt id="utilities.__find_song_pattern">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">__find_song_pattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.__find_song_pattern" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.__find_song_pattern">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">__find_song_pattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.__find_song_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stitches information from thresh_diags matrix into a single
 row, song_pattern, that shows the timesteps containing repeats;
 From the full matrix that decodes repeat beginnings (thresh_diags),
@@ -121,8 +121,8 @@ that time step is a member of</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.add_annotations">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.add_annotations">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds annotations to the pairs of repeats in input_mat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -145,8 +145,8 @@ which will be removed</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.create_sdm">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.create_sdm">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates self-dissimilarity matrix; this matrix is found by creating audio
 shingles from feature vectors, and finding the cosine distance between
 shingles.</p>
@@ -170,8 +170,8 @@ shingles</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.find_initial_repeats">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.find_initial_repeats">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Looks for the largest repeated structures in thresh_mat. Finds all
 repeated structures, represented as diagonals present in thresh_mat,
 and then stores them with their start/end indices and lengths in a
@@ -197,8 +197,8 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.get_annotation_lst">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.get_annotation_lst" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.get_annotation_lst">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_annotation_lst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -214,8 +214,8 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.get_yLabels">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">get_yLabels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.get_yLabels" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.get_yLabels">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_yLabels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_yLabels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the labels for a visualization with width_vec and anno_vec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -234,8 +234,8 @@ diagonals in thresh_mat</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.reconstruct_full_block">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.reconstruct_full_block">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a record of when pairs of repeated structures occur, from the
 first beat in the song to the end. This record is a binary matrix with a
 block of 1’s for each repeat encoded in pattern_mat whose length
@@ -261,8 +261,8 @@ prescribed in pattern_key</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.reformat">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.reformat" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.reformat">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a binary array with 1’s where repeats start and 0’s
 otherwise into a list of repeated stuctures. This list consists of
 information about the repeats including length, when they occur and when
@@ -293,8 +293,8 @@ start and end organized</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="utilities.stretch_diags">
-<code class="sig-prename descclassname">utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
+<dt id="repytah.utilities.stretch_diags">
+<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates binary matrix with full length diagonals from binary matrix of
 diagonal starts and length of diagonals</p>
 <dl class="field-list simple">
@@ -328,14 +328,14 @@ at each entry prescribed in thresh_diag</p>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Utilities</a><ul>
-<li><a class="reference internal" href="#module-utilities">Functions</a></li>
+<li><a class="reference internal" href="#module-repytah.utilities">Functions</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="installation.html"
-                        title="previous chapter">installation</a></p>
+                        title="previous chapter">Installation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="transform.html"
                         title="next chapter">Transform</a></p>
@@ -373,7 +373,7 @@ at each entry prescribed in thresh_diag</p>
           <a href="transform.html" title="Transform"
              >next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="installation"
+          <a href="installation.html" title="Installation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">repytah  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Utilities</a></li> 
