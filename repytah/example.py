@@ -8,7 +8,7 @@ from .assemble import hierarchical_structure
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
-    Example of full aligned hierarchies pathway.
+    Example of full aligned hierarchies pathway 
     
     Args
     ----

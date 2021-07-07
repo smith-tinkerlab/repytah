@@ -12,43 +12,37 @@ of the song's essential structure component by ensuring there are no
 overlapping repeats in time. When repeats do overlap, they undergo a process 
 where they are divided until there are only non-overlapping pieces left over. 
 
-    * breakup_overlaps_by_intersect
-        Extracts repeats in input_pattern_obj that has the starting indices 
-        of the repeats, into the essential structure componets using bw_vec, 
-        that has the lengths of each repeat.
+    * breakup_overlaps_by_intersect - Extracts repeats in input_pattern_obj 
+    that has the starting indices of the repeats, into the essential structure 
+    componets using bw_vec, that has the lengths of each repeat.
     
-    * check_overlaps 
-        Compares every pair of groups, determining if there are any repeats 
-        in any pairs of the groups that overlap. 
+    * check_overlaps - Compares every pair of groups, determining if there are
+    any repeats in any pairs of the groups that overlap. 
 
-    * __compare_and_cut 
-        Compares two rows of repeats labeled RED and BLUE, and determines if 
-        there are any overlaps in time between them. If there are overlaps, 
-        we cut the repeats in RED and BLUE into up to 3 pieces. 
+    * __compare_and_cut - Compares two rows of repeats labeled RED and BLUE, 
+    and determines if there are any overlaps in time between them. If there
+    are overlaps, we cut the repeats in RED and BLUE into up to 3 pieces. 
 
-    * __num_of_parts
-        Determines the number of blocks of consecutive time steps in a list 
-        of time steps. A block of consecutive time steps represents a 
-        distilled section of a repeat.    
+    * __num_of_parts - Determines the number of blocks of consecutive time 
+    steps in a list of time steps. A block of consecutive time steps represents 
+    a distilled section of a repeat.    
 
-    * __inds_to_rows 
-        Expands a vector containing the starting indices of a piece or two 
-        of a repeat into a matrix representation recording when these pieces 
-        occur in the song with 1's. All remaining entries are marked with 
-        0's.
+    * __inds_to_rows -  Expands a vector containing the starting indices of a 
+    piece or two of a repeat into a matrix representation recording when these
+    pieces occur in the song with 1's. All remaining entries are marked with 
+    0's.
 
-    * __merge_based_on_length
-        Merges repeats that are the same length, as set by full_bandwidth, 
-        and are repeats of the same piece of structure.
+    * __merge_based_on_length - Merges repeats that are the same length, as set 
+    by full_bandwidth, and are repeats of the same piece of structure.
 
-    * __merge_rows 
-        Merges rows that have at least one common repeat. These common 
-        repeat(s) must occur at the same time step and be of a common length.
+    * __merge_rows - Merges rows that have at least one common repeat. These 
+    common repeat(s) must occur at the same time step and be of a common 
+    length.
 
-    * hierarchical_structure
-        Distills the repeats encoded in matrix_no (and key_no) to the essential
-        structure components and then builds the hierarchical representation. 
-        Optionally outputs visualizations of the hierarchical representations.
+    * hierarchical_structure - Distills the repeats encoded in MATRIX_NO 
+    (and KEY_NO) to the essential structure components and then builds the 
+    hierarchical representation. Optionally outputs visualizations of the 
+    hierarchical representations.
     
 """
 
@@ -72,25 +66,25 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     ----
         input_pattern_obj: np.array
             Binary matrix with 1's where repeats begin
-            and 0's otherwise.
+            and 0's otherwise
 
         bw_vec: np.array
             Vector containing the lengths of the repeats
-            encoded in input_pattern_obj.
+            encoded in input_pattern_obj
 
         thresh_bw: number
-            Smallest allowable repeat length.
+            Smallest allowable repeat length
 
     Returns
     -------
         pattern_no_overlaps: np.array
             Binary matrix with 1's where repeats of
-            essential structure components begin.
+            essential structure components begin
 
         pattern_no_overlaps_key: np.array
             Vector containing the lengths of the repeats
             of essential structure components in
-            pattern_no_overlaps.
+            pattern_no_overlaps
             
     """
 
@@ -203,18 +197,18 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 def check_overlaps(input_mat):
     """
     Compares every pair of groups and determines if there are any repeats in
-    any pairs of the groups that overlap.
+    any pairs of the groups that overlap
 
     Args
     ----
         input_mat: np.array(int)
-            Matrix to be checked for overlaps.
+            Matrix to be checked for overlaps
 
     Returns
     -------
         overlaps_yn: np.array(bool)
             Logical array where (i,j) = 1 if row i of input matrix and row j
-            of input matrix overlap and (i,j) = 0 elsewhere.
+            of input matrix overlap and (i,j) = 0 elsewhere
             
     """
 
@@ -280,26 +274,26 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     ----
         red: np.array
             Binary row vector encoding a set of repeats with 1's where each
-            repeat starts and 0's otherwise.
+            repeat starts and 0's otherwise
 
         red_len: number
-            Length of repeats encoded in red.
+            Length of repeats encoded in red
 
         blue: np.array
             Binary row vector encoding a set of repeats with 1's where each
-            repeat starts and 0's otherwise.
+            repeat starts and 0's otherwise
 
         blue_len: number
-            Length of repeats encoded in blue.
+            Length of repeats encoded in blue
 
     Returns
     -------
         union_mat: np.array
             Binary matrix representation of up to three rows encoding
-            non-overlapping repeats cut from red and blue.
+            non-overlapping repeats cut from red and blue
 
         union_length: np.array
-            Vector containing the lengths of the repeats encoded in union_mat.
+            Vector containing the lengths of the repeats encoded in union_mat
             
     """
 
@@ -540,22 +534,22 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
     ----
         input_vec: np.array
             Vector that contains one or two parts of a repeat that are 
-            overlap(s) in time that may need to be replicated.
+            overlap(s) in time that may need to be replicated
 
         input_start: np.array index
-            Starting index for the part to be replicated.
+            Starting index for the part to be replicated
 
         input_all_starts: np.array indices
-            Starting indices for replication.
+            Starting indices for replication
 
     Returns
     -------
         start_mat: np.array
             Array of one or two rows, containing the starting indices of the
-            replicated repeats.
+            replicated repeats
 
         length_vec: np.array
-            Column vector containing the lengths of the replicated parts.
+            Column vector containing the lengths of the replicated parts
             
     """
 
@@ -619,16 +613,16 @@ def __inds_to_rows(start_mat, row_length):
     Args
     ----
         start_mat: np.array
-            Matrix of one or two rows, containing the starting indices.
+            Matrix of one or two rows, containing the starting indices
 
         row_length: int
-            Length of the rows.
+            Length of the rows
 
     Returns
     -------
         new_mat: np.array
             Matrix of one or two rows, with 1's where the starting indices 
-            and 0's otherwise.
+            and 0's otherwise
             
     """
 
@@ -649,27 +643,27 @@ def __inds_to_rows(start_mat, row_length):
 def __merge_based_on_length(full_mat, full_bw, target_bw):
     """
     Merges repeats that are the same length, as set by full_bandwidth, 
-    and are repeats of the same piece of structure.
+    and are repeats of the same piece of structure
 
     Args
     ----
         full_mat: np.array
-            Binary matrix with ones where repeats start and zeroes otherwise.
+            Binary matrix with ones where repeats start and zeroes otherwise
 
         full_bw: np.array
-            Length of repeats encoded in input_mat.
+            Length of repeats encoded in input_mat
 
         target_bw: np.array
-            Lengths of repeats that we seek to merge.
+            Lengths of repeats that we seek to merge
 
     Returns
     -------
         out_mat: np.array
             Binary matrix with ones where repeats start and zeros otherwise
-            with rows of full_mat merged if appropriate.
+            with rows of full_mat merged if appropriate
 
         one_length_vec: np.array
-            Length of the repeats encoded in out_mat.
+            Length of the repeats encoded in out_mat
         
     """
 
@@ -744,20 +738,20 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
 def __merge_rows(input_mat, input_width):
     """
     Merges rows that have at least one common repeat; said common repeat(s)
-    must occur at the same time step and be of common length.
+    must occur at the same time step and be of common length
 
     Args
     ----
         input_mat: np.array
-            Binary matrix with ones where repeats start and zeroes otherwise.
+            Binary matrix with ones where repeats start and zeroes otherwise
 
         input_width: int
-            Length of repeats encoded in input_mat.
+            Length of repeats encoded in input_mat
 
     Returns
     -------
         merge_mat: np.array
-            Binary matrix with ones where repeats start and zeroes otherwise.
+            Binary matrix with ones where repeats start and zeroes otherwise
         
     """
 
@@ -825,36 +819,36 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
     Args
     -----
         matrix_no: np.array[int]
-            Binary matrix with 1's where repeats begin and 0's otherwise.
+            Binary matrix with 1's where repeats begin and 0's otherwise
 
         key_no: np.array[int]
-            Vector containing the lengths of the repeats encoded in matrix_no.
+            Vector containing the lengths of the repeats encoded in matrix_NO
 
         sn: int
-            Song length, which is the number of audio shingles.
+            song length, which is the number of audio shingles
 
         vis: bool
-            Shows visualizations if True (default = False).
+            shows visualizations if True (default = False)
 
     Returns
     -----
         full_visualization: np.array[int]
-            Binary matrix representation for full_matrix_no 
-            with blocks of 1's equal to the length's prescribed 
-            in full_key.
+            Binary matrix representation for
+            full_matrix_NO with blocks of 1's equal to
+            the length's prescribed in full_key
 
         full_key: np.array[int]
             Vector containing the lengths of the hierarchical
-            structure encoded in full_matrix_no.
+            structure encoded in full_matrix_NO
 
-        full_matrix_no: np.array[int]
+        full_matrix_NO: np.array[int]
             Binary matrix with 1's where hierarchical
-            structure begins and 0's otherwise.
+            structure begins and 0's otherwise
 
         full_anno_lst: np.array[int]
             Vector containing the annotation markers of the
             hierarchical structure encoded in each row of
-            full_matrix_no.
+            full_matrix_NO
             
     """
 
@@ -1060,7 +1054,7 @@ def hierarchical_structure(matrix_no, key_no, sn, vis=False):
         
         full_matrix_no[:, pattern_starts[i]] = nzi_matrix_no[:, i]
        
-    # Get FULL_KEY, the matching bandwidth key for full_matrix_no
+    # Get FULL_KEY, the matching bandwidth key for FULL_MATRIX_NO
     full_key = np.zeros((nzi_rows, 1), dtype=int)
     find_key_mat = full_visualization + full_matrix_no
 

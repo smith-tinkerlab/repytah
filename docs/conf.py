@@ -12,14 +12,14 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../aligned-hierarchies/'))
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'aligned-hierarchies'
-copyright = '2019, Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava'
-author = 'Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava'
+project = 'repytah'
+copyright = '2021, Smith Tinker Lab Team'
+author = 'Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao'
 
 
 # -- General configuration ---------------------------------------------------
@@ -28,14 +28,12 @@ author = 'Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
-              'sphinx.ext.napoleon'
+              'sphinx.ext.napoleon', 'nbsphinx'
 ]
 
 # TEST: Add source suffixes
-source_suffix = {
-    '.rst':'restructuredtext',
-    '.txt':'restructuredtext'
-}
+source_suffix = '.rst'
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -45,15 +43,22 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# List of imported modules
+autodoc_mock_imports = ['numpy', 'scipy', 'matplotlib', 'pandas', 'inspect']
+
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'default'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_css_files = [
+    'custom.css'
+]
