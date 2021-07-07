@@ -180,8 +180,8 @@ def find_complete_list(pair_list, song_length):
 def __find_add_rows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
-    length, k, that neither start nor end at the same time steps as previously
-    found pairs of repeated structures of the same length.
+    length, k, that start at, end at, or in thr middle of the same time steps
+    as previously found pairs of repeated structures of the same length.
 
     Args
     ----
@@ -347,7 +347,8 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     Returns
     -------
-        
+        all_lst np.array
+            Pairs of repeats that correspond to diagonals in thresh_mat.
     """
 
     # Initialize the input and temporary variables
@@ -504,7 +505,7 @@ def find_complete_list_anno_only(pair_list, song_length):
     
     Args
     ----
-        pair_list: 
+        pair_list: np.array
             List of pairs of repeats.
             WARNING: Bandwidths must be in ascending order.
             
@@ -513,7 +514,7 @@ def find_complete_list_anno_only(pair_list, song_length):
         
     Returns
     -------
-        out_lst:
+        out_lst: np.array
             List of pairs of repeats with smaller repeats added and with
             annotation markers.
 
