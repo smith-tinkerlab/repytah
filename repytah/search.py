@@ -180,8 +180,9 @@ def find_complete_list(pair_list, song_length):
 def __find_add_rows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
-    length, k, that neither start nor end at the same time steps as previously
-    found pairs of repeated structures of the same length.
+    length, k, that that start at the same time steps, or end at the same time
+    steps, or neither start nor end at the same time steps as previously found
+    pairs of repeated structures of the same length.
 
     Args
     ----
@@ -347,7 +348,8 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     Returns
     -------
-        
+        all_lst np.array
+            Pairs of repeats that correspond to diagonals in thresh_mat.
     """
 
     # Initialize the input and temporary variables
