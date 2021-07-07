@@ -340,8 +340,6 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     Returns
     -------
-        all_lst: np.array 
-            Pairs of repeats that correspond to diagonals in thresh_mat
         
     """
 

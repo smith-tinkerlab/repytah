@@ -195,15 +195,15 @@ def remove_overlaps(input_mat, song_length):
 
 def __create_anno_remove_overlaps(k_mat, song_length, band_width):
     """
-    Turns k_mat into marked rows with annotation markers for the start indices 
-    and zeroes otherwise. After removing the annotations that have overlaps, 
-    the function outputs k_lst_out which only contains rows that have no overlaps, 
-    then takes the annotations that have overlaps from k_lst_out and puts them 
-    in overlap_lst. Lastly, it checks if the proper sequence of annotation markers 
-    was given and fix them if necessary.
-    
-    Args
-    ----
+        Turns k_mat into marked rows with annotation markers for the start indices 
+        and zeroes otherwise. After removing the annotations that have overlaps, 
+        the function outputs k_lst_out which only contains rows that have no overlaps, 
+        then takes the annotations that have overlaps from k_lst_out and puts them 
+        in overlap_lst. Lastly, it checks if the proper sequence of annotation markers 
+        was given and fix them if necessary.
+        
+        Args
+        ----
         k_mat: np.array
             List of pairs of repeats of length 1 with annotations 
             marked. The first two columns refer to the first repeat
