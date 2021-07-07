@@ -3,8 +3,9 @@
 transform.py
 
 This script contains functions that transform matrix inputs into different
-forms that are of use in bigger functions where they are called. These functions
-focus mainly on overlapping repeated structures and annotation markers.
+forms that are of use in bigger functions where they are called. These 
+functions focus mainly on overlapping repeated structures and annotation 
+markers.
 
 This file contains the following functions:
 
@@ -15,14 +16,15 @@ This file contains the following functions:
     * __create_anno_remove_overlaps
         Turns rows of repeats into marked rows with 
         annotation markers for the start indices and zeroes otherwise. After 
-        removing the annotations that have overlaps, the function creates separate 
-        arrays for annotations with overlaps and annotations without overlaps. 
-        Finally, the annotation markers are checked and fixed if necessary.
+        removing the annotations that have overlaps, the function creates 
+        separate arrays for annotations with overlaps and annotations without 
+        overlaps. Finally, the annotation markers are checked and fixed if 
+        necessary.
     
     * __separate_anno_markers
         Expands vector of non-overlapping repeats into a matrix representation. 
-        The matrix representation is a visual record of where all of the repeats 
-        in a song start and end.
+        The matrix representation is a visual record of where all of the 
+        repeats in a song start and end.
 
 """
 
@@ -76,8 +78,8 @@ def remove_overlaps(input_mat, song_length):
 
     # Create a vector of unique repeat lengths
     bw_vec = np.unique(input_mat[:, 4])
-    bw_vec = np.sort(bw_vec)[::-1]  # Sort list in ascending order
-                                    # and then reverse
+    # Sort list in ascending order and then reverse
+    bw_vec = np.sort(bw_vec)[::-1]
 
     # Create a copy of the input matrix
     L = input_mat
@@ -120,7 +122,8 @@ def remove_overlaps(input_mat, song_length):
         # THREE: The annotations that have overlaps are removed from 
         #      bw_lst_out and gets added to overlap_lst
         
-        tuple_of_outputs = __create_anno_remove_overlaps(bw_lst, song_length, bw)
+        tuple_of_outputs = __create_anno_remove_overlaps(bw_lst, song_length, 
+                                                         bw)
         
         pattern_row = tuple_of_outputs[0]
         bw_lst_out = tuple_of_outputs[1]
@@ -175,7 +178,8 @@ def remove_overlaps(input_mat, song_length):
         master_array = np.hstack((mat_NO, key_NO, anno_NO))
         col_num = master_array.shape[1] # Number of columns
     
-        ind = np.lexsort((master_array[:, col_num-1], master_array[:, col_num-2]))
+        ind = np.lexsort((master_array[:, col_num-1], 
+                          master_array[:, col_num-2]))
         master_array = master_array[ind]
         
         matrix_no_overlaps = master_array[:, :(col_num-2)]
@@ -190,20 +194,25 @@ def remove_overlaps(input_mat, song_length):
     # Set the output
     lst_no_overlaps = L
     all_overlap_lst = np.delete(all_overlap_lst, 0, 0)
-    output = (lst_no_overlaps, matrix_no_overlaps.astype(int), key_no_overlaps.astype(int),
-              annotations_no_overlaps.astype(int), all_overlap_lst)
+    output = (
+        lst_no_overlaps, 
+        matrix_no_overlaps.astype(int), 
+        key_no_overlaps.astype(int),
+        annotations_no_overlaps.astype(int), 
+        all_overlap_lst
+        )
     
     return output
 
 
 def __create_anno_remove_overlaps(k_mat, song_length, band_width):
     """
-        Turns k_mat into marked rows with annotation markers for the start indices 
-        and zeroes otherwise. After removing the annotations that have overlaps, 
-        the function outputs k_lst_out which only contains rows that have no overlaps, 
-        then takes the annotations that have overlaps from k_lst_out and puts them 
-        in overlap_lst. Lastly, it checks if the proper sequence of annotation markers 
-        was given and fix them if necessary.
+        Turns k_mat into marked rows with annotation markers for the start 
+        indices and zeroes otherwise. After removing the annotations that have
+        overlaps, the function outputs k_lst_out which only contains rows that
+        have no overlaps, then takes the annotations that have overlaps from 
+        k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
+        sequence of annotation markers was given and fix them if necessary.
         
         Args
         ----
@@ -256,7 +265,8 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
     for a in range(1, anno_max+1):
         # Step 1a: Add annotation marker a to the time steps in pattern_row
         # where repeats with annotation a begin
-        ands = (anno_lst == a)  # Check if each element in anno_lst is equal to a
+        # Check if each element in anno_lst is equal to a
+        ands = (anno_lst == a)
 
         # Combine rows into a single matrix
         bind_rows = [k_mat[ands, 0], k_mat[ands, 2]]
@@ -266,14 +276,14 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
         # Step 2: Check annotation by annotation
         # Start with row of 0's
         good_check = np.zeros((1, song_length)).astype(int)
-        good_check[0, start_inds-1] = 1  # Add 1's to all time steps where repeats
-                                         # with annotation a begin
+        # Add 1's to all time steps where repeats with annotation a begin
+        good_check[0, start_inds-1] = 1  
 
         bw = np.array(bw).flatten()
         # Use reconstruct_full_block to check for overlaps
         block_check = reconstruct_full_block(good_check, bw)
 
-        # If there are any overlaps, remove the bad annotations from pattern_row
+        # If there are overlaps, remove the bad annotations from pattern_row
         if block_check.max() > 1:
             # Remove the bad annotations from pattern_row
             pattern_row[0, start_inds-1] = 0
@@ -288,7 +298,8 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
                 overlap_lst = np.vstack((overlap_lst, temp_add))
 
             if np.any(remove_inds == True):
-                # Convert the boolean array remove_inds into an array of integers
+                # Convert the boolean array remove_inds into an array of 
+                # integers
                 remove_inds = np.array(remove_inds).astype(int)
                 remove = np.where(remove_inds == 1)
 
@@ -402,7 +413,8 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
         for a in range(1, anno_max+1): 
             # Find starting indices
             ands = (anno_lst == a)
-            a_starts = np.concatenate((k_mat[ands, 0], k_mat[ands, 2]), axis=None)
+            a_starts = np.concatenate((k_mat[ands, 0], k_mat[ands, 2]), 
+                                       axis=None)
             # Replace entries at all repeats' start time with 1's
             pattern_mat[a-1, a_starts-1] = 1
         

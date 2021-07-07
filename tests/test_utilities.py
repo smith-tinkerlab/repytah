@@ -27,12 +27,14 @@ class TestUtilities(unittest.TestCase):
 
         num_fv_per_shingle = 3
         output = create_sdm(my_data, num_fv_per_shingle)
-        expect_output = np.array([[0.0,                1.0,                 1.0, 0.3739524907237728,  0.9796637041304479,                 1.0],
-                                  [1.0,                0.0,                 1.0, 1.0,                 0.45092001152209327, 0.9598390335548751],
-                                  [1.0,                1.0,                 0.0, 1.0,                 1.0,                                1.0],
-                                  [0.3739524907237728, 1.0,                 1.0, 0.0,                 1.0,                                1.0],
-                                  [0.9796637041304479, 0.45092001152209327, 1.0, 1.0,                 0.0,                                1.0],
-                                  [1.0,                0.9598390335548751,  1.0, 1.0,                 1.0,                                0.0]])
+        expect_output = np.array([
+            [0.0,                1.0,                 1.0, 0.3739524907237728,  0.9796637041304479,                 1.0],
+            [1.0,                0.0,                 1.0, 1.0,                 0.45092001152209327, 0.9598390335548751],
+            [1.0,                1.0,                 0.0, 1.0,                 1.0,                                1.0],
+            [0.3739524907237728, 1.0,                 1.0, 0.0,                 1.0,                                1.0],
+            [0.9796637041304479, 0.45092001152209327, 1.0, 1.0,                 0.0,                                1.0],
+            [1.0,                0.9598390335548751,  1.0, 1.0,                 1.0,                                0.0]
+            ])
 
         # Test output type
         self.assertIs(type(output), np.ndarray)
@@ -169,8 +171,9 @@ class TestUtilities(unittest.TestCase):
 
     def test_stretch_diags(self):
         """
-        Tests if stretch_diags creates the correct binary matrix with full length
-        diagonals from binary matrix of diagonal starts and length of diagonals
+        Tests if stretch_diags creates the correct binary matrix with full 
+        length diagonals from binary matrix of diagonal starts and length of 
+        diagonals
         """
         
         thresh_diags = np.array([[0, 0, 1, 0, 0],
@@ -196,8 +199,8 @@ class TestUtilities(unittest.TestCase):
 
     def test_add_annotations(self):
         """
-        Tests if add_annotations adds the correct annotations to the pairs of repeats
-        in input_mat
+        Tests if add_annotations adds the correct annotations to the pairs of 
+        repeats in input_mat
         """
        
         # Input with annotations correctly marked

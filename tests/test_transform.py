@@ -8,8 +8,10 @@ import unittest
 import numpy as np 
 
 from repytah.transform import remove_overlaps
-from repytah.transform import __create_anno_remove_overlaps as create_anno_remove_overlaps
-from repytah.transform import __separate_anno_markers as separate_anno_markers
+from repytah.transform import __create_anno_remove_overlaps \
+    as create_anno_remove_overlaps
+from repytah.transform import __separate_anno_markers \
+    as separate_anno_markers
 
 
 class TestTransform(unittest.TestCase): 
@@ -27,7 +29,8 @@ class TestTransform(unittest.TestCase):
         expect_k_lst_out = np.array([[2, 2, 4, 4, 1, 1]])
         expect_overlaps_lst = np.array([])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -44,12 +47,15 @@ class TestTransform(unittest.TestCase):
         song_length = 20
         band_width = 4
         
-        expect_pattern_row = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        expect_pattern_row = np.array(
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            )
         expect_k_lst_out = np.array([])
         expect_overlaps_lst = np.array([[1, 4, 11, 14, 4, 1],
                                         [4, 7, 14, 17, 4, 2]])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -75,7 +81,9 @@ class TestTransform(unittest.TestCase):
         song_length = 19
         band_width = 2
         
-        expect_pattern_row = np.array([0, 1, 2, 3, 0, 0, 4, 1, 2, 3, 5, 0, 0, 4, 1, 2, 3, 5, 0])
+        expect_pattern_row = np.array(
+            [0, 1, 2, 3, 0, 0, 4, 1, 2, 3, 5, 0, 0, 4, 1, 2, 3, 5, 0]
+            )
         expect_k_lst_out = np.array([[2,  3,  8,  9,  2, 1],
                                      [2,  3,  15, 16, 2, 1],
                                      [3,  4,  9,  10, 2, 2],
@@ -89,7 +97,8 @@ class TestTransform(unittest.TestCase):
                                      [11, 12, 18, 19, 2, 5]])
         expect_overlaps_lst = np.array([])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -120,13 +129,15 @@ class TestTransform(unittest.TestCase):
         song_length = 119
         band_width = 1
 
-        expect_pattern_row = np.array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                                       0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0])
+        expect_pattern_row = np.array([
+            0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+            0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+            0, 0, 0, 0, 0
+                                       ])
 
         expect_k_lst_out = np.array([[8,   8,   14,  14,  1, 1],
                                      [8,   8,   56,  56,  1, 1],
@@ -145,7 +156,8 @@ class TestTransform(unittest.TestCase):
                                      [104, 104, 110, 110, 1, 1]])
         expect_overlaps_lst = np.array([])
 
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
 
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -171,7 +183,9 @@ class TestTransform(unittest.TestCase):
         song_length = 19
         band_width = 3
         
-        expect_pattern_row = np.array([0, 1, 2, 3, 0, 0, 4, 1, 2, 3, 5, 0, 0, 4, 1, 2, 3, 5, 0])
+        expect_pattern_row = np.array(
+            [0, 1, 2, 3, 0, 0, 4, 1, 2, 3, 5, 0, 0, 4, 1, 2, 3, 5, 0]
+            )
         expect_k_lst_out = np.array([[2,  3,  8,  9,  2, 1],
                                      [2,  3,  15, 16, 2, 1],
                                      [3,  4,  9,  10, 2, 2],
@@ -185,7 +199,8 @@ class TestTransform(unittest.TestCase):
                                      [11, 12, 18, 19, 2, 5]])
         expect_overlaps_lst = np.array([])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -211,7 +226,9 @@ class TestTransform(unittest.TestCase):
         song_length = 19
         band_width = 2
 
-        expect_pattern_row = np.array([0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 3, 0, 0, 2, 0, 0, 1, 3, 0])
+        expect_pattern_row = np.array(
+            [0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 3, 0, 0, 2, 0, 0, 1, 3, 0]
+            )
         expect_k_lst_out = np.array([[4,  5,  10, 11, 2, 1],
                                      [4,  5,  17, 18, 2, 1],
                                      [7,  8,  14, 15, 2, 2],
@@ -225,7 +242,8 @@ class TestTransform(unittest.TestCase):
                                         [3, 4,  16, 17, 2, 2],
                                         [9, 10, 16, 17, 2, 2]])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -251,7 +269,8 @@ class TestTransform(unittest.TestCase):
                                      [3, 3, 6,  6,  1, 2]])
         expect_overlaps_lst = np.array([])
         
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -290,7 +309,9 @@ class TestTransform(unittest.TestCase):
         song_length = 19
         band_width = 1
 
-        expect_pattern_row = np.array([0, 5, 2, 3, 2, 0, 4, 1, 2, 3, 2, 5, 0, 4, 1, 2, 3, 2, 5])
+        expect_pattern_row = np.array(
+            [0, 5, 2, 3, 2, 0, 4, 1, 2, 3, 2, 5, 0, 4, 1, 2, 3, 2, 5]
+            )
         
         expect_k_lst_out = np.array([[2,  2,  8,  8,  1, 1],
                                      [2,  2,  12, 12, 1, 5],
@@ -318,7 +339,8 @@ class TestTransform(unittest.TestCase):
                                      [16, 16, 18, 18, 1, 2]])
         expect_overlaps_lst = np.array([])
 
-        output_tuple = create_anno_remove_overlaps(input_mat, song_length, band_width)
+        output_tuple = create_anno_remove_overlaps(input_mat, song_length, 
+                                                   band_width)
         
         self.assertTrue((output_tuple[0] == expect_pattern_row).all())
         self.assertTrue((output_tuple[1] == expect_k_lst_out).all())
@@ -332,13 +354,18 @@ class TestTransform(unittest.TestCase):
         k_mat = np.array([[7, 12, 14, 19, 6, 1]])
         song_length = 19
         band_width = 6
-        pattern_row = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])
+        pattern_row = np.array(
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+            )
 
-        expect_pattern_mat = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])        
+        expect_pattern_mat = np.array(
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+            )        
         expect_pattern_key = np.array([6])        
         expect_anno_id_lst = np.array([[1]])
         
-        output_tuple = separate_anno_markers(k_mat, song_length, band_width, pattern_row)
+        output_tuple = separate_anno_markers(k_mat, song_length, band_width, 
+                                             pattern_row)
         
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
@@ -354,16 +381,21 @@ class TestTransform(unittest.TestCase):
                           [5, 5, 12, 12, 1, 2]])
         song_length = 19
         band_width = 1
-        pattern_row = np.array([0, 0, 1, 0, 2, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0])
+        pattern_row = np.array(
+            [0, 0, 1, 0, 2, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0]
+            )
 
-        expect_pattern_mat = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                                       [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]])
+        expect_pattern_mat = np.array([
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+                                       ])
         expect_pattern_key = np.array([[1],
                                        [1]])
         expect_anno_id_lst = np.array([[1],
                                        [2]])
 
-        output_tuple = separate_anno_markers(k_mat, song_length, band_width, pattern_row)
+        output_tuple = separate_anno_markers(k_mat, song_length, band_width, 
+                                             pattern_row)
 
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
@@ -399,13 +431,17 @@ class TestTransform(unittest.TestCase):
                           [16, 16, 18, 18, 1, 2]])
         song_length = 19
         band_width = 1
-        pattern_row = np.array([0, 1, 2, 3, 2, 0, 4, 1, 2, 3, 2, 5, 0, 4, 1, 2, 3, 2, 5])
+        pattern_row = np.array(
+            [0, 1, 2, 3, 2, 0, 4, 1, 2, 3, 2, 5, 0, 4, 1, 2, 3, 2, 5]
+            )
 
-        expect_pattern_mat = np.array([[0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                                       [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
-                                       [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                                       [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1]])
+        expect_pattern_mat = np.array([
+            [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1]
+                                       ])
 
         expect_pattern_key = np.array([[1],
                                        [1],
@@ -419,7 +455,8 @@ class TestTransform(unittest.TestCase):
                                        [4],
                                        [5]])
         
-        output_tuple = separate_anno_markers(k_mat, song_length, band_width, pattern_row)
+        output_tuple = separate_anno_markers(k_mat, song_length, band_width, 
+                                             pattern_row)
 
         self.assertTrue((output_tuple[0] == expect_pattern_mat).all())
         self.assertTrue((output_tuple[1] == expect_pattern_key).all())
@@ -436,7 +473,9 @@ class TestTransform(unittest.TestCase):
         song_length = 20
 
         expect_lst_no_overlaps = np.array([[2, 3, 12, 13, 2, 1]])        
-        expect_matrix_no_overlaps = np.array([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]])        
+        expect_matrix_no_overlaps = np.array([
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+            ])        
         expect_key_no_overlaps = np.array([2])
         expect_annotations_no_overlaps = np.array([1])
         expect_all_overlap_lst = np.array([[1, 4, 11, 14, 4, 1],
@@ -447,7 +486,8 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] == \
+            expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
 
     def test_remove_overlaps_small_input_without_overlaps(self):
@@ -464,8 +504,10 @@ class TestTransform(unittest.TestCase):
         expect_lst_no_overlaps = np.array([[1, 1, 10, 10, 1, 1],
                                            [7, 7, 13, 13, 1, 1],
                                            [3, 4, 17, 18, 2, 1]])
-        expect_matrix_no_overlaps = np.array([[1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]])
+        expect_matrix_no_overlaps = np.array([
+            [1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+                                              ])
         expect_key_no_overlaps = np.array([1, 2])
         expect_annotations_no_overlaps = np.array([1, 1])
         expect_all_overlap_lst = np.empty([0, 6])
@@ -475,7 +517,8 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] == \
+            expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
     
     def test_remove_overlaps_large_input_with_overlaps(self):
@@ -495,7 +538,9 @@ class TestTransform(unittest.TestCase):
         song_length = 20
 
         expect_lst_no_overlaps = np.array([[3, 4, 10, 11, 2, 1]])        
-        expect_matrix_no_overlaps = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])        
+        expect_matrix_no_overlaps = np.array([
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ])        
         expect_key_no_overlaps = np.array([2])
         expect_annotations_no_overlaps = np.array([1])
         expect_all_overlap_lst = np.array([[4,  6,  11, 13, 3, 1],
@@ -512,7 +557,8 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] == \
+            expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
         
     def test_remove_overlaps_large_input_without_overlaps(self):
@@ -625,29 +671,35 @@ class TestTransform(unittest.TestCase):
                                            [8,  12, 15, 19, 5, 2],
                                            [7,  12, 14, 19, 6, 1]])
 
-        expect_matrix_no_overlaps = np.array([[0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                              [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0],
-                                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-                                              [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                              [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                                              [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                                              [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                              [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-                                              [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                                              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]])
+        expect_matrix_no_overlaps = np.array([
+            [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+            [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+                                              ])
 
-        expect_key_no_overlaps = np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6])
-        expect_annotations_no_overlaps = np.array([1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 1, 2, 3, 1, 2, 1])
+        expect_key_no_overlaps = np.array(
+            [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6]
+            )
+        expect_annotations_no_overlaps = np.array(
+            [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 1, 2, 3, 1, 2, 1]
+            )
         expect_all_overlap_lst = np.empty([0, 6])
         
         output_tuple = remove_overlaps(input_lst, song_length)
@@ -655,7 +707,8 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] == \
+            expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
 
 

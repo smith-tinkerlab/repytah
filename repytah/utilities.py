@@ -61,9 +61,9 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     Args
     ----
         fv_mat: np.array
-            Matrix of feature vectors where each column is a timestep and each row
-            includes feature information i.e. an array of 144 columns/beats and 12
-            rows corresponding to chroma values.
+            Matrix of feature vectors where each column is a timestep and each 
+            row includes feature information i.e. an array of 144 columns/beats
+            and 12 rows corresponding to chroma values.
             
         num_fv_per_shingle: int
             Number of feature vectors per audio shingle.
@@ -249,8 +249,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     cut_e = cut_e.T
                     eint_lst = eint_lst[cut_e][0]
     
-                    # Add the new right overlapping intervals to the full list of
-                    # right overlapping intervals
+                    # Add the new right overlapping intervals to the full list 
+                    # of right overlapping intervals
                     eint_all = np.vstack((eint_all,eint_lst))
 
                     # 2) Middle Overlap
@@ -276,10 +276,12 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                         k_middle = k_middle.T
                         k_middle = k_middle[np.all(k_middle != 0, axis=1)]
         
-                        mint_lst = np.column_stack((i_middle,j_middle,k_middle.T))
+                        mint_lst = np.column_stack((i_middle, j_middle, 
+                                                    k_middle.T))
                                                 
 
-                        # Remove the pairs that fall below the bandwidth threshold 
+                        # Remove the pairs that fall below the bandwidth 
+                        # threshold 
                         cut_m = np.argwhere((mint_lst[:,4] > thresh_bw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
@@ -511,8 +513,8 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     """
     Creates a record of when pairs of repeated structures occur, from the 
     first beat in the song to the end. This record is a binary matrix with a 
-    block of 1's for each repeat encoded in pattern_mat whose length 
-    is encoded in pattern_key.
+    block of 1's for each repeat encoded in pattern_mat whose length is 
+    encoded in pattern_key.
     
     Args
     ----
@@ -653,7 +655,8 @@ def get_yLabels(width_vec, anno_vec):
     
     # Loop over the array adding labels
     for i in range(0,num_rows):
-        label = ('w = '+str(width_vec[i][0].astype(int)) + ', a = '+str(anno_vec[i]))
+        label = ('w = '+str(width_vec[i][0].astype(int)) + 
+                 ', a = '+str(anno_vec[i]))
         ylabels = np.append(ylabels, label )
     
     return ylabels
@@ -698,7 +701,8 @@ def reformat(pattern_mat, pattern_key):
     # Retrieve the index values of the repeats in pattern_mat 
     results = np.where(pattern_mat == 1)
     
-    for x,j in zip(range(pattern_mat.shape[0]),(range(0,results[0].size - 1,2))):
+    for x,j in zip(range(pattern_mat.shape[0]),(range(0, 
+                                                results[0].size - 1,2))):
             
             # Assign the time steps of the repeated structures into info_mat
             info_mat[x,0] = results[1][j] + 1
