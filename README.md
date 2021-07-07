@@ -8,6 +8,9 @@ A Python package for building Aligned Hierarchies for music-based data streams.
 [![License](https://img.shields.io/pypi/l/librosa.svg)](https://github.com/librosa/librosa/blob/main/LICENSE.md)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.591533.svg)](https://doi.org/10.5281/zenodo.591533)
 
+
+## Elements of the package
+
 [![CI](https://github.com/librosa/librosa/actions/workflows/ci.yml/badge.svg)](https://github.com/librosa/librosa/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/librosa/librosa/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/librosa/librosa) -->
 
@@ -23,7 +26,11 @@ This [example](link to example vignette) tutorial will show you a usage of the p
 
 ### Problems addressed
 
+Music-based data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the Python package repytah is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
+
 ### Audience
+Who is our audience? Check with KK.
+
 
 ## Installation
 
@@ -63,6 +70,7 @@ repytah (0.x.x, /path/to/repytah)
 ```
 
 ## Current and Future Work - Elements of the Package
+
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given music-based data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
   * Includes walk through file example.py using supplied input.csv
