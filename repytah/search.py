@@ -9,23 +9,26 @@ be transformed and assembled.
 
 This file contains the following functions:
     
-    * find_complete_list - Finds all smaller diagonals (and the associated 
-    pairs of repeats) that are contained pair_list, which is composed of 
-    larger diagonals found in find_initial_repeats.
+    * find_complete_list
+    Finds all smaller diagonals (and the associated pairs of repeats) 
+    that are contained pair_list, which is composed of larger diagonals 
+    found in find_initial_repeats.
 
-    * __find_add_rows - Finds pairs of repeated structures, represented as 
-    diagonals of a certain length, k, that neither start nor end at the same 
-    time steps as previously found pairs of repeated structures of the same 
-    length. 
+    * __find_add_rows 
+    Finds pairs of repeated structures, represented as diagonals of a 
+    certain length, k, that neither start nor end at the same time steps 
+    as previously found pairs of repeated structures of the same length. 
     
-    * find_all_repeats - Finds all the diagonals present in thresh_mat. This 
-    function is nearly identical to find_initial_repeats, with two crucial 
-    differences. First, we do not remove diagonals after we find them. Second,
-    there is no smallest bandwidth size as we are looking for all diagonals.
+    * find_all_repeats 
+    Finds all the diagonals present in thresh_mat. This function is nearly 
+    identical to find_initial_repeats, with two crucial differences. First, 
+    we do not remove diagonals after we find them. Second, there is no 
+    smallest bandwidth size as we are looking for all diagonals.
 
-    * find_complete_list_anno_only - Finds annotations for all pairs of 
-    repeats found in find_all_repeats. This list contains all the pairs of  
-    repeated structures with their start/end indices and lengths. 
+    * find_complete_list_anno_only 
+    Finds annotations for all pairs of repeats found in find_all_repeats. 
+    This list contains all the pairs of repeated structures with their 
+    start/end indices and lengths. 
     
 """
 
@@ -38,7 +41,7 @@ def find_complete_list(pair_list, song_length):
     """
     Finds all smaller diagonals (and the associated pairs of repeats) that are
     contained pair_list, which is composed of larger diagonals found in 
-    find_initial_repeats
+    find_initial_repeats.
         
     Args
     ----
@@ -49,12 +52,12 @@ def find_complete_list(pair_list, song_length):
             then pair_list will be ordered correctly. 
             
         song_length: int
-            Song length, which is the number of audio shingles
+            Song length, which is the number of audio shingles.
    
     Returns
     -------  
         lst_out: np.array 
-            List of pairs of repeats with smaller repeats added
+            List of pairs of repeats with smaller repeats added.
         
     """
     
@@ -178,25 +181,25 @@ def __find_add_rows(lst_no_anno, check_inds, k):
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
     length, k, that neither start nor end at the same time steps as previously
-    found pairs of repeated structures of the same length
+    found pairs of repeated structures of the same length.
 
     Args
     ----
         lst_no_anno: np.array 
-            List of pairs of repeats
+            List of pairs of repeats.
 
         check_inds: np.array
             List of ending indices for repeats of length k that we use to 
-            check lst_no_anno for more repeats of length k
+            check lst_no_anno for more repeats of length k.
 
         k: number
-            Length of repeats that we are looking for 
+            Length of repeats that we are looking for .
 
     Returns
     -------
         add_rows: np.array
             List of newly found pairs of repeats of length K that are 
-            contained in larger repeats in lst_no_anno 
+            contained in larger repeats in lst_no_anno .
                 
     """
 
@@ -332,7 +335,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     Args
     ----
         thresh_mat: np.array
-            Thresholded matrix that we extract diagonals from
+            Thresholded matrix that we extract diagonals from.
         
         bw_vec: np.array
             Vector of lengths of diagonals to be found
@@ -496,17 +499,17 @@ def find_complete_list_anno_only(pair_list, song_length):
     Args
     ----
         pair_list: 
-            List of pairs of repeats
-            WARNING: bandwidths must be in ascending order
+            List of pairs of repeats.
+            WARNING: Bandwidths must be in ascending order.
             
         song_length: int
-            Number of audio shingles in song
+            Number of audio shingles in song.
         
     Returns
     -------
         out_lst:
             List of pairs of repeats with smaller repeats added and with
-            annotation markers
+            annotation markers.
 
     """
 
