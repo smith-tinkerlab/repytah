@@ -3,7 +3,67 @@
 This python package builds the Aligned Hierarchies for music-based data streams. For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
 
 
+<<<<<<< Updated upstream
 ## Elements of the package
+=======
+[![CI](https://github.com/librosa/librosa/actions/workflows/ci.yml/badge.svg)](https://github.com/librosa/librosa/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/librosa/librosa/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/librosa/librosa) -->
+
+For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
+
+## Documentation
+
+See (link to website) for a complete reference manual and introductory tutorials.
+
+This [example](link to example vignette) tutorial will show you a usage of the package from start to finish.
+
+## Statement of Need
+
+### Problems addressed
+Music-based data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the Python package repytah is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
+
+### Audience
+Who is our audience? Check with KK.
+
+## Installation
+
+The latest stable release is available on PyPI, and you can install it by running:
+
+```bash
+pip install repytah
+```
+
+Anaconda users can install using `conda-forge`:
+
+```bash
+conda install -c conda-forge repytah
+```
+
+To build repytah from source, say `python setup.py build`.
+Then, to install repytah, say `python setup.py install`.
+
+Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
+
+```bash
+unzip repytah.zip
+pip install -e repytah
+```
+
+or
+
+```bash
+git clone https://github.com/smith-tinkerlab/repytah.git
+pip install -e repytah
+```
+
+By calling `pip list` you should see `repytah` now as an installed package:
+
+```bash
+repytah (0.x.x, /path/to/repytah)
+```
+
+## Current and Future Work - Elements of the Package
+>>>>>>> Stashed changes
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given music-based data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
     * Includes walk through file example.py using supplied input.csv
