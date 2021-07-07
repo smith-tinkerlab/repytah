@@ -58,9 +58,9 @@
 <p>This script finds and forms the essential structure components, which are the
 smallest building blocks that form every repeat in the song.</p>
 <p>These functions ensure each time step of a song is contained in at most one
-of the song’s essential structure component by ensuring there are no overlapping
-repeats in time. When repeats do overlap, they undergo a process where they
-are divided until there are only non-overlapping pieces left over.</p>
+of the song’s essential structure component by ensuring there are no
+overlapping repeats in time. When repeats do overlap, they undergo a process
+where they are divided until there are only non-overlapping pieces left over.</p>
 <blockquote>
 <div><ul class="simple">
 <li><dl class="simple">
@@ -105,8 +105,8 @@ and are repeats of the same piece of structure.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common repeat(s)
-must occur at the same time step and be of a common length.</p>
+<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common
+repeat(s) must occur at the same time step and be of a common length.</p>
 </dd>
 </dl>
 </li>
@@ -226,8 +226,8 @@ returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_vec</strong> (<em>np.array</em>) – Vector that contains one or two parts of a repeat that are overlap(s)
-in time that may need to be replicated.</p></li>
+<li><p><strong>input_vec</strong> (<em>np.array</em>) – Vector that contains one or two parts of a repeat that are
+overlap(s) in time that may need to be replicated</p></li>
 <li><p><strong>input_start</strong> (<em>np.array index</em>) – Starting index for the part to be replicated.</p></li>
 <li><p><strong>input_all_starts</strong> (<em>np.array indices</em>) – Starting indices for replication.</p></li>
 </ul>
@@ -297,7 +297,8 @@ of input matrix overlap and (i,j) = 0 elsewhere.</p>
 <code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no</span></em>, <em class="sig-param"><span class="n">key_no</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
 structure components and then builds the hierarchical representation.
-Optionally shows visualizations of the hierarchical structure via the vis argument.</p>
+Optionally shows visualizations of the hierarchical structure via the vis
+argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

@@ -56,8 +56,9 @@
 <span id="functions"></span><h2>Functions<a class="headerlink" href="#module-repytah.transform" title="Permalink to this headline">¶</a></h2>
 <p>transform.py</p>
 <p>This script contains functions that transform matrix inputs into different
-forms that are of use in bigger functions where they are called. These functions
-focus mainly on overlapping repeated structures and annotation markers.</p>
+forms that are of use in bigger functions where they are called. These
+functions focus mainly on overlapping repeated structures and annotation
+markers.</p>
 <p>This file contains the following functions:</p>
 <blockquote>
 <div><ul class="simple">
@@ -70,16 +71,17 @@ where at least one pair of repeats overlap in time.</p>
 <li><dl class="simple">
 <dt>__create_anno_remove_overlaps</dt><dd><p>Turns rows of repeats into marked rows with
 annotation markers for the start indices and zeroes otherwise. After
-removing the annotations that have overlaps, the function creates separate
-arrays for annotations with overlaps and annotations without overlaps.
-Finally, the annotation markers are checked and fixed if necessary.</p>
+removing the annotations that have overlaps, the function creates
+separate arrays for annotations with overlaps and annotations without
+overlaps. Finally, the annotation markers are checked and fixed if
+necessary.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>__separate_anno_markers</dt><dd><p>Expands vector of non-overlapping repeats into a matrix representation.
-The matrix representation is a visual record of where all of the repeats
-in a song start and end.</p>
+The matrix representation is a visual record of where all of the
+repeats in a song start and end.</p>
 </dd>
 </dl>
 </li>
@@ -89,12 +91,12 @@ in a song start and end.</p>
 <dt id="repytah.transform.__create_anno_remove_overlaps">
 <code class="sig-prename descclassname">repytah.transform.</code><code class="sig-name descname">__create_anno_remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.transform.__create_anno_remove_overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Turns k_mat into marked rows with annotation markers for the start indices
-and zeroes otherwise. After removing the annotations that have overlaps,
-the function outputs k_lst_out which only contains rows that have no overlaps,
-then takes the annotations that have overlaps from k_lst_out and puts them
-in overlap_lst. Lastly, it checks if the proper sequence of annotation markers
-was given and fix them if necessary.</p>
+<div><p>Turns k_mat into marked rows with annotation markers for the start
+indices and zeroes otherwise. After removing the annotations that have
+overlaps, the function outputs k_lst_out which only contains rows that
+have no overlaps, then takes the annotations that have overlaps from
+k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
+sequence of annotation markers was given and fix them if necessary.</p>
 <dl class="simple">
 <dt>k_mat: np.array</dt><dd><p>List of pairs of repeats of length 1 with annotations
 marked. The first two columns refer to the first repeat

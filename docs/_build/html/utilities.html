@@ -174,9 +174,9 @@ shingles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fv_mat</strong> (<em>np.array</em>) – Matrix of feature vectors where each column is a timestep and each row
-includes feature information i.e. an array of 144 columns/beats and 12
-rows corresponding to chroma values.</p></li>
+<li><p><strong>fv_mat</strong> (<em>np.array</em>) – Matrix of feature vectors where each column is a timestep and each
+row includes feature information i.e. an array of 144 columns/beats
+and 12 rows corresponding to chroma values.</p></li>
 <li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle.</p></li>
 </ul>
 </dd>
@@ -258,8 +258,8 @@ thresh_mat.</p>
 <code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a record of when pairs of repeated structures occur, from the
 first beat in the song to the end. This record is a binary matrix with a
-block of 1’s for each repeat encoded in pattern_mat whose length
-is encoded in pattern_key.</p>
+block of 1’s for each repeat encoded in pattern_mat whose length is
+encoded in pattern_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
