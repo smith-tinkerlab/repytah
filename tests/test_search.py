@@ -9,8 +9,8 @@ import numpy as np
 
 from repytah.search import find_complete_list
 from repytah.search import __find_add_rows as find_add_rows
-from repytah.search import find_all_repeats as find_all_repeats
-from repytah.search import find_complete_list_anno_only as find_complete_list_anno_only
+from repytah.search import find_all_repeats
+from repytah.search import find_complete_list_anno_only
 
 
 class TestSearch(unittest.TestCase):
@@ -80,12 +80,13 @@ class TestSearch(unittest.TestCase):
 
     def test__find_add_rows(self):
         """ 
-        Tests if __find_add_rows finds the correct pairs of repeated structures, 
-        represented as diagonals of a certain length, k 
+        Tests if __find_add_rows finds the correct pairs of repeated 
+        structures, represented as diagonals of a certain length, k 
         """
         
-        # Test for pairs of repeated structures that start at the same time step as 
-        # previously found pairs of repeated structures of the same length
+        # Test for pairs of repeated structures that start at the same time 
+        # step as previously found pairs of repeated structures of the same 
+        # length
         lst_no_anno_ep1 = np.array([[1,  15, 31, 45, 15],
                                     [1,  10, 46, 55, 10],
                                     [31, 40, 46, 55, 10],
@@ -107,8 +108,8 @@ class TestSearch(unittest.TestCase):
         # Test output result
         self.assertEqual(output_ep1.tolist(), expect_output_ep2_1.tolist())
 
-        # Test for pairs of repeated structures that end at the same time step as 
-        # previously found pairs of repeated structures of the same length
+        # Test for pairs of repeated structures that end at the same time step 
+        # as previously found pairs of repeated structures of the same length
         lst_no_anno_ep2 = np.array([[4,  4,  14,  14,  1],
                                     [4,  4,  56,  56,  1],
                                     [4,  4,  110, 110, 1],
