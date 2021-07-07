@@ -106,8 +106,9 @@ following rules before submitting:
   import sys; print("Python", sys.version)
   import numpy; print("NumPy", numpy.__version__)
   import scipy; print("SciPy", scipy.__version__)
-  import repytah; print("Repytah", repytah._version_)
+  import repytah; print("Repytah", repytah.__version__)
   ```
+
   Note: We also import packages "os" and "signature", which have the same version as users' python version.
 
 ## Documentation
