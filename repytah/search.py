@@ -10,25 +10,25 @@ be transformed and assembled.
 This file contains the following functions:
     
     * find_complete_list
-    Finds all smaller diagonals (and the associated pairs of repeats) 
-    that are contained pair_list, which is composed of larger diagonals 
-    found in find_initial_repeats.
+        Finds all smaller diagonals (and the associated pairs of repeats) 
+        that are contained pair_list, which is composed of larger diagonals 
+        found in find_initial_repeats.
 
     * __find_add_rows 
-    Finds pairs of repeated structures, represented as diagonals of a 
-    certain length, k, that neither start nor end at the same time steps 
-    as previously found pairs of repeated structures of the same length. 
+        Finds pairs of repeated structures, represented as diagonals of a 
+        certain length, k, that neither start nor end at the same time steps 
+        as previously found pairs of repeated structures of the same length. 
     
     * find_all_repeats 
-    Finds all the diagonals present in thresh_mat. This function is nearly 
-    identical to find_initial_repeats, with two crucial differences. First, 
-    we do not remove diagonals after we find them. Second, there is no 
-    smallest bandwidth size as we are looking for all diagonals.
+        Finds all the diagonals present in thresh_mat. This function is nearly 
+        identical to find_initial_repeats, with two crucial differences. First, 
+        we do not remove diagonals after we find them. Second, there is no 
+        smallest bandwidth size as we are looking for all diagonals.
 
     * find_complete_list_anno_only 
-    Finds annotations for all pairs of repeats found in find_all_repeats. 
-    This list contains all the pairs of repeated structures with their 
-    start/end indices and lengths. 
+        Finds annotations for all pairs of repeats found in find_all_repeats. 
+        This list contains all the pairs of repeated structures with their 
+        start/end indices and lengths. 
     
 """
 

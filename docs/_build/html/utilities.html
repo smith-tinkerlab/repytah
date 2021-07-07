@@ -60,41 +60,62 @@ assemble.py in the repytah package to run smoothly.</p>
 <p>This file contains the following functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>create_sdm - Creates a self-dissimilarity matrix; this matrix is found</p></li>
-</ul>
-<p>by creating audio shingles from feature vectors, and finding cosine
+<li><dl class="simple">
+<dt>create_sdm</dt><dd><p>Creates a self-dissimilarity matrix; this matrix is found
+by creating audio shingles from feature vectors, and finding cosine
 distance between shingles.</p>
-<ul class="simple">
-<li><p>find_initial_repeats - Finds all diagonals present in thresh_mat,</p></li>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>find_initial_repeats</dt><dd><p>Finds all diagonals present in thresh_mat, removing each diagonal
+as it is found.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>stretch_diags</dt><dd><p>Fills out diagonals in binary self dissimilarity matrix from diagonal
+starts and lengths.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>add_annotations</dt><dd><p>Adds annotations to each pair of repeated structures according to
+their length and order of occurence.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>__find_song_pattern</dt><dd><p>Stitches information about repeat locations from thresh_diags matrix
+into a single row.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>reconstruct_full_block</dt><dd><p>Creates a record of when pairs of repeated structures occur, from
+the first beat in the song to the last beat of the song. Pairs of
+repeated structures are marked with 1’s.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>get_annotation_lst</dt><dd><p>Gets one annotation marker vector, given vector of lengths key_lst.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>get_yLabels</dt><dd><p>Generates the labels for a visualization.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>reformat [Only used for creating test examples]</dt><dd><p>Transforms a binary matrix representation of when repeats occur in
+a song into a list of repeated structures detailing the length and
+occurence of each repeat.</p>
+</dd>
+</dl>
+</li>
 </ul>
-<p>removing each diagonal as it is found.</p>
-<ul class="simple">
-<li><p>stretch_diags - Fills out diagonals in binary self dissimilarity matrix</p></li>
-</ul>
-<p>from diagonal starts and lengths.</p>
-<ul class="simple">
-<li><p>add_annotations - Adds annotations to each pair of repeated structures</p></li>
-</ul>
-<p>according to their length and order of occurence.</p>
-<ul class="simple">
-<li><p>__find_song_pattern - Stitches information about repeat locations from</p></li>
-</ul>
-<p>thresh_diags matrix into a single row.</p>
-<ul class="simple">
-<li><p>reconstruct_full_block - Creates a record of when pairs of repeated</p></li>
-</ul>
-<p>structures occur, from the first beat in the song to the last beat of the
-song. Pairs of repeated structures are marked with 1’s.</p>
-<ul class="simple">
-<li><p>get_annotation_lst - Gets one annotation marker vector, given vector of</p></li>
-</ul>
-<p>lengths key_lst.</p>
-<ul class="simple">
-<li><p>get_yLabels - Generates the labels for a visualization.</p></li>
-<li><p>reformat [Only used for creating test examples] - Transforms a binary</p></li>
-</ul>
-<p>matrix representation of when repeats occur in a song into a list of
-repeated structures detailing the length and occurence of each repeat.</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="repytah.utilities.__find_song_pattern">
@@ -103,16 +124,16 @@ repeated structures detailing the length and occurence of each repeat.</p>
 row, song_pattern, that shows the timesteps containing repeats;
 From the full matrix that decodes repeat beginnings (thresh_diags),
 the locations, or beats, where these repeats start are found and
-encoded into the song_pattern array</p>
+encoded into the song_pattern array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix with 1 at the start of each repeat pair (SI,SJ) and
 0 elsewhere.
-WARNING: must be symmetric</p>
+WARNING: Must be symmetric.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>song_pattern</strong> – Row where each entry represents a time step and the group
-that time step is a member of</p>
+that time step is a member of.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array [shape = (1, song_length)]</p>
@@ -128,15 +149,15 @@ that time step is a member of</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_mat</strong> (<em>np.array</em>) – List of pairs of repeats. The first two columns refer to
-the first repeat of the pair. The third and fourth columns refer
-to the second repeat of the pair. The fifth column refers to the
-repeat lengths. The sixth column contains any previous annotations,
-which will be removed</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in the song</p></li>
+the first repeat of the pair. The third and fourth columns
+refer to the second repeat of the pair. The fifth column
+refers to the repeat lengths. The sixth column contains any
+previous annotations, which will be removed.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in the song.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_list</strong> – List of pairs of repeats with annotations marked</p>
+<dd class="field-even"><p><strong>anno_list</strong> – List of pairs of repeats with annotations marked.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>array</p>
@@ -155,13 +176,12 @@ shingles.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fv_mat</strong> (<em>np.array</em>) – Matrix of feature vectors where each column is a timestep and each row
 includes feature information i.e. an array of 144 columns/beats and 12
-rows corresponding to chroma values</p></li>
-<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle</p></li>
+rows corresponding to chroma values.</p></li>
+<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self dissimilarity matrix with paired cosine distances between
-shingles</p>
+<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self dissimilarity matrix with paired cosine distances between shingles.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -180,15 +200,15 @@ repeated sub-structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from</p></li>
-<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be 1,2,3,…..
-n where n = num_timesteps</p></li>
-<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length</p></li>
+<li><p><strong>thresh_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
+<li><p><strong>bandwidth_vec</strong> (<em>np.array</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be
+1,2,3,….. n where n = num_timesteps.</p></li>
+<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>all_lst</strong> – List of pairs of repeats that correspond to
-diagonals in thresh_mat</p>
+<dd class="field-even"><p><strong>all_lst</strong> – List of pairs of repeats that correspond to diagonals in
+thresh_mat.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[int]</p>
@@ -202,10 +222,10 @@ diagonals in thresh_mat</p>
 <dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order</p>
+<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst</p>
+<dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[int]</p>
@@ -220,12 +240,12 @@ diagonals in thresh_mat</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>width_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization</p></li>
-<li><p><strong>anno_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization</p></li>
+<li><p><strong>width_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization.</p></li>
+<li><p><strong>anno_vec</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>ylabels</strong> – Labels for the y-axis of a visualization</p>
+<dd class="field-even"><p><strong>ylabels</strong> – Labels for the y-axis of a visualization.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array[str]</p>
@@ -243,16 +263,14 @@ is encoded in pattern_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin
-and 0’s otherwise</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats
-encoded in each row of pattern_mat</p></li>
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats encoded in
+each row of pattern_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pattern_block</strong> – Binary matrix representation for pattern_mat
-with blocks of 1’s equal to the length’s
-prescribed in pattern_key</p>
+<dd class="field-even"><p><strong>pattern_block</strong> – Binary matrix representation for pattern_mat with blocks
+of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -278,13 +296,13 @@ the tests.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary array with 1’s where repeats start and 0’s otherwise</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Array with the lengths of each repeated structure in pattern_mat</p></li>
+<li><p><strong>pattern_mat</strong> (<em>np.array</em>) – Binary array with 1’s where repeats start and 0’s otherwise.</p></li>
+<li><p><strong>pattern_key</strong> (<em>np.array</em>) – Array with the lengths of each repeated structure in pattern_mat.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>info_mat</strong> – Array with the time steps of when the pairs of repeated structures
-start and end organized</p>
+start and end organized.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -296,18 +314,18 @@ start and end organized</p>
 <dt id="repytah.utilities.stretch_diags">
 <code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates binary matrix with full length diagonals from binary matrix of
-diagonal starts and length of diagonals</p>
+diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>thresh_diags</strong> (<em>np.array</em>) – Binary matrix where entries equal to 1 signal the existence
-of a diagonal</p></li>
-<li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals</p></li>
+of a diagonal.</p></li>
+<li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>stretch_diag_mat</strong> – Logical matrix with diagonals of length band_width starting
-at each entry prescribed in thresh_diag</p>
+at each entry prescribed in thresh_diag.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array [boolean]</p>
