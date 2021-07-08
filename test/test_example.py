@@ -22,7 +22,7 @@ class TestExample(unittest.TestCase):
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__),
                                            "../input.csv")).to_numpy()
-        file_out = "tests/hierarchical_out_file.mat"
+        file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
@@ -38,14 +38,14 @@ class TestExample(unittest.TestCase):
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__),
                                            "../input.csv")).to_numpy()
-        file_out = "tests/hierarchical_out_file.mat"
+        file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, 
                                    thresh)
 
-        self.assertTrue(os.path.exists("tests/hierarchical_out_file.mat"))
+        self.assertTrue(os.path.exists("test/hierarchical_out_file.mat"))
 
     def test_csv_to_aligned_hierarchies_file_not_empty(self): 
         """
@@ -54,7 +54,7 @@ class TestExample(unittest.TestCase):
 
         file_in = pd.read_csv(os.path.join(os.path.dirname(__file__),
                                            "../input.csv")).to_numpy()
-        file_out = "tests/hierarchical_out_file.mat"
+        file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
 
@@ -62,7 +62,7 @@ class TestExample(unittest.TestCase):
                                    thresh)
 
         self.assertFalse(
-            os.stat("tests/hierarchical_out_file.mat").st_size == 0)
+            os.stat("test/hierarchical_out_file.mat").st_size == 0)
     
 
 if __name__ == '__main__':

@@ -8,4 +8,4 @@ include setup.py
 
 include input.csv
 
-exclude JOSS-Paper/
+recursive-include docs *
