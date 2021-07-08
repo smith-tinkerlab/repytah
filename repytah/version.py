@@ -5,8 +5,8 @@
 import sys
 import importlib
 
-short_version = "0.0"
-version = "0.0.0a0"
+short_version = "0.1"
+version = "0.1.0dev"
 
 
 def __get_mod_version(modname):

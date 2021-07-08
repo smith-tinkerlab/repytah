@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='repytah',
-    version='0.1.0',
+    version='0.1.0dev',
     description='Python package for building Aligned Hierarchies for music-based data streams',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
