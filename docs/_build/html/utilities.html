@@ -74,14 +74,14 @@ as it is found.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>stretch_diags</dt><dd><p>Fills out diagonals in binary self dissimilarity matrix from diagonal
+<dt>stretch_diags</dt><dd><p>Fills out diagonals in binary self-dissimilarity matrix from diagonal
 starts and lengths.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>add_annotations</dt><dd><p>Adds annotations to each pair of repeated structures according to
-their length and order of occurence.</p>
+their length and order of occurrence.</p>
 </dd>
 </dl>
 </li>
@@ -104,14 +104,14 @@ repeated structures are marked with 1’s.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>get_yLabels</dt><dd><p>Generates the labels for a visualization.</p>
+<dt>get_yLabels</dt><dd><p>Generates the labels for visualization.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>reformat [Only used for creating test examples]</dt><dd><p>Transforms a binary matrix representation of when repeats occur in
 a song into a list of repeated structures detailing the length and
-occurence of each repeat.</p>
+occurrence of each repeat.</p>
 </dd>
 </dl>
 </li>
@@ -181,7 +181,7 @@ and 12 rows corresponding to chroma values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self dissimilarity matrix with paired cosine distances between shingles.</p>
+<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self-dissimilarity matrix with paired cosine distances between shingles.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -201,7 +201,7 @@ repeated sub-structures.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>thresh_mat</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
-<li><p><strong>bandwidth_vec</strong> (<em>np.ndarray</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Vector of lengths of diagonals to be found. Should be
+<li><p><strong>bandwidth_vec</strong> (<em>np.ndarray</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Array of lengths of diagonals to be found. Should be
 1,2,3,….. n where n = num_timesteps.</p></li>
 <li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length.</p></li>
 </ul>
@@ -236,7 +236,7 @@ thresh_mat.</p>
 <dl class="py function">
 <dt id="repytah.utilities.get_yLabels">
 <code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_yLabels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_yLabels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the labels for a visualization with width_vec and anno_vec.</p>
+<dd><p>Generates the labels for visualization with width_vec and anno_vec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -313,12 +313,12 @@ start and end organized.</p>
 <dl class="py function">
 <dt id="repytah.utilities.stretch_diags">
 <code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates binary matrix with full length diagonals from binary matrix of
+<dd><p>Creates a binary matrix with full length diagonals from a binary matrix of
 diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix where entries equal to 1 signal the existence
+<li><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix where entries equal to 1 signals the existence
 of a diagonal.</p></li>
 <li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals.</p></li>
 </ul>
@@ -398,7 +398,7 @@ at each entry prescribed in thresh_diag.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Smith Tinker Lab Team.
+        &#169; Copyright 2021, repytah Development Team.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>

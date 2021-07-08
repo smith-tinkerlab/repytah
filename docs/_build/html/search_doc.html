@@ -96,8 +96,9 @@ start/end indices and lengths.</p>
 <dt id="repytah.search.__find_add_rows">
 <code class="sig-prename descclassname">repytah.search.</code><code class="sig-name descname">__find_add_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lst_no_anno</span></em>, <em class="sig-param"><span class="n">check_inds</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.search.__find_add_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds pairs of repeated structures, represented as diagonals of a certain
-length, k, that neither start nor end at the same time steps as previously
-found pairs of repeated structures of the same length.</p>
+length, k, that that start at the same time steps, or end at the same time
+steps, or neither start nor end at the same time steps as previously found
+pairs of repeated structures of the same length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -109,7 +110,7 @@ check lst_no_anno for more repeats of length k.</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>add_rows</strong> – List of newly found pairs of repeats of length K that are
-contained in larger repeats in lst_no_anno .</p>
+contained in larger repeats in lst_no_anno.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -128,9 +129,15 @@ there is no smallest bandwidth size as we are looking for all diagonals.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>thresh_mat</strong> (<em>np.ndarray</em>) – Thresholded matrix that we extract diagonals from.</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.ndarray</em>) – Vector of lengths of diagonals to be found
+<li><p><strong>bw_vec</strong> (<em>np.ndarray</em>) – Vector of lengths of diagonals to be found.
 Should be 1,2,3,…, n where n = number of timesteps.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>all_lst</strong> – Pairs of repeats that correspond to diagonals in thresh_mat.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,7 +256,7 @@ annotation markers.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Smith Tinker Lab Team.
+        &#169; Copyright 2021, repytah Development Team.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
