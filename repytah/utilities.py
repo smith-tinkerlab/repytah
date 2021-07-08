@@ -18,12 +18,12 @@ This file contains the following functions:
         as it is found.
     
     * stretch_diags
-        Fills out diagonals in binary self dissimilarity matrix from diagonal 
+        Fills out diagonals in binary self-dissimilarity matrix from diagonal 
         starts and lengths.
 
     * add_annotations
         Adds annotations to each pair of repeated structures according to 
-        their length and order of occurence. 
+        their length and order of occurrence. 
     
     * __find_song_pattern
         Stitches information about repeat locations from thresh_diags matrix 
@@ -38,12 +38,12 @@ This file contains the following functions:
         Gets one annotation marker vector, given vector of lengths key_lst.
     
     * get_yLabels 
-        Generates the labels for a visualization.
+        Generates the labels for visualization.
     
     * reformat [Only used for creating test examples]
         Transforms a binary matrix representation of when repeats occur in 
         a song into a list of repeated structures detailing the length and 
-        occurence of each repeat.   
+        occurrence of each repeat.   
     
 """
 
@@ -71,7 +71,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     Returns
     -------
         self_dissim_mat: np.ndarray 
-            Self dissimilarity matrix with paired cosine distances between shingles.
+            Self-dissimilarity matrix with paired cosine distances between shingles.
         
     """
     
@@ -93,7 +93,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     # Build the pairwise-cosine distance matrix between audio shingles
     sdm_row = spd.pdist(mat_as.T, 'cosine')
     
-    # Build self dissimilarity matrix by changing the condensed 
+    # Build self-dissimilarity matrix by changing the condensed 
     # pairwise-cosine distance matrix to a redundant matrix
     self_dissim_mat = spd.squareform(sdm_row)
     
@@ -114,7 +114,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             Thresholded matrix that we extract diagonals from.
 
         bandwidth_vec: np.ndarray[1D,int]
-            Vector of lengths of diagonals to be found. Should be 
+            Array of lengths of diagonals to be found. Should be 
             1,2,3,..... n where n = num_timesteps.
 
         thresh_bw: int
@@ -309,13 +309,13 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
 def stretch_diags(thresh_diags, band_width):
     """
-    Creates binary matrix with full length diagonals from binary matrix of
+    Creates a binary matrix with full length diagonals from a binary matrix of
     diagonal starts and length of diagonals.
                                                                                  
     Args
     ----
         thresh_diags: np.ndarray
-            Binary matrix where entries equal to 1 signal the existence 
+            Binary matrix where entries equal to 1 signals the existence 
             of a diagonal.
         
         band_width: int
@@ -628,7 +628,7 @@ def get_annotation_lst (key_lst):
 
 def get_yLabels(width_vec, anno_vec):   
     """
-    Generates the labels for a visualization with width_vec and anno_vec.
+    Generates the labels for visualization with width_vec and anno_vec.
     
     Args 
     -----
