@@ -1,16 +1,18 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='repytah',  
-    version='0.0.0a0',
-    description='repytah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
+    name='repytah',
+    version='0.1.0',
+    description='Python package for building Aligned Hierarchies for music-based data streams',  # Optional
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/smith-tinkerlab/repytah',
     author='Smith Tinker Lab, Katherine M. Kinnaird (PI)',
+    author_email='tinkerlab@smith.edu',
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -32,6 +34,7 @@ setup(
     extras_require={
         'docs': [
             'sphinx != 1.3.1',
+            'nbsphinx',
             'sphinx_rtd_theme==0.5.*',
             'sphinx-multiversion >= 0.2.3',
             'sphinx-gallery >= 0.7',

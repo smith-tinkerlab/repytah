@@ -7,5 +7,3 @@ include CODE_OF_CONDUCT.md
 include setup.py
 
 include input.csv
-
-exclude JOSS-Paper/
