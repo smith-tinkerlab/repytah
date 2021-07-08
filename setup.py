@@ -31,13 +31,13 @@ setup(
     ],
     extras_require={
         'docs': [
-            'sphinx==3.4.3',
-            'sphinx_rtd_theme==0.5.*',
-            'nbsphinx==0.8.6',
-            'spyder=4.2.5',
-            'numpydoc==1.1.0',
-            'myst-parser==0.15.1',
-            'readthedocs-sphinx-search==0.1.0'
+            'sphinx != 1.3.1',
+            'sphinx_rtd_theme == 0.5.*',
+            'nbsphinx == 0.8.*',
+            'spyder == 4.2.*',
+            'numpydoc == 1.1.0',
+            'myst-parser == 0.15.1',
+            'readthedocs-sphinx-search == 0.1.0'
                 ],
         'tests': ['pytest']
     },
