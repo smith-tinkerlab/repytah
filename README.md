@@ -12,9 +12,9 @@ For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale 
 
 ## Documentation
 
-See (link to website) for a complete reference manual and introductory tutorials.
+See [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
 
-This [example](link to example vignette) tutorial will show you a usage of the package from start to finish.
+This [example](https://repytah.readthedocs.io/en/latest/example_vignette.html) tutorial will show you a usage of the package from start to finish.
 
 ## Statement of Need
 
