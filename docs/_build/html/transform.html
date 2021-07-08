@@ -90,29 +90,26 @@ repeats in a song start and end.</p>
 <dl class="py function">
 <dt id="repytah.transform.__create_anno_remove_overlaps">
 <code class="sig-prename descclassname">repytah.transform.</code><code class="sig-name descname">__create_anno_remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.transform.__create_anno_remove_overlaps" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Turns k_mat into marked rows with annotation markers for the start
+<dd><p>Turns k_mat into marked rows with annotation markers for the start
 indices and zeroes otherwise. After removing the annotations that have
 overlaps, the function outputs k_lst_out which only contains rows that
 have no overlaps, then takes the annotations that have overlaps from
 k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
 sequence of annotation markers was given and fix them if necessary.</p>
-<dl class="simple">
-<dt>k_mat: np.ndarray</dt><dd><p>List of pairs of repeats of length 1 with annotations
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length 1 with annotations
 marked. The first two columns refer to the first repeat
 of the pair, the second two refer to the second repeat of
 the pair, the fifth column refers to the length of the
-repeats, and the sixth column contains the annotation markers.</p>
+repeats, and the sixth column contains the annotation markers.</p></li>
+<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles.</p></li>
+<li><p><strong>band_width</strong> (<em>int</em>) – Length of repeats encoded in k_mat.</p></li>
+</ul>
 </dd>
-<dt>song_length: int</dt><dd><p>Number of audio shingles.</p>
-</dd>
-<dt>band_width: int</dt><dd><p>Length of repeats encoded in k_mat.</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><ul class="simple">
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
 <li><p><strong>pattern_row</strong> (<em>np.ndarray</em>) – Row that marks where non-overlapping repeats occur,
 marking start indices with annotation markers and
 0’s otherwise.</p></li>
@@ -270,7 +267,7 @@ that do overlap in time.</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Smith Tinker Lab Team.
+        &#169; Copyright 2021, repytah Development Team.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
