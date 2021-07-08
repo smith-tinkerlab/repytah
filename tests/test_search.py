@@ -96,7 +96,7 @@ class TestSearch(unittest.TestCase):
 
         output_ep1 = find_add_rows(lst_no_anno_ep1, check_inds_ep1, k_ep1)
 
-        expect_output_ep2_1 = np.array([[1,  10, 31, 40, 10],
+        expect_output_ep1 = np.array([[1,  10, 31, 40, 10],
                                         [11, 15, 41, 45,  5],
                                         [1,  10, 31, 40, 10],
                                         [11, 15, 41, 45,  5]])
@@ -104,9 +104,9 @@ class TestSearch(unittest.TestCase):
         # Test output type
         self.assertIs(type(output_ep1), np.ndarray)
         # Test output size
-        self.assertEqual(np.size(output_ep1), np.size(expect_output_ep2_1))
+        self.assertEqual(np.size(output_ep1), np.size(expect_output_ep1))
         # Test output result
-        self.assertEqual(output_ep1.tolist(), expect_output_ep2_1.tolist())
+        self.assertEqual(output_ep1.tolist(), expect_output_ep1.tolist())
 
         # Test for pairs of repeated structures that end at the same time step 
         # as previously found pairs of repeated structures of the same length

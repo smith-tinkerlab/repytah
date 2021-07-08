@@ -2,17 +2,12 @@
 
 A Python package for building Aligned Hierarchies for music-based data streams.
 
-<!-- Badges
-[![PyPI](https://img.shields.io/pypi/v/librosa.svg)](https://pypi.python.org/pypi/librosa)
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/librosa/badges/version.svg)](https://anaconda.org/conda-forge/librosa)
-[![License](https://img.shields.io/pypi/l/librosa.svg)](https://github.com/librosa/librosa/blob/main/LICENSE.md)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.591533.svg)](https://doi.org/10.5281/zenodo.591533)
+[![PyPI](https://img.shields.io/pypi/v/repytah.svg)](https://pypi.python.org/pypi/repytah)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah)
+[![License](https://img.shields.io/pypi/l/repytah.svg)](https://github.com/smith-tinkerlab/repytah/blob/main/LICENSE.md)
 
-
-## Elements of the package
-
-[![CI](https://github.com/librosa/librosa/actions/workflows/ci.yml/badge.svg)](https://github.com/librosa/librosa/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/librosa/librosa/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/librosa/librosa) -->
+[![CI](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml/badge.svg)](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml)
+[![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
 For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
 
@@ -29,8 +24,8 @@ This [example](link to example vignette) tutorial will show you a usage of the p
 Music-based data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the Python package repytah is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
 
 ### Audience
-Who is our audience? Check with KK.
 
+Who is our audience? Check with KK.
 
 ## Installation
 
@@ -70,7 +65,6 @@ repytah (0.x.x, /path/to/repytah)
 ```
 
 ## Current and Future Work - Elements of the Package
-
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given music-based data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
   * Includes walk through file example.py using supplied input.csv
