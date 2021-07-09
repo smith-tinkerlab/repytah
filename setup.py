@@ -36,8 +36,8 @@ setup(
             'sphinx != 1.3.1',
             'sphinx_rtd_theme == 0.5.*',
             'nbsphinx == 0.8.*',
-            'spyder == 4.2.*',
-            'numpydoc == 1.1.0',
+            'spyder >= 4.0.0',
+            'numpydoc >= 0.9.0',
             'myst-parser == 0.15.1',
             'readthedocs-sphinx-search == 0.1.0'
                 ],
