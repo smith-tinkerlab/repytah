@@ -1,10 +1,11 @@
 # repytah
 
-A Python package for building Aligned Hierarchies for music-based data streams.
+A Python package for building Aligned Hierarchies using sequential data.
 
 [![PyPI](https://img.shields.io/pypi/v/repytah.svg)](https://pypi.python.org/pypi/repytah)
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah)
+<!-- [![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah) -->
 [![License](https://img.shields.io/pypi/l/repytah.svg)](https://github.com/smith-tinkerlab/repytah/blob/main/LICENSE.md)
+
 [![CI](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml/badge.svg)](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml)
 [![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
@@ -12,9 +13,9 @@ For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale 
 
 ## Documentation
 
-See (link to website) for a complete reference manual and introductory tutorials.
+See [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
 
-This [example](link to example vignette) tutorial will show you a usage of the package from start to finish.
+This [example](https://repytah.readthedocs.io/en/latest/example_vignette.html) tutorial will show you a usage of the package from start to finish.
 
 ## Statement of Need
 
@@ -72,17 +73,6 @@ repytah (0.x.x, /path/to/repytah)
   * _Forthcoming_ Distance metric between two AsH representations
 * _Forthcoming_ Start-End and S_NL diagrams
 * _Forthcoming_ SuPP and MaPP representations
-
-<!-- this block should be part of documentation website
-
-### Modules
-
-* [Aligned Hierarchies](https://github.com/smith-tinkerlab/ah/tree/master/aligned-hierarchies)
-  * [example.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/example.py) - Includes a complete aligned hierarchies case in which a csv file with extracted features is input and the aligned  hierarchies are output.
-  * [utilities.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/utilities.py) - Includes utility functions that allow larger functions in other modules to function.
-  * [search.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/search.py) - Includes functions that find structures and information about those structures.
-  * [transform.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/transform.py) - Includes functions that transform inputs to be of use in larger functions in assemble.py.
-  * [assemble.py](https://github.com/smith-tinkerlab/ah/blob/master/aligned-hierarchies/assemble.py) - Includes functions that create the hierarchical structure and build the aligned hierarchies. -->
 
 ### MATLAB code
 
