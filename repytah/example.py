@@ -12,31 +12,31 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     Args
     ----
-    file_in: str
+    file_in : str
         Name of .csv file to be processed. Contains features across time steps 
         to be analyzed, for example chroma features
     
-    file_out: str
+    file_out : str
         Name of file where output will be stored.
     
-    num_fv_per_shingle: int
+    num_fv_per_shingle : int
         Number of feature vectors per shingle. Provides "context" of each 
         individual time step, so that for notes CDE if num_fv_per_shingle=2
         shingles would be CD, DE.
         
-        num_fv_per_shingle: int
-            Number of feature vectors per shingle. Provides "context" of each
-            individual time step, so that for notes CDE if num_fv_per_shingle=2
-            shingles would be CD, DE.
-            
-        thresh: int
-            Maximum threshold value. Largest length repeated structure to 
-            search for.
+    num_fv_per_shingle : int
+        Number of feature vectors per shingle. Provides "context" of each
+        individual time step, so that for notes CDE if num_fv_per_shingle=2
+        shingles would be CD, DE.
+        
+    thresh : int
+        Maximum threshold value. Largest length repeated structure to 
+        search for.
     
     Returns
     -------
-        none: .mat file is saved. Contains variables created for aligned 
-            hierarchies. 
+    none : .mat file is saved. Contains variables created for aligned 
+        hierarchies. 
 
     Example
     --------
@@ -48,6 +48,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     >>> thresh = 0.01
     >>> csv_to_aligned_hierarchies(file_in, file_out, 
                                    num_fv_per_shingle, thresh)
+                                   
     """
     
     # Import file of feature vectors

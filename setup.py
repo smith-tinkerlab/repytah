@@ -1,21 +1,23 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='repytah',  
-    version='0.0.0a0',
-    description='repytah: Python package for building Aligned Hierarchies for music-based data streams.',  # Optional
+    name='repytah',
+    version='0.1.0dev',
+    description='Python package for building Aligned Hierarchies using sequential data',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/smith-tinkerlab/repytah',
     author='Smith Tinker Lab, Katherine M. Kinnaird (PI)',
+    author_email='tinkerlab@smith.edu',
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: ISC License (ISCL)',
+        'Topic :: Multimedia :: Sound/Audio :: Analysis',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -26,17 +28,18 @@ setup(
     install_requires=[
         'numpy >= 1.15.0',
         'scipy >= 1.0.0', 
-        'pandas',
-        'matplotlib'
+        'pandas >= 1.0.0',
+        'matplotlib >= 3.3.0'
     ],
     extras_require={
         'docs': [
             'sphinx != 1.3.1',
-            'sphinx_rtd_theme==0.5.*',
-            'sphinx-multiversion >= 0.2.3',
-            'sphinx-gallery >= 0.7',
-            'spinxcontrib-svg2pdfconverter',
-            'presets'
+            'sphinx_rtd_theme == 0.5.*',
+            'nbsphinx == 0.8.*',
+            'spyder >= 4.0.0',
+            'numpydoc >= 0.9.0',
+            'myst-parser == 0.15.1',
+            'readthedocs-sphinx-search == 0.1.0'
                 ],
         'tests': ['pytest']
     },

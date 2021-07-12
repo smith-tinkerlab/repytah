@@ -19,7 +19,6 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
-    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Search" href="search_doc.html" />
@@ -58,9 +57,9 @@
 <p>This script finds and forms the essential structure components, which are the
 smallest building blocks that form every repeat in the song.</p>
 <p>These functions ensure each time step of a song is contained in at most one
-of the song’s essential structure component by ensuring there are no overlapping
-repeats in time. When repeats do overlap, they undergo a process where they
-are divided until there are only non-overlapping pieces left over.</p>
+of the song’s essential structure component by ensuring there are no
+overlapping repeats in time. When repeats do overlap, they undergo a process
+where they are divided until there are only non-overlapping pieces left over.</p>
 <blockquote>
 <div><ul class="simple">
 <li><dl class="simple">
@@ -105,8 +104,8 @@ and are repeats of the same piece of structure.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common repeat(s)
-must occur at the same time step and be of a common length.</p>
+<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common
+repeat(s) must occur at the same time step and be of a common length.</p>
 </dd>
 </dl>
 </li>
@@ -128,19 +127,19 @@ repeats in RED and BLUE into up to 3 pieces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<em>np.array</em>) – Binary row vector encoding a set of repeats with 1’s where each
+<li><p><strong>red</strong> (<em>np.ndarray</em>) – Binary row vector encoding a set of repeats with 1’s where each
 repeat starts and 0’s otherwise.</p></li>
-<li><p><strong>red_len</strong> (<em>number</em>) – Length of repeats encoded in red.</p></li>
-<li><p><strong>blue</strong> (<em>np.array</em>) – Binary row vector encoding a set of repeats with 1’s where each
+<li><p><strong>red_len</strong> (<em>int</em>) – Length of repeats encoded in red.</p></li>
+<li><p><strong>blue</strong> (<em>np.ndarray</em>) – Binary row vector encoding a set of repeats with 1’s where each
 repeat starts and 0’s otherwise.</p></li>
-<li><p><strong>blue_len</strong> (<em>number</em>) – Length of repeats encoded in blue.</p></li>
+<li><p><strong>blue_len</strong> (<em>int</em>) – Length of repeats encoded in blue.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>union_mat</strong> (<em>np.array</em>) – Binary matrix representation of up to three rows encoding
+<li><p><strong>union_mat</strong> (<em>np.ndarray</em>) – Binary matrix representation of up to three rows encoding
 non-overlapping repeats cut from red and blue.</p></li>
-<li><p><strong>union_length</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats encoded in union_mat.</p></li>
+<li><p><strong>union_length</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats encoded in union_mat.</p></li>
 </ul>
 </p>
 </dd>
@@ -156,7 +155,7 @@ the song with 1’s. All remaining entries are marked with 0’s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.array</em>) – Matrix of one or two rows, containing the starting indices.</p></li>
+<li><p><strong>start_mat</strong> (<em>np.ndarray</em>) – Matrix of one or two rows, containing the starting indices.</p></li>
 <li><p><strong>row_length</strong> (<em>int</em>) – Length of the rows.</p></li>
 </ul>
 </dd>
@@ -165,7 +164,7 @@ the song with 1’s. All remaining entries are marked with 0’s.</p>
 and 0’s otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -178,16 +177,16 @@ and are repeats of the same piece of structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>full_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
-<li><p><strong>full_bw</strong> (<em>np.array</em>) – Length of repeats encoded in input_mat.</p></li>
-<li><p><strong>target_bw</strong> (<em>np.array</em>) – Lengths of repeats that we seek to merge.</p></li>
+<li><p><strong>full_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
+<li><p><strong>full_bw</strong> (<em>np.ndarray</em>) – Length of repeats encoded in input_mat.</p></li>
+<li><p><strong>target_bw</strong> (<em>np.ndarray</em>) – Lengths of repeats that we seek to merge.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>out_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeros otherwise
+<li><p><strong>out_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeros otherwise
 with rows of full_mat merged if appropriate.</p></li>
-<li><p><strong>one_length_vec</strong> (<em>np.array</em>) – Length of the repeats encoded in out_mat.</p></li>
+<li><p><strong>one_length_vec</strong> (<em>np.ndarray</em>) – Length of the repeats encoded in out_mat.</p></li>
 </ul>
 </p>
 </dd>
@@ -202,7 +201,7 @@ must occur at the same time step and be of common length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.array</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
+<li><p><strong>input_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
 <li><p><strong>input_width</strong> (<em>int</em>) – Length of repeats encoded in input_mat.</p></li>
 </ul>
 </dd>
@@ -210,7 +209,7 @@ must occur at the same time step and be of common length.</p>
 <dd class="field-even"><p><strong>merge_mat</strong> – Binary matrix with ones where repeats start and zeroes otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -226,17 +225,17 @@ returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_vec</strong> (<em>np.array</em>) – Vector that contains one or two parts of a repeat that are overlap(s)
-in time that may need to be replicated.</p></li>
-<li><p><strong>input_start</strong> (<em>np.array index</em>) – Starting index for the part to be replicated.</p></li>
-<li><p><strong>input_all_starts</strong> (<em>np.array indices</em>) – Starting indices for replication.</p></li>
+<li><p><strong>input_vec</strong> (<em>np.ndarray</em>) – Vector that contains one or two parts of a repeat that are
+overlap(s) in time that may need to be replicated</p></li>
+<li><p><strong>input_start</strong> (<em>np.ndarray</em>) – Starting index for the part to be replicated.</p></li>
+<li><p><strong>input_all_starts</strong> (<em>np.ndarray</em>) – Starting indices for replication.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.array</em>) – Array of one or two rows, containing the starting indices of the
+<li><p><strong>start_mat</strong> (<em>np.ndarray</em>) – Array of one or two rows, containing the starting indices of the
 replicated repeats.</p></li>
-<li><p><strong>length_vec</strong> (<em>np.array</em>) – Column vector containing the lengths of the replicated parts.</p></li>
+<li><p><strong>length_vec</strong> (<em>np.ndarray</em>) – Column vector containing the lengths of the replicated parts.</p></li>
 </ul>
 </p>
 </dd>
@@ -253,18 +252,18 @@ smallest building blocks that form every repeat in the song.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_pattern_obj</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats begin
+<li><p><strong>input_pattern_obj</strong> (<em>np.ndarray</em>) – Binary matrix with 1’s where repeats begin
 and 0’s otherwise.</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats
+<li><p><strong>bw_vec</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats
 encoded in input_pattern_obj.</p></li>
-<li><p><strong>thresh_bw</strong> (<em>number</em>) – Smallest allowable repeat length.</p></li>
+<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowable repeat length.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_no_overlaps</strong> (<em>np.array</em>) – Binary matrix with 1’s where repeats of
+<li><p><strong>pattern_no_overlaps</strong> (<em>np.ndrray</em>) – Binary matrix with 1’s where repeats of
 essential structure components begin.</p></li>
-<li><p><strong>pattern_no_overlaps_key</strong> (<em>np.array</em>) – Vector containing the lengths of the repeats
+<li><p><strong>pattern_no_overlaps_key</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats
 of essential structure components in
 pattern_no_overlaps.</p></li>
 </ul>
@@ -280,14 +279,14 @@ pattern_no_overlaps.</p></li>
 any pairs of the groups that overlap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_mat</strong> (<em>np.array</em><em>(</em><em>int</em><em>)</em>) – Matrix to be checked for overlaps.</p>
+<dd class="field-odd"><p><strong>input_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Matrix to be checked for overlaps.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>overlaps_yn</strong> – Logical array where (i,j) = 1 if row i of input matrix and row j
 of input matrix overlap and (i,j) = 0 elsewhere.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array(bool)</p>
+<dd class="field-odd"><p>np.array[bool]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -297,26 +296,27 @@ of input matrix overlap and (i,j) = 0 elsewhere.</p>
 <code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no</span></em>, <em class="sig-param"><span class="n">key_no</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
 structure components and then builds the hierarchical representation.
-Optionally shows visualizations of the hierarchical structure via the vis argument.</p>
+Optionally shows visualizations of the hierarchical structure via the vis
+argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
-<li><p><strong>key_no</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no.</p></li>
+<li><p><strong>matrix_no</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>key_no</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no.</p></li>
 <li><p><strong>sn</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
 <li><p><strong>vis</strong> (<em>bool</em>) – Shows visualizations if True (default = False).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>full_visualization</strong> (<em>np.array[int]</em>) – Binary matrix representation for full_matrix_no
+<li><p><strong>full_visualization</strong> (<em>np.ndarray[int]</em>) – Binary matrix representation for full_matrix_no
 with blocks of 1’s equal to the length’s prescribed
 in full_key.</p></li>
-<li><p><strong>full_key</strong> (<em>np.array[int]</em>) – Vector containing the lengths of the hierarchical
+<li><p><strong>full_key</strong> (<em>np.ndarray[int]</em>) – Vector containing the lengths of the hierarchical
 structure encoded in full_matrix_no.</p></li>
-<li><p><strong>full_matrix_no</strong> (<em>np.array[int]</em>) – Binary matrix with 1’s where hierarchical
+<li><p><strong>full_matrix_no</strong> (<em>np.ndarray[int]</em>) – Binary matrix with 1’s where hierarchical
 structure begins and 0’s otherwise.</p></li>
-<li><p><strong>full_anno_lst</strong> (<em>np.array[int]</em>) – Vector containing the annotation markers of the
+<li><p><strong>full_anno_lst</strong> (<em>np.ndarray[int]</em>) – Vector containing the annotation markers of the
 hierarchical structure encoded in each row of
 full_matrix_no.</p></li>
 </ul>
@@ -390,7 +390,7 @@ full_matrix_no.</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Smith Tinker Lab Team.
+        &#169; Copyright 2021, repytah Development Team.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>

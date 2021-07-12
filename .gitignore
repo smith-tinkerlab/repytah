@@ -14,7 +14,6 @@ pip-log.txt
 
 # Unit test / coverage reports
 .coverage
-tests/result_images/
 
 # Data files
 *.mat
