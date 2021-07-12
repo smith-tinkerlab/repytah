@@ -1,18 +1,25 @@
-.. repytah documentation master file, created by
-   sphinx-quickstart on Tue Jul 30 10:11:44 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+*******
+repytah
+*******
+`repytah` is a Python package that builds aligned hierarchies, a representation for 
+music-based data streams. 
 
-Welcome to repytah's documentation!
-===============================================
+Music-based data streams often have repeated elements that build on each other, creating hierarchies. 
+Therefore, the goal of the Python package `repytah` is to extract these repetitions and their relationships 
+to each other in order to form aligned hierarchies.
 
+Citing repytah
+==============
+Please cite `repytah` using the following:
+
+K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.1.0, 2021. [Online]. 
+Available: https://github.com/smith-tinkerlab/repytah.
 
 
 .. toctree::
    :maxdepth: 1
    :caption: Getting Started
 
-   about
    installation
 
 
