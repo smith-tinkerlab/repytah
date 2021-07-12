@@ -1,6 +1,5 @@
-*******
-repytah
-*******
+About
+=====
 
 `repytah` is a Python package that builds aligned hierarchies, a representation for 
 music-based data streams. 
