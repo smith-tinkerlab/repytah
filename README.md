@@ -29,7 +29,7 @@ This [example](link to example vignette) tutorial will show you a usage of the p
 Music-based data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the Python package repytah is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
 
 ### Audience
-Who is our audience? Check with KK.
+The target audience is people who are working with sequential data where repetitions have meaning: computational researchers, advanced undergraduate students who can be seen as younger industry esperts, etc. For example, people who are both music lovers and know computer science are our audiences since they will be interested in knowing the implication and application of Python in music.
 
 
 ## Installation
