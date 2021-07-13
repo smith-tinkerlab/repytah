@@ -1,31 +1,34 @@
 # repytah
 
-A Python package for building Aligned Hierarchies using sequential data.
+A Python package for building Aligned Hierarchies for sequential data streams.
 
 [![PyPI](https://img.shields.io/pypi/v/repytah.svg)](https://pypi.python.org/pypi/repytah)
-<!-- [![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah) -->
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah)
+
 [![License](https://img.shields.io/pypi/l/repytah.svg)](https://github.com/smith-tinkerlab/repytah/blob/main/LICENSE.md)
-
 [![CI](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml/badge.svg)](https://github.com/smith-tinkerlab/repytah/actions/workflows/check_repytah.yml)
-[![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
-For details on the aligned hierarchies, see [Aligned Hierarchies: A Multi-scale structure-based representation for music-based data streams](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016).
+[![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
 ## Documentation
 
-See [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
+See our [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
 
 This [example](https://repytah.readthedocs.io/en/latest/example_vignette.html) tutorial will show you a usage of the package from start to finish.
 
 ## Statement of Need
 
-### Problems addressed
+### Problems Addressed
 
-Music-based data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the Python package repytah is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
+Sequential data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of the `repytah` is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
+
+To learn more about aligned hierarchies, see this [paper](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016) which introduces aligned hierarchies in the context of music-based data streams.
 
 ### Audience
 
-The target audience is people who are working with sequential data where repetitions have meaning: computational researchers, advanced undergraduate students who can be seen as younger industry esperts, etc. For example, people who are both music lovers and know computer science are our audiences since they will be interested in knowing the implication and application of Python in music.
+People working with sequential data where repetitions have meaning will find `repytah` useful including computational scientists, advanced undergraduate students, younger industry esperts, and many others.
+
+An example application of `repytah` is in Music Information Retrieval (MIR), i.e., in the intersection of music and computer science.
 
 ## Installation
 
@@ -66,7 +69,7 @@ repytah (0.x.x, /path/to/repytah)
 
 ## Current and Future Work - Elements of the Package
 
-* Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given music-based data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
+* Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given sequential data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
   * Includes walk through file example.py using supplied input.csv
   * _Forthcoming_ Distance metric between two aligned hierarchies
 * _Forthcoming_ Aligned sub-Hierarchies - (AsH) - These are derivatives of the aligned hierarchies and are described in [Aligned sub-Hierarchies: a structure-based approach to the cover song task](http://ismir2018.ircam.fr/doc/pdfs/81_Paper.pdf)
@@ -88,4 +91,4 @@ Additionally, we would like to acknowledge and give thanks to Brian McFee and th
 
 Please cite `repytah` using the following:
 
-K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
