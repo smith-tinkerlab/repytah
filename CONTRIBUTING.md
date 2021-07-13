@@ -3,7 +3,7 @@
 
 ## How to contribute
 
-The preferred way to contribute to repytah is to fork the [main repository](https://github.com/smith-tinkerlab/repytah) on GitHub:
+The preferred way to contribute to `repytah` is to fork the [main repository](https://github.com/smith-tinkerlab/repytah) on GitHub:
 
 1. Fork the [project repository](https://github.com/smith-tinkerlab/repytah):
    click on the 'Fork' button near the top of the page. This creates
@@ -34,7 +34,7 @@ The preferred way to contribute to repytah is to fork the [main repository](http
    git checkout -b my-feature
    ```
 
-   and start making changes. Never work in the ``main`` branch!
+   and start making changes. Never work in the `main` branch!
 
 6. Work on this copy on your computer using Git to do the version
    control. When you're done editing, do:
