@@ -26,7 +26,7 @@ To learn more about aligned hierarchies, see this [paper](https://s18798.pcdn.co
 
 ### Audience
 
-People working with sequential data where repetitions have meaning will find `repytah` useful including computational scientists, advanced undergraduate students, younger industry esperts, and many others.
+People working with sequential data where repetitions have meaning will find `repytah` useful including computational scientists, advanced undergraduate students, younger industry experts, and many others.
 
 An example application of `repytah` is in Music Information Retrieval (MIR), i.e., in the intersection of music and computer science.
 
