@@ -1,13 +1,22 @@
 Installation
 ============
 
+PyPI
+~~~~
+
 The latest stable release is available on PyPI, and you can install it by running::
 
     pip install repytah
 
+Anaconda
+~~~~~~~~
+
 Anaconda users can install using `conda-forge`::
 
     conda install -c conda-forge repytah
+
+Source
+~~~~~~
 
 To build repytah from source, say `python setup.py build`. Then, to install repytah, say `python setup.py install`.
 
