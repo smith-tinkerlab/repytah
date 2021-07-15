@@ -8,8 +8,9 @@ that synthesizes and aligns all possible hierarchies of the meaningful repetitiv
 a common time axis. In addition to visualizing the structure of a song, aligned hierarchies can be
 embedded into a classification space with a natural notion of distance and post-processed to narrow the
 exploration of a music-based data stream to certain lengths of structure, or to address numerous MIR
-tasks, including the cover song task, the segmentation task, and the chorus detection task. Moreover, 
-the python package repytah can go beyond the MIR area. People working with sequential data where 
+tasks, including the cover song task, the segmentation task, and the chorus detection task. 
+
+Moreover, `repytah` can go beyond the MIR area. People working with sequential data where 
 repetitions have meaning can use repytah as a tool as well.
 
 For future work, based on the aligned hierarchies, we can build aligned sub-hierarchies. Aligned sub-
