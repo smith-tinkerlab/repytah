@@ -29,7 +29,6 @@ bibliography: joss.bib
 # Summary
 
 Broadly, Music Information Retrieval (MIR) seeks to capture information about music. Content-based methods work directly on the recordings or scores, while other approaches leverage other kinds of data such as metadata, tags, or surveys. Some MIR tasks seek to determine how similar any two pieces of music are, while others seek to label various structural features. The Aligned Hierarchies representation by Kinnaird [@Kinnaird: 2014] is a structure-based representation that can be used to show how similar two pieces of music are. This representation combines the motivation of structure tasks with the goal of similarity tasks. A drawback of Kinnaird’s approach is that the original code was written in MATLAB. 
-
 We introduce `repytah`, a Python package that constructs aligned hierarchies. The `repytah` package provides tools to extract repeated structures in musical data, and offers a comprehensive mechanism to convert music-based data streams to hierarchical structures. The original code was written in MATLAB based upon the PhD research of Katherine M. Kinnaird[@Kinnaird: 2014]. 
 
 
@@ -53,7 +52,7 @@ Besides these four modules, the package also includes example.py, which is an ex
 
 The Jupyter notebook files were also generated that summarize what these modules consist of, which together serve as a guide through the package. There is a distinct notebook file for each module, as well as an overarching file highlighting the code from start to finish. There are also test files for each module to ensure that the functions work as expected.
 
-# **Acknowledgements**
+# Acknowledgements
 `repytah` was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019, 2020 and 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
 
 # References
