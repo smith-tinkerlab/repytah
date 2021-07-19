@@ -4,13 +4,15 @@
 """
 assemble.py 
 
-This script finds and forms the essential structure components, which are the 
+This module finds and forms the essential structure components, which are the 
 smallest building blocks that form every repeat in the song. 
 
 These functions ensure each time step of a song is contained in at most one 
 of the song's essential structure component by ensuring there are no 
 overlapping repeats in time. When repeats do overlap, they undergo a process 
 where they are divided until there are only non-overlapping pieces left over. 
+
+The module contains the following functions:
 
     * breakup_overlaps_by_intersect
         Extracts repeats in input_pattern_obj that has the starting indices 
