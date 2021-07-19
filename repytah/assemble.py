@@ -14,7 +14,7 @@ where they are divided until there are only non-overlapping pieces left over.
 
     * breakup_overlaps_by_intersect
         Extracts repeats in input_pattern_obj that has the starting indices 
-        of the repeats, into the essential structure componets using bw_vec, 
+        of the repeats, into the essential structure components using bw_vec,
         that has the lengths of each repeat.
     
     * check_overlaps 
@@ -22,7 +22,7 @@ where they are divided until there are only non-overlapping pieces left over.
         in any pairs of the groups that overlap. 
 
     * __compare_and_cut 
-        Compares two rows of repeats labeled RED and BLUE, and determines if 
+        Compares two rows of repeats labeled RED  and BLUE, and determines if
         there are any overlaps in time between them. If there are overlaps, 
         we cut the repeats in RED and BLUE into up to 3 pieces. 
 
@@ -56,7 +56,7 @@ where they are divided until there are only non-overlapping pieces left over.
 import numpy as np
 from inspect import signature 
 from .search import find_all_repeats, find_complete_list_anno_only
-from .utilities import reconstruct_full_block, get_annotation_lst, get_yLabels
+from .utilities import reconstruct_full_block, get_annotation_lst, get_y_labels
 from .transform import remove_overlaps
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
@@ -65,7 +65,7 @@ import matplotlib.ticker as plticker
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     """
     Extracts repeats in input_pattern_obj that has the starting indices of the
-    repeats, into the essential structure componets using bw_vec, that has the
+    repeats, into the essential structure components using bw_vec, that has the
     lengths of each repeat. The essential structure components are the
     smallest building blocks that form every repeat in the song.
 
@@ -173,7 +173,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         desc_bw_vec = np.sort(bw_vec, axis=0)[::-1]
         bw_inds = np.flip(np.argsort(bw_vec, axis=0))
         row_bw_inds = np.transpose(bw_inds).flatten()
-        pno = pno[(row_bw_inds), :]
+        pno = pno[row_bw_inds, :]
 
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
@@ -224,13 +224,13 @@ def check_overlaps(input_mat):
     ws = input_mat.shape[1]
 
     # compare_left -- Every row of input_mat is repeated rs times to create 
-    # a submatrix. We stack these submatrices on top of each other.
+    # a sub-matrix. We stack these sub-matrices on top of each other.
     compare_left = np.zeros(((rs * rs), ws))
 
     for i in range(rs):
         compare_add = input_mat[i, :]
         compare_add_mat = np.tile(compare_add, (rs, 1))
-        a = (i) * rs
+        a = i * rs
         b = (i + 1) * rs
         compare_left[a:b, :] = compare_add_mat
 
@@ -260,7 +260,7 @@ def check_overlaps(input_mat):
     overlap_mat = np.reshape(compare_all, (rs, rs))
 
     # If overlap_mat is symmetric, only keep the upper-triangular portion. 
-    # If not, keep all of ovelap_mat.
+    # If not, keep all of overlap_mat.
     check_mat = np.allclose(overlap_mat, overlap_mat.T)
 
     if check_mat:
@@ -705,7 +705,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
             bandwidth_add = test_bandwidth * np.ones((bandwidth_add_size, 
                                                       1)).astype(int)
 
-            if np.any(inds == True):
+            if np.any(inds):
                 # Convert the boolean array inds into an array of integers
                 inds = np.array(inds).astype(int)
                 remove_inds = np.where(inds == 1)
@@ -765,7 +765,7 @@ def __merge_rows(input_mat, input_width):
     # Step 0: initialize temporary variables
     not_merge = input_mat  # Everything must be checked
     merge_mat = np.empty((0, input_mat.shape[1]), int)  # Nothing has been merged
-    merge_key = np.empty((1), int)
+    merge_key = np.empty(1, int)
     rows = input_mat.shape[0]  # How many rows to merge?
 
     # Step 1: has every row been checked?
@@ -869,10 +869,10 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     # Get the block representation for pno, called pno_block
     pno_block = reconstruct_full_block(pno, pno_key)
     
-    if vis == True:
+    if vis:
         # IMAGE 1 construction
         pno_anno = get_annotation_lst(pno_key)
-        pno_yLabels = get_yLabels(pno_key, pno_anno)
+        pno_y_labels = get_y_labels(pno_key, pno_anno)
         num_pno_rows = np.size(pno, axis=0)
         twos = np.full((num_pno_rows, sn), 2, dtype=int)
         vis_array = twos - (pno_block + pno)
@@ -880,9 +880,9 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         sdm = ax.imshow(vis_array, cmap="gray", aspect=10)
         plt.title("Essential Structure Components")
         # Set the number of ticks and set tick intervals to be equal 
-        ax.set_yticks(np.arange(0,np.size(pno_yLabels)-1))
-        # Set the ticklabels along the y axis and remove 0 in vis_yLabels
-        ax.set_yticklabels(pno_yLabels[1:])
+        ax.set_yticks(np.arange(0,np.size(pno_y_labels)-1))
+        # Set the ticklabels along the y axis and remove 0 in vis_y_labels
+        ax.set_yticklabels(pno_y_labels[1:])
         plt.show()
         
     # Assign a unique (nonzero) number for each row in PNO. We refer these
@@ -933,7 +933,6 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     non_zero_inds = (pno_color_vec > 0)
     num_nzi = non_zero_inds.sum(axis=0)
     pno_color_inds_only = pno_color_vec[non_zero_inds]
-    
 
     # For indices that signals the start of a zero block, turn those indices
     # back to 0
@@ -947,7 +946,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     #     2) a repeat of an essential structure component is the j-th thing in
     #        the ordering
     #     3) the repeat occurring in the i-th place of the ordering and the
-    #        one occuring in the j-th place of the ordering are repeats of the
+    #        one occurring in the j-th place of the ordering are repeats of the
     #        same essential structure component.
 
     # If any of the above conditions are not true, then the (i,j) entry of
@@ -967,7 +966,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         ).astype(np.float32)
         ) * pno_io_mask
 
-    if vis == True:
+    if vis:
         # IMAGE 2
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(symm_pno_inds_only, cmap="binary", aspect=0.8)
@@ -993,7 +992,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
 
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
     # a pair (A,B) where A == B)
-    if np.any(remove_inds == True):
+    if np.any(remove_inds):
         remove_inds = np.array(remove_inds).astype(int)
         remove = np.where(remove_inds == 1)
         nzi_lst = np.delete(nzi_lst, remove, axis=0)
@@ -1009,7 +1008,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     nzi_pattern_block = reconstruct_full_block(nzi_matrix_no_overlaps, nzi_key_no_overlaps)
     nzi_rows = nzi_pattern_block.shape[0]
 
-    if vis == True:
+    if vis:
         # IMAGE 3
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(nzi_pattern_block, cmap="binary", aspect=0.8)
@@ -1055,7 +1054,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         )
         
         full_visualization[:, 
-            pattern_starts[i] : pattern_ends[i] + 1] = np.tile(
+            pattern_starts[i]: pattern_ends[i] + 1] = np.tile(
             repeated_sect, (1, pattern_lengths[i])
         )
         
@@ -1102,10 +1101,10 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
 
     output = (full_visualization, full_key, full_matrix_no_overlaps, full_anno_lst)
 
-    if vis == True:
+    if vis:
         # IMAGE 5
         full_anno_lst = get_annotation_lst(full_key)
-        vis_yLabels = get_yLabels(full_key, full_anno_lst)
+        vis_y_labels = get_y_labels(full_key, full_anno_lst)
         num_vis_rows = np.size(full_visualization, axis=0)
         twos = np.full((num_vis_rows, sn), 2, dtype=int)
         vis_array = twos - (full_visualization + full_matrix_no_overlaps)
@@ -1113,9 +1112,9 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
         plt.title("Complete Hierarchical Structure")
         # Set the number of ticks and set tick intervals to be equal 
-        ax.set_yticks(np.arange(0,np.size(vis_yLabels)-1))
-        # Set the ticklabels along the y axis and remove 0 in vis_yLabels
-        ax.set_yticklabels(vis_yLabels[1:])
+        ax.set_yticks(np.arange(0,np.size(vis_y_labels)-1))
+        # Set the ticklabels along the y axis and remove 0 in vis_y_labels
+        ax.set_yticklabels(vis_y_labels[1:])
         plt.show()
 
     return output
