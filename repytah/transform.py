@@ -2,12 +2,12 @@
 """
 transform.py
 
-This script contains functions that transform matrix inputs into different
+This module contains functions that transform matrix inputs into different
 forms that are of use in bigger functions where they are called. These 
 functions focus mainly on overlapping repeated structures and annotation 
 markers.
 
-This file contains the following functions:
+The module contains the following functions:
 
     * remove_overlaps
         Removes any pairs of repeats with the same length and annotation marker 

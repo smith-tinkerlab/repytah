@@ -6,6 +6,14 @@ from .search import find_complete_list
 from .transform import remove_overlaps
 from .assemble import hierarchical_structure
 
+"""
+example.py
+
+An example module that runs a complete case of building aligned hierarchies 
+when a CSV file with extracted features is the input.
+
+"""
+
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
