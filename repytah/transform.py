@@ -176,7 +176,7 @@ def remove_overlaps(input_mat, song_length):
     # Extract matrix_no_overlaps, key_no_overlaps and annotations_no_overlaps
     if mat_NO.size > 0:
         master_array = np.hstack((mat_NO, key_NO, anno_NO))
-        col_num = master_array.shape[1] # Number of columns
+        col_num = master_array.shape[1]  # Number of columns
     
         ind = np.lexsort((master_array[:, col_num-1], 
                           master_array[:, col_num-2]))
@@ -297,7 +297,7 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
             else:
                 overlap_lst = np.vstack((overlap_lst, temp_add))
 
-            if np.any(remove_inds == True):
+            if np.any(remove_inds):
                 # Convert the boolean array remove_inds into an array of 
                 # integers
                 remove_inds = np.array(remove_inds).astype(int)
@@ -414,7 +414,7 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
             # Find starting indices
             ands = (anno_lst == a)
             a_starts = np.concatenate((k_mat[ands, 0], k_mat[ands, 2]), 
-                                       axis=None)
+                                      axis=None)
             # Replace entries at all repeats' start time with 1's
             pattern_mat[a-1, a_starts-1] = 1
         

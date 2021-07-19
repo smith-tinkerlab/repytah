@@ -341,9 +341,9 @@ class TestUtilities(unittest.TestCase):
         # Test output result
         self.assertEqual(output.tolist(), expect_output.tolist())
 
-    def test_get_yLabels(self):
+    def test_get_y_labels(self):
         """
-        Tests if get_yLabels generates the correct labels for a visualization
+        Tests if get_y_labels generates the correct labels for a visualization
         with width_vec and anno_vec
         """
 
@@ -355,7 +355,7 @@ class TestUtilities(unittest.TestCase):
                                   'w = 5, a = 1', 'w = 6, a = 1',
                                   'w = 6, a = 2'])
         
-        output = get_yLabels(width_vec, anno_vec)
+        output = get_y_labels(width_vec, anno_vec)
         
         # Test output type
         self.assertIs(type(output), np.ndarray)
