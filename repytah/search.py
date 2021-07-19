@@ -256,7 +256,7 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             # Middle of left pair
             l_add_mid = np.vstack(((ci * np.ones((1, l_num))),
                                   (ci+k-1) * np.ones((1, l_num)),
-                                  J_li + l_left_k, SJ_li +
+                                  SJ_li + l_left_k, SJ_li +
                                   l_left_k + (k-1) * np.ones((1, l_num)),
                                   k * np.ones((1, l_num))))
             l_add_mid = np.transpose(l_add_mid)
