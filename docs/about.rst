@@ -14,7 +14,7 @@ lengths of structure, or to address numerous MIR tasks, including the cover song
 and the chorus detection task. 
 
 For future work, based on the aligned hierarchies, we can build aligned sub-hierarchies. Aligned sub-hierarchies 
-is a collection of individual aligned hierarchies for each repeated pattern in a given sequential
+are a collection of individual aligned hierarchies for each repeated pattern in a given sequential
 data. With aligned sub-hierarchies, we can better deal with tasks that require a degree of flexibility. For
 example, we can implement the aligned sub-hierarchies to find all versions of the same piece of music based
 on a given version of the recording, which might involve different expressions including the number of
