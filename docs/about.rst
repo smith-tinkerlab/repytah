@@ -2,7 +2,7 @@ Why `repytah`
 =============
 
 Sequential data streams often have repeated elements that build on each other, creating hierarchies. 
-Therefore, the goal of the Python package `repytah` is to extract these repetitions and their relationships 
+Therefore, the goal of the Python package ``repytah`` is to extract these repetitions and their relationships 
 to each other in order to form aligned hierarchies, a low-dimensional representation for sequential data
 that synthesizes and aligns all possible hierarchies of the meaningful repetitive structure in a sequential data stream 
 along a common time axis. 

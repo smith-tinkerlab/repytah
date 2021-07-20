@@ -3,11 +3,11 @@
 """
 search.py 
 
-This script holds functions used to find and record the diagonals in the
+This module holds functions used to find and record the diagonals in the
 thresholded matrix, T. These functions prepare the found diagonals to later
 be transformed and assembled.
 
-This file contains the following functions:
+The module contains the following functions:
     
     * find_complete_list
         Finds all smaller diagonals (and the associated pairs of repeats) 
@@ -343,7 +343,7 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     bw_vec : np.ndarray
         Vector of lengths of diagonals to be found.
-        Should be 1,2,3,..., n where n = number of timesteps. 
+        Should be 1, 2, 3, ..., n where n = number of timesteps. 
     
     Returns
     -------

@@ -209,7 +209,7 @@ where they are divided until there are only non-overlapping pieces left over.</p
 <div><ul class="simple">
 <li><dl class="simple">
 <dt>breakup_overlaps_by_intersect</dt><dd><p>Extracts repeats in input_pattern_obj that has the starting indices
-of the repeats, into the essential structure componets using bw_vec,
+of the repeats, into the essential structure components using bw_vec,
 that has the lengths of each repeat.</p>
 </dd>
 </dl>
@@ -221,7 +221,7 @@ in any pairs of the groups that overlap.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>__compare_and_cut</dt><dd><p>Compares two rows of repeats labeled RED and BLUE, and determines if
+<dt>__compare_and_cut</dt><dd><p>Compares two rows of repeats labeled RED  and BLUE, and determines if
 there are any overlaps in time between them. If there are overlaps,
 we cut the repeats in RED and BLUE into up to 3 pieces.</p>
 </dd>
@@ -255,9 +255,10 @@ repeat(s) must occur at the same time step and be of a common length.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>hierarchical_structure</dt><dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
-structure components and then builds the hierarchical representation.
-Optionally outputs visualizations of the hierarchical representations.</p>
+<dt>hierarchical_structure</dt><dd><p>Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps)
+to the essential structure components and then builds the hierarchical
+representation. Optionally outputs visualizations of the hierarchical
+representations.</p>
 </dd>
 </dl>
 </li>
@@ -391,7 +392,7 @@ replicated repeats.</p></li>
 <dt id="repytah.assemble.breakup_overlaps_by_intersect">
 <code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">breakup_overlaps_by_intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_pattern_obj</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts repeats in input_pattern_obj that has the starting indices of the
-repeats, into the essential structure componets using bw_vec, that has the
+repeats, into the essential structure components using bw_vec, that has the
 lengths of each repeat. The essential structure components are the
 smallest building blocks that form every repeat in the song.</p>
 <dl class="field-list simple">
@@ -438,32 +439,32 @@ of input matrix overlap and (i,j) = 0 elsewhere.</p>
 
 <dl class="py function">
 <dt id="repytah.assemble.hierarchical_structure">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no</span></em>, <em class="sig-param"><span class="n">key_no</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Distills the repeats encoded in matrix_no (and key_no) to the essential
-structure components and then builds the hierarchical representation.
-Optionally shows visualizations of the hierarchical structure via the vis
-argument.</p>
+<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no_overlaps</span></em>, <em class="sig-param"><span class="n">key_no_overlaps</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps)
+to the essential structure components and then builds the hierarchical
+representation. Optionally shows visualizations of the hierarchical structure
+via the vis argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix_no</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
-<li><p><strong>key_no</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no.</p></li>
+<li><p><strong>matrix_no_overlaps</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
+<li><p><strong>key_no_overlaps</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no_overlaps.</p></li>
 <li><p><strong>sn</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
 <li><p><strong>vis</strong> (<em>bool</em>) – Shows visualizations if True (default = False).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>full_visualization</strong> (<em>np.ndarray[int]</em>) – Binary matrix representation for full_matrix_no
+<li><p><strong>full_visualization</strong> (<em>np.ndarray[int]</em>) – Binary matrix representation for full_matrix_no_overlaps
 with blocks of 1’s equal to the length’s prescribed
 in full_key.</p></li>
 <li><p><strong>full_key</strong> (<em>np.ndarray[int]</em>) – Vector containing the lengths of the hierarchical
-structure encoded in full_matrix_no.</p></li>
-<li><p><strong>full_matrix_no</strong> (<em>np.ndarray[int]</em>) – Binary matrix with 1’s where hierarchical
+structure encoded in full_matrix_no_overlaps.</p></li>
+<li><p><strong>full_matrix_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Binary matrix with 1’s where hierarchical
 structure begins and 0’s otherwise.</p></li>
 <li><p><strong>full_anno_lst</strong> (<em>np.ndarray[int]</em>) – Vector containing the annotation markers of the
 hierarchical structure encoded in each row of
-full_matrix_no.</p></li>
+full_matrix_no_overlaps.</p></li>
 </ul>
 </p>
 </dd>
