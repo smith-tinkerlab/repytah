@@ -42,7 +42,7 @@ This module contains the following functions:
 
         bandwidth_vec : np.ndarray[1D,int]
             Array of lengths of diagonals to be found. Should be
-            1, 2, 3, ..., n where n = num_timesteps.
+            1, 2, 3, ..., n where n is the number of timesteps.
 
         thresh_bw : int
             Smallest allowed diagonal length.
