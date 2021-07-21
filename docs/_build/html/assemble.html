@@ -198,11 +198,12 @@
 </style>
 <section id="assemble">
 <h1>Assemble<a class="headerlink" href="#assemble" title="Permalink to this headline">¶</a></h1>
-<p>The module <code class="docutils literal notranslate"><span class="pre">assemble.py</span></code> finds and forms the essential structure components,
-which are the smallest building blocks that form every repeat in the song. These functions
-ensure each time step of a song is contained in at most one of the song’s essential structure
-components by ensuring there are no overlapping repeats in time. When repeats overlap, they
-undergo a process where they are divided until there are only non-overlapping pieces left over.</p>
+<p>The module <code class="docutils literal notranslate"><span class="pre">assemble.py</span></code> finds and forms essential structure components, which are
+the smallest building blocks that form every repeat in the song. These functions ensure
+that each time step of a song is contained in at most one of the song’s essential
+structure components by checking that there are no overlapping repeats in time.
+When repeats overlap, they undergo a process where they are divided until there are
+only non-overlapping pieces left.</p>
 <p>This module contains the following functions:</p>
 <dl class="py function">
 <dt id="breakup_overlaps_by_intersect">
