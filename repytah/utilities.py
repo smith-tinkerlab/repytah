@@ -3,8 +3,8 @@
 """ 
 utilities.py 
 
-This module, when imported as a module, allows search.py, transform.py 
-and assemble.py in the repytah package to run smoothly. 
+This module, when imported, allows search.py, transform.py and assemble.py 
+in the repytah package to run smoothly. 
 
 The module contains the following functions:
     
@@ -116,7 +116,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
     bandwidth_vec : np.ndarray[1D,int]
         Array of lengths of diagonals to be found. Should be 
-        1,2,3,..... n where n = num_timesteps.
+        1, 2, 3,..., n where n is the number of timesteps.
 
     thresh_bw : int
         Smallest allowed diagonal length.
