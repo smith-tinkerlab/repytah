@@ -1,13 +1,9 @@
 Search
 ======
 
-The module ``search.py`` finds and forms the essential structure components, 
-which are the smallest building blocks that form every repeat in the song. 
-
-These functions ensure each time step of a song is contained in at most one 
-of the song's essential structure component by ensuring there are no 
-overlapping repeats in time. When repeats do overlap, they undergo a process 
-where they are divided until there are only non-overlapping pieces left over. 
+The module ``search.py`` holds functions used to find and record the diagonals 
+in the thresholded matrix, T. These functions prepare the diagonals found to 
+later be transformed and assembled. 
 
 This module contains the following functions:
 
