@@ -44,8 +44,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Assemble (alt)" href="assemble_alt.html" />
-    <link rel="prev" title="Transform (alt)" href="transform_alt.html" /> 
+    <link rel="next" title="Search" href="search_doc.html" />
+    <link rel="prev" title="Transform" href="transform.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,13 +98,9 @@
 <p><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utilities_alt.html">Utilities (alt)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transform_alt.html">Transform (alt)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="assemble_alt.html">Assemble (alt)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search_alt.html">Search (alt)</a></li>
 </ul>
 <p><span class="caption-text">Implementation</span></p>
 <ul>
@@ -200,277 +196,109 @@
     text-align: unset;
 }
 </style>
-<section id="module-repytah.assemble">
-<span id="assemble"></span><h1>Assemble<a class="headerlink" href="#module-repytah.assemble" title="Permalink to this headline">¶</a></h1>
-<p>assemble.py</p>
-<p>This module finds and forms the essential structure components, which are the
-smallest building blocks that form every repeat in the song.</p>
-<p>These functions ensure each time step of a song is contained in at most one
-of the song’s essential structure component by ensuring there are no
-overlapping repeats in time. When repeats do overlap, they undergo a process
-where they are divided until there are only non-overlapping pieces left over.</p>
-<p>The module contains the following functions:</p>
-<blockquote>
-<div><ul class="simple">
-<li><dl class="simple">
-<dt>breakup_overlaps_by_intersect</dt><dd><p>Extracts repeats in input_pattern_obj that has the starting indices
-of the repeats, into the essential structure components using bw_vec,
-that has the lengths of each repeat.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>check_overlaps</dt><dd><p>Compares every pair of groups, determining if there are any repeats
-in any pairs of the groups that overlap.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__compare_and_cut</dt><dd><p>Compares two rows of repeats labeled RED  and BLUE, and determines if
-there are any overlaps in time between them. If there are overlaps,
-we cut the repeats in RED and BLUE into up to 3 pieces.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__num_of_parts</dt><dd><p>Determines the number of blocks of consecutive time steps in a list
-of time steps. A block of consecutive time steps represents a
-distilled section of a repeat.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__inds_to_rows</dt><dd><p>Expands a vector containing the starting indices of a piece or two
-of a repeat into a matrix representation recording when these pieces
-occur in the song with 1’s. All remaining entries are marked with
-0’s.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__merge_based_on_length</dt><dd><p>Merges repeats that are the same length, as set by full_bandwidth,
-and are repeats of the same piece of structure.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__merge_rows</dt><dd><p>Merges rows that have at least one common repeat. These common
-repeat(s) must occur at the same time step and be of a common length.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>hierarchical_structure</dt><dd><p>Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps)
-to the essential structure components and then builds the hierarchical
-representation. Optionally outputs visualizations of the hierarchical
-representations.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
+<section id="assemble">
+<h1>Assemble<a class="headerlink" href="#assemble" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">assemble.py</span></code> finds and forms the essential structure components,
+which are the smallest building blocks that form every repeat in the song. These functions
+ensure each time step of a song is contained in at most one of the song’s essential structure
+components by ensuring there are no overlapping repeats in time. When repeats overlap, they
+undergo a process where they are divided until there are only non-overlapping pieces left over.</p>
+<p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="repytah.assemble.__compare_and_cut">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__compare_and_cut</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">red</span></em>, <em class="sig-param"><span class="n">red_len</span></em>, <em class="sig-param"><span class="n">blue</span></em>, <em class="sig-param"><span class="n">blue_len</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__compare_and_cut" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares two rows of repeats labeled RED and BLUE, and determines if there
-are any overlaps in time between them. If there is, then we cut the
-repeats in RED and BLUE into up to 3 pieces.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<em>np.ndarray</em>) – Binary row vector encoding a set of repeats with 1’s where each
-repeat starts and 0’s otherwise.</p></li>
-<li><p><strong>red_len</strong> (<em>int</em>) – Length of repeats encoded in red.</p></li>
-<li><p><strong>blue</strong> (<em>np.ndarray</em>) – Binary row vector encoding a set of repeats with 1’s where each
-repeat starts and 0’s otherwise.</p></li>
-<li><p><strong>blue_len</strong> (<em>int</em>) – Length of repeats encoded in blue.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>union_mat</strong> (<em>np.ndarray</em>) – Binary matrix representation of up to three rows encoding
-non-overlapping repeats cut from red and blue.</p></li>
-<li><p><strong>union_length</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats encoded in union_mat.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.assemble.__inds_to_rows">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__inds_to_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_mat</span></em>, <em class="sig-param"><span class="n">row_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__inds_to_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expands a vector containing the starting indices of a piece or two of a
-repeat into a matrix representation recording when these pieces occur in
-the song with 1’s. All remaining entries are marked with 0’s.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.ndarray</em>) – Matrix of one or two rows, containing the starting indices.</p></li>
-<li><p><strong>row_length</strong> (<em>int</em>) – Length of the rows.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>new_mat</strong> – Matrix of one or two rows, with 1’s where the starting indices
-and 0’s otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.assemble.__merge_based_on_length">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__merge_based_on_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_mat</span></em>, <em class="sig-param"><span class="n">full_bw</span></em>, <em class="sig-param"><span class="n">target_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__merge_based_on_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges repeats that are the same length, as set by full_bandwidth,
-and are repeats of the same piece of structure.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>full_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
-<li><p><strong>full_bw</strong> (<em>np.ndarray</em>) – Length of repeats encoded in input_mat.</p></li>
-<li><p><strong>target_bw</strong> (<em>np.ndarray</em>) – Lengths of repeats that we seek to merge.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>out_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeros otherwise
-with rows of full_mat merged if appropriate.</p></li>
-<li><p><strong>one_length_vec</strong> (<em>np.ndarray</em>) – Length of the repeats encoded in out_mat.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.assemble.__merge_rows">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__merge_rows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">input_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__merge_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges rows that have at least one common repeat; said common repeat(s)
-must occur at the same time step and be of common length.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.ndarray</em>) – Binary matrix with ones where repeats start and zeroes otherwise.</p></li>
-<li><p><strong>input_width</strong> (<em>int</em>) – Length of repeats encoded in input_mat.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>merge_mat</strong> – Binary matrix with ones where repeats start and zeroes otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.assemble.__num_of_parts">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">__num_of_parts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_vec</span></em>, <em class="sig-param"><span class="n">input_start</span></em>, <em class="sig-param"><span class="n">input_all_starts</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.__num_of_parts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determines the number of blocks of consecutive
-time steps in a list of time steps. A block of consecutive time steps
-represents a distilled section of a repeat. This distilled section will be
-replicated and the starting indices of the repeats within it will be
-returned.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_vec</strong> (<em>np.ndarray</em>) – Vector that contains one or two parts of a repeat that are
-overlap(s) in time that may need to be replicated</p></li>
-<li><p><strong>input_start</strong> (<em>np.ndarray</em>) – Starting index for the part to be replicated.</p></li>
-<li><p><strong>input_all_starts</strong> (<em>np.ndarray</em>) – Starting indices for replication.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>start_mat</strong> (<em>np.ndarray</em>) – Array of one or two rows, containing the starting indices of the
-replicated repeats.</p></li>
-<li><p><strong>length_vec</strong> (<em>np.ndarray</em>) – Column vector containing the lengths of the replicated parts.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.assemble.breakup_overlaps_by_intersect">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">breakup_overlaps_by_intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_pattern_obj</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
+<dt id="breakup_overlaps_by_intersect">
+<code class="sig-name descname">breakup_overlaps_by_intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_pattern_obj</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts repeats in input_pattern_obj that has the starting indices of the
 repeats, into the essential structure components using bw_vec, that has the
 lengths of each repeat. The essential structure components are the
 smallest building blocks that form every repeat in the song.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_pattern_obj</strong> (<em>np.ndarray</em>) – Binary matrix with 1’s where repeats begin
-and 0’s otherwise.</p></li>
-<li><p><strong>bw_vec</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats
-encoded in input_pattern_obj.</p></li>
-<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowable repeat length.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>input_pattern_obj<span class="classifier">np.ndarray</span></dt><dd><p>Binary matrix with 1’s where repeats begin
+and 0’s otherwise.</p>
+</dd>
+<dt>bw_vec<span class="classifier">np.ndarray</span></dt><dd><p>Vector containing the lengths of the repeats
+encoded in input_pattern_obj.</p>
+</dd>
+<dt>thresh_bw<span class="classifier">int</span></dt><dd><p>Smallest allowable repeat length.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_no_overlaps</strong> (<em>np.ndrray</em>) – Binary matrix with 1’s where repeats of
-essential structure components begin.</p></li>
-<li><p><strong>pattern_no_overlaps_key</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats
+<dd class="field-even"><p><dl class="simple">
+<dt>pattern_no_overlaps<span class="classifier">np.ndrray</span></dt><dd><p>Binary matrix with 1’s where repeats of
+essential structure components begin.</p>
+</dd>
+<dt>pattern_no_overlaps_key<span class="classifier">np.ndarray</span></dt><dd><p>Vector containing the lengths of the repeats
 of essential structure components in
-pattern_no_overlaps.</p></li>
-</ul>
+pattern_no_overlaps.</p>
+</dd>
+</dl>
 </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.assemble.check_overlaps">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">check_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.check_overlaps" title="Permalink to this definition">¶</a></dt>
+<dt id="check_overlaps">
+<code class="sig-name descname">check_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#check_overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares every pair of groups and determines if there are any repeats in
 any pairs of the groups that overlap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_mat</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Matrix to be checked for overlaps.</p>
+<dd class="field-odd"><dl class="simple">
+<dt>input_mat<span class="classifier">np.array[int]</span></dt><dd><p>Matrix to be checked for overlaps.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>overlaps_yn</strong> – Logical array where (i,j) = 1 if row i of input matrix and row j
+<dd class="field-even"><p><dl class="simple">
+<dt>overlaps_yn<span class="classifier">np.array[bool]</span></dt><dd><p>Logical array where (i,j) = 1 if row i of input matrix and row j
 of input matrix overlap and (i,j) = 0 elsewhere.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array[bool]</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.assemble.hierarchical_structure">
-<code class="sig-prename descclassname">repytah.assemble.</code><code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no_overlaps</span></em>, <em class="sig-param"><span class="n">key_no_overlaps</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.assemble.hierarchical_structure" title="Permalink to this definition">¶</a></dt>
+<dt id="hierarchical_structure">
+<code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no_overlaps</span></em>, <em class="sig-param"><span class="n">key_no_overlaps</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hierarchical_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps)
 to the essential structure components and then builds the hierarchical
 representation. Optionally shows visualizations of the hierarchical structure
 via the vis argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix_no_overlaps</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
-<li><p><strong>key_no_overlaps</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector containing the lengths of the repeats encoded in matrix_no_overlaps.</p></li>
-<li><p><strong>sn</strong> (<em>int</em>) – Song length, which is the number of audio shingles.</p></li>
-<li><p><strong>vis</strong> (<em>bool</em>) – Shows visualizations if True (default = False).</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>matrix_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Binary matrix with 1’s where repeats begin and 0’s otherwise.</p>
+</dd>
+<dt>key_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector containing the lengths of the repeats encoded in matrix_no_overlaps.</p>
+</dd>
+<dt>sn<span class="classifier">int</span></dt><dd><p>Song length, which is the number of audio shingles.</p>
+</dd>
+<dt>vis<span class="classifier">bool</span></dt><dd><p>Shows visualizations if True (default = False).</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>full_visualization</strong> (<em>np.ndarray[int]</em>) – Binary matrix representation for full_matrix_no_overlaps
+<dd class="field-even"><p><dl class="simple">
+<dt>full_visualization<span class="classifier">np.ndarray[int]</span></dt><dd><p>Binary matrix representation for full_matrix_no_overlaps
 with blocks of 1’s equal to the length’s prescribed
-in full_key.</p></li>
-<li><p><strong>full_key</strong> (<em>np.ndarray[int]</em>) – Vector containing the lengths of the hierarchical
-structure encoded in full_matrix_no_overlaps.</p></li>
-<li><p><strong>full_matrix_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Binary matrix with 1’s where hierarchical
-structure begins and 0’s otherwise.</p></li>
-<li><p><strong>full_anno_lst</strong> (<em>np.ndarray[int]</em>) – Vector containing the annotation markers of the
+in full_key.</p>
+</dd>
+<dt>full_key<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector containing the lengths of the hierarchical
+structure encoded in full_matrix_no_overlaps.</p>
+</dd>
+<dt>full_matrix_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Binary matrix with 1’s where hierarchical
+structure begins and 0’s otherwise.</p>
+</dd>
+<dt>full_anno_lst<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector containing the annotation markers of the
 hierarchical structure encoded in each row of
-full_matrix_no_overlaps.</p></li>
-</ul>
+full_matrix_no_overlaps.</p>
+</dd>
+</dl>
 </p>
 </dd>
 </dl>
@@ -484,8 +312,8 @@ full_matrix_no_overlaps.</p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="assemble_alt.html" class="btn btn-neutral float-right" title="Assemble (alt)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="transform_alt.html" class="btn btn-neutral float-left" title="Transform (alt)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="search_doc.html" class="btn btn-neutral float-right" title="Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="transform.html" class="btn btn-neutral float-left" title="Transform" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

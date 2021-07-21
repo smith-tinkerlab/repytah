@@ -25,13 +25,9 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :caption: Modules
 
    utilities
-   utilities_alt
    transform
-   transform_alt
    assemble
-   assemble_alt
    search_doc
-   search_alt
 
 
 

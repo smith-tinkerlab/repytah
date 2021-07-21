@@ -44,7 +44,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Utilities (alt)" href="utilities_alt.html" />
+    <link rel="next" title="Transform" href="transform.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
@@ -98,13 +98,9 @@
 <p><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utilities_alt.html">Utilities (alt)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transform_alt.html">Transform (alt)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
-<li class="toctree-l1"><a class="reference internal" href="assemble_alt.html">Assemble (alt)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="search_alt.html">Search (alt)</a></li>
 </ul>
 <p><span class="caption-text">Implementation</span></p>
 <ul>
@@ -200,146 +196,41 @@
     text-align: unset;
 }
 </style>
-<section id="module-repytah.utilities">
-<span id="utilities"></span><h1>Utilities<a class="headerlink" href="#module-repytah.utilities" title="Permalink to this headline">¶</a></h1>
-<p>utilities.py</p>
-<p>This module, when imported, allows search.py, transform.py and assemble.py
-in the repytah package to run smoothly.</p>
-<p>The module contains the following functions:</p>
-<blockquote>
-<div><ul class="simple">
-<li><dl class="simple">
-<dt>create_sdm</dt><dd><p>Creates a self-dissimilarity matrix; this matrix is found
-by creating audio shingles from feature vectors, and finding cosine
-distance between shingles.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>find_initial_repeats</dt><dd><p>Finds all diagonals present in thresh_mat, removing each diagonal
-as it is found.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>stretch_diags</dt><dd><p>Fills out diagonals in binary self-dissimilarity matrix from diagonal
-starts and lengths.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>add_annotations</dt><dd><p>Adds annotations to each pair of repeated structures according to
-their length and order of occurrence.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__find_song_pattern</dt><dd><p>Stitches information about repeat locations from thresh_diags matrix
-into a single row.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>reconstruct_full_block</dt><dd><p>Creates a record of when pairs of repeated structures occur, from
-the first beat in the song to the last beat of the song. Pairs of
-repeated structures are marked with 1’s.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>get_annotation_lst</dt><dd><p>Gets one annotation marker vector, given vector of lengths key_lst.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>get_y_labels</dt><dd><p>Generates the labels for visualization.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>reformat [Only used for creating test examples]</dt><dd><p>Transforms a binary matrix representation of when repeats occur in
-a song into a list of repeated structures detailing the length and
-occurrence of each repeat.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
+<section id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">utilities.py</span></code>, when imported, allows <code class="docutils literal notranslate"><span class="pre">search.py</span></code>, <code class="docutils literal notranslate"><span class="pre">transform.py</span></code> and
+<code class="docutils literal notranslate"><span class="pre">assemble.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">repytah</span></code> package to run smoothly.</p>
+<p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="repytah.utilities.__find_song_pattern">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">__find_song_pattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.__find_song_pattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stitches information from thresh_diags matrix into a single
-row, song_pattern, that shows the time steps containing repeats;
-From the full matrix that decodes repeat beginnings (thresh_diags),
-the locations, or beats, where these repeats start are found and
-encoded into the song_pattern array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix with 1 at the start of each repeat pair (SI,SJ) and
-0 elsewhere.
-WARNING: Must be symmetric.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>song_pattern</strong> – Row where each entry represents a time step and the group
-that time step is a member of.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.utilities.add_annotations">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.add_annotations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds annotations to the pairs of repeats in input_mat.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats. The first two columns refer to
-the first repeat of the pair. The third and fourth columns
-refer to the second repeat of the pair. The fifth column
-refers to the repeat lengths. The sixth column contains any
-previous annotations, which will be removed.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles in the song.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_list</strong> – List of pairs of repeats with annotations marked.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.utilities.create_sdm">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.create_sdm" title="Permalink to this definition">¶</a></dt>
+<dt id="create_sdm">
+<code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_sdm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates self-dissimilarity matrix; this matrix is found by creating audio
 shingles from feature vectors, and finding the cosine distance between
 shingles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fv_mat</strong> (<em>np.ndarray</em>) – Matrix of feature vectors where each column is a time step and each
+<dd class="field-odd"><dl class="simple">
+<dt>fv_mat<span class="classifier">np.ndarray</span></dt><dd><p>Matrix of feature vectors where each column is a time step and each
 row includes feature information i.e. an array of 144 columns/beats
-and 12 rows corresponding to chroma values.</p></li>
-<li><p><strong>num_fv_per_shingle</strong> (<em>int</em>) – Number of feature vectors per audio shingle.</p></li>
-</ul>
+and 12 rows corresponding to chroma values.</p>
+</dd>
+<dt>num_fv_per_shingle<span class="classifier">int</span></dt><dd><p>Number of feature vectors per audio shingle.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self_dissim_mat</strong> – Self-dissimilarity matrix with paired cosine distances between shingles.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>self_dissim_mat<span class="classifier">np.ndarray</span></dt><dd><p>Self-dissimilarity matrix with paired cosine distances between shingles.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.utilities.find_initial_repeats">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.find_initial_repeats" title="Permalink to this definition">¶</a></dt>
+<dt id="find_initial_repeats">
+<code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_initial_repeats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Looks for the largest repeated structures in thresh_mat. Finds all
 repeated structures, represented as diagonals present in thresh_mat,
 and then stores them with their start/end indices and lengths in a
@@ -347,88 +238,155 @@ list. As each diagonal is found, they are removed to avoid identifying
 repeated sub-structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_mat</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Thresholded matrix that we extract diagonals from.</p></li>
-<li><p><strong>bandwidth_vec</strong> (<em>np.ndarray</em><em>[</em><em>1D</em><em>,</em><em>int</em><em>]</em>) – Array of lengths of diagonals to be found. Should be
-1, 2, 3,…, n where n is the number of timesteps.</p></li>
-<li><p><strong>thresh_bw</strong> (<em>int</em>) – Smallest allowed diagonal length.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>thresh_mat<span class="classifier">np.ndarray[int]</span></dt><dd><p>Thresholded matrix that we extract diagonals from.</p>
+</dd>
+<dt>bandwidth_vec<span class="classifier">np.ndarray[1D,int]</span></dt><dd><p>Array of lengths of diagonals to be found. Should be
+1, 2, 3, …, n where n is the number of timesteps.</p>
+</dd>
+<dt>thresh_bw<span class="classifier">int</span></dt><dd><p>Smallest allowed diagonal length.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>all_lst</strong> – List of pairs of repeats that correspond to diagonals in
+<dd class="field-even"><p><dl class="simple">
+<dt>all_lst<span class="classifier">np.ndarray[int]</span></dt><dd><p>List of pairs of repeats that correspond to diagonals in
 thresh_mat.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray[int]</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.utilities.get_annotation_lst">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_annotation_lst" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
+<dt id="stretch_diags">
+<code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stretch_diags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a binary matrix with full length diagonals from a binary matrix of
+diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key_lst</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Array of lengths in ascending order.</p>
+<dd class="field-odd"><dl class="simple">
+<dt>thresh_diags<span class="classifier">np.ndarray</span></dt><dd><p>Binary matrix where entries equal to 1 signals the existence
+of a diagonal.</p>
+</dd>
+<dt>band_width<span class="classifier">int</span></dt><dd><p>Length of encoded diagonals.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>anno_lst_out</strong> – Array of one possible set of annotation markers for key_lst.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>stretch_diag_mat<span class="classifier">np.ndarray[bool]</span></dt><dd><p>Logical matrix with diagonals of length band_width starting
+at each entry prescribed in thresh_diag.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray[int]</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.utilities.get_y_labels">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">get_y_labels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.get_y_labels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the labels for visualization with width_vec and anno_vec.</p>
+<dt id="add_annotations">
+<code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds annotations to the pairs of repeats in input_mat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width_vec</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Vector of widths for a visualization.</p></li>
-<li><p><strong>anno_vec</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – Array of annotations for a visualization.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>input_mat<span class="classifier">np.ndarray</span></dt><dd><p>List of pairs of repeats. The first two columns refer to
+the first repeat of the pair. The third and fourth columns
+refer to the second repeat of the pair. The fifth column
+refers to the repeat lengths. The sixth column contains any
+previous annotations, which will be removed.</p>
+</dd>
+<dt>song_length<span class="classifier">int</span></dt><dd><p>Number of audio shingles in the song.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y_labels</strong> – Labels for the y-axis of a visualization.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>anno_list<span class="classifier">np.ndarray</span></dt><dd><p>List of pairs of repeats with annotations marked.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray[str]</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.utilities.reconstruct_full_block">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
+<dt id="reconstruct_full_block">
+<code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a record of when pairs of repeated structures occur, from the
 first beat in the song to the end. This record is a binary matrix with a
 block of 1’s for each repeat encoded in pattern_mat whose length is
 encoded in pattern_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Binary matrix with 1’s where repeats begin and 0’s otherwise.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Vector containing the lengths of the repeats encoded in
-each row of pattern_mat.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>pattern_mat<span class="classifier">np.ndarray</span></dt><dd><p>Binary matrix with 1’s where repeats begin and 0’s otherwise.</p>
+</dd>
+<dt>pattern_key<span class="classifier">np.ndarray</span></dt><dd><p>Vector containing the lengths of the repeats encoded in
+each row of pattern_mat.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pattern_block</strong> – Binary matrix representation for pattern_mat with blocks
+<dd class="field-even"><p><dl class="simple">
+<dt>pattern_block<span class="classifier">np.ndarray</span></dt><dd><p>Binary matrix representation for pattern_mat with blocks
 of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="repytah.utilities.reformat">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.reformat" title="Permalink to this definition">¶</a></dt>
+<dt id="get_annotation_lst">
+<code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_annotation_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>key_lst<span class="classifier">np.ndarray[int]</span></dt><dd><p>Array of lengths in ascending order.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>anno_lst_out<span class="classifier">np.ndarray[int]</span></dt><dd><p>Array of one possible set of annotation markers for key_lst.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="get_y_labels">
+<code class="sig-name descname">get_y_labels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_y_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the labels for visualization with width_vec and anno_vec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>width_vec<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector of widths for a visualization.</p>
+</dd>
+<dt>anno_vec<span class="classifier">np.ndarray[int]</span></dt><dd><p>Array of annotations for a visualization.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>y_labels<span class="classifier">np.ndarray[str]</span></dt><dd><p>Labels for the y-axis of a visualization.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="reformat">
+<code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a binary array with 1’s where repeats start and 0’s
 otherwise into a list of repeated structures. This list consists of
 information about the repeats including length, when they occur and when
@@ -443,40 +401,20 @@ aligned-hierarchies. It is helpful when writing example inputs for
 the tests.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Binary array with 1’s where repeats start and 0’s otherwise.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Array with the lengths of each repeated structure in pattern_mat.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>pattern_mat<span class="classifier">np.ndarray</span></dt><dd><p>Binary array with 1’s where repeats start and 0’s otherwise.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>info_mat</strong> – Array with the time steps of when the pairs of repeated structures
-start and end organized.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dt>pattern_key<span class="classifier">np.ndarray</span></dt><dd><p>Array with the lengths of each repeated structure in pattern_mat.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.utilities.stretch_diags">
-<code class="sig-prename descclassname">repytah.utilities.</code><code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.utilities.stretch_diags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a binary matrix with full length diagonals from a binary matrix of
-diagonal starts and length of diagonals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>thresh_diags</strong> (<em>np.ndarray</em>) – Binary matrix where entries equal to 1 signals the existence
-of a diagonal.</p></li>
-<li><p><strong>band_width</strong> (<em>int</em>) – Length of encoded diagonals.</p></li>
-</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>stretch_diag_mat</strong> – Logical matrix with diagonals of length band_width starting
-at each entry prescribed in thresh_diag.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>info_mat<span class="classifier">np.ndarray</span></dt><dd><p>Array with the time steps of when the pairs of repeated structures
+start and end organized.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray[bool]</p>
+</dl>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -489,7 +427,7 @@ at each entry prescribed in thresh_diag.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="utilities_alt.html" class="btn btn-neutral float-right" title="Utilities (alt)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="transform.html" class="btn btn-neutral float-right" title="Transform" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
