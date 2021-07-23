@@ -21,7 +21,7 @@ class TestAssemble(unittest.TestCase):
     def test_breakup_overlaps_by_intersect(self):
         """
         Tests if breakup_overlap_by_intersect gives the correct output 
-        accessible via a tuple for an example 
+        accessible via a tuple for an example.
         """
 
         input_pattern_obj = np.array([
@@ -54,7 +54,7 @@ class TestAssemble(unittest.TestCase):
     def test_check_overlaps(self):
         """
         Tests if check_overlaps gives the correct output with the correct data
-        type and size for an example case 
+        type and size for an example case.
         """
 
         input_mat = np.array([[1, 1, 0, 1, 0, 0],
@@ -80,7 +80,7 @@ class TestAssemble(unittest.TestCase):
     def test_compare_and_cut(self):
         """
         Tests if __compare_and_cut gives the correct output accessible via a
-        tuple for an example 
+        tuple for an example.
         """
 
         red = np.array(
@@ -111,7 +111,7 @@ class TestAssemble(unittest.TestCase):
     def test_num_of_parts_if_statement(self):
         """
         Tests if __num_of_parts gives the correct output accessible via a tuple 
-        for an example when the if clause is entered 
+        for an example when the if clause is entered
         (i.e. if the input vector has no breaks).
         """
 
@@ -154,7 +154,7 @@ class TestAssemble(unittest.TestCase):
     def test_inds_to_rows(self):
         """
         Tests if __inds_to_rows gives the correct output with the correct data
-        type and size for an example case 
+        type and size for an example case.
         """
 
         start_mat = np.array([0, 1, 6, 7])
@@ -171,7 +171,7 @@ class TestAssemble(unittest.TestCase):
     def test_merge_based_on_length(self):
         """
         Tests if __merge_based_on_length gives the correct output accessible 
-        via a tuple for an example case
+        via a tuple for an example case.
         """
 
         full_mat = np.array([
@@ -199,7 +199,7 @@ class TestAssemble(unittest.TestCase):
     def test_merge_rows(self):
         """
         Tests if __merge_rows gives the correct output with the correct data
-        type and size for an example case 
+        type and size for an example case.
         """
 
         input_mat = np.array([
@@ -221,7 +221,7 @@ class TestAssemble(unittest.TestCase):
     def test_hierarchical_structure(self):
         """
         Tests if hierarchical_structure gives the correct output accessible via
-        a tuple for an example case
+        a tuple for an example case.
         """
 
         input_matrix_no = np.array([
@@ -251,7 +251,7 @@ class TestAssemble(unittest.TestCase):
     def test_hierarchical_structure_equal_with_boolean(self):
         """
         Tests if hierarchical_structure gives the same output for vis=True 
-        and vis=False as visualizations are just shown
+        and vis=False as visualizations are just shown.
         """
 
         input_matrix_no = np.array([

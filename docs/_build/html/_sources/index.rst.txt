@@ -1,12 +1,12 @@
 *******
 repytah
 *******
-`repytah` is a Python package that builds aligned hierarchies, a representation for 
-music-based data streams. 
+``repytah`` is a Python package that builds aligned hierarchies, a representation for 
+sequential data streams. 
 
 Citing repytah
 ==============
-Please cite `repytah` using the following:
+Please cite ``repytah`` using the following:
 
 K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.1.0, 2021. [Online]. 
 Available: https://github.com/smith-tinkerlab/repytah.
@@ -28,6 +28,7 @@ Available: https://github.com/smith-tinkerlab/repytah.
    transform
    assemble
    search_doc
+
 
 
 .. toctree::

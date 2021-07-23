@@ -196,151 +196,52 @@
     text-align: unset;
 }
 </style>
-<section id="module-repytah.transform">
-<span id="transform"></span><h1>Transform<a class="headerlink" href="#module-repytah.transform" title="Permalink to this headline">¶</a></h1>
-<p>transform.py</p>
-<p>This script contains functions that transform matrix inputs into different
-forms that are of use in bigger functions where they are called. These
-functions focus mainly on overlapping repeated structures and annotation
+<section id="transform">
+<h1>Transform<a class="headerlink" href="#transform" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">transform.py</span></code> contains functions that transform matrix inputs
+into different forms that are of use in bigger functions where they are called.
+These functions focus mainly on overlapping repeated structures and annotation
 markers.</p>
-<p>This file contains the following functions:</p>
-<blockquote>
-<div><ul class="simple">
-<li><dl class="simple">
-<dt>remove_overlaps</dt><dd><p>Removes any pairs of repeats with the same length and annotation marker
-where at least one pair of repeats overlap in time.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__create_anno_remove_overlaps</dt><dd><p>Turns rows of repeats into marked rows with
-annotation markers for the start indices and zeroes otherwise. After
-removing the annotations that have overlaps, the function creates
-separate arrays for annotations with overlaps and annotations without
-overlaps. Finally, the annotation markers are checked and fixed if
-necessary.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>__separate_anno_markers</dt><dd><p>Expands vector of non-overlapping repeats into a matrix representation.
-The matrix representation is a visual record of where all of the
-repeats in a song start and end.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
+<p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="repytah.transform.__create_anno_remove_overlaps">
-<code class="sig-prename descclassname">repytah.transform.</code><code class="sig-name descname">__create_anno_remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.transform.__create_anno_remove_overlaps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turns k_mat into marked rows with annotation markers for the start
-indices and zeroes otherwise. After removing the annotations that have
-overlaps, the function outputs k_lst_out which only contains rows that
-have no overlaps, then takes the annotations that have overlaps from
-k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
-sequence of annotation markers was given and fix them if necessary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>k_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length 1 with annotations
-marked. The first two columns refer to the first repeat
-of the pair, the second two refer to the second repeat of
-the pair, the fifth column refers to the length of the
-repeats, and the sixth column contains the annotation markers.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles.</p></li>
-<li><p><strong>band_width</strong> (<em>int</em>) – Length of repeats encoded in k_mat.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_row</strong> (<em>np.ndarray</em>) – Row that marks where non-overlapping repeats occur,
-marking start indices with annotation markers and
-0’s otherwise.</p></li>
-<li><p><strong>k_lst_out</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width that
-contain no overlapping repeats with annotations
-marked.</p></li>
-<li><p><strong>overlap_lst</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width that
-contain overlapping repeats with annotations marked.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.transform.__separate_anno_markers">
-<code class="sig-prename descclassname">repytah.transform.</code><code class="sig-name descname">__separate_anno_markers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em>, <em class="sig-param"><span class="n">band_width</span></em>, <em class="sig-param"><span class="n">pattern_row</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.transform.__separate_anno_markers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expands pattern_row, a row vector that marks where non-overlapping
-repeats occur, into a matrix representation or np.array. The dimension of
-this array is twice the pairs of repeats by song_length. k_mat provides
-a list of annotation markers that is used in separating the repeats of
-length band_width into individual rows. Each row will mark the start and
-end time steps of a repeat with 1’s and 0’s otherwise. The array is a
-visual record of where all of the repeats in a song start and end.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>k_mat</strong> (<em>np.ndarray</em>) – List of pairs of repeats of length band_width with annotations
-marked. The first two columns refer to the start and end time
-steps of the first repeat of the pair, the second two refer to
-the start and end time steps of second repeat of the pair, the
-fifth column refers to the length of the repeats, and the sixth
-column contains the annotation markers. We will be indexing into
-the sixth column to obtain a list of annotation markers.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles.</p></li>
-<li><p><strong>band_width</strong> (<em>int</em>) – Length of repeats encoded in k_mat.</p></li>
-<li><p><strong>pattern_row</strong> (<em>np.ndarray</em>) – Row vector of the length of the song that marks where
-non-overlapping repeats occur with the repeats’ corresponding
-annotation markers and 0’s otherwise.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>pattern_mat</strong> (<em>np.ndarray</em>) – Matrix representation where each row contains a group of repeats
-marked.</p></li>
-<li><p><strong>pattern_key</strong> (<em>np.ndarray</em>) – Column vector containing the lengths of the repeats encoded in
-each row of pattern_mat.</p></li>
-<li><p><strong>anno_id_lst</strong> (<em>np.ndarray</em>) – Column vector containing the annotation markers of the repeats
-encoded in each row of pattern_mat.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="repytah.transform.remove_overlaps">
-<code class="sig-prename descclassname">repytah.transform.</code><code class="sig-name descname">remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#repytah.transform.remove_overlaps" title="Permalink to this definition">¶</a></dt>
+<dt id="remove_overlaps">
+<code class="sig-name descname">remove_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#remove_overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes any pairs of repeat length and specific annotation marker
 where there exists at least one pair of repeats that overlap in time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_mat</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – List of pairs of repeats with annotations marked. The first
+<dd class="field-odd"><dl class="simple">
+<dt>input_mat<span class="classifier">np.ndarray[int]</span></dt><dd><p>List of pairs of repeats with annotations marked. The first
 two columns refer to the first repeat or the pair, the second
 two refer to the second repeat of the pair, the fifth column
 refers to the length of the repeats, and the sixth column
-contains the annotation markers.</p></li>
-<li><p><strong>song_length</strong> (<em>int</em>) – Number of audio shingles.</p></li>
-</ul>
+contains the annotation markers.</p>
+</dd>
+<dt>song_length<span class="classifier">int</span></dt><dd><p>Number of audio shingles.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>lst_no_overlaps</strong> (<em>np.ndarray[int]</em>) – List of pairs of repeats with annotations marked. All the
+<dd class="field-even"><p><dl class="simple">
+<dt>lst_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>List of pairs of repeats with annotations marked. All the
 repeats of a given length and with a specific annotation
-marker do not overlap in time.</p></li>
-<li><p><strong>matrix_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Matrix representation of lst_no_overlaps with one row for
-each group of repeats.</p></li>
-<li><p><strong>key_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Vector containing the lengths of the repeats encoded in
-each row of matrix_no_overlaps.</p></li>
-<li><p><strong>annotations_no_overlaps</strong> (<em>np.ndarray[int]</em>) – Vector containing the annotation markers of the repeats
-encoded in each row of matrix_no_overlaps.</p></li>
-<li><p><strong>all_overlap_lst</strong> (<em>np.ndarray[int]</em>) – List of pairs of repeats with annotations marked removed
+marker do not overlap in time.</p>
+</dd>
+<dt>matrix_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Matrix representation of lst_no_overlaps with one row for
+each group of repeats.</p>
+</dd>
+<dt>key_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector containing the lengths of the repeats encoded in
+each row of matrix_no_overlaps.</p>
+</dd>
+<dt>annotations_no_overlaps<span class="classifier">np.ndarray[int]</span></dt><dd><p>Vector containing the annotation markers of the repeats
+encoded in each row of matrix_no_overlaps.</p>
+</dd>
+<dt>all_overlap_lst<span class="classifier">np.ndarray[int]</span></dt><dd><p>List of pairs of repeats with annotations marked removed
 from input_mat. For each pair of repeat length and specific
 annotation marker, there exist at least one pair of repeats
-that do overlap in time.</p></li>
-</ul>
+that do overlap in time.</p>
+</dd>
+</dl>
 </p>
 </dd>
 </dl>
