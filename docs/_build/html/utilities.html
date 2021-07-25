@@ -8,12 +8,14 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Utilities &mdash; repytah  documentation</title>
+  <title>Utilities &mdash; repytah 0.1.0dev documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
@@ -31,12 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -59,14 +60,21 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> repytah
+            <a href="index.html">
           
 
+          
+            
+            <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
           
             
+            
+              <div class="version">
+                0.1.0dev
+              </div>
             
           
 
@@ -90,19 +98,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">Why <cite>repytah</cite></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
-<p><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
 <li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
 </ul>
-<p><span class="caption-text">Implementation</span></p>
+<p class="caption"><span class="caption-text">Implementation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
 </ul>
@@ -202,8 +210,8 @@
 <code class="docutils literal notranslate"><span class="pre">assemble.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">repytah</span></code> package to run smoothly.</p>
 <p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="create_sdm">
-<code class="sig-name descname">create_sdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv_mat</span></em>, <em class="sig-param"><span class="n">num_fv_per_shingle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_sdm" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="create_sdm">
+<span class="sig-name descname"><span class="pre">create_sdm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_fv_per_shingle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_sdm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates self-dissimilarity matrix; this matrix is found by creating audio
 shingles from feature vectors, and finding the cosine distance between
 shingles.</p>
@@ -229,8 +237,8 @@ and 12 rows corresponding to chroma values.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="find_initial_repeats">
-<code class="sig-name descname">find_initial_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bandwidth_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_initial_repeats" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="find_initial_repeats">
+<span class="sig-name descname"><span class="pre">find_initial_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_initial_repeats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Looks for the largest repeated structures in thresh_mat. Finds all
 repeated structures, represented as diagonals present in thresh_mat,
 and then stores them with their start/end indices and lengths in a
@@ -260,8 +268,8 @@ thresh_mat.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="stretch_diags">
-<code class="sig-name descname">stretch_diags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_diags</span></em>, <em class="sig-param"><span class="n">band_width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stretch_diags" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stretch_diags">
+<span class="sig-name descname"><span class="pre">stretch_diags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_diags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_width</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stretch_diags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a binary matrix with full length diagonals from a binary matrix of
 diagonal starts and length of diagonals.</p>
 <dl class="field-list simple">
@@ -286,8 +294,8 @@ at each entry prescribed in thresh_diag.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="add_annotations">
-<code class="sig-name descname">add_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_annotations" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="add_annotations">
+<span class="sig-name descname"><span class="pre">add_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds annotations to the pairs of repeats in input_mat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -313,8 +321,8 @@ previous annotations, which will be removed.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="reconstruct_full_block">
-<code class="sig-name descname">reconstruct_full_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="reconstruct_full_block">
+<span class="sig-name descname"><span class="pre">reconstruct_full_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reconstruct_full_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a record of when pairs of repeated structures occur, from the
 first beat in the song to the end. This record is a binary matrix with a
 block of 1’s for each repeat encoded in pattern_mat whose length is
@@ -341,8 +349,8 @@ of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="get_annotation_lst">
-<code class="sig-name descname">get_annotation_lst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_lst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_annotation_lst" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="get_annotation_lst">
+<span class="sig-name descname"><span class="pre">get_annotation_lst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_lst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_annotation_lst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates one annotation marker vector, given vector of lengths key_lst.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -362,8 +370,8 @@ of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="get_y_labels">
-<code class="sig-name descname">get_y_labels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_vec</span></em>, <em class="sig-param"><span class="n">anno_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_y_labels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="get_y_labels">
+<span class="sig-name descname"><span class="pre">get_y_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anno_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_y_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the labels for visualization with width_vec and anno_vec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -385,8 +393,8 @@ of 1’s equal to the length’s prescribed in pattern_key.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="reformat">
-<code class="sig-name descname">reformat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern_mat</span></em>, <em class="sig-param"><span class="n">pattern_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reformat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="reformat">
+<span class="sig-name descname"><span class="pre">reformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a binary array with 1’s where repeats start and 0’s
 otherwise into a list of repeated structures. This list consists of
 information about the repeats including length, when they occur and when

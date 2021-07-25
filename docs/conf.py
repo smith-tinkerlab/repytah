@@ -12,40 +12,62 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+from pathlib import Path
+srcpath = os.path.abspath(Path(os.path.dirname(__file__)) / '..')
+sys.path.insert(0, srcpath)
+# sys.path.insert(0, os.path.abspath(".."))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'repytah'
-copyright = '2021, repytah development team'
-author = 'Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao'
+project = "repytah"
+copyright = "2021, repytah development team"
+author = "Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao"
 
 
 # -- General configuration ---------------------------------------------------
 
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+
+from importlib.machinery import SourceFileLoader
+
+repytah_version = SourceFileLoader(
+    "repytah.version", os.path.abspath(Path(srcpath) / 'repytah' / 'version.py')
+).load_module()
+
+# The short X.Y version.
+version = repytah_version.version
+# The full version, including alpha/beta/rc tags.
+release = repytah_version.version
+
 # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# extensions coming with Sphinx (named "sphinx.ext.*") or your custom
 # ones.
 import sphinx_rtd_theme
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
-              'sphinx.ext.napoleon', 'nbsphinx', 'sphinx_rtd_theme'
+extensions = ["sphinx.ext.autodoc", 
+              "sphinx.ext.coverage",
+              "sphinx.ext.napoleon", 
+              "nbsphinx", 
+              "sphinx_rtd_theme",
+              "sphinx.ext.imgconverter"
 ]
 
 # TEST: Add source suffixes
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # List of imported modules
-autodoc_mock_imports = ['numpy', 'scipy', 'matplotlib', 'pandas', 'inspect']
+autodoc_mock_imports = ["numpy", "scipy", "matplotlib", "pandas", "inspect"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -54,15 +76,22 @@ autodoc_mock_imports = ['numpy', 'scipy', 'matplotlib', 'pandas', 'inspect']
 # a list of builtin themes.
 #
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 html_css_files = [
-    'custom.css'
+    "custom.css"
 ]
+
+html_logo = "img/repytah_logo.svg"
+
+html_theme_options = {
+    "logo_only": True,
+    "display_version": True,
+}
