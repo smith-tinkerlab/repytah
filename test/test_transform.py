@@ -18,7 +18,7 @@ class TestTransform(unittest.TestCase):
   
     def test_create_anno_remove_overlaps_single_row_input(self): 
         """
-        Tests if __create_anno_remove_overlaps works with a single-row matrix
+        Tests if __create_anno_remove_overlaps works with a single-row matrix.
         """
 
         input_mat = np.array([2, 2, 4, 4, 1, 1])
@@ -39,7 +39,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_small_input_overlaps_only(self):
         """
         Tests if __create_anno_remove_overlaps works with a small matrix
-        containing only overlaps
+        containing only overlaps.
         """
 
         input_mat = np.array([[1, 4, 11, 14, 4, 1],
@@ -64,7 +64,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_large_input_no_overlaps(self):
         """
         Tests if __create_anno_remove_overlaps works with a large matrix
-        containing no overlaps and having bandwidth larger than 1
+        containing no overlaps and having bandwidth larger than 1.
         """
 
         input_mat = np.array([[2,  3,  8,  9,  2, 1],
@@ -107,7 +107,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_large_input_no_overlaps_bw_1(self):
         """
         Tests if __create_anno_remove_overlaps works with a large matrix
-        containing no overlaps and having bandwidth equal to 1
+        containing no overlaps and having bandwidth equal to 1.
         """
 
         input_mat = np.array([[8,   8,   14,  14,  1, 1],
@@ -166,7 +166,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_wrong_bandwidth(self):
         """
         Tests if __create_anno_remove_overlaps works with a matrix
-        when a non-existing bandwidth is given
+        when a non-existing bandwidth is given.
         """
 
         input_mat = np.array([[2,  3,  8,  9,  2, 1],
@@ -209,7 +209,7 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_some_overlaps(self):
         """
         Tests if __create_anno_remove_overlaps works with a matrix
-        containing both overlapping and non-overlapping repeats
+        containing both overlapping and non-overlapping repeats.
         """
 
         input_mat = np.array([[2,  3,  8,  9,  2, 1],
@@ -252,7 +252,8 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_skipped_anno_small_input(self):
         """
         Tests that step 2 of __create_anno_remove_overlaps is able to check
-        whether the annotation has a repeat associated to it for a small matrix
+        whether the annotation has a repeat associated to it for a small
+        matrix.
         """
 
         input_mat = np.array([[2, 2, 8,  8,  1, 0],
@@ -279,7 +280,8 @@ class TestTransform(unittest.TestCase):
     def test_create_anno_remove_overlaps_skipped_anno_large_input(self):
         """
         Tests if step 2 of __create_anno_remove_overlaps is able to check
-        whether the annotation has a repeat associated to it for a large matrix
+        whether the annotation has a repeat associated to it for a large
+        matrix.
         """
 
         input_mat = np.array([[2,  2,  8,  8,  1, 1],
@@ -348,7 +350,7 @@ class TestTransform(unittest.TestCase):
 
     def test_separate_anno_markers_single_row_input(self):
         """
-        Tests if __separate_anno_markers works with a single-row matrix
+        Tests if __separate_anno_markers works with a single-row matrix.
         """
         
         k_mat = np.array([[7, 12, 14, 19, 6, 1]])
@@ -373,7 +375,7 @@ class TestTransform(unittest.TestCase):
 
     def test_separate_anno_markers_small_input(self):
         """
-        Tests if __separate_anno_markers works with a small matrix
+        Tests if __separate_anno_markers works with a small matrix.
         """
 
         k_mat = np.array([[3, 3, 9,  9,  1, 1],
@@ -403,7 +405,7 @@ class TestTransform(unittest.TestCase):
     
     def test_separate_anno_markers_large_input(self):
         """
-        Tests if __separate_anno_markers works with a large matrix
+        Tests if __separate_anno_markers works with a large matrix.
         """
         
         k_mat = np.array([[2,  2,  8,  8,  1, 1],
@@ -464,7 +466,8 @@ class TestTransform(unittest.TestCase):
 
     def test_remove_overlaps_small_input_with_overlaps(self):
         """
-        Tests if remove_overlaps works with a small matrix containing overlaps
+        Tests if remove_overlaps works with a small matrix containing
+        overlaps.
         """
         
         input_lst = np.array([[1, 4, 11, 14, 4, 1],
@@ -486,14 +489,14 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == \
-            expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] ==
+                        expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
 
     def test_remove_overlaps_small_input_without_overlaps(self):
         """
         Tests if remove_overlaps works with a small matrix containing
-        no overlaps
+        no overlaps.
         """
 
         input_lst = np.array([[1, 1, 10, 10, 1, 1],
@@ -517,13 +520,14 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == \
-            expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] ==
+                        expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
     
     def test_remove_overlaps_large_input_with_overlaps(self):
         """
-        Tests if remove_overlaps works with a large matrix containing overlaps
+        Tests if remove_overlaps works with a large matrix containing
+        overlaps.
         """
         
         input_lst = np.array([[1,  2,  8,  9,  2, 1],
@@ -557,14 +561,14 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == \
-            expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] ==
+                        expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
         
     def test_remove_overlaps_large_input_without_overlaps(self):
         """
         Tests if remove_overlaps works with a large matrix containing
-        no overlaps
+        no overlaps.
         """
         
         input_lst = np.array([[2,  2,  8,  8,  1, 1],
@@ -707,8 +711,8 @@ class TestTransform(unittest.TestCase):
         self.assertTrue((output_tuple[0] == expect_lst_no_overlaps).all())
         self.assertTrue((output_tuple[1] == expect_matrix_no_overlaps).all())
         self.assertTrue((output_tuple[2] == expect_key_no_overlaps).all())
-        self.assertTrue((output_tuple[3] == \
-            expect_annotations_no_overlaps).all())
+        self.assertTrue((output_tuple[3] ==
+                        expect_annotations_no_overlaps).all())
         self.assertTrue((output_tuple[4] == expect_all_overlap_lst).all())
 
 

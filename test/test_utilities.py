@@ -16,7 +16,7 @@ class TestUtilities(unittest.TestCase):
     def test_create_sdm(self):
         """
         Tests if create_sdm creates the correct self-dissimilarity matrix
-        given feature vectors
+        given feature vectors.
         """
         
         my_data = np.array([[0, 0.5, 0, 0, 0, 1, 0, 0],
@@ -44,7 +44,7 @@ class TestUtilities(unittest.TestCase):
     def test_find_initial_repeats(self):
         """
         Tests if find_initial_repeats finds all the large repeated structures 
-        represented as diagonals in thresh_mat
+        represented as diagonals in thresh_mat.
         """
         
         # Input with single row && bandwidth_vec > thresh_bw
@@ -173,7 +173,7 @@ class TestUtilities(unittest.TestCase):
         """
         Tests if stretch_diags creates the correct binary matrix with full 
         length diagonals from binary matrix of diagonal starts and length of 
-        diagonals
+        diagonals.
         """
         
         thresh_diags = np.array([[0, 0, 1, 0, 0],
@@ -200,7 +200,7 @@ class TestUtilities(unittest.TestCase):
     def test_add_annotations(self):
         """
         Tests if add_annotations adds the correct annotations to the pairs of 
-        repeats in input_mat
+        repeats in input_mat.
         """
        
         # Input with annotations correctly marked
@@ -236,10 +236,9 @@ class TestUtilities(unittest.TestCase):
     def test_find_song_pattern(self):
         """
         Tests if __find_song_pattern correctly encodes the information in
-        thresh_diags into a single-row song_pattern array
+        thresh_diags into a single-row song_pattern array.
         """
-        
-        
+
         thresh_diags = np.array([[1, 0, 0, 0, 0],
                                  [0, 1, 1, 1, 0],
                                  [0, 1, 1, 0, 0],
@@ -259,7 +258,7 @@ class TestUtilities(unittest.TestCase):
     def test_reconstruct_full_block(self):
         """
         Tests if reconstruct_full_block creates the correct full record
-        of repeated structures, from the first beat of the song to the end
+        of repeated structures, from the first beat of the song to the end.
         """
         
         # Input without overlaps 
@@ -301,8 +300,8 @@ class TestUtilities(unittest.TestCase):
 
     def test_get_annotation_lst(self):
         """
-        Tests if get_annotation_lst creates the correct annotation marker vector
-        given vector of repeat lengths key_lst
+        Tests if get_annotation_lst creates the correct annotation marker
+        vector given vector of repeat lengths key_lst.
         """
 
         # Input with small size, all length different
@@ -341,10 +340,10 @@ class TestUtilities(unittest.TestCase):
         # Test output result
         self.assertEqual(output.tolist(), expect_output.tolist())
 
-    def test_get_yLabels(self):
+    def test_get_y_labels(self):
         """
-        Tests if get_yLabels generates the correct labels for a visualization
-        with width_vec and anno_vec
+        Tests if get_y_labels generates the correct labels for a visualization
+        with width_vec and anno_vec.
         """
 
         width_vec = np.array([[1], [1], [3], [4], [4], [5], [5], [6], [6]])
@@ -355,7 +354,7 @@ class TestUtilities(unittest.TestCase):
                                   'w = 5, a = 1', 'w = 6, a = 1',
                                   'w = 6, a = 2'])
         
-        output = get_yLabels(width_vec, anno_vec)
+        output = get_y_labels(width_vec, anno_vec)
         
         # Test output type
         self.assertIs(type(output), np.ndarray)
@@ -366,7 +365,7 @@ class TestUtilities(unittest.TestCase):
         """
         Tests if reformat generates the correct list of repeated structures
         that includes repeat lengths, where they start and end given a
-        binary array with 1's where repeats start and 0's
+        binary array with 1's where repeats start and 0's.
         """
         
         pattern_mat = np.array([[0, 0, 0, 0, 1, 0, 0, 0, 0, 1],

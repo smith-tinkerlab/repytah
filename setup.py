@@ -34,7 +34,7 @@ setup(
     extras_require={
         'docs': [
             'sphinx != 1.3.1',
-            'sphinx_rtd_theme == 0.5.*',
+            'sphinx_rtd_theme >= 0.3.1',
             'nbsphinx == 0.8.*',
             'spyder >= 4.0.0',
             'numpydoc >= 0.9.0',

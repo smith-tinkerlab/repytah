@@ -18,7 +18,7 @@ class TestSearch(unittest.TestCase):
     def test_find_complete_list(self):
         """ 
         Tests if find_complete_list finds the correct smaller diagonals 
-        (and the associated pairs of repeats) 
+        (and the associated pairs of repeats).
         """
         
         input_mat = np.array([[8,   8,   14,  14,    1],
@@ -77,11 +77,10 @@ class TestSearch(unittest.TestCase):
         # Test output result
         self.assertEqual(output.tolist(), expect_output.tolist())
 
-
     def test__find_add_rows(self):
         """ 
         Tests if __find_add_rows finds the correct pairs of repeated 
-        structures, represented as diagonals of a certain length, k 
+        structures, represented as diagonals of a certain length, k.
         """
         
         # Test for pairs of repeated structures that start at the same time 
@@ -97,9 +96,9 @@ class TestSearch(unittest.TestCase):
         output_ep1 = find_add_rows(lst_no_anno_ep1, check_inds_ep1, k_ep1)
 
         expect_output_ep1 = np.array([[1,  10, 31, 40, 10],
-                                        [11, 15, 41, 45,  5],
-                                        [1,  10, 31, 40, 10],
-                                        [11, 15, 41, 45,  5]])
+                                      [11, 15, 41, 45,  5],
+                                      [1,  10, 31, 40, 10],
+                                      [11, 15, 41, 45,  5]])
 
         # Test output type
         self.assertIs(type(output_ep1), np.ndarray)
@@ -151,7 +150,7 @@ class TestSearch(unittest.TestCase):
                                     [4,   14,  52,  62,  11],
                                     [4,   14,  100, 110, 11],
                                     [26,  71,  74,  119, 46]])
-        check_inds_ep3 =np.array([4, 52, 100])
+        check_inds_ep3 = np.array([4, 52, 100])
         k = 11
         
         output_ep3 = find_add_rows(lst_no_anno_ep3, check_inds_ep3, k)
@@ -173,7 +172,7 @@ class TestSearch(unittest.TestCase):
     def test_find_all_repeats(self):
         """ 
         Tests if find_all_repeats finds all the correct diagonals present 
-        in thresh_mat 
+        in thresh_mat.
         """
         
         thresh_temp = np.array([[1, 0, 1, 0, 0],
@@ -204,7 +203,7 @@ class TestSearch(unittest.TestCase):
     def test_find_complete_list_anno_only(self):
         """ 
         Tests if find_complete_list_anno_only finds all the correct annotations 
-        for all pairs of repeats found in find_all_repeats
+        for all pairs of repeats found in find_all_repeats.
         """
 
         pair_list = np.array([[3, 3,  5,  5,  1],
