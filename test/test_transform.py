@@ -7,7 +7,7 @@ Unit tests for Aligned Hierarchies, transform.py
 import unittest
 import numpy as np 
 
-from repytah import *
+from repytah.transform import remove_overlaps
 from repytah.transform import __create_anno_remove_overlaps \
     as create_anno_remove_overlaps
 from repytah.transform import __separate_anno_markers \

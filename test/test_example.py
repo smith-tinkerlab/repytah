@@ -4,7 +4,11 @@ Unit tests for Aligned Hierarchies, example.py
 """
 
 import unittest 
-from repytah import *
+
+from repytah.utilities import * 
+from repytah.example import *
+from repytah.input import load_csv_input
+
 import os
 
 
