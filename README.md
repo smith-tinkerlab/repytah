@@ -1,4 +1,4 @@
-# repytah
+# <img alt="repytah" src="branding/repytah_logo.png" height="100">
 
 A Python package for building Aligned Hierarchies for sequential data streams.
 
