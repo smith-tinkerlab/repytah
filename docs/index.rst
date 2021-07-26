@@ -35,6 +35,7 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :maxdepth: 1
    :caption: Implementation
    
+   function_pipeline
    example_vignette.ipynb
 
 .. toctree::
