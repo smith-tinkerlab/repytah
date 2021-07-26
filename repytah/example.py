@@ -1,5 +1,7 @@
 import scipy.io as sio
 import numpy as np
+import pkg_resources
+import pandas as pd
 
 from .utilities import create_sdm, find_initial_repeats
 from .search import find_complete_list
@@ -9,10 +11,31 @@ from .assemble import hierarchical_structure
 """
 example.py
 
-An example module that runs a complete case of building aligned hierarchies 
-when a CSV file with extracted features is the input.
+An example module that contains functions to run a complete case of building
+aligned hierarchies when a CSV file with extracted features is the input.
+
+The module contains the following functions:
+    
+    * load_eg_data
+        Reads in a csv input file with extracted features.
+
+    * csv_to_aligned_hierarchies
+        Example of full aligned hierarchies pathway. 
 
 """
+
+def load_ex_data(input):
+    """
+    Reads in a csv input file with extracted features.
+
+    Args
+    ----
+    input : str
+        Name of .csv file to be processed. 
+    """
+
+    stream = pkg_resources.resource_stream(__name__, input)
+    return pd.read_csv(stream)
 
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):

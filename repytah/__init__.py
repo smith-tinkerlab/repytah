@@ -10,4 +10,3 @@ from .utilities import *
 from .transform import *
 from .assemble import *
 from .example import *
-from .input import *
