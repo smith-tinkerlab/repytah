@@ -37,11 +37,9 @@ Available: https://github.com/smith-tinkerlab/repytah.
    
    example_vignette.ipynb
 
+.. toctree::
+   :maxdepth: 1
+   :caption: References
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   changelog
+   genindex
