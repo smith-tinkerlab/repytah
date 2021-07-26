@@ -3,7 +3,6 @@
 Unit tests for Aligned Hierarchies, example.py 
 """
 
-import pandas as pd
 import unittest 
 
 from repytah.utilities import * 
