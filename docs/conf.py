@@ -94,6 +94,5 @@ html_css_files = [
 html_logo = "img/repytah_logo.svg"
 
 html_theme_options = {
-    "logo_only": True,
-    "display_version": True,
+    "logo_only": True
 }
