@@ -6,14 +6,12 @@ Unit tests for Aligned Hierarchies, assemble.py
 import unittest
 import numpy as np
 
-from repytah.assemble import breakup_overlaps_by_intersect
-from repytah.assemble import check_overlaps
+from repytah import *
 from repytah.assemble import __compare_and_cut as compare_and_cut
 from repytah.assemble import __num_of_parts as num_of_parts
 from repytah.assemble import __inds_to_rows as inds_to_rows
 from repytah.assemble import __merge_based_on_length as merge_based_on_length
 from repytah.assemble import __merge_rows as merge_rows
-from repytah.assemble import hierarchical_structure
 
 
 class TestAssemble(unittest.TestCase):

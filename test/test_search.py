@@ -7,10 +7,8 @@ Unit tests for Aligned Hierarchies, search.py
 import unittest
 import numpy as np
 
-from repytah.search import find_complete_list
+from repytah import *
 from repytah.search import __find_add_rows as find_add_rows
-from repytah.search import find_all_repeats
-from repytah.search import find_complete_list_anno_only
 
 
 class TestSearch(unittest.TestCase):

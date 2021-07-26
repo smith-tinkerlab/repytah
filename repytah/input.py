@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+input.py 
+
+This module contains the load_input function used to load the example data.
+"""
+
 import pkg_resources
 import pandas as pd
 
