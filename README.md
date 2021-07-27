@@ -32,7 +32,7 @@ An example application of `repytah` is in Music Information Retrieval (MIR), i.e
 
 ## Installation
 
-The latest stable release is available on PyPI, and you can install it by running:
+The latest stable release is available on PyPI, and users can install it by running:
 
 ```bash
 pip install repytah
