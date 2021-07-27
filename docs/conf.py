@@ -91,7 +91,7 @@ html_css_files = [
     "custom.css"
 ]
 
-html_logo = "img/repytah_logo.svg"
+html_logo = "../branding/repytah_logo.svg"
 
 html_theme_options = {
     "logo_only": True,
