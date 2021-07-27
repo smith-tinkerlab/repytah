@@ -22,9 +22,9 @@ sys.path.insert(0, srcpath)
 
 # -- Project information -----------------------------------------------------
 
-project = "repytah"
-copyright = "2021, repytah development team"
-author = "Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao"
+project = u"repytah"
+copyright = u"2021, repytah development team"
+author = u"Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao"
 
 
 # -- General configuration ---------------------------------------------------
@@ -94,5 +94,6 @@ html_css_files = [
 html_logo = "img/repytah_logo.svg"
 
 html_theme_options = {
-    "logo_only": True
+    "logo_only": True,
+    "logo_text_align": "center"
 }
