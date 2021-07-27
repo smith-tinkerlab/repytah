@@ -32,13 +32,13 @@ An example application of `repytah` is in Music Information Retrieval (MIR), i.e
 
 ## Installation
 
-The latest stable release is available on PyPI, and users can install it by running:
+The latest stable release is available on PyPI, and you can install it by running:
 
 ```bash
 pip install repytah
 ```
 
-Anaconda users can install using `conda-forge`:
+If you use Anaconda, you can install using `conda-forge`:
 
 ```bash
 conda install -c conda-forge repytah
@@ -47,7 +47,7 @@ conda install -c conda-forge repytah
 To build repytah from source, say `python setup.py build`.
 Then, to install repytah, say `python setup.py install`.
 
-Alternatively, users can download or clone the repository and use `pip` to handle dependencies:
+Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
 
 ```bash
 unzip repytah.zip
