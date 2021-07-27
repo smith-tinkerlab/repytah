@@ -38,7 +38,7 @@ The latest stable release is available on PyPI, and you can install it by runnin
 pip install repytah
 ```
 
-If you use Anaconda, you can install using `conda-forge`:
+If you use Anaconda, you can install the package using `conda-forge`:
 
 ```bash
 conda install -c conda-forge repytah
