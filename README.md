@@ -20,7 +20,7 @@ This [example](https://repytah.readthedocs.io/en/latest/example_vignette.html) t
 
 ### Problems Addressed
 
-Sequential data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of `repytah` is to extract these repetitions and their relationships to each other in order to form the aligned hierarchies.
+Sequential data streams often have repeated elements that build on each other, creating hierarchies. Therefore, the goal of `repytah` is to extract these repetitions and their relationships to each other in order to form aligned hierarchies.
 
 To learn more about aligned hierarchies, see this [paper](https://s18798.pcdn.co/ismir2016/wp-content/uploads/sites/2294/2016/07/020_Paper.pdf) by Kinnaird (ISMIR 2016) which introduces aligned hierarchies in the context of music-based data streams.
 
