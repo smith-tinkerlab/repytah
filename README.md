@@ -1,6 +1,6 @@
 # <img alt="repytah" src="branding/repytah_logo.png" height="100">
 
-A Python package for building Aligned Hierarchies for sequential data streams.
+A Python package that builds aligned hierarchies for sequential data streams.
 
 [![PyPI](https://img.shields.io/pypi/v/repytah.svg)](https://pypi.python.org/pypi/repytah)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/repytah/badges/version.svg)](https://anaconda.org/conda-forge/repytah)
@@ -91,4 +91,4 @@ Additionally, we would like to acknowledge and give thanks to Brian McFee and th
 
 Please cite `repytah` using the following:
 
-K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+K. M. Kinnaird, et al. repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
