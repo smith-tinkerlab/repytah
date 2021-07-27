@@ -28,7 +28,7 @@ bibliography: joss.bib
 
 # Summary
 
-We introduce `repytah`, a Python package that constructs aligned hierarchies, a structure-based representation for sequential data where repetitions have particular meaning (such as musical recordings or scores). Introduced by Kinnaird [@Kinnaird_ISMIR] and with music-based data as the primary motivation, the aligned hierarchies representation shows all possible hierarchical decompositions of a piece of music along a common time axis. The `repytah` package provides tools to extract repeated structures in sequential data (including music-based data), and offers a comprehensive mechanism to convert them into aligned hierarchies. This package is a translation of the original MATLAB code by Kinnaird [@Kinnaird_code]. 
+We introduce `repytah`, a Python package that constructs aligned hierarchies, a structure-based representation for sequential data where repetitions have particular meaning (such as musical recordings or scores). Introduced by Kinnaird [@Kinnaird_ah] and with music-based data as the primary motivation, the aligned hierarchies representation shows all possible hierarchical decompositions of a piece of music along a common time axis. The `repytah` package provides tools to extract repeated structures in sequential data (including music-based data), and offers a comprehensive mechanism to convert them into aligned hierarchies. This package is a translation of the original MATLAB code by Kinnaird [@Kinnaird_code]. 
 
 
 # Statement of Need
@@ -41,7 +41,7 @@ The Python package `repytah` forms the aligned hierarchies for a given sequentia
 
 `repytah` was completed, improved on, and successfully debugged by cross-referencing the desired output of the package with the output of the original MATLAB code. However, this package aims to give MIR users access to these tools through the open-source Python language instead of the proprietary MATLAB language. Additionally, this package provides more complete documentation, examples, and test files than the original code. 
 
-There has been a long tradition of building Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@Raffel14mir_eval:a], the `mirdata` library [@Bittner19mirdata], and the more recent `libfmp` package [@Müller_libfmp]. As MIR has grown as a discipline, there has been a focus on reproducibility, accessibility, and open-source development. As such, there have been several examples of code being translated from MATLAB to python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@McFee_librosa_SciPy]. 
+There has been a long tradition of building Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@Raffel_mir_eval], the `mirdata` library [@Bittner_mirdata], and the more recent `libfmp` package [@Müller_libfmp]. As MIR has grown as a discipline, there has been a focus on reproducibility, accessibility, and open-source development. As such, there have been several examples of code being translated from MATLAB to python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@McFee_librosa]. 
 
 # Functionality
 There are four modules in the `repytah` Python package: transform, search, assemble, and utilities. Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
