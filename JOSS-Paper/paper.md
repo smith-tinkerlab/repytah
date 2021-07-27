@@ -28,7 +28,7 @@ bibliography: joss.bib
 
 # Summary
 
-We introduce `repytah`, a Python package that constructs aligned hierarchies, a structure-based representation for sequential data where repetitions have particular meaning (such as musical recordings or scores). Introduced by Kinnaird [@Kinnaird_ISMIR] and with music-based data as the primary motivation, the aligned hierarchies representation shows all possible hierarchical decompositions of a piece of music along a common time axis. The `repytah` package provides tools to extract repeated structures in sequential data (including music-based data), and offers a comprehensive mechanism to convert them into aligned hierarchies. This package is a translation of the original MATLAB code by Kinnaird[@Kinnaird_code]. 
+We introduce `repytah`, a Python package that constructs aligned hierarchies, a structure-based representation for sequential data where repetitions have particular meaning (such as musical recordings or scores). Introduced by Kinnaird [@Kinnaird_ISMIR] and with music-based data as the primary motivation, the aligned hierarchies representation shows all possible hierarchical decompositions of a piece of music along a common time axis. The `repytah` package provides tools to extract repeated structures in sequential data (including music-based data), and offers a comprehensive mechanism to convert them into aligned hierarchies. This package is a translation of the original MATLAB code by Kinnaird [@Kinnaird_code]. 
 
 
 # Statement of Need
