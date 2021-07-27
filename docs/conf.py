@@ -95,5 +95,4 @@ html_logo = "img/repytah_logo.svg"
 
 html_theme_options = {
     "logo_only": True,
-    "logo_text_align": "center"
 }
