@@ -44,16 +44,11 @@ The Python package `repytah` forms the aligned hierarchies for a given sequentia
 There has been a long tradition of building Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@Raffel14mir_eval:a] , the `mirdata` library [@Bittner19mirdata]. As MIR has grown as a discipline, there has been a focus on reproducibility, accessibility, and open-source development. As such, there have been several examples of code being translated from MATLAB to python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@brian_mcfee-proc-scipy-2015]. More recent examples include the `FMP` Notebooks [@MuellerZ19_FMP_ISMIR] and` libfmp` [@Müller2021].
 
 # Functionality
-There are four modules in the `repytah` Python package:
+There are four modules in the `repytah` Python package: transform, search, assemble, and utilities. Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
 
-- utilities.py: This module includes functions that are frequently called by larger functions in other modules so that the entire package can run smoothly.
-- search.py: This module includes functions that find and record information about repeat structures in the form of diagonals in the threshold matrix. Once found, these repeat structures can later be transformed and assembled.
-- transform.py: This module includes functions that transform matrix inputs into different forms that are of use when being called by larger functions.
-- assemble.py: This module includes functions that find and form the essential structure components used to build the aligned hierarchies. 
+The four modules work together to form the aligned hierarchies, but each serves a slightly different purpose. Functions in the <u>transform</u> module transform matrix inputs into different forms, either from lists of indices into matrices and vice versa. The <u>search</u> module finds and records information about repeated structures, represented as diagonals in a song’s thresholded self-dissimilarity matrix. Once found, these repeated structures are later transformed and assembled into the aligned hierarchies using the <u>assemble</u> module, which finds the essential structure components from the repeated structures found with the search module, and then uses those essential structure components to build the aligned hierarchies. Lastly, the <u>utilities</u> module contains functions that are frequently called by functions in the other three modules. 
 
-Besides these four modules, the package also includes example.py, which is an example module that runs a complete case of building aligned hierarchies when a CSV file with extracted features is the input.
-
-The Jupyter notebook files were also generated that summarize what these modules consist of, which together serve as a guide through the package. There is a distinct notebook file for each module, as well as an overarching file highlighting the code from start to finish. There are also test files for each module to ensure that the functions work as expected.
+Additionally, the package includes <u>example.py</u>, which runs a complete example building aligned hierarchies when a CSV file with extracted features is the input.
 
 # Acknowledgements
 `repytah` was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019, 2020 and 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
