@@ -50,6 +50,7 @@ The four modules work together to form the aligned hierarchies, but each serves 
 
 Additionally, the package includes <ins>example.py<ins>, which runs a complete example building aligned hierarchies when a CSV file with extracted features is the input.
 
+
 # Acknowledgements
 `repytah` was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019, 2020 and 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
 
