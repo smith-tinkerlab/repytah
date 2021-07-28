@@ -33,7 +33,7 @@ We introduce `repytah`, a Python package that constructs aligned hierarchies, a 
 
 # Statement of Need
 
-Broadly, Music Information Retrieval (MIR) seeks to capture information about music. Content-based methods work directly on the recordings or scores, while other approaches leverage other kinds of information such as metadata, tags, or listener surveys. There are a variety of tasks in MIR, including similarity tasks (e.g. cover song identification and remix detection) that seek to determine how similar any two pieces of music are, and structure tasks (e.g. the chorus detection task) that seek to label various structural features or artifacts. 
+Broadly, Music Information Retrieval (MIR) seeks to capture information about music. Content-based methods work directly on the recordings or scores, while other approaches leverage other kinds of information such as metadata, tags, or listener surveys. There are a variety of tasks in MIR, including similarity tasks (for example, cover song identification and remix detection) that seek to determine how similar any two pieces of music are, and structure tasks (for example, the chorus detection task) that seek to label various structural features or artifacts. 
 
 Music-based data streams often have repeated elements that build on each other, creating structure-based hierarchies. The aligned hierarchies representation by Kinnaird [@Kinnaird:2014] is a structure-based representation that combines the motivation of structure tasks with the goal of similarity tasks. A drawback of Kinnaird’s approach is that the original code was written in MATLAB. 
 
