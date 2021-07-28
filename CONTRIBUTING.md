@@ -1,6 +1,8 @@
 
 # Contributing code
 
+This project is the result of a community effort and all people are welcome to contribute.
+
 ## How to contribute
 
 The preferred way to contribute to `repytah` is to fork the [main repository](https://github.com/smith-tinkerlab/repytah) on GitHub:
