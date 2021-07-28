@@ -1,7 +1,7 @@
 
 # Contributing code
 
-This project is a whole effort.
+This project is a community effort.
 
 ## How to contribute
 
