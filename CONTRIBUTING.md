@@ -1,7 +1,7 @@
 
 # Contributing code
 
-This project is a community effort, and everyone is welcome to contribute.
+This project is the result of a community effort and all people are welcome to contribute.
 
 ## How to contribute
 
