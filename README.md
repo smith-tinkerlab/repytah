@@ -47,7 +47,7 @@ conda install -c conda-forge repytah
 To build repytah from source, say `python setup.py build`.
 Then, to install repytah, say `python setup.py install`.
 
-Alternatively, users can download or clone the repository and use `pip` to handle dependencies:
+Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
 
 ```bash
 unzip repytah.zip
