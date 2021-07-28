@@ -15,9 +15,6 @@ pip-log.txt
 # Unit test / coverage reports
 .coverage
 
-# Data files
-*.mat
-
 # Mac OS X cruft
 *.DS_Store
 ._*

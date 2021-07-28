@@ -8,7 +8,7 @@ Citing repytah
 ==============
 Please cite ``repytah`` using the following:
 
-K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.1.0, 2021. [Online]. 
+K. M. Kinnaird et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. 
 Available: https://github.com/smith-tinkerlab/repytah.
 
 
@@ -35,13 +35,12 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :maxdepth: 1
    :caption: Implementation
    
+   function_pipeline
    example_vignette.ipynb
 
+.. toctree::
+   :maxdepth: 1
+   :caption: References
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   changelog
+   genindex

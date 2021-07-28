@@ -8,12 +8,14 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>repytah &mdash; repytah  documentation</title>
+  <title>repytah &mdash; repytah 0.1.0dev documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
@@ -31,12 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,14 +59,21 @@
           
 
           
-            <a href="#" class="icon icon-home"> repytah
+            <a href="#">
           
 
+          
+            
+            <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
           
             
+            
+              <div class="version">
+                0.1.0dev
+              </div>
             
           
 
@@ -89,21 +97,27 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Why <cite>repytah</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
-<p><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Modules</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
 <li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
 </ul>
-<p><span class="caption-text">Implementation</span></p>
+<p class="caption"><span class="caption-text">Implementation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
             
@@ -202,17 +216,17 @@ sequential data streams.</p>
 <section id="citing-repytah">
 <h2>Citing repytah<a class="headerlink" href="#citing-repytah" title="Permalink to this headline">¶</a></h2>
 <p>Please cite <code class="docutils literal notranslate"><span class="pre">repytah</span></code> using the following:</p>
-<p>K. M. Kinnaird, et al. repytah: Python package for building Aligned Hierarchies for music-based data streams. Python package version 0.1.0, 2021. [Online].
+<p>K. M. Kinnaird et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online].
 Available: <a class="reference external" href="https://github.com/smith-tinkerlab/repytah">https://github.com/smith-tinkerlab/repytah</a>.</p>
 <div class="toctree-wrapper compound">
-<p><span class="caption-text">Getting Started</span></p>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Why <cite>repytah</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Modules</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
@@ -221,19 +235,19 @@ Available: <a class="reference external" href="https://github.com/smith-tinkerla
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p><span class="caption-text">Implementation</span></p>
+<p class="caption"><span class="caption-text">Implementation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
 </ul>
 </div>
-</section>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
+</div>
 </section>
 </section>
 

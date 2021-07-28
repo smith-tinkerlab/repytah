@@ -6,6 +6,6 @@ include CODE_OF_CONDUCT.md
 
 include setup.py
 
-include input.csv
+include repytah/data/*
 
 recursive-include docs *

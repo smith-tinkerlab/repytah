@@ -8,12 +8,14 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Assemble &mdash; repytah  documentation</title>
+  <title>Assemble &mdash; repytah 0.1.0dev documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
@@ -31,12 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -59,14 +60,21 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> repytah
+            <a href="index.html">
           
 
+          
+            
+            <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
           
             
+            
+              <div class="version">
+                0.1.0dev
+              </div>
             
           
 
@@ -90,21 +98,27 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Why <cite>repytah</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
-<p><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Assemble</a></li>
 <li class="toctree-l1"><a class="reference internal" href="search_doc.html">Search</a></li>
 </ul>
-<p><span class="caption-text">Implementation</span></p>
+<p class="caption"><span class="caption-text">Implementation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
             
@@ -206,8 +220,8 @@ When repeats overlap, they undergo a process where they are divided until there 
 only non-overlapping pieces left.</p>
 <p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="breakup_overlaps_by_intersect">
-<code class="sig-name descname">breakup_overlaps_by_intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_pattern_obj</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em>, <em class="sig-param"><span class="n">thresh_bw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="breakup_overlaps_by_intersect">
+<span class="sig-name descname"><span class="pre">breakup_overlaps_by_intersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_pattern_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#breakup_overlaps_by_intersect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts repeats in input_pattern_obj that has the starting indices of the
 repeats, into the essential structure components using bw_vec, that has the
 lengths of each repeat. The essential structure components are the
@@ -241,8 +255,8 @@ pattern_no_overlaps.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="check_overlaps">
-<code class="sig-name descname">check_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_mat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#check_overlaps" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="check_overlaps">
+<span class="sig-name descname"><span class="pre">check_overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#check_overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares every pair of groups and determines if there are any repeats in
 any pairs of the groups that overlap.</p>
 <dl class="field-list simple">
@@ -264,8 +278,8 @@ of input matrix overlap and (i,j) = 0 elsewhere.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="hierarchical_structure">
-<code class="sig-name descname">hierarchical_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_no_overlaps</span></em>, <em class="sig-param"><span class="n">key_no_overlaps</span></em>, <em class="sig-param"><span class="n">sn</span></em>, <em class="sig-param"><span class="n">vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hierarchical_structure" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hierarchical_structure">
+<span class="sig-name descname"><span class="pre">hierarchical_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_no_overlaps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_no_overlaps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hierarchical_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distills the repeats encoded in matrix_no_overlaps (and key_no_overlaps)
 to the essential structure components and then builds the hierarchical
 representation. Optionally shows visualizations of the hierarchical structure

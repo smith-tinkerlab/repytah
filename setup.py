@@ -47,7 +47,7 @@ setup(
         'Bug Reports': 'https://github.com/smith-tinkerlab/repytah/issues',
         'Source': 'https://github.com/smith-tinkerlab/repytah',
     },
-    package_data={'repytah': ['input.csv']},
+    package_data={'': ['data/input.csv']},
     include_package_data=True,
     license='MIT'
 )

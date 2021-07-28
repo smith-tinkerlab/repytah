@@ -8,12 +8,14 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Search &mdash; repytah  documentation</title>
+  <title>Search &mdash; repytah 0.1.0dev documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
@@ -31,12 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -44,7 +45,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Example of Creating Aligned Hierarchies for a Mazurka Score" href="example_vignette.html" />
+    <link rel="next" title="Function Pipeline" href="function_pipeline.html" />
     <link rel="prev" title="Assemble" href="assemble.html" /> 
 </head>
 
@@ -59,14 +60,21 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> repytah
+            <a href="index.html">
           
 
+          
+            
+            <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
           
             
+            
+              <div class="version">
+                0.1.0dev
+              </div>
             
           
 
@@ -90,21 +98,27 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Why <cite>repytah</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
-<p><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transform.html">Transform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="assemble.html">Assemble</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Search</a></li>
 </ul>
-<p><span class="caption-text">Implementation</span></p>
+<p class="caption"><span class="caption-text">Implementation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
             
@@ -203,8 +217,8 @@ in the thresholded matrix, T. These functions prepare the diagonals found to
 later be transformed and assembled.</p>
 <p>This module contains the following functions:</p>
 <dl class="py function">
-<dt id="find_complete_list">
-<code class="sig-name descname">find_complete_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pair_list</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_complete_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="find_complete_list">
+<span class="sig-name descname"><span class="pre">find_complete_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_complete_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all smaller diagonals (and the associated pairs of repeats) that are
 contained pair_list, which is composed of larger diagonals found in
 find_initial_repeats.</p>
@@ -231,8 +245,8 @@ then pair_list will be ordered correctly.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="find_all_repeats">
-<code class="sig-name descname">find_all_repeats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">thresh_mat</span></em>, <em class="sig-param"><span class="n">bw_vec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_all_repeats" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="find_all_repeats">
+<span class="sig-name descname"><span class="pre">find_all_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresh_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_all_repeats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all the diagonals present in thresh_mat. This function is nearly
 identical to find_initial_repeats, with two crucial differences.
 First, we do not remove diagonals after we find them. Second,
@@ -258,8 +272,8 @@ Should be 1,2,3,…, n where n = number of timesteps.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="find_complete_list_anno_only">
-<code class="sig-name descname">find_complete_list_anno_only</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pair_list</span></em>, <em class="sig-param"><span class="n">song_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_complete_list_anno_only" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="find_complete_list_anno_only">
+<span class="sig-name descname"><span class="pre">find_complete_list_anno_only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_complete_list_anno_only" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds annotations for all pairs of repeats found in find_all_repeats.
 This list contains all the pairs of repeated structures with their
 start/end indices and lengths.</p>
@@ -292,7 +306,7 @@ annotation markers.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="example_vignette.html" class="btn btn-neutral float-right" title="Example of Creating Aligned Hierarchies for a Mazurka Score" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="function_pipeline.html" class="btn btn-neutral float-right" title="Function Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="assemble.html" class="btn btn-neutral float-left" title="Assemble" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
