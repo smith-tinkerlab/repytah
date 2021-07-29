@@ -4,8 +4,8 @@
 search.py 
 
 This module holds functions used to find and record the diagonals in the
-thresholded matrix, T. These functions prepare the diagonals found to later
-be transformed and assembled.
+thresholded matrix, T. These functions prepare the diagonals found to for
+transformation and assembling later.
 
 The module contains the following functions:
     
@@ -21,9 +21,9 @@ The module contains the following functions:
     
     * find_all_repeats 
         Finds all the diagonals present in thresh_mat. This function is nearly 
-        identical to find_initial_repeats, with two crucial differences. First, 
-        we do not remove diagonals after we find them. Second, there is no 
-        smallest bandwidth size as we are looking for all diagonals.
+        identical to find_initial_repeats except for two crucial differences. 
+        First, we do not remove diagonals after we find them. Second, there is 
+        no smallest bandwidth size as we are looking for all diagonals.
 
     * find_complete_list_anno_only 
         Finds annotations for all pairs of repeats found in find_all_repeats. 
@@ -40,7 +40,7 @@ from .utilities import add_annotations
 def find_complete_list(pair_list, song_length):
     """
     Finds all smaller diagonals (and the associated pairs of repeats) that are
-    contained pair_list, which is composed of larger diagonals found in 
+    contained in pair_list, which is composed of larger diagonals found in 
     find_initial_repeats.
         
     Args
