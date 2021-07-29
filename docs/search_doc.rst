@@ -54,7 +54,7 @@ This module contains the following functions:
 
     Finds annotations for all pairs of repeats found in find_all_repeats. 
     This list contains all the pairs of repeated structures with their 
-    start/end indices and lengths.
+    starting/ending indices and lengths.
     
     :parameters:
 
