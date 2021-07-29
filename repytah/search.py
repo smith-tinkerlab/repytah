@@ -28,7 +28,7 @@ The module contains the following functions:
     * find_complete_list_anno_only 
         Finds annotations for all pairs of repeats found in find_all_repeats. 
         This list contains all the pairs of repeated structures with their 
-        start/end indices and lengths. 
+        starting/ending indices and lengths.
     
 """
 
