@@ -2,15 +2,15 @@ Search
 ======
 
 The module ``search.py`` holds functions used to find and record the diagonals 
-in the thresholded matrix, T. These functions prepare the diagonals found to 
-later be transformed and assembled. 
+in the thresholded matrix, T. These functions prepare the diagonals found for
+transformation and assembling later. 
 
 This module contains the following functions:
 
 .. function:: find_complete_list(pair_list, song_length)
 
     Finds all smaller diagonals (and the associated pairs of repeats) that are
-    contained pair_list, which is composed of larger diagonals found in 
+    contained in pair_list, which is composed of larger diagonals found in 
     find_initial_repeats.
         
     :parameters:
@@ -43,7 +43,7 @@ This module contains the following functions:
         
         bw_vec : np.ndarray
             Vector of lengths of diagonals to be found.
-            Should be 1,2,3,..., n where n = number of timesteps. 
+            Should be 1, 2, 3, ..., n where n is the number of timesteps. 
         
     :returns:
 
