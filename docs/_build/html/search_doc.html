@@ -213,14 +213,14 @@
 <section id="search">
 <h1>Search<a class="headerlink" href="#search" title="Permalink to this headline">¶</a></h1>
 <p>The module <code class="docutils literal notranslate"><span class="pre">search.py</span></code> holds functions used to find and record the diagonals
-in the thresholded matrix, T. These functions prepare the diagonals found to
-later be transformed and assembled.</p>
+in the thresholded matrix, T. These functions prepare the diagonals found for
+transformation and assembling later.</p>
 <p>This module contains the following functions:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="find_complete_list">
 <span class="sig-name descname"><span class="pre">find_complete_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_complete_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all smaller diagonals (and the associated pairs of repeats) that are
-contained pair_list, which is composed of larger diagonals found in
+contained in pair_list, which is composed of larger diagonals found in
 find_initial_repeats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -257,7 +257,7 @@ there is no smallest bandwidth size as we are looking for all diagonals.</p>
 <dt>thresh_mat<span class="classifier">np.ndarray</span></dt><dd><p>Thresholded matrix that we extract diagonals from.</p>
 </dd>
 <dt>bw_vec<span class="classifier">np.ndarray</span></dt><dd><p>Vector of lengths of diagonals to be found.
-Should be 1,2,3,…, n where n = number of timesteps.</p>
+Should be 1, 2, 3, …, n where n is the number of timesteps.</p>
 </dd>
 </dl>
 </dd>
