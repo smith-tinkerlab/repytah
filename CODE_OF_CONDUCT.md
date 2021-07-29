@@ -63,8 +63,8 @@ Project maintainers who do not follow or enforce the Code of Conduct in good fai
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
+This Code of Conduct is adapted from the Contributor Covenant homepage,
 version 2.0, available at
-[https://www.contributor-covenant.org/version/2/0/code_of_conduct.html][v2.0].
+https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
 
-Some specific language is adapted from the [Librosa Python Package Code of Conduct][https://github.com/librosa/librosa/blob/main/CODE_OF_CONDUCT.md].
+Some specific language is adapted from the [Librosa Python Package Code of Conduct](https://github.com/librosa/librosa/blob/main/CODE_OF_CONDUCT.md).
