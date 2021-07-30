@@ -16,7 +16,7 @@ This module contains the following functions:
     :parameters:
 
         pair_list : np.ndarray
-            List of pairs of repeats found in earlier step
+            List of pairs of repeats found in earlier steps
             (bandwidths MUST be in ascending order). If you have
             run find_initial_repeats before this script,
             then pair_list will be ordered correctly. 
