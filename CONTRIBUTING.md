@@ -2,7 +2,7 @@
 # Contributing code
 
 This project is the result of a community effort and all people are welcome to contribute.
-We are a community based on openness and friendly, didactic, discussions.
+Our community is based on openness and friendly, didactic, discussions.
 
 ## How to contribute
 
