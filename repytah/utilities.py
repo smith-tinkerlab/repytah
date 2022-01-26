@@ -98,7 +98,7 @@ def create_sdm(fv_mat, num_fv_per_shingle):
     # pairwise-cosine distance matrix to a redundant matrix
     self_dissim_mat = spd.squareform(sdm_row)
     
-    return self_dissim_mat, mat_as
+    return self_dissim_mat
   
       
 def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
