@@ -973,8 +973,8 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(symm_pno_inds_only, cmap="binary", aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of " +
-            "Essential Structure Components (1)"
+            "Threshold Self-dissimilarity matrix of" +
+            "the ordering Essential Structure Components"
         )
         # this locator puts ticks at regular intervals
         loc = plticker.MultipleLocator(base=1.0)  
@@ -1015,8 +1015,8 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(nzi_pattern_block, cmap="binary", aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of " +
-            "Essential Structure Components (2)"
+            "Repeated ordered sublists of the" +
+            "Essential Structure Components"
         )
         # This locator puts ticks at regular intervals
         loc = plticker.MultipleLocator(base=1.0)  
@@ -1029,8 +1029,9 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         sdm = ax.imshow((nzi_pattern_block + nzi_matrix_no_overlaps), cmap="binary", 
                          aspect=0.8)
         plt.title(
-            "Diagonal Matrix of the Starting Indices of " +
-            "Essential Structure Components (3)"
+            "Repeated ordered sublists of the" +
+            "Essential Structure Components" +
+            "with leading index highlighted"
         )
         loc = plticker.MultipleLocator(
             base=1.0
@@ -1112,7 +1113,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         vis_array = twos - (full_visualization + full_matrix_no_overlaps)
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(vis_array, cmap="gray", aspect=5)
-        plt.title("Complete Hierarchical Structure")
+        plt.title("Complete Aligned Hierarchies")
         # Set the number of ticks and set tick intervals to be equal 
         ax.set_yticks(np.arange(0,np.size(vis_y_labels)-1))
         # Set the ticklabels along the y axis and remove 0 in vis_y_labels

@@ -46,7 +46,7 @@ def find_complete_list(pair_list, song_length):
     Args
     ----
     pair_list : np.ndarray
-        List of pairs of repeats found in earlier step
+        List of pairs of repeats found in earlier steps
         (bandwidths MUST be in ascending order). If you have
         run find_initial_repeats before this script,
         then pair_list will be ordered correctly. 
@@ -180,8 +180,8 @@ def find_complete_list(pair_list, song_length):
 def __find_add_rows(lst_no_anno, check_inds, k): 
     """
     Finds pairs of repeated structures, represented as diagonals of a certain
-    length, k, that that start at the same time steps, or end at the same time
-    steps, or neither start nor end at the same time steps as previously found
+    length, k, that that start at the same time step, or end at the same time
+    step, or neither start nor end at the same time step as previously found
     pairs of repeated structures of the same length.
 
     Args
