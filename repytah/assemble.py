@@ -973,8 +973,8 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(symm_pno_inds_only, cmap="binary", aspect=0.8)
         plt.title(
-            "Threshold Self-dissimilarity matrix of" +
-            "the ordering Essential Structure Components"
+            "Threshold Self-dissimilarity Matrix of " +
+            "the Ordering Essential Structure Components"
         )
         # this locator puts ticks at regular intervals
         loc = plticker.MultipleLocator(base=1.0)  
@@ -1015,7 +1015,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         fig, ax = plt.subplots(1, 1)
         sdm = ax.imshow(nzi_pattern_block, cmap="binary", aspect=0.8)
         plt.title(
-            "Repeated ordered sublists of the" +
+            "Repeated Ordered Sublists of the " +
             "Essential Structure Components"
         )
         # This locator puts ticks at regular intervals
@@ -1029,9 +1029,9 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         sdm = ax.imshow((nzi_pattern_block + nzi_matrix_no_overlaps), cmap="binary", 
                          aspect=0.8)
         plt.title(
-            "Repeated ordered sublists of the" +
+            "Repeated Ordered Sublists of the " +
             "Essential Structure Components" +
-            "with leading index highlighted"
+            "with Leading Index Highlighted"
         )
         loc = plticker.MultipleLocator(
             base=1.0
@@ -1092,8 +1092,8 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     full_visualization = full_visualization[full_key_inds, :]
     full_matrix_no_overlaps = full_matrix_no_overlaps[full_key_inds, :]
     
-    # Remove rows of our hierarchical representation that contain only one
-    # repeat
+    # Remove rows of our hierarchical representation that contain only
+    # one repeat
     inds_remove = np.where(np.sum(full_matrix_no_overlaps, 1) <= 1)
     full_key = np.delete(full_key, inds_remove, axis=0)
 
