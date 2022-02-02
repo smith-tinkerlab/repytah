@@ -1030,7 +1030,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
                          aspect=0.8)
         plt.title(
             "Repeated Ordered Sublists of the " +
-            "Essential Structure Components" +
+            "Essential Structure Components " +
             "with Leading Index Highlighted"
         )
         loc = plticker.MultipleLocator(
