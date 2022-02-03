@@ -3,7 +3,6 @@ import numpy as np
 import pkg_resources
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
 
 from .utilities import create_sdm, find_initial_repeats
 from .search import find_complete_list
@@ -172,19 +171,25 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
     colors = ["red", "blue", "orange"]
 
+    # Find the length of the largest diagonal so that we don't
+    # color-code this particular diagonal
     max_length = all_lst[len(all_lst) - 1][4]
 
-    for pairs_of_repeat in all_lst:
-        first_repeat = pairs_of_repeat[0:2]
-        second_repeat = pairs_of_repeat[2:4]
-        repeat_length = pairs_of_repeat[4]
+    for pair_of_repeat in all_lst:
+        # Obtain repeat length
+        repeat_length = pair_of_repeat[4]
 
-        if (repeat_length > 1 and repeat_length != max_length) :
-            plt.plot(first_repeat, second_repeat, color = random.choice(colors))
+        # If repeat length is greater than 1 and not the maximum length,
+        # produce the visualization for that pair of repeat
+        if repeat_length > 1 and repeat_length != max_length:
+            first_repeat = pair_of_repeat[0:2]
+            second_repeat = pair_of_repeat[2:4]
+            rgb = np.random.rand(3,)
+            plt.plot(first_repeat, second_repeat, color = rgb)
 
     plt.show()
 
-def visualize_complete_lst(complete_lst, thresh_dist_mat):
+def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     """
     Produce a visualization to highlight all pairs of smaller repeats
     that are contained in larger diagonals.
@@ -210,13 +215,21 @@ def visualize_complete_lst(complete_lst, thresh_dist_mat):
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
     colors = ["red", "blue", "orange", "green", "purple", "yellow"]
 
-    for pairs_of_repeat in complete_lst:
-        first_repeat = pairs_of_repeat[0:2]
-        second_repeat = pairs_of_repeat[2:4]
-        repeat_length = pairs_of_repeat[4]
+    for pair_of_repeat in complete_lst:
+        pair_of_repeat_without_anno = pair_of_repeat[0:5]
+        # Check if the pair of repeat is in all_lst. If yes then skip the pair
+        # of repeat. Otherwise produce a visualization for that repeat
+        if not any(np.equal(all_lst, pair_of_repeat_without_anno).all(1)):
+            # Obtain the repeat length
+            repeat_length = pair_of_repeat[4]
 
-        if (repeat_length > 1):
-            plt.plot(first_repeat, second_repeat, color = random.choice(colors))
+            # If repeat length is greater than 1, produce the visualization 
+            # for that pair of repeat
+            if repeat_length > 1:
+                first_repeat = pair_of_repeat[0:2]
+                second_repeat = pair_of_repeat[2:4]
+                rgb = np.random.rand(3,)
+                plt.plot(first_repeat, second_repeat, color = rgb)
 
     plt.show()
 
