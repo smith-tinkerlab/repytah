@@ -163,13 +163,12 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     
     Returns
     -------
-    none : A visualization of all pairs of repeated is produced.
+    none : A visualization of all pairs of repeat is produced.
 
     """
 
     # Produce a visualization of the SDM
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
-    colors = ["red", "blue", "orange"]
 
     # Find the length of the largest diagonal so that we don't
     # color-code this particular diagonal
@@ -213,13 +212,14 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
 
     # Produce a visualization of the SDM
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
-    colors = ["red", "blue", "orange", "green", "purple", "yellow"]
 
     for pair_of_repeat in complete_lst:
         pair_of_repeat_without_anno = pair_of_repeat[0:5]
+
         # Check if the pair of repeat is in all_lst. If yes then skip the pair
         # of repeat. Otherwise produce a visualization for that repeat
         if not any(np.equal(all_lst, pair_of_repeat_without_anno).all(1)):
+            
             # Obtain the repeat length
             repeat_length = pair_of_repeat[4]
 
