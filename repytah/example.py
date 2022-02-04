@@ -207,7 +207,6 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     none : A visualization of all pairs of repeated smaller repeats
            that are contained in larger diagonals is produced.
 
-
     """
 
     # Produce a visualization of the SDM
