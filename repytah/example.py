@@ -23,6 +23,13 @@ The module contains the following functions:
     * csv_to_aligned_hierarchies
         Example of full aligned hierarchies pathway. 
 
+    * visualize_all_lst
+        Produces a visualization to highlight all pairs of repeats.
+
+    * visualize_complete_lst
+        Produces a visualization to highlight all pairs of smaller repeats
+        that are contained in larger diagonals.
+
 """
 
 def load_ex_data(input):
@@ -150,7 +157,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
 def visualize_all_lst(all_lst, thresh_dist_mat):
     """
-    Produce a visualization to highlight all pairs of repeats.
+    Produces a visualization to highlight all pairs of repeats.
 
     Args
     ----
@@ -190,7 +197,7 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
 
 def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     """
-    Produce a visualization to highlight all pairs of smaller repeats
+    Produces a visualization to highlight all pairs of smaller repeats
     that are contained in larger diagonals.
 
     Args
