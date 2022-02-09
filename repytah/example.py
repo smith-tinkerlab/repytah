@@ -2,6 +2,7 @@ import scipy.io as sio
 import numpy as np
 import pkg_resources
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from .utilities import create_sdm, find_initial_repeats
 from .search import find_complete_list
@@ -21,6 +22,13 @@ The module contains the following functions:
 
     * csv_to_aligned_hierarchies
         Example of full aligned hierarchies pathway. 
+
+    * visualize_all_lst
+        Produces a visualization to highlight all pairs of repeats.
+
+    * visualize_complete_lst
+        Produces a visualization to highlight all pairs of smaller repeats
+        that are contained in larger diagonals.
 
 """
 
@@ -76,8 +84,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     >>> file_in = pd.read_csv(os.path.join(os.path.dirname(__file__),
                               "../input.csv")).to_numpy()
     >>> file_out = "hierarchical_out_file.mat"
-    >>> num_fv_per_shingle = 3
-    >>> thresh = 0.01
+    >>> num_fv_per_shingle = 12
+    >>> thresh = 0.02
     >>> csv_to_aligned_hierarchies(file_in, file_out,
                                    num_fv_per_shingle, thresh)
                                    
@@ -146,3 +154,88 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         
         # Create the output file
         sio.savemat(file_out, outdict)
+
+def visualize_all_lst(all_lst, thresh_dist_mat):
+    """
+    Produces a visualization to highlight all pairs of repeats.
+
+    Args
+    ----
+    all_lst : np.array
+        Pairs of repeats that correspond to diagonals in thresh_mat.
+
+    thresh_dist_mat : np.ndarray
+        Thresholded dissimilarity matrix that we extract diagonals from.
+    
+    
+    Returns
+    -------
+    none : A visualization of all pairs of repeat is produced.
+
+    """
+
+    # Produce a visualization of the SDM
+    SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
+
+    # Find the length of the largest diagonal so that we don't
+    # color-code this particular diagonal
+    max_length = all_lst[len(all_lst) - 1][4]
+
+    for pair_of_repeat in all_lst:
+        # Obtain repeat length
+        repeat_length = pair_of_repeat[4]
+
+        # If repeat length is greater than 1 and not the maximum length,
+        # produce the visualization for that pair of repeat
+        if repeat_length > 1 and repeat_length != max_length:
+            first_repeat = pair_of_repeat[0:2]
+            second_repeat = pair_of_repeat[2:4]
+            rgb = np.random.rand(3,)
+            plt.plot(first_repeat, second_repeat, color = rgb)
+
+    plt.show()
+
+def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
+    """
+    Produces a visualization to highlight all pairs of smaller repeats
+    that are contained in larger diagonals.
+
+    Args
+    ----
+    complete_lst : np.ndarray 
+        List of pairs of repeats with smaller repeats added.
+
+    thresh_dist_mat : np.ndarray
+        Thresholded dissimilarity matrix that we extract diagonals from.
+    
+    
+    Returns
+    -------
+    none : A visualization of all pairs of repeated smaller repeats
+           that are contained in larger diagonals is produced.
+
+    """
+
+    # Produce a visualization of the SDM
+    SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
+
+    for pair_of_repeat in complete_lst:
+        pair_of_repeat_without_anno = pair_of_repeat[0:5]
+
+        # Check if the pair of repeat is in all_lst. If yes then skip the pair
+        # of repeat. Otherwise produce a visualization for that repeat
+        if not any(np.equal(all_lst, pair_of_repeat_without_anno).all(1)):
+            
+            # Obtain the repeat length
+            repeat_length = pair_of_repeat[4]
+
+            # If repeat length is greater than 1, produce the visualization 
+            # for that pair of repeat
+            if repeat_length > 1:
+                first_repeat = pair_of_repeat[0:2]
+                second_repeat = pair_of_repeat[2:4]
+                rgb = np.random.rand(3,)
+                plt.plot(first_repeat, second_repeat, color = rgb)
+
+    plt.show()
+
