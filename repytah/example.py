@@ -179,40 +179,15 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     # Produce a visualization of the SDM
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
-    # For [247, 250, 271, 274, 4] in all_lst
-    x = [247, 250]
-    y = [271, 274]
-    plt.plot(x, y, color = "darkorange")
-
     # For [124, 156, 292, 324, 33] in all_lst
     x = [124, 156]
     y = [292, 324]
-    plt.plot(x, y, color = "blue")
-
-    # For [2, 36, 290, 324, 35] in all_lst
-    x = [2, 36]
-    y = [290, 324]
     plt.plot(x, y, color = "red")
-
-    # For [3, 38, 123, 158, 36] in all_lst
-    x = [3, 38]
-    y = [123, 158]
-    plt.plot(x, y, color = "fuchsia")
-
-    # For [3, 39, 195, 231, 37] in all_lst
-    x = [3, 39]
-    y = [195, 231]
-    plt.plot(x, y, color = "green")
-
-    # For [1, 38, 49, 86, 38] in all_lst
-    x = [1, 38]
-    y = [49, 86]
-    plt.plot(x, y, color = "deepskyblue")
 
     # For [51, 122, 123, 194, 72] in all_lst
     x = [51, 122]
     y = [123, 194]
-    plt.plot(x, y, color = "teal")
+    plt.plot(x, y, color = "blue")
 
     plt.show()
 
@@ -244,92 +219,33 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     # For [124, 145, 292, 313, 22, 1] in complete_lst
     x = [124, 145]
     y = [292, 313]
-    plt.plot(x, y, color = "red")
+    plt.plot(x, y, color = "blue")
 
     # For [146, 146, 314, 314, 1, 2] in complete_lst
     x = [146, 146]
     y = [314, 314]
-    plt.plot(x, y, color = "yellow")
+    plt.plot(x, y, color = "aqua")
 
     # For [147, 156, 315, 324, 10, 1] in complete_lst
     x = [147, 156]
     y = [315, 324]
-    plt.plot(x, y, color = "blue")
-
-    # Breaking down [2, 36, 290, 324, 35]
-    # For  [2, 3, 290, 291, 2, 2] in complete_lst
-    x = [2, 3]
-    y = [290, 291]
     plt.plot(x, y, color = "red")
-
-    # For [4, 36, 292, 324, 33, 1] in complete_lst
-    x = [4, 36]
-    y = [292, 324]
-    plt.plot(x, y, color = "blue")
-
-    # Breaking down [3, 38, 123, 158, 36]
-    # For [3, 3, 123, 123, 1, 3] in complete_lst
-    x = [3, 3]
-    y = [123, 123]
-    plt.plot(x, y, color = "yellow")
-
-    # For [4, 36, 124, 156, 33, 1] in complete_lst
-    x = [4, 36]
-    y = [124, 156]
-    plt.plot(x, y, color = "red")
-
-    # For [37, 38, 157, 158, 2, 3] in complete_lst
-    x = [37, 38]
-    y = [157, 158]
-    plt.plot(x, y, color = "blue")
-
-    # Breaking down [3, 39, 195, 231, 37]
-    # For [3, 3, 195, 195, 1, 3] in complete_lst
-    x = [3, 3]
-    y = [195, 195]
-    plt.plot(x, y, color = "yellow")
-
-    # For [4, 36, 196, 228, 33, 1] in complete_lst
-    x = [4, 36]
-    y = [196, 228]
-    plt.plot(x, y, color = "red")
-
-    # For [37, 39, 229, 231, 3, 1] in complete_lst
-    x = [37, 39]
-    y = [229, 231]
-    plt.plot(x, y, color = "blue")
-
-    # Breaking down [1, 38, 49, 86, 38]
-    # For [1, 1, 49, 49, 1, 1] in complete_lst
-    x = [1, 1]
-    y = [49, 49]
-    plt.plot(x, y, color = "yellow")
-
-    # For [2, 36, 50, 84, 35, 1] in complete_lst
-    x = [2, 36]
-    y = [50, 84]
-    plt.plot(x, y, color = "red")
-
-    # For [37, 38, 85, 86, 2, 3] in complete_lst
-    x = [37, 38]
-    y = [85, 86]
-    plt.plot(x, y, color = "blue")
 
     # Breaking down [51, 122, 123, 194, 72]
     # For [51, 73, 123, 145, 23, 1] in complete_lst
     x = [51, 73]
     y = [123, 145]
-    plt.plot(x, y, color = "red")
+    plt.plot(x, y, color = "darkgreen")
 
     # For [74, 74, 146, 146, 1, 2] in complete_lst
     x = [74, 74]
     y = [146, 146]
-    plt.plot(x, y, color = "yellow")
+    plt.plot(x, y, color = "aqua")
 
     # For [75, 122, 147, 194, 48, 1] in complete_lst
     x = [75, 122]
     y = [147, 194]
-    plt.plot(x, y, color = "blue")
+    plt.plot(x, y, color = "purple")
 
     plt.show()
 
