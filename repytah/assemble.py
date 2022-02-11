@@ -878,7 +878,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         num_pno_rows = np.size(pno, axis=0)
         twos = np.full((num_pno_rows, sn), 2, dtype=int)
         vis_array = twos - (pno_block + pno)
-        fig, ax = plt.subplots(1, 1, figsize=(10,8))
+        fig, ax = plt.subplots(1, 1, figsize=(10,9))
         sdm = ax.imshow(vis_array, cmap="gray", aspect="auto")
         plt.title("Essential Structure Components")
         # Set the number of ticks and set tick intervals to be equal 
@@ -1111,7 +1111,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         num_vis_rows = np.size(full_visualization, axis=0)
         twos = np.full((num_vis_rows, sn), 2, dtype=int)
         vis_array = twos - (full_visualization + full_matrix_no_overlaps)
-        fig, ax = plt.subplots(1, 1, figsize=(10,25))
+        fig, ax = plt.subplots(1, 1, figsize=(10,13))
         sdm = ax.imshow(vis_array, cmap="gray", aspect="auto")
         plt.title("Complete Aligned Hierarchies")
         # Set the number of ticks and set tick intervals to be equal 
