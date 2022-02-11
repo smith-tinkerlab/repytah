@@ -180,39 +180,39 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
     # For [247, 250, 271, 274, 4] in all_lst
-    x0 = [247, 250]
-    y0 = [271, 274]
-    plt.plot(x0, y0, color = "darkorange")
+    x = [247, 250]
+    y = [271, 274]
+    plt.plot(x, y, color = "darkorange")
 
     # For [124, 156, 292, 324, 33] in all_lst
-    x0 = [124, 156]
-    y0 = [292, 324]
-    plt.plot(x0, y0, color = "blue")
+    x = [124, 156]
+    y = [292, 324]
+    plt.plot(x, y, color = "blue")
 
     # For [2, 36, 290, 324, 35] in all_lst
-    x1 = [2, 36]
-    y1 = [290, 324]
-    plt.plot(x1, y1, color = "red")
+    x = [2, 36]
+    y = [290, 324]
+    plt.plot(x, y, color = "red")
 
     # For [3, 38, 123, 158, 36] in all_lst
-    x2 = [3, 38]
-    y2 = [123, 158]
-    plt.plot(x2, y2, color = "fuchsia")
+    x = [3, 38]
+    y = [123, 158]
+    plt.plot(x, y, color = "fuchsia")
 
     # For [3, 39, 195, 231, 37] in all_lst
-    x2 = [3, 39]
-    y2 = [195, 231]
-    plt.plot(x2, y2, color = "green")
+    x = [3, 39]
+    y = [195, 231]
+    plt.plot(x, y, color = "green")
 
     # For [1, 38, 49, 86, 38] in all_lst
-    x2 = [1, 38]
-    y2 = [49, 86]
-    plt.plot(x2, y2, color = "deepskyblue")
+    x = [1, 38]
+    y = [49, 86]
+    plt.plot(x, y, color = "deepskyblue")
 
     # For [51, 122, 123, 194, 72] in all_lst
-    x2 = [51, 122]
-    y2 = [123, 194]
-    plt.plot(x2, y2, color = "teal")
+    x = [51, 122]
+    y = [123, 194]
+    plt.plot(x, y, color = "teal")
 
     plt.show()
 
