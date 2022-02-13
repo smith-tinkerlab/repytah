@@ -235,7 +235,7 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     # For [51, 73, 123, 145, 23, 1] in complete_lst
     x = [51, 73]
     y = [123, 145]
-    plt.plot(x, y, color = "darkgreen")
+    plt.plot(x, y, color = "darkorange")
 
     # For [74, 74, 146, 146, 1, 2] in complete_lst
     x = [74, 74]
