@@ -24,11 +24,12 @@ The module contains the following functions:
         Example of full aligned hierarchies pathway. 
 
     * visualize_all_lst
-        Produces a visualization to highlight all pairs of repeats.
+        Produces a visualization to highlight all pairs of repeats
+        in the Mazurka data set.
 
     * visualize_complete_lst
         Produces a visualization to highlight all pairs of smaller repeats
-        that are contained in larger diagonals.
+        that are contained in larger diagonals in the Mazurka data set.
 
 """
 
@@ -157,7 +158,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
 def visualize_all_lst(all_lst, thresh_dist_mat):
     """
-    Produces a visualization to highlight all pairs of repeats.
+    Produces a visualization to highlight all pairs of repeats
+    in the Mazurka data set.
 
     Args
     ----
@@ -177,28 +179,22 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     # Produce a visualization of the SDM
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
-    # Find the length of the largest diagonal so that we don't
-    # color-code this particular diagonal
-    max_length = all_lst[len(all_lst) - 1][4]
+    # For [124, 156, 292, 324, 33] in all_lst
+    x = [124, 156]
+    y = [292, 324]
+    plt.plot(x, y, color = "red")
 
-    for pair_of_repeat in all_lst:
-        # Obtain repeat length
-        repeat_length = pair_of_repeat[4]
-
-        # If repeat length is greater than 1 and not the maximum length,
-        # produce the visualization for that pair of repeat
-        if repeat_length > 1 and repeat_length != max_length:
-            first_repeat = pair_of_repeat[0:2]
-            second_repeat = pair_of_repeat[2:4]
-            rgb = np.random.rand(3,)
-            plt.plot(first_repeat, second_repeat, color = rgb)
+    # For [51, 122, 123, 194, 72] in all_lst
+    x = [51, 122]
+    y = [123, 194]
+    plt.plot(x, y, color = "blue")
 
     plt.show()
 
 def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     """
     Produces a visualization to highlight all pairs of smaller repeats
-    that are contained in larger diagonals.
+    that are contained in larger diagonals in the Mazurka data set.
 
     Args
     ----
@@ -219,23 +215,37 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     # Produce a visualization of the SDM
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
-    for pair_of_repeat in complete_lst:
-        pair_of_repeat_without_anno = pair_of_repeat[0:5]
+    # Breaking down [124, 156, 292, 324, 33]
+    # For [124, 145, 292, 313, 22, 1] in complete_lst
+    x = [124, 145]
+    y = [292, 313]
+    plt.plot(x, y, color = "blue")
 
-        # Check if the pair of repeat is in all_lst. If yes then skip the pair
-        # of repeat. Otherwise produce a visualization for that repeat
-        if not any(np.equal(all_lst, pair_of_repeat_without_anno).all(1)):
-            
-            # Obtain the repeat length
-            repeat_length = pair_of_repeat[4]
+    # For [146, 146, 314, 314, 1, 2] in complete_lst
+    x = [146, 146]
+    y = [314, 314]
+    plt.plot(x, y, color = "aqua")
 
-            # If repeat length is greater than 1, produce the visualization 
-            # for that pair of repeat
-            if repeat_length > 1:
-                first_repeat = pair_of_repeat[0:2]
-                second_repeat = pair_of_repeat[2:4]
-                rgb = np.random.rand(3,)
-                plt.plot(first_repeat, second_repeat, color = rgb)
+    # For [147, 156, 315, 324, 10, 1] in complete_lst
+    x = [147, 156]
+    y = [315, 324]
+    plt.plot(x, y, color = "red")
+
+    # Breaking down [51, 122, 123, 194, 72]
+    # For [51, 73, 123, 145, 23, 1] in complete_lst
+    x = [51, 73]
+    y = [123, 145]
+    plt.plot(x, y, color = "darkorange")
+
+    # For [74, 74, 146, 146, 1, 2] in complete_lst
+    x = [74, 74]
+    y = [146, 146]
+    plt.plot(x, y, color = "aqua")
+
+    # For [75, 122, 147, 194, 48, 1] in complete_lst
+    x = [75, 122]
+    y = [147, 194]
+    plt.plot(x, y, color = "purple")
 
     plt.show()
 
