@@ -533,11 +533,10 @@ def __compare_and_cut(red, red_len, blue, blue_len):
 
 def __num_of_parts(input_vec, input_start, input_all_starts):
     """
-    Determines the number of blocks of consecutive
-    time steps in a list of time steps. A block of consecutive time steps
-    represents a distilled section of a repeat. This distilled section will be
-    replicated and the starting indices of the repeats within it will be
-    returned.
+    Determines the number of blocks of consecutive time steps in a list of 
+    time steps. A block of consecutive time steps represents a distilled 
+    section of a repeat. This distilled section will be replicated and the 
+    starting indices of the repeats within it will be returned.
 
     Args
     ----

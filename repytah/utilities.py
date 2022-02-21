@@ -676,7 +676,7 @@ def reformat(pattern_mat, pattern_key):
     the length of the repeated structure. 
     
     Reformat is not used in the main process for creating the
-    aligned-hierarchies. It is helpful when writing example inputs for 
+    aligned hierarchies. It is helpful when writing example inputs for 
     the tests.
     
     Args
