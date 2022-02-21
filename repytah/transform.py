@@ -14,12 +14,11 @@ The module contains the following functions:
         where at least one pair of repeats overlap in time.
     
     * __create_anno_remove_overlaps
-        Turns rows of repeats into marked rows with 
-        annotation markers for the start indices and zeroes otherwise. After 
-        removing the annotations that have overlaps, the function creates 
-        separate arrays for annotations with overlaps and annotations without 
-        overlaps. Finally, the annotation markers are checked and fixed if 
-        necessary.
+        Turns rows of repeats into marked rows with annotation markers for the 
+        start indices and zeroes otherwise. After removing the annotations that 
+        have overlaps, the function creates separate arrays for annotations with 
+        overlaps and annotations without overlaps. Finally, the annotation markers 
+        are checked and fixed if necessary.
     
     * __separate_anno_markers
         Expands vector of non-overlapping repeats into a matrix representation. 

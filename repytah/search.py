@@ -4,7 +4,7 @@
 search.py 
 
 This module holds functions used to find and record the diagonals in the
-thresholded matrix, T. These functions prepare the diagonals found to for
+thresholded matrix, T. These functions prepare the diagonals found for
 transformation and assembling later.
 
 The module contains the following functions:
