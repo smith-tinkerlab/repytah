@@ -141,8 +141,8 @@ def find_complete_list(pair_list, song_length):
     
     # Step 3: Loop over the new list of found bandwidths to add the annotation
     #         markers to each found pair of repeats
-    for j in range(1, new_bw_num + 1):
-        new_bw = new_bw_found[j - 1]
+    for j in range(0, new_bw_num):
+        new_bw = new_bw_found[j]
         
         # Isolate pairs of repeats in combine_mat that are length bandwidth
         # Return the minimum of the array
