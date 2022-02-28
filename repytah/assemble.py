@@ -688,8 +688,8 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
     # Number of columns
     target_size = target_bandwidth.shape[0]
 
-    for i in range(1, target_size + 1):
-        test_bandwidth = target_bandwidth[i - 1]
+    for i in range(0, target_size):
+        test_bandwidth = target_bandwidth[i]
 
         # Check if temp_bandwidth is equal to test_bandwidth
         inds = (temp_bandwidth == test_bandwidth)
