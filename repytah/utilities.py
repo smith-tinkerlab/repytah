@@ -567,7 +567,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         # Pre-allocate a section of size length x sn for pattern_block
         sub_section = np.zeros((length, sn))
     
-        # Replace first row in sub_section with repeated_structure 
+        # Replace first row in sub_section with repeated_struct
         sub_section[0, :] = repeated_struct
         
         # Create pattern_block: Sums up each column after sliding repeated 
