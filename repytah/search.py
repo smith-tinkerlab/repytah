@@ -71,8 +71,10 @@ def find_complete_list(pair_list, song_length):
         bw_found = np.delete(bw_found, -1, 0)
         bw_num = (bw_num - 1)
         
-    # Initialize variables
-    p = np.size(pair_list, axis=0)
+    # Get number of pairs of repeat in pair_list
+    p = np.size(pair_list, axis=0) 
+
+    # Initialize temporary variables
     add_mat = np.zeros((1, 5)).astype(int)
 
     # Step 1: For each found bandwidth, search upwards (i.e. search the larger 
@@ -80,7 +82,7 @@ def find_complete_list(pair_list, song_length):
     for j in range(0, bw_num - 1):
         band_width = bw_found[j] 
         
-        # Isolate pairs of repeats that are length bandwidth
+        # Isolate pairs of repeats that are of length bandwidth
         # Return the minimum of the array
         bsnds = np.amin((pair_list[:, 4] == band_width).nonzero())
         bends = (pair_list[:, 4] > band_width).nonzero()
