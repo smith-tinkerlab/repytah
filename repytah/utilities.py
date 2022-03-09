@@ -572,18 +572,18 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         
         # Create pattern_block: Sums up each column after sliding repeated 
         # structure i to the right bw - 1 times 
-        for b in range(2, length + 1): 
+        for b in range(1, length): 
             # Retrieve repeated structure i up to its (1 - b) position 
-            sub_struct_a = repeated_struct[0:(1 - b)]
+            sub_struct_a = repeated_struct[:-b]
     
             # Row vector with number of entries not included in sub_struct_a  
-            sub_struct_b = np.zeros((1, (b - 1)))
+            sub_struct_b = np.zeros(b)
     
             # Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
 
             # Replace part of sub_section with new_struct 
-            sub_section[b - 1, :] = new_struct
+            sub_section[b, :] = new_struct
 
         # Replace part of pattern_block with the sums of each column in 
         # sub_section 
