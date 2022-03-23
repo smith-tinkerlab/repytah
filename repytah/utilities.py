@@ -330,6 +330,11 @@ def stretch_diags(thresh_diags, band_width):
     # Create size of returned matrix
     n = thresh_diags.shape[0] + band_width - 1
     temp_song_marks_out = np.zeros(n)
+
+    # find() in MATLAB returns column indices first, then row indices
+    # but in Python, nonzero() returns row indices first, then column indices
+    # hence (jnds, inds) and not (inds, jnds)
+    # Reference: http://www.ece.northwestern.edu/local-apps/matlabhelp/techdoc/ref/find.html
     (jnds, inds) = thresh_diags.nonzero()
     
     subtemp = np.identity(band_width)
