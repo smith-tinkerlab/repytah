@@ -283,7 +283,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                         cut_m = np.argwhere((mint_lst[:, 4] > thresh_bw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
-                    
+
+                        # Add the new middle overlapping intervals to the
+                        # full list of middle overlapping intervals
                         mint_all = np.vstack((mint_all, mint_lst))
 
             # Remove found diagonals of length BW from consideration

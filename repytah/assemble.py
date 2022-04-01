@@ -339,11 +339,10 @@ def __compare_and_cut(red, red_len, blue, blue_len):
         # contains a starting index in red and a starting index in blue
         red_inds = np.tile(start_red.transpose(), (lsb, 1))
         blue_inds = np.tile(start_blue, (lsr, 1))
-        tem_blue = blue_inds[0][0]
-        for i in range(0, blue_inds.shape[1]):
-            for j in range(0, blue_inds.shape[0]):
-                tem_blue = np.vstack((tem_blue, blue_inds[j][i]))
-        tem_blue = np.delete(tem_blue, 1, 0)
+        tem_blue = blue_inds[:, 0].reshape(-1, 1)
+        for i in range(1, blue_inds.shape[1]):
+            col = blue_inds[:, i].reshape(-1,1)
+            tem_blue = np.vstack((tem_blue, col))
         compare_inds = np.concatenate((tem_blue, red_inds), axis=1)
 
         # Initialize the output variables union_mat and union_length
