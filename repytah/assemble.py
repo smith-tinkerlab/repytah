@@ -874,6 +874,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         pno_anno = get_annotation_lst(pno_key)
         pno_y_labels = get_y_labels(pno_key, pno_anno)
         num_pno_rows = np.size(pno, axis=0)
+        # Visualization trick: 2s - white, 0s - black, 1s - gray
         twos = np.full((num_pno_rows, sn), 2, dtype=int)
         vis_array = twos - (pno_block + pno)
         fig, ax = plt.subplots(1, 1, figsize=(10,9))
