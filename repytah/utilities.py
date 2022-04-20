@@ -283,7 +283,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                         cut_m = np.argwhere((mint_lst[:, 4] > thresh_bw))
                         cut_m = cut_m.T
                         mint_lst = mint_lst[cut_m][0]
-                    
+
+                        # Add the new middle overlapping intervals to the
+                        # full list of middle overlapping intervals
                         mint_all = np.vstack((mint_all, mint_lst))
 
             # Remove found diagonals of length BW from consideration
@@ -330,6 +332,11 @@ def stretch_diags(thresh_diags, band_width):
     # Create size of returned matrix
     n = thresh_diags.shape[0] + band_width - 1
     temp_song_marks_out = np.zeros(n)
+
+    # find() in MATLAB returns column indices first, then row indices
+    # but in Python, nonzero() returns row indices first, then column indices
+    # hence (jnds, inds) and not (inds, jnds)
+    # Reference: http://www.ece.northwestern.edu/local-apps/matlabhelp/techdoc/ref/find.html
     (jnds, inds) = thresh_diags.nonzero()
     
     subtemp = np.identity(band_width)
@@ -567,23 +574,23 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         # Pre-allocate a section of size length x sn for pattern_block
         sub_section = np.zeros((length, sn))
     
-        # Replace first row in block_zeros with repeated_structure 
+        # Replace first row in sub_section with repeated_struct
         sub_section[0, :] = repeated_struct
         
         # Create pattern_block: Sums up each column after sliding repeated 
         # structure i to the right bw - 1 times 
-        for b in range(2, length + 1): 
+        for b in range(1, length): 
             # Retrieve repeated structure i up to its (1 - b) position 
-            sub_struct_a = repeated_struct[0:(1 - b)]
+            sub_struct_a = repeated_struct[:-b]
     
             # Row vector with number of entries not included in sub_struct_a  
-            sub_struct_b = np.zeros((1, (b - 1)))
+            sub_struct_b = np.zeros(b)
     
             # Append sub_struct_b in front of sub_struct_a 
             new_struct = np.append(sub_struct_b, sub_struct_a)
 
             # Replace part of sub_section with new_struct 
-            sub_section[b - 1, :] = new_struct
+            sub_section[b, :] = new_struct
 
         # Replace part of pattern_block with the sums of each column in 
         # sub_section 

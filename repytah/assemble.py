@@ -339,11 +339,10 @@ def __compare_and_cut(red, red_len, blue, blue_len):
         # contains a starting index in red and a starting index in blue
         red_inds = np.tile(start_red.transpose(), (lsb, 1))
         blue_inds = np.tile(start_blue, (lsr, 1))
-        tem_blue = blue_inds[0][0]
-        for i in range(0, blue_inds.shape[1]):
-            for j in range(0, blue_inds.shape[0]):
-                tem_blue = np.vstack((tem_blue, blue_inds[j][i]))
-        tem_blue = np.delete(tem_blue, 1, 0)
+        tem_blue = blue_inds[:, 0].reshape(-1, 1)
+        for i in range(1, blue_inds.shape[1]):
+            col = blue_inds[:, i].reshape(-1,1)
+            tem_blue = np.vstack((tem_blue, col))
         compare_inds = np.concatenate((tem_blue, red_inds), axis=1)
 
         # Initialize the output variables union_mat and union_length
@@ -688,8 +687,8 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
     # Number of columns
     target_size = target_bandwidth.shape[0]
 
-    for i in range(1, target_size + 1):
-        test_bandwidth = target_bandwidth[i - 1]
+    for i in range(0, target_size):
+        test_bandwidth = target_bandwidth[i]
 
         # Check if temp_bandwidth is equal to test_bandwidth
         inds = (temp_bandwidth == test_bandwidth)
@@ -875,6 +874,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         pno_anno = get_annotation_lst(pno_key)
         pno_y_labels = get_y_labels(pno_key, pno_anno)
         num_pno_rows = np.size(pno, axis=0)
+        # Visualization trick: 2s - white, 0s - black, 1s - gray
         twos = np.full((num_pno_rows, sn), 2, dtype=int)
         vis_array = twos - (pno_block + pno)
         fig, ax = plt.subplots(1, 1, figsize=(10,9))
