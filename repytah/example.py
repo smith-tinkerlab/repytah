@@ -3,11 +3,12 @@ import numpy as np
 import pkg_resources
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
-from .utilities import create_sdm, find_initial_repeats
-from .search import find_complete_list
-from .transform import remove_overlaps
-from .assemble import hierarchical_structure
+from utilities import create_sdm, find_initial_repeats
+from search import find_complete_list
+from transform import remove_overlaps
+from assemble import hierarchical_structure
 
 """
 example.py
@@ -33,18 +34,18 @@ The module contains the following functions:
 
 """
 
-def load_ex_data(input):
-    """
-    Reads in a csv input file with extracted features.
-
-    Args
-    ----
-    input : str
-        Name of .csv file to be processed. 
-    """
-
-    stream = pkg_resources.resource_stream(__name__, input)
-    return pd.read_csv(stream)
+# def load_ex_data(input):
+#     """
+#     Reads in a csv input file with extracted features.
+#
+#     Args
+#     ----
+#     input : str
+#         Name of .csv file to be processed.
+#     """
+#
+#     stream = pkg_resources.resource_stream(__name__, input)
+#     return pd.read_csv(stream)
 
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
@@ -101,35 +102,36 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
-    thresh_dist_mat = (self_dissim_mat <= thresh) 
-    
+    thresh_dist_mat = (self_dissim_mat <= thresh)
+
     # Extract the diagonals from thresholded distance matrix, saving the 
     # repeat pairs the diagonals represent
     all_lst = find_initial_repeats(thresh_dist_mat, 
                                    np.arange(1, song_length + 1), 0)
-    
+
     # Find smaller repeats which are contained within larger repeats
     complete_lst = find_complete_list(all_lst, song_length)
 
     # Create the dictionary of output variables
     outdict = {}
     outdict['thresh'] = thresh
-    
+
     if np.size(complete_lst) != 0:
         # Remove groups of repeats that overlap in time
         output_tuple = remove_overlaps(complete_lst, song_length)
 
         (mat_no_overlaps, key_no_overlaps) = output_tuple[1:3]
 
-        # Distill non-overlapping repeats into essential structure components 
+        # Distill non-overlapping repeats into essential structure components
         # and use them to build the hierarchical representation
         output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps,
                                               song_length, True)
+
         (full_key, full_mat_no_overlaps) = output_tuple[1:3]
-        
+
         outdict['full_key'] = full_key
         outdict['full_mat_no_overlaps'] = full_mat_no_overlaps
-        
+
         # Save list of partial representations containing only the full
         # hierarchical representation for use in comparison code
         outdict['partial_reps'] = [full_mat_no_overlaps]
@@ -137,24 +139,26 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         outdict['partial_widths'] = song_length
         outdict['partial_num_blocks'] = np.sum(mat_no_overlaps)
         outdict['num_partials'] = 1
-        
-        # Create the output file
+
+        #Create the output file
         sio.savemat(file_out, outdict)
-        
+
     else:
         outdict['full_key'] = []
         outdict['full_mat_no_overlaps'] = []
-        
-        # Save the empty list of partial representations for use in comparison 
+
+        # Save the empty list of partial representations for use in comparison
         # code
         outdict['partial_reps'] = []
         outdict['partial_key'] = []
         outdict['partial_widths'] = []
         outdict['partial_num_blocks'] = []
         outdict['num_partials'] = 0
-        
+
         # Create the output file
         sio.savemat(file_out, outdict)
+    
+
 
 def visualize_all_lst(all_lst, thresh_dist_mat):
     """
@@ -248,4 +252,12 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     plt.plot(x, y, color = "purple")
 
     plt.show()
+
+file = open("mazurka07-4.csv")
+file_in = np.genfromtxt(file, delimiter=",")
+file_out = "hierarchical_out_file.mat"
+num_fv_per_shingle = 12
+thresh = 0.02
+csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+
 
