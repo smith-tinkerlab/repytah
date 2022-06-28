@@ -51,6 +51,7 @@ import numpy as np
 from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
+import cv2
 
 
 def create_sdm(fv_mat, num_fv_per_shingle):
@@ -147,11 +148,18 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Loop over all bandwidths from n to 1
     for bw in np.flip(bandwidth_vec):
         if bw > thresh_bw:
-            # Use convolution matrix to find diagonals of length bw 
+            # Use correlation matrix to find diagonals of length bw
             id_mat = np.identity(bw) 
 
             # Search for diagonals of length band_width
-            diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
+
+            # casting thresh_temp as np.uint16 means that thresh_mat cannot be bigger than a 65535 x 65535 matrix
+            diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1, id_mat)
+
+            # Splice away results from zero-padding
+            half_kernel = np.floor(np.array(id_mat.shape[0]) / 2).astype(int)
+            outdims = (np.array(thresh_temp.shape[0]) - np.array(id_mat.shape[0])) + 1
+            diagonal_mat = diagonal_mat[half_kernel:half_kernel + outdims, half_kernel:half_kernel + outdims]
         
             # Mark where diagonals of length band_width start
             diag_markers = (diagonal_mat == bw).astype(int)
@@ -403,7 +411,7 @@ def add_annotations(input_mat, song_length):
     
     # Add annotation markers to pairs of repeats
     for i in range(1, SPmax + 1):
-        pinds = np.nonzero(song_pattern == i)     
+        pinds = np.nonzero(song_pattern == i)
       
         # One if annotation not already marked, zero if it is
         check_inds = (input_mat[:, 5] == 0)
