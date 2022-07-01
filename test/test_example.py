@@ -9,6 +9,7 @@ from repytah.utilities import *
 from repytah.example import *
 
 import os
+import pandas as pd
 
 
 class TestExample(unittest.TestCase): 
@@ -19,7 +20,7 @@ class TestExample(unittest.TestCase):
         Tests that nothing is returned.
         """
 
-        file_in = load_ex_data('data/input.csv').to_numpy()
+        file_in = pd.read_csv('input.csv',header=None).to_numpy()
         file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
@@ -34,7 +35,7 @@ class TestExample(unittest.TestCase):
         Tests that a file is saved.
         """
 
-        file_in = load_ex_data('data/input.csv').to_numpy()
+        file_in = pd.read_csv('input.csv',header=None).to_numpy()
         file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
@@ -49,7 +50,7 @@ class TestExample(unittest.TestCase):
         Tests that the file saved isn't empty.
         """
 
-        file_in = load_ex_data('data/input.csv').to_numpy()
+        file_in = pd.read_csv('input.csv',header=None).to_numpy()
         file_out = "test/hierarchical_out_file.mat"
         num_fv_per_shingle = 3
         thresh = 0.01
