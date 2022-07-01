@@ -95,6 +95,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     
     # Import file of feature vectors
     fv_mat = file_in
+    #print("fv_mat",fv_mat)
     
     # Get pairwise distance matrix/self dissimilarity matrix using cosine 
     # distance
@@ -253,11 +254,13 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
 
     plt.show()
 
-file = open("mazurka07-4.csv")
-file_in = np.genfromtxt(file, delimiter=",")
-file_out = "hierarchical_out_file.mat"
-num_fv_per_shingle = 12
-thresh = 0.02
-csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+
+if __name__ == "__main__":
+
+    file_in = pd.read_csv('input.csv',header=None).to_numpy()
+    file_out = "hierarchical_out_file.mat"
+    num_fv_per_shingle = 12
+    thresh = 0.02
+    csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
 
 

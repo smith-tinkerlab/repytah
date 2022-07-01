@@ -883,7 +883,6 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         plt.title("Essential Structure Components")
         # Set the number of ticks and set tick intervals to be equal
         ax.set_yticks(np.arange(0, np.size(pno_y_labels) - 1))
-        # Set the ticklabels along the y axis and remove 0 in vis_y_labels
         ax.set_yticklabels(pno_y_labels[1:])
         plt.show()
 
@@ -1013,7 +1012,8 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     # Reconstruct full block
     nzi_pattern_block = reconstruct_full_block(nzi_matrix_no_overlaps, nzi_key_no_overlaps)
     nzi_rows = nzi_pattern_block.shape[0]
-
+    full_anno_lst = get_annotation_lst(nzi_key_no_overlaps)
+    vis_y_labels = get_y_labels(nzi_key_no_overlaps[None, :].reshape(-1, 1),full_anno_lst)
     if vis:
         # IMAGE 3
         fig, ax = plt.subplots(1, 1, figsize=(10, 8))
@@ -1023,8 +1023,11 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
             "Essential Structure Components"
         )
         # This locator puts ticks at regular intervals
-        loc = plticker.MultipleLocator(base=1.0)
-        ax.yaxis.set_major_locator(loc)
+        loc = plticker.MultipleLocator(1)
+        # Set the number of ticks and set tick intervals to be equal
+        ax.set_yticks(np.arange(0, np.size(vis_y_labels) - 1))
+        # Set the ticklabels along the y axis and remove 0 in vis_y_labels
+        ax.set_yticklabels(vis_y_labels[1:])
         ax.xaxis.set_major_locator(loc)
         plt.show()
 
@@ -1040,8 +1043,11 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
         loc = plticker.MultipleLocator(
             base=1.0
         )  # This locator puts ticks at regular intervals
-        ax.yaxis.set_major_locator(loc)
         ax.xaxis.set_major_locator(loc)
+        # Set the number of ticks and set tick intervals to be equal
+        ax.set_yticks(np.arange(0, np.size(vis_y_labels) - 1))
+        # Set the ticklabels along the y axis and remove 0 in vis_y_labels
+        ax.set_yticklabels(vis_y_labels[1:])
         plt.show()
 
     nzi_rows = nzi_pattern_block.shape[0]
