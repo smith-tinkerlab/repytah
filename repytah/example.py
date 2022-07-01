@@ -34,18 +34,18 @@ The module contains the following functions:
 
 """
 
-# def load_ex_data(input):
-#     """
-#     Reads in a csv input file with extracted features.
-#
-#     Args
-#     ----
-#     input : str
-#         Name of .csv file to be processed.
-#     """
-#
-#     stream = pkg_resources.resource_stream(__name__, input)
-#     return pd.read_csv(stream)
+def load_ex_data(input):
+    """
+    Reads in a csv input file with extracted features.
+
+    Args
+    ----
+    input : str
+        Name of .csv file to be processed.
+    """
+
+    stream = pkg_resources.resource_stream(__name__, input)
+    return pd.read_csv(stream,header=None)
 
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
@@ -257,7 +257,7 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
 
 if __name__ == "__main__":
 
-    file_in = pd.read_csv('input.csv',header=None).to_numpy()
+    file_in = load_ex_data('input.csv').to_numpy()
     file_out = "hierarchical_out_file.mat"
     num_fv_per_shingle = 12
     thresh = 0.02
