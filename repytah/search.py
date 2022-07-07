@@ -34,7 +34,7 @@ The module contains the following functions:
 
 import numpy as np
 from scipy import signal
-from .utilities import add_annotations
+from utilities import add_annotations
 
 
 def find_complete_list(pair_list, song_length):
@@ -56,7 +56,7 @@ def find_complete_list(pair_list, song_length):
    
     Returns
     -------  
-    lst_out : np.ndarray 
+    final_lst : np.ndarray
         List of pairs of repeats with smaller repeats added.
         
     """
@@ -107,7 +107,7 @@ def find_complete_list(pair_list, song_length):
         end_J = pair_list[bsnds:bend, 3]  # Similar to definition for start_J
 
         all_vec_ends = np.concatenate((end_I, end_J), axis=None)
-        int_ends = np.unique(all_vec_ends)
+        # int_ends = np.unique(all_vec_ends)
     
         # Part B: Use the current diagonal information to search for diagonals 
         #         of length BW contained in larger diagonals and thus were not
@@ -174,9 +174,7 @@ def find_complete_list(pair_list, song_length):
                                     final_lst[:, 5], final_lst[:, 4]])
         final_lst = final_lst[tem_final_lst, :]
     
-    lst_out = final_lst
-    
-    return lst_out
+    return final_lst
 
 
 def __find_add_rows(lst_no_anno, check_inds, k): 
@@ -192,7 +190,7 @@ def __find_add_rows(lst_no_anno, check_inds, k):
         List of pairs of repeats.
 
     check_inds : np.ndarray
-        List of ending indices for repeats of length k that we use to 
+        List of starting indices for repeats of length k that we use to
         check lst_no_anno for more repeats of length k.
 
     k : int
@@ -206,12 +204,11 @@ def __find_add_rows(lst_no_anno, check_inds, k):
                 
     """
 
-    # Initialize list of pairs 
-    L = lst_no_anno
+    # Initialize list of pairs
     add_rows = np.empty(0)
     
     # Logically, which pair of repeats has a length greater than k 
-    search_inds = (L[:, 4] > k)
+    search_inds = (lst_no_anno[:, 4] > k)
     
     # If there are no pairs of repeats that have a length greater than k 
     if sum(search_inds) == 0:
@@ -219,16 +216,16 @@ def __find_add_rows(lst_no_anno, check_inds, k):
         return add_rows
     
     # Multiply the starting index of all repeats "I" by search_inds
-    SI = np.multiply(L[:, 0], search_inds)
+    SI = np.multiply(lst_no_anno[:, 0], search_inds)
 
     # Multiply the starting index of all repeats "J" by search_inds
-    SJ = np.multiply(L[:, 2], search_inds)
+    SJ = np.multiply(lst_no_anno[:, 2], search_inds)
 
     # Multiply the ending index of all repeats "I" by search_inds
-    EI = np.multiply(L[:, 1], search_inds)
+    EI = np.multiply(lst_no_anno[:, 1], search_inds)
 
     # Multiply the ending index of all repeats "J" by search_inds
-    EJ = np.multiply(L[:, 3], search_inds)
+    EJ = np.multiply(lst_no_anno[:, 3], search_inds)
     
     # Loop over check_inds 
     for i in range(check_inds.size): 
@@ -242,13 +239,13 @@ def __find_add_rows(lst_no_anno, check_inds, k):
         if lnds.sum(axis=0) > 0:
             # Find the 2nd entry of the row (lnds) whose starting index of the
             # repeat "I" equals CI 
-            SJ_li = L[lnds, 2]
-            EJ_li = L[lnds, 3]
+            SJ_li = lst_no_anno[lnds, 2]
+            EJ_li = lst_no_anno[lnds, 3]
             l_num = SJ_li.shape[0]
 
             # Left side of left pair
-            l_left_k = (ci * np.ones((1, l_num))) - L[lnds, 0]
-            l_add_left = np.vstack((L[lnds, 0] * np.ones((1, l_num)),
+            l_left_k = (ci * np.ones((1, l_num))) - lst_no_anno[lnds, 0]
+            l_add_left = np.vstack((lst_no_anno[lnds, 0] * np.ones((1, l_num)),
                                    (ci - 1 * np.ones((1, l_num))),
                                    SJ_li * np.ones((1, l_num)),
                                    (SJ_li + l_left_k - np.ones((1, l_num))),
@@ -264,10 +261,10 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             l_add_mid = np.transpose(l_add_mid)
            
             # Right side of left pair
-            l_right_k = np.concatenate((L[lnds, 1] - ((ci + k) - 1) *
+            l_right_k = np.concatenate((lst_no_anno[lnds, 1] - ((ci + k) - 1) *
                                         np.ones((1, l_num))), axis=None)
             l_add_right = np.vstack((((ci + k) * np.ones((1, l_num))),
-                                    L[lnds, 1], (EJ_li - l_right_k +
+                                    lst_no_anno[lnds, 1], (EJ_li - l_right_k +
                                     np.ones((1, l_num))), EJ_li,
                                     l_right_k))
             l_add_right = np.transpose(l_add_right)
@@ -287,14 +284,14 @@ def __find_add_rows(lst_no_anno, check_inds, k):
         # is a repeat of length K with starting index CI contained in a larger
         # repeat which is the right repeat of a pair
         if rnds.sum(axis=0) > 0:
-            SI_ri = L[rnds, 0]
-            EI_ri = L[rnds, 1]
+            SI_ri = lst_no_anno[rnds, 0]
+            EI_ri = lst_no_anno[rnds, 1]
             r_num = SI_ri.shape[0]
 
             # Left side of right pair
-            r_left_k = ci*np.ones((1, r_num)) - L[rnds, 2]
+            r_left_k = ci*np.ones((1, r_num)) - lst_no_anno[rnds, 2]
             r_add_left = np.vstack((SI_ri, (SI_ri + r_left_k -
-                                   np.ones((1, r_num))), L[rnds, 2],
+                                   np.ones((1, r_num))), lst_no_anno[rnds, 2],
                                    (ci - 1) * np.ones((1, r_num)),
                                    r_left_k))
             r_add_left = np.transpose(r_add_left)
@@ -308,11 +305,11 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             r_add_mid = np.transpose(r_add_mid)    
 
             # Right side of right pair
-            r_right_k = L[rnds, 3] - ((ci + k) - 1) * np.ones((1, r_num))
+            r_right_k = lst_no_anno[rnds, 3] - ((ci + k) - 1) * np.ones((1, r_num))
             r_add_right = np.vstack((EI_ri - r_right_k +
                                     np.ones((1, r_num)), EI_ri,
                                     (ci + k) * np.ones((1, r_num)),
-                                    L[rnds, 3], r_right_k))
+                                    lst_no_anno[rnds, 3], r_right_k))
             r_add_right = np.transpose(r_add_right)
 
             # Add the rows found       
@@ -486,15 +483,15 @@ def find_all_repeats(thresh_mat, bw_vec):
     
     # Combine non-overlapping intervals with the left, right, and middle 
     # parts of the non-overlapping intervals
-    out_lst = np.vstack((sint_all, eint_all, mint_all))
+    out_lst = np.vstack((sint_all, eint_all, mint_all)) # out_lst = np.vstack((sint_all, eint_all, mint_all))
     
-    inds = np.argsort(out_lst[:, 4])
-    out_lst = np.array(out_lst)[inds]
-    
-    inds = np.argsort(int_all[:, 4])
-    int_all = np.array(int_all)[inds]
-    
-    all_lst = np.vstack((int_all, out_lst))
+    all_lst = np.vstack((int_all, out_lst)) # inds = np.argsort(out_lst[:, 4])
+    inds = np.lexsort((all_lst[:, 2], all_lst[:, 0], all_lst[:, 4])) # out_lst = np.array(out_lst)[inds]
+    #
+    all_lst = np.array(all_lst)[inds] # inds = np.argsort(int_all[:, 4])
+     # int_all = np.array(int_all)[inds]
+    #
+    #all_lst.tofile('C:\\Users\\quind\\SURF-2022-Repytah\\repytah\\repytah\\data\\2022_06_21_chenhui_all_lst.csv', sep = ',')# all_lst = np.vstack((int_all, out_lst))
     
     return all_lst.astype(int)
 
