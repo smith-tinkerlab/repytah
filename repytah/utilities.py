@@ -147,19 +147,11 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Loop over all bandwidths from n to 1
     for bw in bandwidth_vec[::-1]:
         if bw > thresh_bw:
-            # Use correlation matrix to find diagonals of length bw
+            # Use convolution matrix to find diagonals of length bw 
             id_mat = np.identity(bw) 
 
             # Search for diagonals of length band_width
-
-            # casting thresh_temp as np.uint16 means that song_length cannot be greater than 65535
-            diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1, id_mat)
-
-            # Splice away results from zero-padding
-            half_kernel = np.floor(np.array(id_mat.shape[0]) / 2).astype(int)
-            outdims = (np.array(thresh_temp.shape[0]) - np.array(id_mat.shape[0])) + 1
-            diagonal_mat = diagonal_mat[half_kernel:half_kernel + outdims,
-                                        half_kernel:half_kernel + outdims]
+            diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
         
             # Mark where diagonals of length band_width start
             diag_markers = (diagonal_mat == bw).astype(int)
