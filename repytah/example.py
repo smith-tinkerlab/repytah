@@ -141,7 +141,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         outdict['partial_num_blocks'] = np.sum(mat_no_overlaps)
         outdict['num_partials'] = 1
 
-        #Create the output file
+        # Create the output file
         sio.savemat(file_out, outdict)
 
     else:
