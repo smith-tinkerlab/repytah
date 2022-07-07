@@ -120,7 +120,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         1, 2, 3,..., n where n is the number of timesteps.
 
     thresh_bw : int
-        Smallest allowed diagonal length.
+        One less than smallest allowed repeat length.
 
     Returns
     -------
@@ -146,45 +146,45 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     mint_all = np.empty((0, 5), int)
 
     # Loop over all bandwidths from n to 1
-    for bw in np.flip(bandwidth_vec):
+    for bw in bandwidth_vec[::-1]:
         if bw > thresh_bw:
             # Use correlation matrix to find diagonals of length bw
             id_mat = np.identity(bw) 
 
             # Search for diagonals of length band_width
 
-            # casting thresh_temp as np.uint16 means that thresh_mat cannot be bigger than a 65535 x 65535 matrix
+            # casting thresh_temp as np.uint16 means that song_length cannot be greater than 65535
             diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1, id_mat)
 
             # Splice away results from zero-padding
             half_kernel = np.floor(np.array(id_mat.shape[0]) / 2).astype(int)
             outdims = (np.array(thresh_temp.shape[0]) - np.array(id_mat.shape[0])) + 1
-            diagonal_mat = diagonal_mat[half_kernel:half_kernel + outdims, half_kernel:half_kernel + outdims]
+            diagonal_mat = diagonal_mat[half_kernel:half_kernel + outdims,
+                                        half_kernel:half_kernel + outdims]
         
             # Mark where diagonals of length band_width start
             diag_markers = (diagonal_mat == bw).astype(int)
             
-            if sum(diag_markers).any() > 0:
-                full_bw = bw
-                
+            if diag_markers.any() > 0:
+
                 # 1) Non-Overlaps: Search outside the overlapping shingles
-                upper_tri = np.triu(diag_markers, full_bw)
+                upper_tri = np.triu(diag_markers, bw)
                 
                 # Search for paired starts 
-                (start_i, start_j) = upper_tri.nonzero() 
+                start_i, start_j = upper_tri.nonzero()
                 start_i = start_i + 1
                 start_j = start_j + 1
               
                 # Find the matching ends for the previously found starts 
-                match_i = start_i + (full_bw - 1)
-                match_j = start_j + (full_bw - 1)
+                match_i = start_i + (bw - 1)
+                match_j = start_j + (bw - 1)
 
                 # List pairs of starts with their ends and the widths of the
                 # non-overlapping interval
-                i_pairs = np.vstack((start_i[:], match_i[:])).T
-                j_pairs = np.vstack((start_j[:], match_j[:])).T
+                i_pairs = np.vstack((start_i, match_i)).T
+                j_pairs = np.vstack((start_j, match_j)).T
                 i_j_pairs = np.hstack((i_pairs, j_pairs))
-                width = np.repeat(full_bw, i_j_pairs.shape[0], axis=0)
+                width = np.repeat(bw, i_j_pairs.shape[0], axis=0)
                 width_col = width.T
                 int_lst = np.column_stack((i_pairs, j_pairs, width_col))
         
@@ -195,37 +195,39 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 # 2) Overlaps: Search only the overlaps in shingles
                 
                 # Search for paired starts 
-                shin_overlaps = np.nonzero((np.tril(np.triu(diag_markers, -1),
-                                                           (full_bw - 1))))
-                start_i_shin = np.array(shin_overlaps[0] + 1)  # row
-                start_j_shin = np.array(shin_overlaps[1] + 1)  # column
+                shin_overlaps = np.nonzero((np.tril(np.triu(diag_markers, 0),
+                                                           (bw - 1))))
+                start_i_shin = shin_overlaps[0] + 1  # row
+                start_j_shin = shin_overlaps[1] + 1  # column
                 num_overlaps = len(start_i_shin)
-                
+
+                # Check if overlap found is the whole data stream
                 if num_overlaps == 1 and start_i_shin == start_j_shin:
                     i_sshin = np.concatenate((start_i_shin, start_i_shin +
-                                              (full_bw - 1)), axis=None)
+                                              (bw - 1)), axis=None)
                     j_sshin = np.concatenate((start_j_shin, start_j_shin +
-                                              (full_bw - 1)), axis=None)
-                    i_j_pairs = np.hstack((i_sshin, j_sshin))
-                    sint_lst = np.hstack((i_j_pairs, full_bw))
+                                              (bw - 1)), axis=None)
+                    sint_lst = np.hstack((i_sshin, j_sshin, bw))
                     sint_all = np.vstack((sint_all, sint_lst))
                     
                 elif num_overlaps > 0:
                     # Since you are checking the overlaps you need to cut these
-                    # intervals into pieces: left, right, and middle. NOTE: the
-                    # middle interval may NOT exist
+                    # intervals into pieces: left, right, and middle.
+                    # NOTE: the middle interval may NOT exist
                     
                     # Vector of 1's that is the length of the number of
                     # overlapping intervals. This is used a lot. 
                     ones_no = np.ones(num_overlaps)
 
                     # 2a) Left Overlap
+                    # Width is the same for corresponding left and right overlaps
                     K = start_j_shin - start_i_shin
-                    
-                    i_sshin = np.vstack((start_i_shin[:], (start_j_shin[:] -
-                                                           ones_no[:]))).T
-                    j_sshin = np.vstack((start_j_shin[:], (start_j_shin[:] +
-                                                           K - ones_no[:]))).T
+
+                    # List pairs of starts with their ends and widths
+                    i_sshin = np.vstack((start_i_shin, (start_j_shin -
+                                                           ones_no))).T
+                    j_sshin = np.vstack((start_j_shin, (start_j_shin +
+                                                           K - ones_no))).T
                     sint_lst = np.column_stack((i_sshin, j_sshin, K.T))
                     
                     i_s = np.argsort(K)  # Return the indices that would sort K
@@ -241,17 +243,16 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     sint_all = np.vstack((sint_all, sint_lst))
                     
                     # 2b) Right Overlap
-                    end_i_shin = start_i_shin + (full_bw - 1)
-                    end_j_shin = start_j_shin + (full_bw - 1)
+                    end_i_shin = start_i_shin + (bw - 1)
+                    end_j_shin = start_j_shin + (bw - 1)
                 
-                    i_eshin = np.vstack((end_i_shin[:] + ones_no[:] - K,
-                                         end_i_shin[:])).T
-                    j_eshin = np.vstack((end_i_shin[:] + ones_no[:],
-                                         end_j_shin[:])).T
+                    i_eshin = np.vstack((end_i_shin + ones_no - K,
+                                         end_i_shin)).T
+                    j_eshin = np.vstack((end_i_shin + ones_no,
+                                         end_j_shin)).T
                     eint_lst = np.column_stack((i_eshin, j_eshin, K.T))
-                
-                    i_e = np.lexsort(K)  # Return the indices that would sort K
-                    eint_lst = eint_lst[i_e:, ]
+
+                    eint_lst = eint_lst[i_s, ]
                     
                     # Remove the pairs that fall below the bandwidth threshold
                     cut_e = np.argwhere((eint_lst[:, 4] > thresh_bw))
@@ -267,6 +268,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     mnds = (end_i_shin - start_j_shin - K + ones_no) > 0
                 
                     if sum(mnds) > 0:
+                        print("has middle overlap")
                         i_middle = (np.vstack((start_j_shin[:],
                                                end_i_shin[:] - K))) * mnds
                         i_middle = i_middle.T
@@ -310,7 +312,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Sort the output array first by repeat length, then by starts of i and 
     # finally by j
     inds = np.lexsort((all_lst[:, 2], all_lst[:, 0], all_lst[:, 4]))
-    all_lst = np.array(all_lst)[inds]
+    all_lst = all_lst[inds]
     
     return all_lst.astype(int)
 
@@ -341,11 +343,8 @@ def stretch_diags(thresh_diags, band_width):
     n = thresh_diags.shape[0] + band_width - 1
     temp_song_marks_out = np.zeros(n)
 
-    # find() in MATLAB returns column indices first, then row indices
-    # but in Python, nonzero() returns row indices first, then column indices
-    # hence (jnds, inds) and not (inds, jnds)
-    # Reference: http://www.ece.northwestern.edu/local-apps/matlabhelp/techdoc/ref/find.html
-    (jnds, inds) = thresh_diags.nonzero()
+    # find starting row, column indices of diagonals
+    inds, jnds = thresh_diags.nonzero()
     
     subtemp = np.identity(band_width)
     
@@ -396,7 +395,7 @@ def add_annotations(input_mat, song_length):
     s_two = input_mat[:, 2]
 
     # Create matrix of all repeats
-    s_three = np.ones((num_rows,), dtype=int)
+    s_three = np.ones(num_rows, dtype=int)
     
     up_tri_mat = sps.coo_matrix((s_three, (s_one - 1, s_two - 1)),
                                 shape=(song_length, song_length)).toarray()
@@ -463,7 +462,7 @@ def __find_song_pattern(thresh_diags):
     song_length = thresh_diags.shape[0]
     
     # Initialize song pattern base
-    pattern_base = np.zeros((1, song_length), dtype=int).flatten()
+    pattern_base = np.zeros(song_length, dtype=int)
    
     # Initialize group number
     pattern_num = 1
@@ -473,9 +472,9 @@ def __find_song_pattern(thresh_diags):
     check_inds = check_inds[0]
     
     # Create vector of song length
-    pattern_mask = np.ones((1, song_length))
+    pattern_mask = np.ones(song_length)
     pattern_out = (col_sum == 0)
-    pattern_mask = (pattern_mask - pattern_out).astype(int).flatten()
+    pattern_mask = (pattern_mask - pattern_out).astype(int)
     
     while np.size(check_inds) != 0:
         # Take first entry in check_inds
