@@ -75,7 +75,7 @@ def remove_overlaps(input_mat, song_length):
     bw_vec = np.sort(bw_vec)[::-1]
 
     # Create a copy of the input matrix
-    L = input_mat
+    lst_no_overlaps = input_mat
 
     # For creating matrix_no_overlaps, key_no_overlaps and
     # annotations_no_overlaps later
@@ -93,19 +93,19 @@ def remove_overlaps(input_mat, song_length):
 
         delete_array = []
 
-        for i in range(len(L)):
-            line_bw = L[i][4]  # Repeat length in the ith row
+        for i in range(len(lst_no_overlaps)):
+            line_bw = lst_no_overlaps[i][4]  # Repeat length in the ith row
             if line_bw == bw:
                 if bw_lst.size == 0:
-                    bw_lst = np.array([L[i]])
+                    bw_lst = np.array([lst_no_overlaps[i]])
                 else:
-                    bw_lst = np.vstack((bw_lst, L[i]))
+                    bw_lst = np.vstack((bw_lst, lst_no_overlaps[i]))
 
                 # Add the row being traversed to delete_array
                 delete_array.append(i)
 
         # Delete the row being traversed from L
-        L = np.delete(L, delete_array, 0)
+        lst_no_overlaps = np.delete(lst_no_overlaps, delete_array, 0)
 
         # Use __create_anno_remove_overlaps to do the following three things:
         # ONE: Turn bw_lst into marked rows with annotation markers for
@@ -140,14 +140,14 @@ def remove_overlaps(input_mat, song_length):
 
         if bw_lst_out.size > 0:
             # Add rows that have no overlaps
-            L = np.vstack((L, bw_lst_out))
+            lst_no_overlaps = np.vstack((lst_no_overlaps, bw_lst_out))
 
         # Create a new, sorted array
-        ind = np.lexsort((L[:, 0], L[:, 4]))
-        L = L[ind]
+        ind = np.lexsort((lst_no_overlaps[:, 0], lst_no_overlaps[:, 4]))
+        lst_no_overlaps = lst_no_overlaps[ind]
 
         # Update bw_vec
-        bw_vec = np.unique(L[:, 4])
+        bw_vec = np.unique(lst_no_overlaps[:, 4])
         bw_vec = np.sort(bw_vec)[::-1]
 
         # Remove entries that fall below the bandwidth threshold
@@ -182,7 +182,7 @@ def remove_overlaps(input_mat, song_length):
     key_no_overlaps = key_no_overlaps.astype(int)
     annotations_no_overlaps = annotations_no_overlaps.astype(int)
 
-    return L, matrix_no_overlaps, key_no_overlaps, annotations_no_overlaps, all_overlap_lst
+    return lst_no_overlaps, matrix_no_overlaps, key_no_overlaps, annotations_no_overlaps, all_overlap_lst
 
 
 def __create_anno_remove_overlaps(k_mat, song_length, band_width):
