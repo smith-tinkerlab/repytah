@@ -14,8 +14,8 @@ The module contains the following functions:
         Turns rows of repeats into marked rows with annotation markers for the
         start indices and zeroes otherwise. After removing the annotations that
         have overlaps, the function creates separate arrays for annotations with
-        overlaps and annotations without overlaps. Finally, the annotation markers
-        are checked and fixed if necessary.
+        overlaps and annotations without overlaps. Finally, the annotation
+        markers are checked and fixed if necessary.
 
     * __separate_anno_markers
         Expands vector of non-overlapping repeats into a matrix representation.
@@ -115,8 +115,8 @@ def remove_overlaps(input_mat, song_length):
         # THREE: The annotations that have overlaps are removed from
         #      bw_lst_out and gets added to overlap_lst
 
-        pattern_row, bw_lst_out, overlap_lst = __create_anno_remove_overlaps(bw_lst,
-                                                        song_length, bw)
+        pattern_row, bw_lst_out, overlap_lst = __create_anno_remove_overlaps(
+            bw_lst, song_length, bw)
 
         if overlap_lst.size > 0:
             all_overlap_lst = np.vstack((all_overlap_lst, overlap_lst))
@@ -125,8 +125,8 @@ def remove_overlaps(input_mat, song_length):
             # Separate ALL annotations. In this step, we expand a row into a
             # matrix, so that there is one group of repeats per row.
 
-            pattern_mat, pattern_key, anno_temp_lst = __separate_anno_markers(bw_lst_out,
-                                                        song_length, bw, pattern_row)
+            pattern_mat, pattern_key, anno_temp_lst = __separate_anno_markers(
+                bw_lst_out, song_length, bw, pattern_row)
 
         else:
             pattern_mat = []
@@ -182,7 +182,8 @@ def remove_overlaps(input_mat, song_length):
     key_no_overlaps = key_no_overlaps.astype(int)
     annotations_no_overlaps = annotations_no_overlaps.astype(int)
 
-    return lst_no_overlaps, matrix_no_overlaps, key_no_overlaps, annotations_no_overlaps, all_overlap_lst
+    return lst_no_overlaps, matrix_no_overlaps, key_no_overlaps,\
+           annotations_no_overlaps, all_overlap_lst
 
 
 def __create_anno_remove_overlaps(k_mat, song_length, band_width):
