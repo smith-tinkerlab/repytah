@@ -255,9 +255,9 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             l_right_k = np.concatenate((lst_no_anno[lnds, 1] - ((ci + k) - 1) *
                                         np.ones((1, l_num))), axis=None)
             l_add_right = np.vstack((((ci + k) * np.ones((1, l_num))),
-                                     lst_no_anno[lnds, 1], (EJ_li - l_right_k +
-                                                            np.ones((1, l_num))), EJ_li,
-                                     l_right_k))
+                                     lst_no_anno[lnds, 1],
+                                     (EJ_li - l_right_k + np.ones((1, l_num))),
+                                     EJ_li, l_right_k))
             l_add_right = np.transpose(l_add_right)
 
             # Add the rows found
@@ -282,21 +282,24 @@ def __find_add_rows(lst_no_anno, check_inds, k):
             # Left side of right pair
             r_left_k = ci * np.ones((1, r_num)) - lst_no_anno[rnds, 2]
             r_add_left = np.vstack((SI_ri, (SI_ri + r_left_k -
-                                            np.ones((1, r_num))), lst_no_anno[rnds, 2],
+                                            np.ones((1, r_num))),
+                                    lst_no_anno[rnds, 2],
                                     (ci - 1) * np.ones((1, r_num)),
                                     r_left_k))
             r_add_left = np.transpose(r_add_left)
 
             # Middle of right pair
-            r_add_mid = np.vstack(((SI_ri + r_left_k), (SI_ri + r_left_k
-                                                        + (k - 1) * np.ones((1, r_num))),
+            r_add_mid = np.vstack(((SI_ri + r_left_k),
+                                   (SI_ri + r_left_k + (k - 1) *
+                                    np.ones((1, r_num))),
                                    ci * np.ones((1, r_num)),
                                    (ci + k - 1) * np.ones((1, r_num)),
                                    k * np.ones((1, r_num))))
             r_add_mid = np.transpose(r_add_mid)
 
             # Right side of right pair
-            r_right_k = lst_no_anno[rnds, 3] - ((ci + k) - 1) * np.ones((1, r_num))
+            r_right_k = lst_no_anno[rnds, 3] - ((ci + k) - 1) * np.ones((1,
+                                                                         r_num))
             r_add_right = np.vstack((EI_ri - r_right_k +
                                      np.ones((1, r_num)), EI_ri,
                                      (ci + k) * np.ones((1, r_num)),
