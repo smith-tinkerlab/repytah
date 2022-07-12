@@ -156,10 +156,12 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             # use smallest datatype that can contain bw value
             if bw < 255:
                 diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint8), -1,
-                                            id_mat, anchor=(0, 0))
+                                            id_mat, anchor=(0, 0),
+                                            borderType=cv2.BORDER_CONSTANT)
             elif bw <= 65535:
                 diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1,
-                                            id_mat, anchor=(0, 0))
+                                            id_mat, anchor=(0, 0),
+                                            borderType=cv2.BORDER_CONSTANT)
             else:
                 raise RuntimeError("Bandwidth value too large")
 
