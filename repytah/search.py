@@ -377,6 +377,7 @@ def find_all_repeats(thresh_mat, bw_vec):
 
             # 1) Search outside the overlapping shingles
             upper_tri = np.triu(diag_markers, full_bw)
+
             # Search for paired starts
             (start_i, start_j) = upper_tri.nonzero()
             start_i = start_i + 1
@@ -478,7 +479,6 @@ def find_all_repeats(thresh_mat, bw_vec):
     # Combine non-overlapping intervals with the left, right, and middle
     # parts of the non-overlapping intervals
     out_lst = np.vstack((sint_all, eint_all, mint_all))
-
     all_lst = np.vstack((int_all, out_lst))
     inds = np.lexsort((all_lst[:, 2], all_lst[:, 0], all_lst[:, 4]))
     all_lst = np.array(all_lst)[inds]
