@@ -56,11 +56,12 @@ The module contains the following functions:
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
+
 from search import find_all_repeats, find_complete_list_anno_only
 from utilities import reconstruct_full_block, get_annotation_lst, get_y_labels
 from transform import remove_overlaps
-import matplotlib.pyplot as plt
-import matplotlib.ticker as plticker
 
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
