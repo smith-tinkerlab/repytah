@@ -9,6 +9,7 @@ from repytah.utilities import *
 from repytah.example import *
 
 import os
+import pandas as pd
 
 
 class TestExample(unittest.TestCase): 

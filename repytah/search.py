@@ -34,7 +34,7 @@ The module contains the following functions:
 
 import numpy as np
 from scipy import signal
-from .utilities import add_annotations
+from utilities import add_annotations
 
 
 def find_complete_list(pair_list, song_length):
@@ -60,7 +60,7 @@ def find_complete_list(pair_list, song_length):
         List of pairs of repeats with smaller repeats added.
         
     """
-    
+
     # Find the list of unique repeat lengths
     bw_found = np.unique(pair_list[:, 4])
     bw_num = np.size(bw_found, axis=0)
@@ -386,6 +386,7 @@ def find_all_repeats(thresh_mat, bw_vec):
             
             # 1) Search outside the overlapping shingles
             upper_tri = np.triu(diag_markers, full_bw)
+
             # Search for paired starts 
             (start_i, start_j) = upper_tri.nonzero() 
             start_i = start_i + 1
@@ -487,14 +488,12 @@ def find_all_repeats(thresh_mat, bw_vec):
     # Combine non-overlapping intervals with the left, right, and middle 
     # parts of the non-overlapping intervals
     out_lst = np.vstack((sint_all, eint_all, mint_all))
-    
-    inds = np.argsort(out_lst[:, 4])
-    out_lst = np.array(out_lst)[inds]
-    
-    inds = np.argsort(int_all[:, 4])
-    int_all = np.array(int_all)[inds]
-    
     all_lst = np.vstack((int_all, out_lst))
+
+    # Sort the output array first by repeat length, then by starts of i and
+    # finally by j
+    inds = np.lexsort((all_lst[:, 2], all_lst[:, 0], all_lst[:, 4]))
+    all_lst = np.array(all_lst)[inds]
     
     return all_lst.astype(int)
 
