@@ -112,17 +112,16 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 
     # Get the index of where bw_vec is equal to thresh_bw for
     # future removal process
-    thresh_inds = np.nonzero(bw_vec == thresh_bw)
-    thresh_inds = np.array(thresh_inds) - 1
-
+    thresh_inds = np.nonzero(desc_bw_vec == thresh_bw)[0]
     if thresh_inds.size == 0:
         thresh_inds = max(bw_vec.shape)
+    else:
+        thresh_inds = thresh_inds[0]
 
     pno_block = reconstruct_full_block(input_pattern_obj, desc_bw_vec)
 
     # Check stopping condition -- Are there overlaps?
     while np.sum(np.sum(pno_block[:thresh_inds, :], axis=0) > 1) > 0:
-
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_pno_block = check_overlaps(pno_block)
 
@@ -170,15 +169,11 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
         # stopping condition
-        thresh_inds = np.amin(desc_bw_vec == thresh_bw) - 1
-        if thresh_inds < 0:
-            thresh_inds = np.array([])
-        else:
-            # Convert thresh_inds into an array
-            thresh_inds = np.array(thresh_inds)
-
+        thresh_inds = np.nonzero(desc_bw_vec == thresh_bw)[0]
         if thresh_inds.size == 0:
             thresh_inds = max(desc_bw_vec.shape)
+        else:
+            thresh_inds = thresh_inds[0]
 
         pno_block = reconstruct_full_block(input_pattern_obj, desc_bw_vec)
 
@@ -231,22 +226,13 @@ def check_overlaps(input_mat):
     # If input_mat is not binary, create binary temporary objects
     compare_left = compare_left > 0
     compare_right = compare_right > 0
-
-    # Empty matrix to store overlaps
-    compare_all = np.zeros((compare_left.shape[0], 1))
-
-    for i in range(compare_left.shape[0]):
-        # Create new counter
-        num_overlaps = 0
-        for j in range(compare_left.shape[1]):
-            if compare_left[i, j] == 1 and compare_right[i, j] == 1:
-                # inc count
-                num_overlaps = num_overlaps + 1
-
-        # Append num_overlaps to matrix
-        compare_all[i, 0] = num_overlaps
-
-    compare_all = compare_all > 0
+    # Check every pair of rows to see which rows overlap with each other
+    compare_all = np.sum(np.add(compare_left.astype(int),
+                                compare_right.astype(int)) == 2,
+                         axis=1) > 0
+    # Convert compare_all to a 2D vector
+    compare_all = compare_all[None, :].reshape(-1, 1)
+    
     overlap_mat = np.reshape(compare_all, (rs, rs))
 
     # If overlap_mat is symmetric, only keep the upper-triangular portion. 
