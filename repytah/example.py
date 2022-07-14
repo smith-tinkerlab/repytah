@@ -1,9 +1,9 @@
-import scipy.io as sio
-import numpy as np
-import pkg_resources
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
+import numpy as np
+import pandas as pd
+import scipy.io as sio
+import pkg_resources
+import matplotlib.pyplot as plt
 
 from utilities import create_sdm, find_initial_repeats
 from search import find_complete_list
