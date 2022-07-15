@@ -5,10 +5,10 @@ import scipy.io as sio
 import pkg_resources
 import matplotlib.pyplot as plt
 
-from .utilities import create_sdm, find_initial_repeats
-from .search import find_complete_list
-from .transform import remove_overlaps
-from .assemble import hierarchical_structure
+from repytah.utilities import create_sdm, find_initial_repeats
+from repytah.search import find_complete_list
+from repytah.transform import remove_overlaps
+from repytah.assemble import hierarchical_structure
 
 """
 example.py
@@ -42,6 +42,7 @@ def load_ex_data(input):
     Args:
         input (str):
             Name of .csv file to be processed.
+
     Returns:
         A pandas.DataFrame that contains extracted features of a sequential data
         stream.
@@ -54,7 +55,8 @@ def load_ex_data(input):
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
-    Example of full aligned hierarchies pathway.
+    Example of full aligned hierarchies pathway. A .mat file is saved that
+    contains variables created for aligned hierarchies.
     
     Args:
         file_in (str):
@@ -71,14 +73,9 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         thresh (int):
             Maximum threshold value.
-    
-    Returns:
-        None
-            A .mat file is saved. Contains variables created for aligned
-            hierarchies.
 
-    Example
-    --------
+
+    Example:
     ### Run on example file
     >>> file_in = load_ex_data('data/input.csv').to_numpy()
     >>> file_out = "hierarchical_out_file.mat"
@@ -164,10 +161,6 @@ def visualize_all_lst(thresh_dist_mat):
     Args:
         thresh_dist_mat (np.ndarray):
             Thresholded dissimilarity matrix that we extract diagonals from.
-    
-    
-    Returns:
-        none : A visualization of all pairs of repeat is produced.
 
     """
 
@@ -195,11 +188,6 @@ def visualize_complete_lst(thresh_dist_mat):
     Args:
         thresh_dist_mat (np.ndarray):
             Thresholded dissimilarity matrix that we extract diagonals from.
-
-
-    Returns:
-        none: A visualization of all pairs of repeated smaller repeats that are
-            contained in larger diagonals is produced.
 
     """
 
@@ -247,3 +235,4 @@ if __name__ == "__main__":
     num_fv_per_shingle = 12
     thresh = 0.02
     csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+    visualize_complete_lst()
