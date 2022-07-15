@@ -24,7 +24,7 @@ The module contains the following functions:
         in any pairs of the groups that overlap. 
 
     * __compare_and_cut 
-        Compares two rows of repeats labeled RED  and BLUE, and determines if
+        Compares two rows of repeats labeled RED and BLUE, and determines if
         there are any overlaps in time between them. If there are overlaps, 
         we cut the repeats in RED and BLUE into up to 3 pieces. 
 
@@ -96,7 +96,7 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         pattern_no_overlaps.
             
     """
-
+    # Make sure bw_vec is a 2D vector
     if bw_vec.ndim == 1:
         # Convert a 1D array into 2D vector
         bw_vec = bw_vec[None, :].reshape(-1, 1)
@@ -111,23 +111,24 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
     input_pattern_obj = input_pattern_obj[row_bw_inds, :]
     desc_bw_vec = bw_vec[row_bw_inds, :]
 
-    T_inds = np.nonzero(bw_vec == thresh_bw)
-    T_inds = np.array(T_inds) - 1
-
-    if T_inds.size == 0:
-        T_inds = max(bw_vec.shape)
+    # Get the index of where bw_vec is equal to thresh_bw for
+    # future removal process
+    thresh_inds = np.nonzero(desc_bw_vec == thresh_bw)[0]
+    if thresh_inds.size == 0:
+        thresh_inds = max(bw_vec.shape)
+    else:
+        thresh_inds = thresh_inds[0]
 
     pno_block = reconstruct_full_block(input_pattern_obj, desc_bw_vec)
 
     # Check stopping condition -- Are there overlaps?
-    while np.sum(np.sum(pno_block[:T_inds, :], axis=0) > 1) > 0:
-
+    while np.sum(np.sum(pno_block[:thresh_inds, :], axis=0) > 1) > 0:
         # Find all overlaps by comparing the rows of repeats pairwise
         overlaps_pno_block = check_overlaps(pno_block)
 
-        # Remove the rows with bandwidth T or less from consideration
-        overlaps_pno_block[T_inds:, ] = 0
-        overlaps_pno_block[:, T_inds:] = 0
+        # Remove the rows with bandwidth thresh_bw or less from consideration
+        overlaps_pno_block[thresh_inds:, ] = 0
+        overlaps_pno_block[:, thresh_inds:] = 0
 
         # Find the first two groups of repeats that overlap, calling one group
         # RED and the other group BLUE
@@ -157,12 +158,12 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         # Check if there are any repeats of length 1 that should be merged into
         # other groups of repeats of length 1 and merge them if necessary
         if sum(union_length == 1) > 0:
-            input_pattern_obj, bw_vec = __merge_based_on_length(
-                input_pattern_obj, bw_vec, np.array(1))
 
-        # AGAIN, Sort bw_vec and input_pattern_obj so that we process the
-        # biggest pieces first
-        # Sort the lengths in bw_vec and indices in descending order
+            input_pattern_obj, bw_vec = __merge_based_on_length(input_pattern_obj, bw_vec,
+                                                                np.array(1))
+
+        # AGAIN, Sort bw_vec and input_pattern_obj in descending order
+        # so that we process the biggest pieces first
         row_bw_inds = np.argsort(bw_vec, axis=None)[::-1]
         input_pattern_obj = input_pattern_obj[row_bw_inds, :]
         desc_bw_vec = bw_vec[row_bw_inds, :]
@@ -170,18 +171,16 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
         # Find the first row that contains repeats of length less than T and
         # remove these rows from consideration during the next check of the
         # stopping condition
-        T_inds = np.amin(desc_bw_vec == thresh_bw) - 1
-        if T_inds < 0:
-            T_inds = np.array([])
+        thresh_inds = np.nonzero(desc_bw_vec == thresh_bw)[0]
+        if thresh_inds.size == 0:
+            thresh_inds = max(desc_bw_vec.shape)
         else:
-            T_inds = np.array(T_inds)  # T_inds is converted into an array
-
-        if T_inds.size == 0:
-            T_inds = max(desc_bw_vec.shape)
+            thresh_inds = thresh_inds[0]
 
         pno_block = reconstruct_full_block(input_pattern_obj, desc_bw_vec)
 
     # Sort the lengths in bw_vec in ascending order
+    # and sort pattern_no_overlaps respectively
     bw_inds = np.argsort(desc_bw_vec, axis=None)
     pattern_no_overlaps_key = desc_bw_vec[bw_inds, ]
     pattern_no_overlaps = input_pattern_obj[bw_inds, ]
@@ -191,17 +190,18 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
 
 def check_overlaps(input_mat):
     """
-    Compares every pair of groups and determines if there are any repeats in
+    Compares every pair of repeat groups and determines if there are any repeats in
     any pairs of the groups that overlap.
 
     Args
     ----
-    input_mat : np.array[int]
-        Matrix to be checked for overlaps.
+    input_mat : np.ndarray
+        Binary matrix with blocks of 1's equal to the length of repeats
+        to be checked for overlaps
 
     Returns
     -------
-    overlap_mat : np.array[bool]
+    overlap_mat : np.ndarray
         Logical array where (i,j) = 1 if row i of input matrix and row j
         of input matrix overlap and (i,j) = 0 elsewhere.
             
@@ -228,23 +228,13 @@ def check_overlaps(input_mat):
     # If input_mat is not binary, create binary temporary objects
     compare_left = compare_left > 0
     compare_right = compare_right > 0
-
-    # Empty matrix to store overlaps
-    compare_all = np.zeros((compare_left.shape[0], 1))
-
-    # For each row
-    for i in range(compare_left.shape[0]):
-        # Create new counter
-        num_overlaps = 0
-        for j in range(compare_left.shape[1]):
-            if compare_left[i, j] == 1 and compare_right[i, j] == 1:
-                # inc count
-                num_overlaps = num_overlaps + 1
-
-        # Append num_overlaps to matrix
-        compare_all[i, 0] = num_overlaps
-
-    compare_all = compare_all > 0
+    # Check every pair of rows to see which rows overlap with each other
+    compare_all = np.sum(np.add(compare_left.astype(int),
+                                compare_right.astype(int)) == 2,
+                         axis=1) > 0
+    # Convert compare_all to a 2D vector
+    compare_all = compare_all[None, :].reshape(-1, 1)
+    
     overlap_mat = np.reshape(compare_all, (rs, rs))
 
     # If overlap_mat is symmetric, only keep the upper-triangular portion. 
@@ -294,11 +284,11 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     sn = red.shape[0]
     assert sn == blue.shape[0]
 
-    # Find all starting indices in red and store them as a 2d array
+    # Find all starting indices in red and store them as a 2D array
     start_red = np.flatnonzero(red)
     start_red = start_red[None, :]
 
-    # Find all starting indices in blue and store them as a 2d array
+    # Find all starting indices in blue and store them as a 2D array
     start_blue = np.flatnonzero(blue)
     start_blue = start_blue[None, :]
 
@@ -306,7 +296,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
     red_block = reconstruct_full_block(red, red_len)
     blue_block = reconstruct_full_block(blue, blue_len)
 
-    # Find the intersection of red and blue
+    # Find the intersection of red and blue and call it purple
     red_block = red_block > 0
     blue_block = blue_block > 0
     purple_block = np.logical_and(red_block, blue_block)
@@ -395,7 +385,6 @@ def __compare_and_cut(red, red_len, blue, blue_len):
                 # new variable new_blue, which holds the part(s) of
                 # blue_minus_purple, should have two rows with 1's for the
                 # starting indices of the resulting pieces and 0's elsewhere.
-
                 else:
                     # If blue_minus_purple is empty, then set new_blue and
                     # blue_length_vec to empty
@@ -499,7 +488,7 @@ def __compare_and_cut(red, red_len, blue, blue_len):
         union_length = np.vstack((np.array([union_length]).T, 
                                   union_mat_add_length))
 
-    # Make sure union_length is a 2d vector
+    # Make sure union_length is a 2D vector
     if union_length.ndim == 1:
         union_length = np.array([union_length]).T
     if union_mat.size != 0:
@@ -606,7 +595,7 @@ def __inds_to_rows(start_mat, row_length):
     Returns
     -------
     new_mat : np.ndarray
-        Matrix of one or two rows, with 1's where the starting indices 
+        Binary matrix of one or two rows, with 1's where the starting indices
         and 0's otherwise.
             
     """
@@ -614,9 +603,11 @@ def __inds_to_rows(start_mat, row_length):
     if start_mat.ndim == 1:
         # Convert a 1D array into 2D array
         start_mat = start_mat[None, :]
+
     # Initialize mat_rows and new_mat
     mat_rows = start_mat.shape[0]
     new_mat = np.zeros((mat_rows, row_length))
+
     for i in range(0, mat_rows):
         inds = start_mat[i, :]
         # Let the starting indices be 1
@@ -627,7 +618,7 @@ def __inds_to_rows(start_mat, row_length):
 
 def __merge_based_on_length(full_mat, full_bw, target_bw):
     """
-    Merges repeats that are the same length, as set by full_bandwidth, 
+    Merges repeats that are the same length, as set by full_bw,
     and are repeats of the same piece of structure.
 
     Args
@@ -652,8 +643,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
         
     """
 
-
-    # Return the indices that would sort full_bandwidth and full_mat
+    # Sort full_bandwidth and full_mat
     bnds = np.argsort(full_bw, axis=None)
     temp_bandwidth = full_bw.flatten()[bnds]
     temp_mat = full_mat[bnds, :]
@@ -694,10 +684,8 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
             # Combine rows into a single matrix
             temp_mat = np.vstack((temp_mat, merged_mat))
 
-            # Indicates temp_bandwidth is an empty array
             if temp_bandwidth.size == 0:
                 temp_bandwidth = np.concatenate(bandwidth_add)
-            # Indicates temp_bandwidth is not an empty array
             elif temp_bandwidth.size > 0:
                 temp_bandwidth = np.concatenate(
                     (temp_bandwidth, bandwidth_add.flatten())
@@ -706,7 +694,7 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
             # Return the indices that would sort temp_bandwidth
             bnds = np.argsort(temp_bandwidth)
 
-            # Sort the elements of temp_bandwidth
+            # Sort the elements of temp_bandwidth and temp_mat
             temp_bandwidth = temp_bandwidth[bnds]
             temp_mat = temp_mat[bnds, ]
 
@@ -752,10 +740,8 @@ def __merge_rows(input_mat, input_width):
         # Step 2a: choose first unmerged row
         row2check = not_merge[0, :]
 
-        # Create a comparison matrix
-        # with copies of row2check stacked
-        # so that r2c_mat is the same
-        # size as the set of rows waiting
+        # Create a comparison matrix with copies of row2check stacked
+        # so that r2c_mat is the same size as the set of rows waiting
         # to be merged
         r2c_mat = np.kron(np.ones((rows, 1)), row2check)
 
@@ -768,8 +754,7 @@ def __merge_rows(input_mat, input_width):
         union_merge = union_merge.astype(int)
         not_merge = np.delete(not_merge, np.where(merge_inds == 1), 0)
 
-        # Step 2d: check that newly merged rows do not cause overlaps within
-        # row
+        # Step 2d: check that newly merged rows do not cause overlaps within row
         # If there are conflicts, rerun compare_and_cut
         merge_block = reconstruct_full_block(union_merge, input_width)
 
@@ -803,12 +788,12 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
 
     Args
     -----
-    matrix_no_overlaps : np.ndarray[int]
+    matrix_no_overlaps : np.ndarray
         Binary matrix with 1's where repeats begin and 0's otherwise.
 
-    key_no_overlaps : np.ndarray[int]
-        Vector containing the lengths of the repeats encoded in
-        matrix_no_overlaps.
+    key_no_overlaps : np.ndarray
+        Vector containing the lengths of the repeats encoded 
+        in matrix_no_overlaps.
 
     sn : int
         Song length, which is the number of audio shingles.
@@ -818,20 +803,20 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
 
     Returns
     -----
-    full_visualization : np.ndarray[int]
+    full_visualization : np.ndarray
         Binary matrix representation for full_matrix_no_overlaps 
         with blocks of 1's equal to the length's prescribed 
         in full_key.
 
-    full_key : np.ndarray[int]
+    full_key : np.ndarray
         Vector containing the lengths of the hierarchical
         structure encoded in full_matrix_no_overlaps.
 
-    full_matrix_no_overlaps : np.ndarray[int]
+    full_matrix_no_overlaps : np.ndarray
         Binary matrix with 1's where hierarchical
         structure begins and 0's otherwise.
 
-    full_anno_lst : np.ndarray[int]
+    full_anno_lst : np.ndarray
         Vector containing the annotation markers of the
         hierarchical structure encoded in each row of
         full_matrix_no_overlaps.
@@ -900,19 +885,15 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     # Assign one new unique number to all the zero blocks
     pno_color_vec[one_vec == 1] = num_colors + 1
 
-
     # We are only concerned with the order that repeats of the essential
     # structure components occur in. So we create a vector that only contains
-    # the starting indices for each repeat of the essential structure
-    # components.
+    # the starting indices for each repeat of the essential structure components.
 
     # We isolate the starting index of each repeat of the essential structure
     # components and save a binary vector with 1 at a time step if a repeat of
     # any essential structure component occurs there
     non_zero_inds = (pno_color_vec > 0)
-
     num_nzi = non_zero_inds.sum(axis=0)
-
     pno_color_inds_only = pno_color_vec[non_zero_inds]
 
     # For indices that signals the start of a zero block, turn those indices
@@ -969,7 +950,6 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
     # representation.
 
     nzi_lst = find_all_repeats(symm_pno_inds_only, np.arange(1, num_nzi + 1))
-
     remove_inds = (nzi_lst[:, 0] == nzi_lst[:, 2])
 
     # Remove any pairs of repeats that are two copies of the same repeat (i.e.
@@ -1066,7 +1046,7 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
             find_zero = sn
         else:
             find_zero = np.where(temp_row == 0)[0][0]
-            
+
         if np.size(np.where(temp_row == 2)[0]) == 0:
             find_two = sn
         else:
