@@ -151,8 +151,6 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             id_mat = np.identity(bw)
 
             # Search for diagonals of length band_width
-
-            # Search for diagonals of length band_width
             diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
 
             # Mark where diagonals of length band_width start
