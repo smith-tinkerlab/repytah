@@ -7,4 +7,5 @@ The module ``utilities.py``, when imported, allows ``search.py``, ``transform.py
 This module contains the following functions:
 
 .. automodule:: repytah.utilities
+    :imported-members:
     :members:
