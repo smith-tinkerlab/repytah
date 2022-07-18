@@ -204,6 +204,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # Since you are checking the overlaps you need to cut these
                     # intervals into pieces: left, right, and middle.
                     # NOTE: the middle interval may NOT exist
+                    
                     # Vector of 1's that is the length of the number of
                     # overlapping intervals. This is used a lot.
                     ones_no = np.ones(num_overlaps, int)
@@ -230,10 +231,10 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     # 2b) Right Overlap
 
                     end_i_over = start_i_over + (bw - 1)
-                    end_j_over= start_j_over + (bw - 1)
+                    end_j_over = start_j_over + (bw - 1)
 
                     ematch_i_over = end_i_over - K + 1 
-                    ematch_j_over = end_i_over - 1
+                    ematch_j_over = end_i_over + 1
 
                     eint_lst = np.vstack((ematch_i_over, end_i_over, 
                         ematch_j_over, end_j_over, K)).T
@@ -248,17 +249,13 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
                     # 2) Middle Overlap
 
-                    mnds = (end_i_over - start_j_over - K + ones_no) > 0
+                    mnds = (end_i_over - start_j_over - K + 1) > 0
 
                     if sum(mnds) > 0:
                         print("has middle overlap")
                         midd_int = np.vstack((start_j_over, end_i_over - K, 
                         start_j_over + K, end_i_over, 
-                        end_i_over - start_j_over - K + ones_no)).T
-
-                        k_middle = np.vstack(())
-                        k_middle = k_middle.T
-                        k_middle = k_middle[np.all(k_middle != 0, axis=1)]
+                        end_i_over - start_j_over - K + 1)).T
 
                         # Remove the pairs that fall below the bandwidth
                         # threshold
