@@ -236,7 +236,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     ematch_j_over = end_i_over - 1
 
                     eint_lst = np.vstack((ematch_i_over, end_i_over, 
-                        ematch_j_over, end_j_over,, K)).T
+                        ematch_j_over, end_j_over, K)).T
 
                     # Remove the pairs that fall below the bandwidth threshold
                     keep_e = eint_lst[:, 4] > thresh_bw
