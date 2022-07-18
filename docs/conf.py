@@ -56,7 +56,12 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.imgconverter"
 ]
 
-# TEST: Add source suffixes
+## Include Python objects as they appear in source files
+autodoc_member_order = 'bysource'
+autodoc_default_options = {
+    'members': True
+}
+
 source_suffix = ".rst"
 
 
