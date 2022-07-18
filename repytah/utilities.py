@@ -161,15 +161,16 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             # Mark where diagonals of length band_width start
             diag_markers = (diagonal_mat == bw).astype(int)
 
-            if diag_markers.any() > 0:
+            if diag_markers.any():
 
                 # 1) Non-Overlaps: Search outside the overlapping shingles
-                upper_tri = np.triu(diag_markers, bw)
-
+                
                 # Search for paired starts
-                start_i, start_j = upper_tri.nonzero()
+                start_i, start_j =  np.nonzero(np.triu(diag_markers, bw))
                 start_i = start_i + 1
                 start_j = start_j + 1
+
+                num_overlaps = start_i.shape[0]
 
                 # Find the matching ends for the previously found starts
                 match_i = start_i + (bw - 1)
@@ -177,12 +178,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
                 # List pairs of starts with their ends and the widths of the
                 # non-overlapping interval
-                i_pairs = np.vstack((start_i, match_i)).T
-                j_pairs = np.vstack((start_j, match_j)).T
-                i_j_pairs = np.hstack((i_pairs, j_pairs))
-                width = np.repeat(bw, i_j_pairs.shape[0], axis=0)
-                width_col = width.T
-                int_lst = np.column_stack((i_pairs, j_pairs, width_col))
+                int_lst = np.vstack((start_i, match_i,start_j, match_j,
+                    bw*np.ones((1,num_overlaps),int))).T
 
                 # Add the new non-overlapping intervals to the full list of
                 # non-overlapping intervals
