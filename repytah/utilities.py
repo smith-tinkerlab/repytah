@@ -195,7 +195,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 num_overlaps = start_i_over.shape[0]
 
                 # Check if overlap found is the whole data stream
-                if num_overlaps == 1 and start_i_shin == start_j_shin:
+                if num_overlaps == 1 and start_i_over == start_j_over:
                     sint_lst = np.vstack((start_i_over, start_i_over + (bw - 1),
                         start_j_over, start_j_over + (bw - 1), bw)).T
                     sint_all = np.vstack((sint_all, sint_lst))
