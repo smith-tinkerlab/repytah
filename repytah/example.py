@@ -34,54 +34,48 @@ The module contains the following functions:
 
 """
 
+
 def load_ex_data(input):
     """
     Reads in a csv input file with extracted features.
 
-    Args
-    ----
-    input : str
-        Name of .csv file to be processed.
+    Args:
+        input (str):
+            Name of .csv file to be processed.
+
+    Returns:
+        A pandas.DataFrame that contains extracted features of a sequential data
+        stream.
+
     """
 
     stream = pkg_resources.resource_stream(__name__, input)
-    return pd.read_csv(stream,header=None)
+    return pd.read_csv(stream, header=None)
 
 
 def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     """
-    Example of full aligned hierarchies pathway.
+    Example of full aligned hierarchies pathway. A .mat file is saved that
+    contains variables created for aligned hierarchies.
     
-    Args
-    ----
-    file_in : str
-        Name of .csv file to be processed. Contains features across time steps 
-        to be analyzed, for example chroma features
+    Args:
+        file_in (str):
+            Name of .csv file to be processed. Contains features across time
+            steps to be analyzed, for example chroma features
     
-    file_out : str
-        Name of file where output will be stored.
+        file_out (str):
+            Name of file where output will be stored.
     
-    num_fv_per_shingle : int
-        Number of feature vectors per shingle. Provides "context" of each 
-        individual time step, so that for notes CDE if num_fv_per_shingle=2
-        shingles would be CD, DE.
-        
-    num_fv_per_shingle : int
-        Number of feature vectors per shingle. Provides "context" of each
-        individual time step, so that for notes CDE if num_fv_per_shingle=2
-        shingles would be CD, DE.
-        
-    thresh : int
-        Maximum threshold value. Largest length repeated structure to 
-        search for.
-    
-    Returns
-    -------
-    none : .mat file is saved. Contains variables created for aligned 
-        hierarchies. 
+        num_fv_per_shingle (int):
+            Number of feature vectors per shingle. Provides "context" of each
+            individual time step, so that for notes CDE if
+            num_fv_per_shingle = 2, shingles would be CD, DE.
 
-    Example
-    --------
+        thresh (int):
+            Maximum threshold value.
+
+
+    Example:
     ### Run on example file
     >>> file_in = load_ex_data('data/input.csv').to_numpy()
     >>> file_out = "hierarchical_out_file.mat"
@@ -91,22 +85,22 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
                                    num_fv_per_shingle, thresh)
                                    
     """
-    
+
     # Import file of feature vectors
     fv_mat = file_in
-    #print("fv_mat",fv_mat)
-    
+    # print("fv_mat",fv_mat)
+
     # Get pairwise distance matrix/self dissimilarity matrix using cosine 
     # distance
     self_dissim_mat = create_sdm(fv_mat, num_fv_per_shingle)
-    
+
     # Get thresholded distance matrix
     song_length = self_dissim_mat.shape[0]
     thresh_dist_mat = (self_dissim_mat <= thresh)
 
     # Extract the diagonals from thresholded distance matrix, saving the 
     # repeat pairs the diagonals represent
-    all_lst = find_initial_repeats(thresh_dist_mat, 
+    all_lst = find_initial_repeats(thresh_dist_mat,
                                    np.arange(1, song_length + 1), 0)
 
     # Find smaller repeats which are contained within larger repeats
@@ -157,26 +151,16 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
         # Create the output file
         sio.savemat(file_out, outdict)
-    
 
 
-def visualize_all_lst(all_lst, thresh_dist_mat):
+def visualize_all_lst(thresh_dist_mat):
     """
     Produces a visualization to highlight all pairs of repeats
     in the Mazurka data set.
 
-    Args
-    ----
-    all_lst : np.array
-        Pairs of repeats that correspond to diagonals in thresh_mat.
-
-    thresh_dist_mat : np.ndarray
-        Thresholded dissimilarity matrix that we extract diagonals from.
-    
-    
-    Returns
-    -------
-    none : A visualization of all pairs of repeat is produced.
+    Args:
+        thresh_dist_mat (np.ndarray):
+            Thresholded dissimilarity matrix that we extract diagonals from.
 
     """
 
@@ -186,33 +170,24 @@ def visualize_all_lst(all_lst, thresh_dist_mat):
     # For [124, 156, 292, 324, 33] in all_lst
     x = [124, 156]
     y = [292, 324]
-    plt.plot(x, y, color = "red")
+    plt.plot(x, y, color="red")
 
     # For [51, 122, 123, 194, 72] in all_lst
     x = [51, 122]
     y = [123, 194]
-    plt.plot(x, y, color = "blue")
+    plt.plot(x, y, color="blue")
 
     plt.show()
 
-def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
+
+def visualize_complete_lst(thresh_dist_mat):
     """
     Produces a visualization to highlight all pairs of smaller repeats
     that are contained in larger diagonals in the Mazurka data set.
 
-    Args
-    ----
-    complete_lst : np.ndarray 
-        List of pairs of repeats with smaller repeats added.
-
-    thresh_dist_mat : np.ndarray
-        Thresholded dissimilarity matrix that we extract diagonals from.
-    
-    
-    Returns
-    -------
-    none : A visualization of all pairs of repeated smaller repeats
-           that are contained in larger diagonals is produced.
+    Args:
+        thresh_dist_mat (np.ndarray):
+            Thresholded dissimilarity matrix that we extract diagonals from.
 
     """
 
@@ -223,43 +198,41 @@ def visualize_complete_lst(all_lst, complete_lst, thresh_dist_mat):
     # For [124, 145, 292, 313, 22, 1] in complete_lst
     x = [124, 145]
     y = [292, 313]
-    plt.plot(x, y, color = "blue")
+    plt.plot(x, y, color="blue")
 
     # For [146, 146, 314, 314, 1, 2] in complete_lst
     x = [146, 146]
     y = [314, 314]
-    plt.plot(x, y, color = "aqua")
+    plt.plot(x, y, color="aqua")
 
     # For [147, 156, 315, 324, 10, 1] in complete_lst
     x = [147, 156]
     y = [315, 324]
-    plt.plot(x, y, color = "red")
+    plt.plot(x, y, color="red")
 
     # Breaking down [51, 122, 123, 194, 72]
     # For [51, 73, 123, 145, 23, 1] in complete_lst
     x = [51, 73]
     y = [123, 145]
-    plt.plot(x, y, color = "darkorange")
+    plt.plot(x, y, color="darkorange")
 
     # For [74, 74, 146, 146, 1, 2] in complete_lst
     x = [74, 74]
     y = [146, 146]
-    plt.plot(x, y, color = "aqua")
+    plt.plot(x, y, color="aqua")
 
     # For [75, 122, 147, 194, 48, 1] in complete_lst
     x = [75, 122]
     y = [147, 194]
-    plt.plot(x, y, color = "purple")
+    plt.plot(x, y, color="purple")
 
     plt.show()
 
 
 if __name__ == "__main__":
-
-    file_in = load_ex_data('not_expanded_data/mazurka30-1.csv').to_numpy()
+    file_in = load_ex_data('data\\input.csv').to_numpy()
     file_out = "hierarchical_out_file.mat"
     num_fv_per_shingle = 12
     thresh = 0.02
     csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
-
-
+    

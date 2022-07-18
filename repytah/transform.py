@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 transform.py
+
 This module contains functions that transform matrix inputs into different
-forms that are of use in bigger functions where they are called. These
-functions focus mainly on overlapping repeated structures and annotation
-markers.
+forms that are of use in bigger functions where they are called.
+These functions focus mainly on overlapping repeated structures and
+annotation markers.
+
 The module contains the following functions:
     * remove_overlaps
         Removes any pairs of repeats with the same length and annotation marker
@@ -13,8 +15,8 @@ The module contains the following functions:
     * __create_anno_remove_overlaps
         Turns rows of repeats into marked rows with annotation markers for the
         start indices and zeroes otherwise. After removing the annotations that
-        have overlaps, the function creates separate arrays for annotations with
-        overlaps and annotations without overlaps. Finally, the annotation
+        have overlaps, the function creates separate arrays for annotations
+        with overlaps and annotations without overlaps. Finally, the annotation
         markers are checked and fixed if necessary.
 
     * __separate_anno_markers
@@ -24,49 +26,48 @@ The module contains the following functions:
 """
 
 import numpy as np
-from utilities import reconstruct_full_block, add_annotations
+from repytah.utilities import reconstruct_full_block, add_annotations
 
 
 def remove_overlaps(input_mat, song_length):
     """
     Removes any pairs of repeat length and specific annotation marker
     where there exists at least one pair of repeats that overlap in time.
-    Args
-    ----
-    input_mat : np.ndarray[int]
-        List of pairs of repeats with annotations marked. The first
-        two columns refer to the first repeat or the pair, the second
-        two refer to the second repeat of the pair, the fifth column
-        refers to the length of the repeats, and the sixth column
-        contains the annotation markers.
 
-    song_length : int
-        Number of audio shingles.
+    Args:
+        input_mat (np.ndarray[int]):
+            List of pairs of repeats with annotations marked. The first two
+            columns refer to the first repeat or the pair, the second two refer
+            to the second repeat of the pair, the fifth column refers to the
+            length of the repeats, and the sixth column contains the annotation
+            markers.
 
-    Returns
-    -------
-    lst_no_overlaps : np.ndarray[int]
-        List of pairs of repeats with annotations marked. All the
-        repeats of a given length and with a specific annotation
-        marker do not overlap in time.
+        song_length (int):
+            Number of audio shingles.
 
-    matrix_no_overlaps : np.ndarray[int]
-        Matrix representation of lst_no_overlaps with one row for
-        each group of repeats.
+    Returns:
+        lst_no_overlaps (np.ndarray[int]):
+            List of pairs of repeats with annotations marked. All the repeats
+            of a given length and with a specific annotation marker do not
+            overlap in time.
 
-    key_no_overlaps : np.ndarray[int]
-        Vector containing the lengths of the repeats encoded in
-        each row of matrix_no_overlaps.
+        matrix_no_overlaps (np.ndarray[int]):
+            Matrix representation of lst_no_overlaps with one row for
+            each group of repeats.
 
-    annotations_no_overlaps : np.ndarray[int]
-        Vector containing the annotation markers of the repeats
-        encoded in each row of matrix_no_overlaps.
+        key_no_overlaps (np.ndarray[int]):
+            Vector containing the lengths of the repeats encoded in each row of
+            matrix_no_overlaps.
 
-    all_overlap_lst : np.ndarray[int]
-        List of pairs of repeats with annotations marked removed
-        from input_mat. For each pair of repeat length and specific
-        annotation marker, there exist at least one pair of repeats
-        that do overlap in time.
+        annotations_no_overlaps (np.ndarray[int]):
+            Vector containing the annotation markers of the repeats encoded in
+            each row of matrix_no_overlaps.
+
+        all_overlap_lst (np.ndarray[int]):
+            List of pairs of repeats with annotations marked removed from
+            input_mat. For each pair of repeat length and specific annotation
+            marker, there exists at least one pair of repeats that do overlap
+            in time.
     """
 
     # Create a vector of unique repeat lengths
@@ -195,36 +196,32 @@ def __create_anno_remove_overlaps(k_mat, song_length, band_width):
     k_lst_out and puts them in overlap_lst. Lastly, it checks if the proper
     sequence of annotation markers was given and fix them if necessary.
 
-    Args
-    ----
-    k_mat : np.ndarray
-        List of pairs of repeats of length 1 with annotations
-        marked. The first two columns refer to the first repeat
-        of the pair, the second two refer to the second repeat of
-        the pair, the fifth column refers to the length of the
-        repeats, and the sixth column contains the annotation markers.
+    Args:
+        k_mat (np.ndarray):
+            List of pairs of repeats of length 1 with annotations marked.
+            The first two columns refer to the first repeat of the pair,
+            the second two refer to the second repeat of the pair, the fifth
+            column refers to the length of the repeats, and the sixth column
+            contains the annotation markers.
 
-    song_length : int
-        Number of audio shingles.
+        song_length (int):
+            Number of audio shingles.
 
-    band_width : int
-        Length of repeats encoded in k_mat.
+        band_width (int):
+            Length of repeats encoded in k_mat.
 
-    Returns
-    -------
-    pattern_row : np.ndarray
-        Row that marks where non-overlapping repeats occur,
-        marking start indices with annotation markers and
-        0's otherwise.
+    Returns:
+        pattern_row (np.ndarray):
+            Row that marks where non-overlapping repeats occur, marking start
+            indices with annotation markers and 0's otherwise.
 
-    k_lst_out : np.ndarray
-        List of pairs of repeats of length band_width that
-        contain no overlapping repeats with annotations
-        marked.
+        k_lst_out (np.ndarray):
+            List of pairs of repeats of length band_width that contain no
+            overlapping repeats with annotations marked.
 
-    overlap_lst : np.ndarray
-        List of pairs of repeats of length band_width that
-        contain overlapping repeats with annotations marked.
+        overlap_lst (np.ndarray):
+            List of pairs of repeats of length band_width that contain
+            overlapping repeats with annotations marked.
     """
 
     # Step 0: Initialize outputs: Start with a vector of all 0's for
@@ -336,40 +333,39 @@ def __separate_anno_markers(k_mat, song_length, band_width, pattern_row):
     length band_width into individual rows. Each row will mark the start and
     end time steps of a repeat with 1's and 0's otherwise. The array is a
     visual record of where all of the repeats in a song start and end.
-    Args
-    ----
-    k_mat : np.ndarray
-        List of pairs of repeats of length band_width with annotations
-        marked. The first two columns refer to the start and end time
-        steps of the first repeat of the pair, the second two refer to
-        the start and end time steps of second repeat of the pair, the
-        fifth column refers to the length of the repeats, and the sixth
-        column contains the annotation markers. We will be indexing into
-        the sixth column to obtain a list of annotation markers.
 
-    song_length : int
-        Number of audio shingles.
+    Args:
+        k_mat (np.ndarray):
+            List of pairs of repeats of length band_width with annotations
+            marked. The first two columns refer to the start and end time
+            steps of the first repeat of the pair, the second two refer to
+            the start and end time steps of second repeat of the pair, the
+            fifth column refers to the length of the repeats, and the sixth
+            column contains the annotation markers. We will be indexing into
+            the sixth column to obtain a list of annotation markers.
 
-    band_width : int
-        Length of repeats encoded in k_mat.
+        song_length (int):
+            Number of audio shingles.
 
-    pattern_row : np.ndarray
-        Row vector of the length of the song that marks where
-        non-overlapping repeats occur with the repeats' corresponding
-        annotation markers and 0's otherwise.
-    Returns
-    -------
-    pattern_mat : np.ndarray
-        Matrix representation where each row contains a group of repeats
-        marked.
+        band_width (int):
+            Length of repeats encoded in k_mat.
 
-    pattern_key : np.ndarray
-        Column vector containing the lengths of the repeats encoded in
-        each row of pattern_mat.
+        pattern_row (np.ndarray):
+            Row vector of the length of the song that marks where
+            non-overlapping repeats occur with the repeats' corresponding
+            annotation markers and 0's otherwise.
+    Returns:
+        pattern_mat (np.ndarray):
+            Matrix representation where each row contains a group of repeats
+            marked.
 
-    anno_id_lst : np.ndarray
-        Column vector containing the annotation markers of the repeats
-        encoded in each row of pattern_mat.
+        pattern_key (np.ndarray):
+            Column vector containing the lengths of the repeats encoded in
+            each row of pattern_mat.
+
+        anno_id_lst (np.ndarray):
+            Column vector containing the annotation markers of the repeats
+            encoded in each row of pattern_mat.
     """
 
     # Find all distinct annotations

@@ -39,21 +39,19 @@ def find_complete_list(pair_list, song_length):
     contained in pair_list, which is composed of larger diagonals found in
     find_initial_repeats.
 
-    Args
-    ----
-    pair_list : np.ndarray
-        List of pairs of repeats found in earlier steps
-        (bandwidths MUST be in ascending order). If you have
-        run find_initial_repeats before this script,
-        then pair_list will be ordered correctly.
+    Args:
+        pair_list (np.ndarray):
+            List of pairs of repeats found in earlier steps
+            (bandwidths MUST be in ascending order). If you have run
+            find_initial_repeats before this script, then pair_list will be
+            ordered correctly.
 
-    song_length : int
-        Song length, which is the number of audio shingles.
+        song_length (int):
+            Song length, which is the number of audio shingles.
 
-    Returns
-    -------
-    final_lst : np.ndarray
-        List of pairs of repeats with smaller repeats added.
+    Returns:
+        final_lst (np.ndarray):
+            List of pairs of repeats with smaller repeats added.
 
     """
 
@@ -178,20 +176,20 @@ def __find_add_rows(lst_no_anno, check_inds, k):
     length, k, that that start at the same time step, or end at the same time
     step, or neither start nor end at the same time step as previously found
     pairs of repeated structures of the same length.
-    Args
-    ----
-    lst_no_anno : np.ndarray
-        List of pairs of repeats.
-    check_inds : np.ndarray
-        List of starting indices for repeats of length k that we use to
-        check lst_no_anno for more repeats of length k.
-    k : int
-        Length of repeats that we are looking for.
-    Returns
-    -------
-    add_rows : np.ndarray
-        List of newly found pairs of repeats of length K that are
-        contained in larger repeats in lst_no_anno.
+
+    Args:
+        lst_no_anno (np.ndarray):
+            List of pairs of repeats.
+        check_inds (np.ndarray):
+            List of starting indices for repeats of length k that we use to
+            check lst_no_anno for more repeats of length k.
+        k (int):
+            Length of repeats that we are looking for.
+
+    Returns:
+        add_rows (np.ndarray):
+            List of newly found pairs of repeats of length K that are
+            contained in larger repeats in lst_no_anno.
 
     """
 
@@ -329,19 +327,17 @@ def find_all_repeats(thresh_mat, bw_vec):
     First, we do not remove diagonals after we find them. Second,
     there is no smallest bandwidth size as we are looking for all diagonals.
 
-    Args
-    ----
-    thresh_mat : np.ndarray
-        Thresholded matrix that we extract diagonals from.
+    Args:
+        thresh_mat (np.ndarray):
+            Thresholded matrix that we extract diagonals from.
 
-    bw_vec : np.ndarray
-        Vector of lengths of diagonals to be found.
-        Should be 1, 2, 3, ..., n where n = number of timesteps.
+        bw_vec (np.ndarray):
+            Vector of lengths of diagonals to be found.
+            Should be 1, 2, 3, ..., n where n = number of timesteps.
 
-    Returns
-    -------
-    all_lst : np.array
-        Pairs of repeats that correspond to diagonals in thresh_mat.
+    Returns:
+        all_lst (np.ndarray):
+            Pairs of repeats that correspond to diagonals in thresh_mat.
     """
 
     # Initialize the input and temporary variables
@@ -492,20 +488,18 @@ def find_complete_list_anno_only(pair_list, song_length):
     This list contains all the pairs of repeated structures with their
     starting/ending indices and lengths.
 
-    Args
-    ----
-    pair_list : np.ndarray
-        List of pairs of repeats.
-        WARNING: Bandwidths must be in ascending order.
+    Args:
+        pair_list (np.ndarray):
+            List of pairs of repeats.
+            WARNING: Bandwidths must be in ascending order.
 
-    song_length : int
-        Number of audio shingles in song.
+        song_length (int):
+            Number of audio shingles in song.
 
-    Returns
-    -------
-    out_lst : np.ndarray
-        List of pairs of repeats with smaller repeats added and with
-        annotation markers.
+    Returns:
+        out_lst (np.ndarray):
+            List of pairs of repeats with smaller repeats added and with
+            annotation markers.
     """
 
     # Find list of unique repeat lengths
