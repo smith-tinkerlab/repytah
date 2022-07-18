@@ -18,7 +18,7 @@ import sphinx
 # This enables builds from outside the docs directory
 # srcpath = os.path.abspath(Path(os.path.dirname(__file__)) / '..')
 # sys.path.insert(0, srcpath)
-srcpath = sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('../repytah'")
 
 # -- Project information -----------------------------------------------------
 
