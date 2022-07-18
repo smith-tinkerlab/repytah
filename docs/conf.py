@@ -19,7 +19,7 @@ import sphinx
 srcpath = os.path.abspath(Path(os.path.dirname(__file__)) / '..')
 sys.path.insert(0, srcpath)
 # for modules to document with autodoc in another directory
-sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('../repytah'))
 
 # -- Project information -----------------------------------------------------
 
