@@ -11,8 +11,6 @@ Please cite ``repytah`` using the following:
 K. M. Kinnaird et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. 
 Available: https://github.com/smith-tinkerlab/repytah.
 
-.. automodule:: repytah.utilities
-    :members:
 
 .. toctree::
    :maxdepth: 1
