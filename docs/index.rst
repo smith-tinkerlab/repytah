@@ -25,9 +25,9 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :caption: Modules
 
    utilities_import
-   transform
-   assemble
-   search_doc
+   transform_import
+   assemble_import
+   search_import
 
 
 
