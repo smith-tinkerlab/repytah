@@ -112,9 +112,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
 
     if np.size(complete_lst) != 0:
         # Remove groups of repeats that overlap in time
-        output_tuple = remove_overlaps(complete_lst, song_length)
-
-        (mat_no_overlaps, key_no_overlaps) = output_tuple[1:3]
+        mat_no_overlaps, key_no_overlaps =\
+            remove_overlaps(complete_lst, song_length)[1:3]
 
         # Distill non-overlapping repeats into essential structure components
         # and use them to build the hierarchical representation
@@ -235,4 +234,3 @@ if __name__ == "__main__":
     num_fv_per_shingle = 12
     thresh = 0.02
     csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
-    
