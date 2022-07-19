@@ -83,14 +83,11 @@ def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
             One less than the smallest allowable repeat length.
 
     Returns:
-        pattern_no_overlaps (np.ndarray):
-            Binary matrix with 1's where repeats of essential structure
-            components begin.
-
-        pattern_no_overlaps_key (np.ndarray):
-            Vector containing the lengths of the repeats of essential structure
-            components in pattern_no_overlaps.
-            
+        A tuple (pattern_no_overlaps, pattern_no_overlaps_key) where
+        pattern_no_overlaps is a np.ndarray binary matrix with 1's where repeats
+        of essential structure components begin and pattern_no_overlaps_key is a
+        np.ndarray vector containing the lengths of the repeats of essential
+        structure components in pattern_no_overlaps.
     """
     # Make sure bw_vec is a 2D vector
     if bw_vec.ndim == 1:
@@ -263,13 +260,10 @@ def __compare_and_cut(red, red_len, blue, blue_len):
             Length of repeats encoded in blue.
 
     Returns:
-        union_mat (np.ndarray):
-            Binary matrix representation of up to three rows encoding
-            non-overlapping repeats cut from red and blue.
-
-        union_length (np.ndarray):
-            Vector containing the lengths of the repeats encoded in union_mat.
-            
+        A tuple (union_mat, union_length) where union_mat is a np.ndarray binary
+        matrix representation of up to three rows encoding non-overlapping
+        repeats cut from red and blue and union_length is a np.ndarray vector
+        containing the lengths of the repeats encoded in union_mat.
     """
 
     # Find the total time steps in red
@@ -511,13 +505,10 @@ def __num_of_parts(input_vec, input_start, input_all_starts):
             Starting indices for replication.
 
     Returns:
-        start_mat (np.ndarray):
-            Array of one or two rows, containing the starting indices of the
-            replicated repeats.
-
-        length_vec (np.ndarray):
-            Column vector containing the lengths of the replicated parts.
-        
+        A tuple (start_mat, length_vec) where start_mat is a np.ndarray of one
+        or two rows containing the starting indices of the replicated repeats
+        and length_vec is a np.ndarray column vector containing the lengths of
+        the replicated parts.
     """
 
     # Determine where input_vec has a break
@@ -620,13 +611,10 @@ def __merge_based_on_length(full_mat, full_bw, target_bw):
             Lengths of repeats that we seek to merge.
 
     Returns:
-        out_mat (np.ndarray):
-            Binary matrix with ones where repeats start and zeros otherwise
-            with rows of full_mat merged if appropriate.
-
-        one_length_vec (np.ndarray):
-            Length of the repeats encoded in out_mat.
-        
+        A tuple (out_mat, one_length_vec) where out_mat is a np.ndarray binary
+        matrix with 1's where repeats start and 0's otherwise with rows of
+        full_mat merged if appropriate and one_length_vec is a np.ndarray that
+        contains the length of repeats encoded in out_mat.
     """
 
     # Sort full_bandwidth and full_mat
@@ -785,22 +773,21 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
             Shows visualizations if True (default = False).
 
     Returns:
-        full_visualization (np.ndarray):
-            Binary matrix representation for full_matrix_no_overlaps
-            with blocks of 1's equal to the length's prescribed
-            in full_key.
+        A tuple (full_visualization, full_key, full_matrix_no_overlaps,
+        full_anno_lst) where all variables are np.ndarrays.
 
-        full_key (np.ndarray):
-            Vector containing the lengths of the hierarchical
-            structure encoded in full_matrix_no_overlaps.
+        full_visualization is a binary matrix representation for
+        full_matrix_no_overlaps with blocks of 1's equal to the lengths
+        prescribed in full_key.
 
-        full_matrix_no_overlaps (np.ndarray):
-            Binary matrix with 1's where hierarchical structure begins and
-            0's otherwise.
+        full_key is a vector containing the lengths of the hierarchical
+        structure encoded in full_matrix_no_overlaps.
 
-        full_anno_lst (np.ndarray):
-            Vector containing the annotation markers of the hierarchical
-            structure encoded in each row of full_matrix_no_overlaps.
+        full_matrix_no_overlaps is a binary matrix with 1's where hierarchical
+        structure begins and 0's otherwise.
+
+        full_anno_lst is a vector containing the annotation markers of the
+        hierarchical structure encoded in each row of full_matrix_no_overlaps.
 
     """
 
