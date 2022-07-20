@@ -148,12 +148,12 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     # Loop over all bandwidths from n to 1
     for bw in bandwidth_vec[::-1]:
         if bw > thresh_bw:
-            # Use correlation matrix to find diagonals of length bw
+            # Use matrix correlation to find diagonals of length bw
             id_mat = np.identity(bw)
 
             # Search for diagonals of length band_width
 
-            # use smallest datatype that can contain bw value
+            # Use smallest datatype that can contain bw value
             if bw < 255:
                 diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint8), -1,
                                             id_mat, anchor=(0, 0),
