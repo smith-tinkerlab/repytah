@@ -48,7 +48,6 @@ The module contains the following functions:
 """
 
 import numpy as np
-from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
 import cv2
