@@ -31,6 +31,7 @@ jobs:
         pip install scipy
         pip install matplotlib
         pip install pandas
+        pip install opencv-python --no-deps
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Install repytah
       run: |
