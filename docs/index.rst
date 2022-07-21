@@ -24,10 +24,10 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :maxdepth: 1
    :caption: Modules
 
-   utilities
-   transform
-   assemble
-   search_doc
+   utilities_import
+   transform_import
+   assemble_import
+   search_import
 
 
 

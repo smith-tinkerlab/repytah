@@ -18,7 +18,8 @@ import sphinx
 # This enables builds from outside the docs directory
 srcpath = os.path.abspath(Path(os.path.dirname(__file__)) / '..')
 sys.path.insert(0, srcpath)
-
+# for modules to document with autodoc in another directory
+sys.path.insert(0, os.path.abspath('../repytah'))
 
 # -- Project information -----------------------------------------------------
 
@@ -56,7 +57,12 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.imgconverter"
 ]
 
-# TEST: Add source suffixes
+## Include Python objects as they appear in source files
+autodoc_member_order = 'bysource'
+autodoc_default_options = {
+    'members': True
+}
+
 source_suffix = ".rst"
 
 
