@@ -30,13 +30,14 @@ Available: https://github.com/smith-tinkerlab/repytah.
    search_import
 
 
-
 .. toctree::
    :maxdepth: 1
    :caption: Implementation
    
    function_pipeline
+   quick_start.ipynb
    example_vignette.ipynb
+
 
 .. toctree::
    :maxdepth: 1
