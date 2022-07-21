@@ -50,7 +50,7 @@ The module contains the following functions:
 import numpy as np
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
-
+import cv2
 
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
