@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-search.py 
+search.py
+
 This module holds functions used to find and record the diagonals in the
 thresholded matrix, T. These functions prepare the diagonals found for
 transformation and assembling later.
@@ -11,6 +12,7 @@ The module contains the following functions:
         Finds all smaller diagonals (and the associated pairs of repeats)
         that are contained in pair_list, which is composed of larger diagonals
         found in find_initial_repeats.
+
     * __find_add_rows
         Finds pairs of repeated structures, represented as diagonals of a
         certain length, k, that neither start nor end at the same time steps
@@ -21,6 +23,7 @@ The module contains the following functions:
         identical to find_initial_repeats except for two crucial differences.
         First, we do not remove diagonals after we find them. Second, there is
         no smallest bandwidth size as we are looking for all diagonals.
+
     * find_complete_list_anno_only
         Finds annotations for all pairs of repeats found in find_all_repeats.
         This list contains all the pairs of repeated structures with their

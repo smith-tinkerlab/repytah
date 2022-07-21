@@ -88,12 +88,11 @@ def create_sdm(fv_mat, num_fv_per_shingle):
             # for each time step and represent these shingles
             # as vectors by stacking the relevant feature
             # vectors on top of each other
-            mat_as[i * num_rows :(i + 1) * num_rows, :] = \
+            mat_as[i * num_rows:(i + 1) * num_rows, :] = \
                 fv_mat[:, i:(num_columns - num_fv_per_shingle + i + 1)]
 
     # Build the pairwise-cosine distance matrix between audio shingles
     sdm_row = spd.pdist(mat_as.T, 'cosine')
-
 
     # Build self-dissimilarity matrix by changing the condensed
     # pairwise-cosine distance matrix to a redundant matrix
@@ -159,9 +158,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
             if diag_markers.any():
 
                 # 1) Non-Overlaps: Search outside the overlapping shingles
-                
+
                 # Search for paired starts
-                start_i, start_j =  np.nonzero(np.triu(diag_markers, bw))
+                start_i, start_j = np.nonzero(np.triu(diag_markers, bw))
                 start_i = start_i + 1
                 start_j = start_j + 1
 
@@ -173,8 +172,8 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
                 # List pairs of starts with their ends and the widths of the
                 # non-overlapping interval
-                int_lst = np.vstack((start_i, match_i,start_j, match_j,
-                    bw*np.ones((1,num_ints),int))).T
+                int_lst = np.vstack((start_i, match_i, start_j, match_j,
+                                     bw * np.ones((1, num_ints), int))).T
 
                 # Add the new non-overlapping intervals to the full list of
                 # non-overlapping intervals
@@ -184,7 +183,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
                 # Search for paired starts
                 start_i_over, start_j_over = np.nonzero((np.tril(
-                    np.triu(diag_markers),(bw - 1))))
+                    np.triu(diag_markers), (bw - 1))))
                 start_i_over = start_i_over + 1  # row
                 start_j_over = start_j_over + 1  # column
                 num_overlaps = start_i_over.shape[0]
@@ -192,28 +191,25 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 # Check if overlap found is the whole data stream
                 if num_overlaps == 1 and start_i_over == start_j_over:
                     sint_lst = np.vstack((start_i_over, start_i_over + (bw - 1),
-                        start_j_over, start_j_over + (bw - 1), bw)).T
+                                          start_j_over, start_j_over + (bw - 1),
+                                          bw)).T
                     sint_all = np.vstack((sint_all, sint_lst))
 
                 elif num_overlaps > 0:
                     # Since you are checking the overlaps you need to cut these
                     # intervals into pieces: left, right, and middle.
                     # NOTE: the middle interval may NOT exist
-                    
-                    # Vector of 1's that is the length of the number of
-                    # overlapping intervals. This is used a lot.
-                    ones_no = np.ones(num_overlaps, int)
 
                     # 2a) Left Overlap
-                    # Width is the same for corresponding left and right overlaps
+                    # Width is the same for  left and right overlaps
                     K = start_j_over - start_i_over
 
                     smatch_i_over = start_j_over - 1
                     smatch_j_over = start_j_over + K - 1
 
                     # List pairs of starts with their ends and widths
-                    sint_lst = np.vstack((start_i_over, smatch_i_over, 
-                        start_j_over, smatch_j_over, K)).T
+                    sint_lst = np.vstack((start_i_over, smatch_i_over,
+                                          start_j_over, smatch_j_over, K)).T
 
                     # Remove the pairs that fall below the bandwidth threshold
                     keep_s = sint_lst[:, 4] > thresh_bw
@@ -228,11 +224,11 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     end_i_over = start_i_over + (bw - 1)
                     end_j_over = start_j_over + (bw - 1)
 
-                    ematch_i_over = end_i_over - K + 1 
+                    ematch_i_over = end_i_over - K + 1
                     ematch_j_over = end_i_over + 1
 
-                    eint_lst = np.vstack((ematch_i_over, end_i_over, 
-                        ematch_j_over, end_j_over, K)).T
+                    eint_lst = np.vstack((ematch_i_over, end_i_over,
+                                          ematch_j_over, end_j_over, K)).T
 
                     # Remove the pairs that fall below the bandwidth threshold
                     keep_e = eint_lst[:, 4] > thresh_bw
@@ -247,10 +243,9 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                     mnds = (end_i_over - start_j_over - K + 1) > 0
 
                     if sum(mnds) > 0:
-                        print("has middle overlap")
-                        midd_int = np.vstack((start_j_over, end_i_over - K, 
-                        start_j_over + K, end_i_over, 
-                        end_i_over - start_j_over - K + 1)).T
+                        midd_int = np.vstack((
+                            start_j_over, end_i_over - K, start_j_over + K,
+                            end_i_over, end_i_over - start_j_over - K + 1)).T
 
                         # Remove the pairs that fall below the bandwidth
                         # threshold
@@ -313,7 +308,7 @@ def stretch_diags(thresh_diags, band_width):
     for i in range(inds.shape[0]):
         tempmat = np.zeros((n, n))
         tempmat[inds[i]:(inds[i] + band_width),
-                jnds[i]:(jnds[i] + band_width)] = subtemp
+        jnds[i]:(jnds[i] + band_width)] = subtemp
         temp_song_marks_out = temp_song_marks_out + tempmat
 
     # Ensure that stretch_diag_mat is a binary matrix
@@ -447,7 +442,7 @@ def __find_song_pattern(thresh_diags):
                 # Take sum of rows corresponding to inds and
                 # multiplies the sums against p_mask
                 c_mat = np.sum(thresh_diags[inds, :], axis=1).flatten()
-                c_mat = c_mat*pattern_mask
+                c_mat = c_mat * pattern_mask
 
                 # Find nonzero entries of c_mat
                 c_inds = c_mat.nonzero()
@@ -613,15 +608,15 @@ def get_y_labels(width_vec, anno_vec):
     num_rows = np.size(width_vec)
 
     # Make sure the sizes of width_vec and anno_vec are the same
-    assert(num_rows == np.size(anno_vec))
+    assert (num_rows == np.size(anno_vec))
 
     # Initialize the array with 0 as the origin
     y_labels = np.array([0])
 
     # Loop over the array adding labels
     for i in range(0, num_rows):
-        label = ('w = '+str(width_vec[i][0].astype(int)) +
-                 ', a = '+str(anno_vec[i]))
+        label = ('w = ' + str(width_vec[i][0].astype(int)) +
+                 ', a = ' + str(anno_vec[i]))
         y_labels = np.append(y_labels, label)
 
     return y_labels
@@ -665,13 +660,13 @@ def reformat(pattern_mat, pattern_key):
     results = np.where(pattern_mat == 1)
 
     for x, j in zip(range(pattern_mat.shape[0]), (range(0,
-                                                  results[0].size - 1, 2))):
-
+                                                        results[0].size - 1,
+                                                        2))):
         # Assign the time steps of the repeated structures into info_mat
         info_mat[x, 0] = results[1][j] + 1
-        info_mat[x, 1] = info_mat[x, 0]+pattern_key[x] - 1
-        info_mat[x, 2] = results[1][j+1] + 1
-        info_mat[x, 3] = info_mat[x, 2]+pattern_key[x] - 1
+        info_mat[x, 1] = info_mat[x, 0] + pattern_key[x] - 1
+        info_mat[x, 2] = results[1][j + 1] + 1
+        info_mat[x, 3] = info_mat[x, 2] + pattern_key[x] - 1
         info_mat[x, 4] = pattern_key[x]
 
     return info_mat.astype(int)
