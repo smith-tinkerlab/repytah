@@ -32,7 +32,7 @@ The module contains the following functions:
 """
 
 import numpy as np
-from scipy import signal
+import cv2
 from utilities import add_annotations
 
 
@@ -361,11 +361,28 @@ def find_all_repeats(thresh_mat, bw_vec):
     # Loop over all possible band_widths
     for bw in bw_vec:
 
-        # Use convolution matrix to find diagonals of length bw
+        # Use matrix correlation to find diagonals of length bw
         id_mat = np.identity(bw)
 
         # Search for diagonals of length band_width
-        diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
+
+        # Use smallest datatype that can contain bw value
+        if bw < 255:
+            diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint8), -1,
+                                        id_mat, anchor=(0, 0),
+                                        borderType=cv2.BORDER_CONSTANT)
+        elif bw <= 65535:
+            diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1,
+                                        id_mat, anchor=(0, 0),
+                                        borderType=cv2.BORDER_CONSTANT)
+        else:
+            raise RuntimeError("Bandwidth value too large")
+
+        # Splice away results from zero-padding
+        outdims = (np.array(thresh_temp.shape[0])
+                   - np.array(id_mat.shape[0])) + 1
+        diagonal_mat = diagonal_mat[0:outdims, 0:outdims]
+        
 
         # Mark where diagonals of length band_width start
         diag_markers = (diagonal_mat == bw).astype(int)

@@ -48,10 +48,9 @@ The module contains the following functions:
 """
 
 import numpy as np
-from scipy import signal
 import scipy.sparse as sps
 import scipy.spatial.distance as spd
-
+import cv2
 
 def create_sdm(fv_mat, num_fv_per_shingle):
     """
@@ -72,7 +71,6 @@ def create_sdm(fv_mat, num_fv_per_shingle):
         self_dissim_mat (np.ndarray):
             Self-dissimilarity matrix with paired cosine distances between
             shingles.
-
     """
 
     [num_rows, num_columns] = fv_mat.shape
@@ -109,6 +107,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     list. As each diagonal is found, they are removed to avoid identifying
     repeated sub-structures.
 
+
     Args:
         thresh_mat (np.ndarray[int]):
             Thresholded matrix that we extract diagonals from.
@@ -124,7 +123,6 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
         all_lst (np.ndarray[int]):
             List of pairs of repeats that correspond to diagonals in
             thresh_mat.
-
     """
 
     # Initialize the input and temporary variables
@@ -146,13 +144,29 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
     for bw in bandwidth_vec[::-1]:
         if bw > thresh_bw:
 
-            # Use convolution matrix to find diagonals of length bw
+            # Use matrix correlation to find diagonals of length bw
             id_mat = np.identity(bw)
 
-            # Search for diagonals of length band_width
-            diagonal_mat = signal.convolve2d(thresh_temp, id_mat, 'valid')
+            # Search for diagonals of length bw
+            
+            # Use smallest datatype that can contain bw 
+            if bw < 255:
+                diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint8), -1,
+                                            id_mat, anchor=(0, 0),
+                                            borderType=cv2.BORDER_CONSTANT)
+            elif bw <= 65535:
+                diagonal_mat = cv2.filter2D(thresh_temp.astype(np.uint16), -1,
+                                            id_mat, anchor=(0, 0),
+                                            borderType=cv2.BORDER_CONSTANT)
+            else:
+                raise RuntimeError("Bandwidth value too large")
 
-            # Mark where diagonals of length band_width start
+            # Splice away results from zero-padding
+            outdims = (np.array(thresh_temp.shape[0])
+                       - np.array(id_mat.shape[0])) + 1
+            diagonal_mat = diagonal_mat[0:outdims, 0:outdims]
+
+            # Mark where diagonals of length bw start
             diag_markers = (diagonal_mat == bw).astype(int)
 
             if diag_markers.any():
@@ -166,12 +180,14 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
 
                 num_ints = start_i.shape[0]
 
+
                 # Find the matching ends for the previously found starts
                 match_i = start_i + (bw - 1)
                 match_j = start_j + (bw - 1)
 
                 # List pairs of starts with their ends and the widths of the
                 # non-overlapping interval
+
                 int_lst = np.vstack((start_i, match_i, start_j, match_j,
                                      bw * np.ones((1, num_ints), int))).T
 
@@ -182,6 +198,7 @@ def find_initial_repeats(thresh_mat, bandwidth_vec, thresh_bw):
                 # 2) Overlaps: Search only the overlaps in shingles
 
                 # Search for paired starts
+
                 start_i_over, start_j_over = np.nonzero((np.tril(
                     np.triu(diag_markers), (bw - 1))))
                 start_i_over = start_i_over + 1  # row
@@ -291,7 +308,6 @@ def stretch_diags(thresh_diags, band_width):
         stretch_diag_mat (np.ndarray[bool]):
             Logical matrix with diagonals of length band_width starting
             at each entry prescribed in thresh_diag.
-
     """
 
     # Create size of returned matrix
@@ -335,7 +351,6 @@ def add_annotations(input_mat, song_length):
     Returns:
         anno_list (np.ndarray):
             List of pairs of repeats with annotations marked.
-
     """
 
     num_rows = input_mat.shape[0]
@@ -407,7 +422,6 @@ def __find_song_pattern(thresh_diags):
         song_pattern (np.ndarray):
             Row where each entry represents a time step and the group that
             time step is a member of.
-
     """
 
     song_length = thresh_diags.shape[0]
@@ -477,7 +491,7 @@ def reconstruct_full_block(pattern_mat, pattern_key):
     first beat in the song to the end. This record is a binary matrix with a
     block of 1's for each repeat encoded in pattern_mat whose length is
     encoded in pattern_key.
-
+    
     Args:
         pattern_mat (np.ndarray):
             Binary matrix with 1's where repeats begin and 0's otherwise.
@@ -490,7 +504,6 @@ def reconstruct_full_block(pattern_mat, pattern_key):
         pattern_block (np.ndarray):
             Binary matrix representation for pattern_mat with blocks
             of 1's equal to the length's prescribed in pattern_key.
-
     """
 
     # First, find number of beats (columns) in pattern_mat:
@@ -566,7 +579,6 @@ def get_annotation_lst(key_lst):
     Returns:
         anno_lst_out (np.ndarray[int]):
             Array of one possible set of annotation markers for key_lst.
-
     """
 
     # Initialize the temporary variable
@@ -601,7 +613,6 @@ def get_y_labels(width_vec, anno_vec):
         y_labels (np.ndarray[str]):
             Labels for the y-axis of a visualization. Each label contains the
             width and annotation number of an essential structure component.
-
     """
 
     # Determine number of rows to label
@@ -650,7 +661,6 @@ def reformat(pattern_mat, pattern_key):
         info_mat (np.ndarray):
             Array with the time steps of when the pairs of repeated structures
             start and end organized.
-
     """
 
     # Pre-allocate output array with zeros
