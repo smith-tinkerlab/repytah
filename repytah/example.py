@@ -5,10 +5,10 @@ import scipy.io as sio
 import pkg_resources
 import matplotlib.pyplot as plt
 
-from utilities import create_sdm, find_initial_repeats
-from search import find_complete_list
-from transform import remove_overlaps
-from assemble import hierarchical_structure
+from .utilities import create_sdm, find_initial_repeats
+from .search import find_complete_list
+from .transform import remove_overlaps
+from .assemble import hierarchical_structure
 
 """
 example.py

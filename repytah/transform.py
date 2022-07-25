@@ -26,7 +26,7 @@ The module contains the following functions:
 """
 
 import numpy as np
-from utilities import reconstruct_full_block, add_annotations
+from .utilities import reconstruct_full_block, add_annotations
 
 
 def remove_overlaps(input_mat, song_length):

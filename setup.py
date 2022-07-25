@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='repytah',
-    version='0.1.0dev',
+    version='0.2.1dev',
     description='Python package for building Aligned Hierarchies for sequential data streams',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -29,7 +29,9 @@ setup(
         'numpy >= 1.15.0',
         'scipy >= 1.0.0', 
         'pandas >= 1.0.0',
-        'matplotlib >= 3.3.0'
+        'matplotlib >= 3.3.0',
+        'opencv-python >= 4.5.0',
+        'setuptools >= 58.0.4'
     ],
     extras_require={
         'docs': [
