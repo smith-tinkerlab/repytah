@@ -5,10 +5,10 @@ import scipy.io as sio
 import pkg_resources
 import matplotlib.pyplot as plt
 
-from utilities import create_sdm, find_initial_repeats
-from search import find_complete_list
-from transform import remove_overlaps
-from assemble import hierarchical_structure
+from .utilities import create_sdm, find_initial_repeats
+from .search import find_complete_list
+from .transform import remove_overlaps
+from .assemble import hierarchical_structure
 
 """
 example.py
@@ -163,7 +163,7 @@ def visualize_all_lst(thresh_dist_mat):
 
     """
 
-    # Produce a visualization of the SDM
+    # Produce a visualization of the SDM for input.csv
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
     # For [124, 156, 292, 324, 33] in all_lst
@@ -190,7 +190,7 @@ def visualize_complete_lst(thresh_dist_mat):
 
     """
 
-    # Produce a visualization of the SDM
+    # Produce a visualization of the SDM for input.csv
     SDM = plt.imshow(thresh_dist_mat, cmap="Greys")
 
     # Breaking down [124, 156, 292, 324, 33]
@@ -226,11 +226,4 @@ def visualize_complete_lst(thresh_dist_mat):
     plt.plot(x, y, color="purple")
 
     plt.show()
-
-
-if __name__ == "__main__":
-    file_in = load_ex_data('data\\input.csv').to_numpy()
-    file_out = "hierarchical_out_file.mat"
-    num_fv_per_shingle = 12
-    thresh = 0.02
-    csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh)
+    

@@ -33,7 +33,7 @@ The module contains the following functions:
 
 import numpy as np
 import cv2
-from utilities import add_annotations
+from .utilities import add_annotations
 
 
 def find_complete_list(pair_list, song_length):
