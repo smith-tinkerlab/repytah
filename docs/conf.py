@@ -75,7 +75,7 @@ templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # List of imported modules
-autodoc_mock_imports = ["numpy", "scipy", "matplotlib", "pandas", "opencv-python"]
+autodoc_mock_imports = ["numpy", "scipy", "matplotlib", "pandas", "cv2"]
 
 
 # -- Options for HTML output -------------------------------------------------
