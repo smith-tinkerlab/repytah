@@ -17,7 +17,8 @@ Available: https://github.com/smith-tinkerlab/repytah.
    :caption: Getting Started
    
    about
-   installation
+   recommended_installation
+   general_installation
 
 
 .. toctree::
