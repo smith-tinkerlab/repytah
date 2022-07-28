@@ -1,0 +1,8 @@
+matplotlib==3.5.2
+numpy==1.23.1
+opencv_python==4.6.0.66
+pandas==1.4.3
+scipy==1.8.1
+setuptools==63.2.0
+Sphinx==5.0.2
+sphinx_rtd_theme==1.0.0
