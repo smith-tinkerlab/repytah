@@ -53,7 +53,7 @@ def load_ex_data(input):
     return pd.read_csv(stream, header=None)
 
 
-def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
+def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh, vis):
     """
     Example of full aligned hierarchies pathway. A .mat file is saved that
     contains variables created for aligned hierarchies.
@@ -74,6 +74,8 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         thresh (int):
             Maximum threshold value.
 
+        vis (bool):
+            Shows visualizations if True.
 
     Example:
     ### Run on example file
@@ -82,13 +84,12 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
     >>> num_fv_per_shingle = 12
     >>> thresh = 0.02
     >>> csv_to_aligned_hierarchies(file_in, file_out,
-                                   num_fv_per_shingle, thresh)
+                                   num_fv_per_shingle, thresh, True)
                                    
     """
 
     # Import file of feature vectors
     fv_mat = file_in
-    # print("fv_mat",fv_mat)
 
     # Get pairwise distance matrix/self dissimilarity matrix using cosine 
     # distance
@@ -118,7 +119,7 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh):
         # Distill non-overlapping repeats into essential structure components
         # and use them to build the hierarchical representation
         output_tuple = hierarchical_structure(mat_no_overlaps, key_no_overlaps,
-                                              song_length, True)
+                                              song_length, vis)
 
         (full_key, full_mat_no_overlaps) = output_tuple[1:3]
 
@@ -226,4 +227,3 @@ def visualize_complete_lst(thresh_dist_mat):
     plt.plot(x, y, color="purple")
 
     plt.show()
-    

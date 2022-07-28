@@ -25,7 +25,7 @@ class TestExample(unittest.TestCase):
         thresh = 0.01
 
         output = csv_to_aligned_hierarchies(file_in, file_out,
-                                            num_fv_per_shingle, thresh)
+                                            num_fv_per_shingle, thresh, False)
 
         self.assertIs(output, None, "Should be none")
 
@@ -40,7 +40,7 @@ class TestExample(unittest.TestCase):
         thresh = 0.01
 
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle,
-                                   thresh)
+                                   thresh, True)
 
         self.assertTrue(os.path.exists("test/hierarchical_out_file.mat"))
 
@@ -55,7 +55,7 @@ class TestExample(unittest.TestCase):
         thresh = 0.01
 
         csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle,
-                                   thresh)
+                                   thresh, True)
 
         self.assertFalse(
             os.stat("test/hierarchical_out_file.mat").st_size == 0)
