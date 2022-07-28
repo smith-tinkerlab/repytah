@@ -1,4 +1,4 @@
-name: repytah
+name: repytah-env
 channels:
   - defaults
 dependencies:
