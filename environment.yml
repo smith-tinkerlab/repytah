@@ -1,4 +1,4 @@
-name: repytah
+name: repytahenv
 channels:
   - defaults
 dependencies:
@@ -158,4 +158,4 @@ dependencies:
   - zstd=1.5.2=h19a0ad4_0
   - pip:
     - opencv-python==4.6.0.66
-prefix: C:\Software\Anaconda3\envs\repytah
+prefix: C:\Software\Anaconda3\envs\repytahenv
