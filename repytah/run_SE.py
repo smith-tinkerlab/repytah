@@ -84,8 +84,9 @@ def get_SEs(AH_mat):
         rows = np.zeros(len(cols))
 
     SE_diagram = []
+    # add start and end
     for k in range(len(rows)):
-        start_temp = int(cols[k]) + 1
+        start_temp = int(cols[k]) + 1  # I think this is 1 indexing again...
         len_temp = key[int(rows[k])]
         SE_diagram.append((start_temp, len_temp + start_temp))
     # check to make sure SL diagram is nonempty. If so, add (0,0)
@@ -104,12 +105,12 @@ def get_SE_directory(IN, dirs):
     for dir in dirs:
         SEs = []
         labels = []
-        dir_name = dir[len(IN)::]
+        dir_name = dir[len(IN)::]  # ex "\\Expanded"
         AHs = glob.glob(dir + '/*.mat')
         # loop through each mat file per directory, get SE and labels
         for AH in AHs:
             SEs.append(get_SEs(AH))
-            labels.append(AH[len(dir) + 1:-4])
+            labels.append(AH[len(dir) + 1:-4])  # name of file ex "mazurka-51"
         # store all SE info in SE_directory class, add to SE_all
         SE_all.add_class(dir_name)
         SE_all.add_labels(labels)
@@ -154,6 +155,7 @@ def get_truth_mat(labels):
 
 
 def main():
+
     # set up argparse
     # descriptor = "A Python module that converts aligned hierarchies to start-end diagrams"
     # parser = argparse.ArgumentParser(description=descriptor)
@@ -182,6 +184,16 @@ def main():
     # print('Mutual KNN complete.')
     # p, r, mismatched, unmatched = pr_values(mnn_M, truth)
     # print('Precision = %s, Recall = %s' % (p, r))
+
+    # python run_SE.py -I path_to_files -w 2 -W 2
+    # path has to be 2 folders above actual .mat files ex cannot be all the way to \\Expanded
+    IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
+
+    dirs = glob.glob(IN + '/*')
+    inner = 2
+    outer = 2
+    SE_all = get_SE_directory(IN, dirs)
+    Dists, labels = get_dist_mat(SE_all, inner, outer)
 
 
 
