@@ -2,13 +2,14 @@ import os
 import numpy as np
 import pandas as pd
 import scipy.io as sio
+import csv
 import pkg_resources
 import matplotlib.pyplot as plt
 
-from .utilities import create_sdm, find_initial_repeats
-from .search import find_complete_list
-from .transform import remove_overlaps
-from .assemble import hierarchical_structure
+from repytah.utilities import create_sdm, find_initial_repeats
+from repytah.search import find_complete_list
+from repytah.transform import remove_overlaps
+from repytah.assemble import hierarchical_structure
 
 """
 example.py
@@ -31,6 +32,8 @@ The module contains the following functions:
     * visualize_complete_lst
         Produces a visualization to highlight all pairs of smaller repeats
         that are contained in larger diagonals in the Mazurka data set.
+        
+    ADD NEW SAVE FUNCTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 """
 
@@ -53,10 +56,9 @@ def load_ex_data(input):
     return pd.read_csv(stream, header=None)
 
 
-def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh, vis):
+def csv_to_aligned_hierarchies(file_in, num_fv_per_shingle, thresh, vis):
     """
-    Example of full aligned hierarchies pathway. A .mat file is saved that
-    contains variables created for aligned hierarchies.
+    Example of full aligned hierarchies pathway. Returns a dictionary
     
     Args:
         file_in (str):
@@ -101,10 +103,12 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh, vi
 
     # Extract the diagonals from thresholded distance matrix, saving the 
     # repeat pairs the diagonals represent
+    # DELETE LATER 1-indexed
     all_lst = find_initial_repeats(thresh_dist_mat,
                                    np.arange(1, song_length + 1), 0)
 
     # Find smaller repeats which are contained within larger repeats
+    # DELETE LATER 1-indexed
     complete_lst = find_complete_list(all_lst, song_length)
 
     # Create the dictionary of output variables
@@ -134,9 +138,6 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh, vi
         outdict['partial_num_blocks'] = np.sum(mat_no_overlaps)
         outdict['num_partials'] = 1
 
-        # Create the output file
-        sio.savemat(file_out, outdict)
-
     else:
         outdict['full_key'] = []
         outdict['full_mat_no_overlaps'] = []
@@ -149,8 +150,17 @@ def csv_to_aligned_hierarchies(file_in, file_out, num_fv_per_shingle, thresh, vi
         outdict['partial_num_blocks'] = []
         outdict['num_partials'] = 0
 
-        # Create the output file
-        sio.savemat(file_out, outdict)
+    return outdict
+
+
+def save_to_mat(file_out, outdict):
+    sio.savemat(file_out, outdict)
+
+
+def save_to_csv(file_out, outdict):
+    f = open(file_out, "w")
+    f.write(str(outdict))
+    f.close()
 
 
 def visualize_all_lst(thresh_dist_mat):
