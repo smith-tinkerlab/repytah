@@ -59,9 +59,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 
-from .search import find_all_repeats, find_complete_list_anno_only
-from .utilities import reconstruct_full_block, get_annotation_lst, get_y_labels
-from .transform import remove_overlaps
+from repytah.search import find_all_repeats, find_complete_list_anno_only
+from repytah.utilities import reconstruct_full_block, get_annotation_lst, get_y_labels
+from repytah.transform import remove_overlaps
 
 
 def breakup_overlaps_by_intersect(input_pattern_obj, bw_vec, thresh_bw):
@@ -1053,8 +1053,11 @@ def hierarchical_structure(matrix_no_overlaps, key_no_overlaps, sn, vis=False):
 
     full_matrix_no_overlaps = np.delete(full_matrix_no_overlaps, inds_remove,
                                         axis=0)
-    full_visualization = np.delete(full_visualization, inds_remove, axis=0)
 
+    # 1-index the beats (column number)
+    full_matrix_no_overlaps = np.pad(full_matrix_no_overlaps, ((0, 0), (1, 0)))
+
+    full_visualization = np.delete(full_visualization, inds_remove, axis=0)
     full_anno_lst = get_annotation_lst(full_key)
 
     if vis:
