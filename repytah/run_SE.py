@@ -27,17 +27,16 @@ Date: 06/11/18
 Sample function call: python run_SE.py -I path_to_files -w 2 -W2
 """
 
-import glob
-import argparse
-import pathlib
 import os
+import glob
+import pkg_resources
 import warnings
+
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
+
 import persim
-from computePDDists import computeWass_orig, computeBottleneck_orig
-from mutual_knn import mutual_knn, pr_values
 from example import csv_to_aligned_hierarchies, save_to_mat
 
 
@@ -46,7 +45,7 @@ class SE_directory:
     SE class to hold directory names, song labels, and SEs
     """
 
-    labels = []  # can't change to be np empty array without knowing shape
+    labels = []
     SEs = []
     className = []
 
@@ -63,51 +62,45 @@ class SE_directory:
         self.SEs.append(SE)
 
 
-def get_AH(filepath, num_fv_per_shingle, thresh):
+def get_AH(filepath, num_fv_per_shingle, thresh, vis=False):
+
+    # convert to absolute filepath if not already
+    if not os.path.isabs(filepath):
+        filepath = pkg_resources.resource_stream(__name__, filepath)
+
+    # read in chroma vector file and convert to AH
     file_in = pd.read_csv(filepath, header=None).to_numpy()
-    AH_dict = csv_to_aligned_hierarchies(file_in, num_fv_per_shingle, thresh, vis=False)
+    AH_dict = csv_to_aligned_hierarchies(file_in, num_fv_per_shingle, thresh, vis)
 
     return AH_dict
-
-def get_SEs_from_AH_file(AH_mat):
-    mat = loadmat(AH_mat, squeeze_me=True, variable_names=['full_key', 'full_matrix_no'])
-    key = mat['full_key']
-    if type(key) == int:
-        key = [key]  # make array to handle single row case
-    AH = mat['full_matrix_no']
-    blocks = np.nonzero(AH)
-    # when there's single row, python swaps the order
-    if len(blocks) > 1:
-        rows = blocks[0]
-        cols = blocks[1]
-    else:
-        cols = blocks[0]
-        rows = np.zeros(len(cols))
-
-    SE_diagram = []
-    for k in range(len(rows)):
-        start_temp = int(cols[k]) + 1
-        len_temp = key[int(rows[k])]
-        SE_diagram.append((start_temp, len_temp + start_temp))
-    # check to make sure SL diagram is nonempty. If so, add (0,0)
-    if SE_diagram == []:
-        SE_diagram.append((0, 0))
-        print('Warning: empty diagram found.')
-
-    return SE_diagram
-
 
 
 def get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=False):
     """
-    Extracts SEs from chroma feature vector csv files
+
+    Extracts Start End Diagrams from Aligned Hierarchies
 
     Args:
-        filepath (string):
-            Path to file that contains the chroma feature vectors or the aligned hierarchies
+        filepath (str):
+            Name of file to be processed. Can be a chroma vector file in
+            .csv form, or an AH file in .mat or .csv form.
+        num_fv_per_shingle (int):
+            Number of feature vectors per shingle. Provides "context" of each
+            individual time step, so that for notes CDE if
+            num_fv_per_shingle = 2, shingles would be CD, DE.
+        thresh (float):
+            Maximum threshold value for converting chroma vectors to AHs.
+        isChroma (boolean):
+            True if starting from chroma vector files, False if starting from
+            previously saved Aligned Hierarchies files. Default is True.
+        save (boolean):
+            True if you want to save the intermediate Aligned Hierarchies.
+            Default is False.
 
     Returns:
-        SE_diagram is an array that [insert from paper]
+        SNL_diagram (list):
+            Start Normalized Length Diagram.
+
     """
 
     # filepath = C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded\\mazurka-50.mat
@@ -125,7 +118,7 @@ def get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=False):
                                     parts[-2],
                                     f"{parts[-1][:-4]}.mat")
 
-            # create directory unless it already exists
+            # create folder
             # might want to optimize this, probably save into file_base_dir
             # or smth
             if not os.path.exists(os.path.split(file_out)[0]):
@@ -135,12 +128,31 @@ def get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=False):
 
     # start from previously saved AHs
     else:
-        extension = os.split(filepath)[1]
+        extension = os.path.splitext(filepath)[1]
+
+        # force file path to be absolute
+        if not os.path.isabs(filepath):
+            filepath = pkg_resources.resource_stream(__name__, filepath)
+
         if extension == ".mat":
-            AH_dict = loadmat(filepath, squeeze_me=True, variable_names=['full_key', 'full_matrix_no'])
+            AH_dict = loadmat(filepath, squeeze_me=True)
         elif extension == ".csv":
-            # need to check this
-            AH_dict = pd.read_csv(filepath, header=None).to_numpy()
+            # read in file
+            AH_df = pd.read_csv(filepath)
+
+            # only create dictionary for keys needed
+            full_key = []
+            full_mat_no_overlaps = []
+            # iterate over dataframe to get key values
+            for i, rows in AH_df.iterrows():
+                # turn string of chars into numpy array of integers
+                temp_full_key_list = np.array([int(rows['full_key'])])
+                temp_mat = np.array([int(s) for s in rows['full_mat_no_overlaps'].split(' ')])
+
+                full_key.append(temp_full_key_list)
+                full_mat_no_overlaps.append(temp_mat)
+
+            AH_dict = {'full_key': np.array(full_key), 'full_mat_no_overlaps':np.array(full_mat_no_overlaps)}
         else:
             warnings.warn("Only .mat and .csv file types supported for Aligned Hierarchies", RuntimeWarning)
 
@@ -174,77 +186,86 @@ def get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=False):
     # i think mazurka 50 just be weird
     return SE_diagram
 
-
-def get_SE_directory_shortcut(IN, dirs):
-    # define variable to store all SEs
-    SE_all = SE_directory('ALL SEs')
-    # loop through each directory
-    for dir in dirs: # dir: 'C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded'
-        SEs = []
-        labels = []
-        dir_name = dir[len(IN)::]
-        AHs = glob.glob(dir + '/*.mat')
-        # loop through each mat file per directory, get SE and labels
-        for AH in AHs: # AH: 'C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded\\mazurka-50.mat'
-            SEs.append(get_SEs_from_AH_file(AH))
-            labels.append(AH[len(dir)+1:-4])
-        # store all SE info in SE_directory class, add to SE_all
-        SE_all.add_class(dir_name)
-        SE_all.add_labels(labels)
-        SE_all.add_SEs(SEs)
-
-    return SE_all
-
-
 # a function to get SE directory
-def get_SE_directory(IN, dirs, num_fv_per_shingle, thresh, isChroma=True, save=False):
+def get_SE_directory(IN, num_fv_per_shingle, thresh, isChroma=True, save=False):
+
+    """
+
+    Args:
+        IN (str):
+            Input file directory.
+        num_fv_per_shingle (int):
+            Number of feature vectors per shingle for converting chroma vectors
+            to Aligned Hierarchies. Provides "context" of each individual time
+            step, so that for notes CDE if num_fv_per_shingle = 2, shingles
+        thresh (float):
+            Maximum threshold value for converting chroma vectors to AHs.
+        isChroma (boolean):
+            True if starting from chroma vector files, False if starting from
+            previously saved Aligned Hierarchies files. Default is True.
+        save (boolean):
+            True if you want to save the intermediate Aligned Hierarchies.
+            Default is False.
+
+    Returns:
+        SNLD_all (SNLD_directory):
+            Directory that contains all SNLDs and corresponding information.
+
+    """
+
     # define variable to store all SEs
     SE_all = SE_directory('ALL SEs')
-    # loop through each directory
-    for dir in dirs:
-        # convert to numpy
+
+    # check if directory path is absolute
+    if not os.path.isabs(IN):
+        IN = pkg_resources.resource_filename(__name__, IN)
+
+    # loop through each subdirectory
+    subdirs = glob.glob(IN + '/*')
+    for subdir in subdirs:
         SEs = []
         labels = []
-        dir_name = dir[len(IN) + 1::]  # ex "Expanded" or NotExpanded
-
-
-        CV_files = glob.glob(dir + '/*.csv')
-        # loop through each mat file per directory, get SE and labels
-        for file in CV_files:
+        subdir_name = subdir[len(IN) + 1::]  # ex Expanded or NotExpanded
+        if isChroma:
+            files = glob.glob(subdir + '/*.csv')
+        else:
+            files = glob.glob(subdir + '/*.mat')
+        # loop through each file per directory, get SE and labels
+        for file in files:
             SEs.append(get_SEs(file, num_fv_per_shingle, thresh, isChroma, save))
-            labels.append(file[len(dir) + 1:-4])  # ex "mazurka-51"
+            labels.append(file[len(subdir) + 1:-4])  # ex "mazurka-51"
         # store all SE info in SE_directory class, add to SE_all
-        SE_all.add_class(dir_name)
+        SE_all.add_class(subdir_name)
         SE_all.add_labels(labels)
         SE_all.add_SEs(SEs)
 
     return SE_all
 
 
-# I will probably have to change the parameters so that it only has the choice wasserstein (inf, 2) and bottleneck
-# ask katherine which one to set as default (like wasserstein = True) or to have an option parameter
-# like 1 = wasserstein and 2 = bottleneck or option = 'w' or 'b'
-
-# default is saving AH on the way, they would have to flip the flag to not save
-
-# change get_SEs to a wrapper function that calls Melissa's original get_SE
-
-# KK said no default but make somebody choose
 def get_dist_mat(SE_all, metric):
-    err = 0.01  # err for wasserstein
+    """
+
+    Args:
+        SE_all (SNLD_directory):
+            Directory that contains all SEs and corresponding information.
+        metric (str):
+            'b' for bottleneck distance, 'w' for wasserstein distance.
+
+    Returns:
+        D (np.ndarray):
+            Distance matrix for all SE diagrams in directory.
+        labels (list):
+            list of all song names.
+
+    """
+    # create distance matrix
     N_tot = sum([len(SE_all.SEs[i]) for i in range(len(SE_all.SEs))])
     D = np.zeros((N_tot, N_tot))
-
 
     SE = []
     labels = []
 
-    # SE_all.SEs is split into 2 lists, one list that has all the expanded SEs and one list that has all the nonexpanded SEs
-    # this loop takes all of them and combines them into one list of all the SEs
-    # and labels holds the information of which song is which
-    # except labels is 2D for expanded and nonexpanded
-    # I wonder if there's a better way of doing this ?
-    # also really intresting usage of loop variables, why i and k and then j and k
+    # combine all SEs and labels into their own list
     for i in range(len(SE_all.SEs)):
         for k in range(len(SE_all.SEs[i])):
             SE.append(SE_all.SEs[i][k])
@@ -258,24 +279,9 @@ def get_dist_mat(SE_all, metric):
             else:
                 D[j][k] = persim.wasserstein(SE[j], SE[k])
             # make symmetrical across diagonal
-            # assumes that wasserstein/bottleneck works like that
             D[k][j] = D[j][k]
 
     return D, labels
-
-# might not put knn python in repytah
-# bc it was the part KK got flamed for
-# since wasserstein and bottleneck are similarity matrices
-# could write a Jupyter notebook that uses a distance matrix for the mutual knn 1-nearest neighbor as an exmpale
-# for what you COULD do witht he distance matrix
-
-
-def get_truth_mat(labels):
-    truth = np.zeros((len(labels), len(labels)))
-    for k in range(len(labels)):
-        temp = [i for i in np.where(np.array(labels) == labels[k])[0] if i != k]
-        truth[k][temp[0]] = 1
-    return truth
 
 
 def main():
@@ -361,21 +367,28 @@ def main():
     # #print(gudhi.hera.wasserstein_distance(SE1, SE2, order=2, internal_p=2, delta = 0.01))
     # takes around 4 min to run the expanded directory
 
-    get_SEs("C:\\Users\\quind\\SE_SNL_analysis\\data\\chromavectors\\nonexpanded\\input.csv", num_fv_per_shingle=12, thresh=0.02, isChroma=True, save=True)
+    # get_SEs("C:\\Users\\quind\\SE_SNL_analysis\\data\\chromavectors\\nonexpanded\\input.csv", num_fv_per_shingle=12, thresh=0.02, isChroma=True, save=True)
 
 
 
 
     #IN = "D:\\Projects\\Smith-College\\repytah"
-    IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
+    # IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
+    #
+    # # 'C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded' and nonexpanded
+    # dirs = glob.glob(IN + '/*')  # get two folders expanded and nonexpanded
+    # num_fv_per_shingle = 12
+    # thresh = 0.02
+    # #SE_all = get_SE_directory_shortcut(IN, dirs, num_fv_per_shingle, thresh)
+    # SE_all = get_SE_directory_shortcut(IN, dirs)
+    # D, labels = get_dist_mat(SE_all, 2, 2)
 
-    # 'C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded' and nonexpanded
-    dirs = glob.glob(IN + '/*')  # get two folders expanded and nonexpanded
+    filepath = "C:\\Users\\quind\\repytah\\repytah\\data\\input.csv"
     num_fv_per_shingle = 12
     thresh = 0.02
-    #SE_all = get_SE_directory_shortcut(IN, dirs, num_fv_per_shingle, thresh)
-    SE_all = get_SE_directory_shortcut(IN, dirs)
-    D, labels = get_dist_mat(SE_all, 2, 2)
+
+    get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=True)
+
 
 if __name__ == "__main__":
     main()
