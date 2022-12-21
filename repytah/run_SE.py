@@ -1,30 +1,23 @@
 """
 run_SE.py
 
-[more detailed module summary]
-A python module to extract start-end diagrams from aligned hierarchies.
+A python module to create start end diagrams from aligned hierarchies and
+use them to compare songs to each other.
 
 
 The module contains the following functions:
 
-[do I need to include the class defined]
-
     * get_SEs
-        insert
+        Constructs start end diagrams from chroma vectors or aligned hierarchies
 
     * get_SE_directory
-        insert
+        Constructs start end diagrams for a folder of chroma vectors or aligned
+        hierarchies.
 
     * get_dist_mat
-        insert
+        Compares pairs of songs to each other using distance metrics.
 
-    * get_truth_mat
-        insert
-
-Author: Melissa McGuirl
-Date: 06/11/18
-
-Sample function call: python run_SE.py -I path_to_files -w 2 -W2
+Original Author: Melissa McGuirl
 """
 
 import os
@@ -282,113 +275,3 @@ def get_dist_mat(SE_all, metric):
             D[k][j] = D[j][k]
 
     return D, labels
-
-
-def main():
-
-    # set up argparse
-    # descriptor = "A Python module that converts aligned hierarchies to start-end diagrams"
-    # parser = argparse.ArgumentParser(description=descriptor)
-    # parser.add_argument('-I', '--indir', required=True,
-    #                     help='provide path to folder containing all aligned hieraarchies in separate folders')
-    # parser.add_argument('-w', '--inner', required=True, help='specify p for inner norm in Wasserstein computation.')
-    # parser.add_argument('-W', '--outer', required=True, help='specify p for outer norm in Wasserstein computation.')
-    #
-    # # get arguments
-    # args = parser.parse_args()
-    # IN = args.indir
-    # dirs = glob.glob(IN + '/*')
-    # inner = args.inner
-    # outer = args.outer
-    #
-    # if outer == 'inf' and inner != 'inf':
-    #     print('Warning: Bottleneck distance can only be computed with l-infinity inner norm. Proceeding accordingly.')
-    #
-    # # get all SES
-    # SE_all = get_SE_directory(IN, dirs)
-    # print('SE Generation Complete.')
-    # Dists, labels = get_dist_mat(SE_all, inner, outer)
-    # print('Distance matrix computations complete.')
-    # mnn_M = mutual_knn(Dists)
-    # truth = get_truth_mat(labels)
-    # print('Mutual KNN complete.')
-    # p, r, mismatched, unmatched = pr_values(mnn_M, truth)
-    # print('Precision = %s, Recall = %s' % (p, r))
-
-    # python run_SE.py -I path_to_files -w 2 -W 2
-    # path has to be 2 folders above actual .mat files ex cannot be all the way to \\Expanded
-    # IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
-    #
-    # dirs = glob.glob(IN + '/*')
-    # inner = 2
-    # outer = 2
-    # SE_all = get_SE_directory(IN, dirs)
-    # Dists, labels = get_dist_mat(SE_all, inner, outer)
-
-    # ----------------- Testing run_SE ------------------------------
-    # AH_mat = "C:\\Users\\quind\\repytah\\repytah\\hierarchical_out_file_one_index.mat"
-    # mat = loadmat(AH_mat, squeeze_me=True, variable_names=['full_key', 'full_mat_no_overlaps']) # DELETE LATER need to change to full_mat_no_overlaps
-    # key = mat['full_key']
-    # if type(key) == int:
-    #     key = [key]  # make array to handle single row case
-    # AH = mat['full_mat_no_overlaps']
-    # blocks = np.nonzero(AH)
-    # # when there's single row, python swaps the order
-    # if len(blocks) > 1:
-    #     rows = blocks[0]
-    #     cols = blocks[1]
-    # else:
-    #     cols = blocks[0]
-    #     rows = np.zeros(len(cols))
-
-    # SE_all = SE_directory('ALL SEs')
-    #
-    # IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
-    #
-    # dirs = glob.glob(IN + '/*')
-    #
-    # SE_diagram_np = np.empty((0, 2), int)
-    #
-    # for k in range(len(rows)):
-    #     start_temp = int(cols[k])
-    #     len_temp = key[int(rows[k])]  # effect of 1-indexing here, will change once i only pad columns not rows
-    #     SE_diagram_np = np.vstack((SE_diagram_np, (start_temp, len_temp)))
-    #
-
-    #np.savetxt("SE_np_one_index.csv", SE_diagram_np, delimiter=',')
-
-    # SE_np_one_index = np.loadtxt("C:\\Users\\quind\\repytah\\repytah\\data\\SE_np_one_index.csv", delimiter=',', dtype=int)
-    # SE_np = np.loadtxt("C:\\Users\\quind\\repytah\\repytah\\data\\SE_np.csv", delimiter=',', dtype=int)
-    #
-    # print(np.array_equal(SE_np, SE_np_one_index))
-    #
-    # SE1 = [[1, 2], [1, 5], [2, 4]]
-    # SE2 = [[1, 3], [1, 5], [2, 3]]
-    # #print(gudhi.hera.wasserstein_distance(SE1, SE2, order=2, internal_p=2, delta = 0.01))
-    # takes around 4 min to run the expanded directory
-
-    # get_SEs("C:\\Users\\quind\\SE_SNL_analysis\\data\\chromavectors\\nonexpanded\\input.csv", num_fv_per_shingle=12, thresh=0.02, isChroma=True, save=True)
-
-
-
-
-    #IN = "D:\\Projects\\Smith-College\\repytah"
-    # IN = "C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6"
-    #
-    # # 'C:\\Users\\quind\\SE_SNL_analysis\\data\\Thresh01_ShingleNumber6\\Expanded' and nonexpanded
-    # dirs = glob.glob(IN + '/*')  # get two folders expanded and nonexpanded
-    # num_fv_per_shingle = 12
-    # thresh = 0.02
-    # #SE_all = get_SE_directory_shortcut(IN, dirs, num_fv_per_shingle, thresh)
-    # SE_all = get_SE_directory_shortcut(IN, dirs)
-    # D, labels = get_dist_mat(SE_all, 2, 2)
-
-    filepath = "C:\\Users\\quind\\repytah\\repytah\\data\\input.csv"
-    num_fv_per_shingle = 12
-    thresh = 0.02
-
-    get_SEs(filepath, num_fv_per_shingle, thresh, isChroma=True, save=True)
-
-
-if __name__ == "__main__":
-    main()

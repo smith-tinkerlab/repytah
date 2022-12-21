@@ -1,10 +1,24 @@
 """
-A python module to extract start-normalized length  diagrams from aligned hierarchies.
+run_SE.py
 
-Author: Melissa McGuirl
-Date: 06/11/18
+A python module to create start end diagrams from aligned hierarchies and
+use them to compare songs to each other.
 
 
+The module contains the following functions:
+
+    * get_SNLDs
+        Constructs start normalized length diagrams from chroma vectors or
+        aligned hierarchies
+
+    * get_SNLD_directory
+        Constructs start normalized length diagrams for a folder of chroma
+        vectors or aligned hierarchies.
+
+    * get_dist_mat
+        Compares pairs of songs to each other using distance metrics.
+
+Original Author: Melissa McGuirl
 """
 
 
@@ -330,44 +344,3 @@ def get_dist_mat(SNLD_all, metric):
             D[b][a] = D[a][b]
 
     return D, labels
-
-
-def main():
-    # set up argparse
-    # descriptor = "A Python module that converts aligned hierarchies to start-end diagrams"
-    # parser = argparse.ArgumentParser(description=descriptor)
-    # parser.add_argument('-I', '--indir', required=True,
-    #                     help='provide path to folder containing all aligned hieraarchies in separate folders')
-    # parser.add_argument('-N', '--norm', required=True,
-    #                     help='specify desired normalization. Options: none for no normalization, std for ordinary normalization, cheb for chebyshev normalization.')
-    # parser.add_argument('-A', '--alpha', required=True,
-    #                     help='specify scaling parameter alpha, alpha = 1 indicates no scaling.')
-    # parser.add_argument('-w', '--inner', required=True, help='specify p for inner norm in Wasserstein computation.')
-    # parser.add_argument('-W', '--outer', required=True, help='specify p for outer norm in Wasserstein computation.')
-    #
-    # # get arguments
-    # args = parser.parse_args()
-    # IN = args.indir
-    # dirs = glob.glob(IN + '/*')
-    # norm = args.norm
-    # alpha = args.alpha
-    # inner = args.inner
-    # outer = args.outer
-    #
-    # if outer == 'inf' and inner != 'inf':
-    #     print('Warning: Bottleneck distance can only be computed with l-infinity inner norm. Proceeding accordingly.')
-    #
-    # # get all SNLDS
-    # SNLD_all = get_SNLD_directory(IN, dirs, norm, alpha)
-    # print('SNLD Generation Complete.')
-    # Dists, labels = get_dist_mat(SNLD_all, inner, outer)
-    # print('Distance matrix computations complete.')
-    # mnn_M = mutual_knn(Dists)
-    # truth = get_truth_mat(labels)
-    # print('Mutual KNN complete.')
-    # p, r, mismatched, unmatched = pr_values(mnn_M, truth)
-    # print('Precision = %s, Recall = %s' % (p, r))
-    print("Hello")
-
-if __name__ == "__main__":
-    main()
