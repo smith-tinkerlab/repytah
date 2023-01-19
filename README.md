@@ -83,7 +83,7 @@ The original code to this project was written in MATLAB by Katherine M. Kinnaird
 
 ### Acknowledgements
 
-This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) from 2019 to 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
+This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) from 2019 to 2022, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
 
 Additionally, we would like to acknowledge and give thanks to Brian McFee and the [librosa](https://github.com/librosa) team. We significantly referenced the Python package [librosa](https://github.com/librosa/librosa) in our development process.
 
@@ -91,4 +91,4 @@ Additionally, we would like to acknowledge and give thanks to Brian McFee and th
 
 Please cite `repytah` using the following:
 
-K. M. Kinnaird et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2021. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
