@@ -82,7 +82,7 @@ Additionally, the package includes `example.py` which runs a complete example bu
 # Acknowledgements
 `repytah` has been partially from Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019 - 2022 and by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program. Additionally, as `repytah` was developed in the TInKER lab (Katherine M. Kinnaird, Founder and PI), we would like to acknowlege other members of the TInKER lab, including Tasha Adler, for being part of our lab and for listening to presentations about earlier versions of this work. 
 
-Finally, we would like to acknowledge and give thanks to Brian McFee and the [`librosa]`](https://github.com/librosa) team. We significantly referenced the Python package [`librosa]`](https://github.com/librosa) in our development process. 
+Finally, we would like to acknowledge and give thanks to Brian McFee and the [`librosa`](https://github.com/librosa) team. We significantly referenced the Python package [`librosa`](https://github.com/librosa) in our development process. 
 
 # References
 
