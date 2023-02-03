@@ -5,22 +5,46 @@ tags:
   - Music Information Retrieval
   - Structure representations
   - Aligned Hierarchies
+  - Music Structure Analysis
 
 authors:
-  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresspoinding author is can be included like this.]
-    orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
+  - name: Chenhui Jia
+    affiliation: 1
+  - name: Lizette Carpenter
+    affiliation: 1
+  - name: Thu Tran
+    affiliation: 1
+  - name: Amanda Y. Liu
+    affiliation: 1
+  - name: Sasha Yeutseyeva
+    affiliation: 1
+  - name: Marium Tapal
+    affiliation: 1
+  - name: Yingke Wang
     affiliation: 2
-  - name: Author with no affiliation
-    affiliation: 3
+  - name: Lizette Carpenter
+    affiliation: 1
+  - name: Zoie Kexin Zhao
+    affiliation: 1
+  - name: Jordan Moody
+    affiliation: 1
+  - name: Denise Nava
+    affiliation: 1
+  - name: Eleanor Donaher
+    affiliation: 1
+  - name: Lillian Yushu Jiang
+    affiliation: 1
+  - name: Ben Bruncati
+    affiliation: 1
+  - name: Katherine M. Kinnaird
+    orcid: 0000-0002-0435-8996
+    corresponding: true 
+    affiliation: 1
 affiliations:
- - name: Name, Position (if relevant), Affiliation
+ - name: Smith College, USA
    index: 1
- - name: Institution Name
+ - name: Columbia University, USA
    index: 2
- - name: Independent Researcher
-   index: 3
 date: DD Month YYYY
 bibliography: joss.bib
 
@@ -28,32 +52,37 @@ bibliography: joss.bib
 
 # Summary
 
-We introduce `repytah`, a Python package that constructs aligned hierarchies, a structure-based representation for sequential data where repetitions have particular meaning (such as musical recordings or scores). Introduced by Kinnaird [@Kinnaird_ah] and with music-based data as the primary motivation, the aligned hierarchies representation shows all possible hierarchical decompositions of a piece of music along a common time axis. The `repytah` package provides tools to extract repeated structures in sequential data (including music-based data), and offers a comprehensive mechanism to convert them into aligned hierarchies. This package is a translation of the original MATLAB code by Kinnaird [@Kinnaird_code]. 
+We introduce `repytah`, a Python package that constructs the aligned hierarchies representation that contains all possible structure-based hierarchical decompositions for a piece of sequential data aligned on a common time axis. In particular, this representation, introduced by Kinnaird [@Kinnaird_ah] with music-based data at the primary motivation, is intended for sequential data where repetitions have particular meaning (such as musical recordings or scores). The `repytah` package builds these aligned hierarchies by first extracting repeated structures in sequential data (including music-based data) and is a Python translation of the original MATLAB code by Kinnaird [@Kinnaird_code] with additional documentation and updated to leverage efficiencies in Python.
 
 
 # Statement of Need
 
-Broadly, Music Information Retrieval (MIR) seeks to capture information about music. Content-based methods work directly on the recordings or scores, while other approaches leverage other kinds of information such as metadata, tags, or listener surveys. There are a variety of tasks in MIR, including similarity tasks (for example, cover song identification and remix detection) that seek to determine how similar any two pieces of music are, and structure tasks (for example, the chorus detection task) that seek to label various structural features or artifacts. 
+Broadly, Music Information Retrieval (MIR) seeks to capture information about music in pursuit of various music-related tasks, such as playlist recommendation, cover song identification, and beat detection. Content-based methods work directly on musical artifacts such as audio recordings or musical scores, while other approaches leverage information about musical artifacts such as metadata (like the artist or album name), tags (like genre), or listener surveys. Approaches to MIR tasks can also include a focus on repeated (or novel) elements. 
 
-Music-based data streams often have repeated elements that build on each other, creating structure-based hierarchies. The aligned hierarchies representation by Kinnaird [@Kinnaird:2014] is a structure-based representation that combines the motivation of structure tasks with the goal of similarity tasks. A drawback of Kinnaird’s approach, however, is that the original code was written in MATLAB, which can only be used with a license and hence might not be the most accessible to everyone. 
+Music-based data streams, like music, often have repeated elements that build on each other, creating hierarchies. The aligned hierarchies representation by Kinnaird [@Kinnaird_ah] is a structure-based representation that encodes multi-scale pattern information by placing all structural-hierarchical decompositions of a music-based data stream onto one common time axis. These aligned hierarchies can be used for visualization or for similarity tasks like the fingerprint task [@Kinnaird_ah]. The aligned hierarchies can also be post-processed to address additional tasks such as the cover song task [@Kinnaird_ash, @snl, @supp]. A drawback of Kinnaird’s code, however, is that the original code was written in MATLAB, which can only be used with a license and hence is not broadly accessible. 
 
+There has been a long tradition of building Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@mir_eval] , the `mirdata` library [@mirdata], and the more recent `libfmp` package [@libfmp]. As MIR has grown as a discipline, there has been an increased focus on reproducibility, accessibility, and open-source development [@reproducibility_mir, @mirdata]. As such, there have been several examples of code being translated from MATLAB to Python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@librosa]. 
 
-The Python package `repytah` forms the aligned hierarchies for a given sequential data stream. Similar to the original code, `repytah` extracts structural repetitions within a data stream and leverages their relationships to each other to build the aligned hierarchies representation. This encodes multi-scale pattern information and overlays all hierarchical decompositions of those patterns onto one object by aligning these hierarchical decompositions along a common time axis. 
-
-`repytah` was completed, improved on, and successfully debugged by cross-referencing the desired output of the package with the output of the original MATLAB code. However, this package aims to give MIR users access to these tools through the open-source Python language instead of the proprietary MATLAB language. Other upsides of using Python over MATLAB include the ease of walking through directories via the os module and Python’s constantly updated functionality, which MATLAB can be limited in. Additionally, this package provides more complete documentation, examples, and test files than the original code. 
-
-There has been a long tradition of building Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@mir_eval], the `mirdata` library [@mirdata], and the more recent `libfmp` package [@libfmp]. As MIR has grown as a discipline, there has been a focus on reproducibility, accessibility, and open-source development. As such, there have been several examples of code being translated from MATLAB to python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@librosa]. 
+Building on this tradition, the presented package `repytah` forms the aligned hierarchies for a given sequential data stream, giving MIR users broader access to these tools through the open-source Python language. Similar to the original code, `repytah` extracts structural repetitions within a data stream and leverages their relationships to each other to build the aligned hierarchies representation. In addition to translating the code from MATLAB by cross-referencing the desired output of the package with the output of the original code, `repytah` improves on the original code, streamlining various computations and further modularizing functions. Additionally, this package provides more complete documentation, examples, and test files than the original code. 
 
 # Functionality
-There are four modules in the `repytah` Python package: transform, search, assemble, and utilities. Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
 
-The four modules work together to form the aligned hierarchies, but each serves a different purpose. Functions in the <ins>transform</ins> module transform matrix inputs into different forms, either from lists of indices into matrices and vice versa. The <ins>search</ins> module finds and records information about repeated structures, represented as diagonals in a song’s thresholded self-dissimilarity matrix. Once found, these repeated structures are later transformed and assembled into the aligned hierarchies using the <ins>assemble</ins> module, which finds the essential structure components from the repeated structures found with the search module, and then uses those essential structure components to build the aligned hierarchies. Lastly, the <ins>utilities</ins> module contains functions that are frequently called by functions in the other three modules. 
+There are four modules in the `repytah` Python package that work together to form the aligned hierarchies: `transform`, `search`, `assemble`, and `utilities`:
 
-Additionally, the package includes <ins>example.py</ins>, which runs a complete example building aligned hierarchies when a CSV file with extracted features is the input.
+ - Functions in the `transform` module transform matrix inputs into different forms, either from lists of indices into matrices and vice versa. 
+ - The `search` module finds and records information about repeated structures, represented as diagonals in a song’s thresholded self-dissimilarity matrix. 
+ - Once found, these repeated structures are later transformed and assembled into the aligned hierarchies using the `assemble` module, which finds the essential structure components from the repeated structures found with the `search` module, and then uses those essential structure components to build the aligned hierarchies. 
+ - Lastly, the `utilities` module contains functions that are frequently called by functions in the other three modules. 
+
+Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
+
+Additionally, the package includes `example.py` which runs a complete example building aligned hierarchies from a single example CSV file. This example CSV file has chroma features for the score of Chopin's Mazurka Op. 6, No. 1. 
 
 
 # Acknowledgements
-`repytah` was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019, 2020 and 2021, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
+`repytah` has been partially from Smith College's Summer Undergraduate Research Fellowship (SURF) in 2019 - 2022 and by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program. Additionally, as `repytah` was developed in the TInKER lab (Katherine M. Kinnaird, Founder and PI), we would like to acknowlege other members of the TInKER lab, including Tasha Adler, for being part of our lab and for listening to presentations about earlier versions of this work. 
+
+Finally, we would like to acknowledge and give thanks to Brian McFee and the [`librosa]`](https://github.com/librosa) team. We significantly referenced the Python package [`librosa]`](https://github.com/librosa) in our development process. 
 
 # References
 
