@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='repytah',
-    version='0.2.2.dev0',
+    version='0.1.0',
     description='Python package for building Aligned Hierarchies for sequential data streams',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -25,20 +25,20 @@ setup(
     ],
     python_requires='>=3.7, <4',
     install_requires=[
-        'numpy >= 1.15.0, < 1.23.0',
-        'scipy >= 1.0.0', 
-        'pandas >= 1.0.0',
-        'matplotlib >= 3.3.0',
+        'numpy >= 1.21.6',
+        'scipy >= 1.7.3', 
+        'pandas >= 1.3.5',
+        'matplotlib==3.3.4',
         'opencv-python >= 4.5.0',
-        'setuptools >= 58.0.4'
+        'setuptools >= 61.2.0'
     ],
     extras_require={
         'docs': [
-            'sphinx != 1.3.1',
-            'sphinx_rtd_theme >= 0.3.1',
+            'sphinx != 5.0.2',
+            'sphinx_rtd_theme >= 1.0.0',
             'nbsphinx == 0.8.*',
             'spyder >= 4.0.0',
-            'numpydoc >= 0.9.0',
+            'numpydoc >= 1.4.0',
             'myst-parser == 0.15.1',
             'readthedocs-sphinx-search == 0.1.0'
                 ],
