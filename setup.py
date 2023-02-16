@@ -28,7 +28,7 @@ setup(
         'numpy >= 1.21.6',
         'scipy >= 1.7.3', 
         'pandas >= 1.3.5',
-        'matplotlib==3.3.4',
+        'matplotlib >=3.3.4',
         'opencv-python >= 4.5.0',
         'setuptools >= 61.2.0'
     ],
