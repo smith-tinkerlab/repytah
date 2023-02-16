@@ -1,6 +1,6 @@
 # ISC License
 
-Copyright (c) 2021, Smith Tinker Lab.
+Copyright (c) 2021-2023, repytah development team as part of Smith Tinker Lab.
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
