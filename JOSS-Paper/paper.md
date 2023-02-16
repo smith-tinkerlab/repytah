@@ -23,8 +23,6 @@ authors:
     affiliation: 1
   - name: Yingke Wang
     affiliation: 2
-  - name: Lizette Carpenter
-    affiliation: 1
   - name: Zoie Kexin Zhao
     affiliation: 1
   - name: Jordan Moody

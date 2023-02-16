@@ -125,4 +125,4 @@ For building the documentation, you will need
 
 ## Note
 
-This document was borrowed from [scikit-learn](http://scikit-learn.org/) and [librosa](https://github.com/librosa/librosa).
+This document was borrowed with great respect from [scikit-learn](http://scikit-learn.org/) and [librosa](https://github.com/librosa/librosa).
