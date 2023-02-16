@@ -71,9 +71,7 @@ repytah (0.x.x, /path/to/repytah)
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given sequential data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
   * Includes walk through file example.py using supplied input.csv
-  * _Forthcoming_ Distance metric between two aligned hierarchies
 * _Forthcoming_ Aligned sub-Hierarchies - (AsH) - These are derivatives of the aligned hierarchies and are described in [Aligned sub-Hierarchies: a structure-based approach to the cover song task](http://ismir2018.ircam.fr/doc/pdfs/81_Paper.pdf)
-  * _Forthcoming_ Distance metric between two AsH representations
 * _Forthcoming_ Start-End and S_NL diagrams
 * _Forthcoming_ SuPP and MaPP representations
 
@@ -91,4 +89,4 @@ Additionally, we would like to acknowledge and give thanks to Brian McFee and th
 
 Please cite `repytah` using the following:
 
-C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2022. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2023. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
