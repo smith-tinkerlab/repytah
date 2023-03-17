@@ -1,4 +1,4 @@
-General Installation
+Install from `pip` or `conda`
 ============
 
 PyPI
@@ -18,7 +18,7 @@ If you use Anaconda, you can install the package using ``conda-forge``::
 Source
 ~~~~~~
 
-To build repytah from source, say ``python setup.py build``. Then, to install repytah, say ``python setup.py install``.
+To build repytah from source, you need to first clone the repo using ``git clone git@github.com:smith-tinkerlab/repytah.git``. Then build with ``python setup.py build``. Then, to install repytah, say ``python setup.py install``.
 
 Alternatively, you can download or clone the repository and use ``pip`` to handle dependencies::
 
@@ -28,7 +28,7 @@ Alternatively, you can download or clone the repository and use ``pip`` to handl
 or::
 
     git clone https://github.com/smith-tinkerlab/repytah.git
-    pip install -e repytah
+    pip install -e repytah-main
 
 By calling ``pip list`` you should see ``repytah`` now as an installed package::
 
