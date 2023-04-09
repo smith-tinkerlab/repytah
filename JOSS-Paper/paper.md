@@ -71,7 +71,7 @@ There are four modules in the `repytah` Python package that work together to for
  - Functions in the `transform` module transform matrix inputs into different forms, either from lists of indices into matrices and vice versa. 
  - The `search` module finds and records information about repeated structures, represented as diagonals in a song’s thresholded self-dissimilarity matrix. 
  - Once found, these repeated structures are later transformed and assembled into the aligned hierarchies using the `assemble` module, which finds the essential structure components from the repeated structures found with the `search` module, and then uses those essential structure components to build the aligned hierarchies. 
- - Lastly, the `utilities` module contains functions that are frequently called by functions in the other three modules. 
+ - Finally, the `utilities` module contains functions that are frequently called by functions in the other three modules. 
 
 Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
 
