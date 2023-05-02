@@ -60,9 +60,11 @@ The `repytah` package builds these aligned hierarchies by first extracting repea
 
 Broadly, Music Information Retrieval (MIR) seeks to capture information about music in pursuit of various music-related tasks, such as playlist recommendation, cover song identification, and beat detection. Content-based methods work directly on musical artifacts such as audio recordings or musical scores, while other approaches leverage information about musical artifacts such as metadata (like the artist or album name), tags (like genre), or listener surveys. Approaches to MIR tasks can also include a focus on repeated (or novel) elements. 
 
+
 Music-based sequenced data, like scores and recordings, often have repeated elements that build on each other, creating structure-based hierarchies. The aligned hierarchies representation by Kinnaird [-@Kinnaird_ah] is a structure-based representation that places all possible structural-hierarchical decompositions of a data stream onto one common time axis. These aligned hierarchies when applied to music-based data sequences can be used for visualization or for similarity tasks within MIR like the fingerprint task (that seeks to find all copies of a query song that are the same recording of the same piece performed by the same musical group) [@Kinnaird_ah]. The aligned hierarchies can also be post-processed to address additional tasks such as the cover song task (that seeks to find different recordings of the same piece of music either by the original artist or another one) [@Kinnaird_ash; @snl; @supp]. A drawback of Kinnaird’s code, however, is that the original code was written in MATLAB, which can only be used with a license and hence is not broadly accessible. 
 
 There has been a recent trend of creating Python packages for MIR research. Examples include the `AMEN` package [@amen], the `mir_eval` library [@mir_eval] , the `mirdata` library [@mirdata], and the more recent `libfmp` package [@libfmp]. As MIR has grown as a discipline, there has been an increased focus on reproducibility, accessibility, and open-source development [@reproducibility_mir; @mirdata]. As such, there have been several examples of code being translated from MATLAB to Python. The most notable example is `librosa`, a package that provides a number of powerful tools for MIR work [@librosa]. 
+
 
 Following suit, the presented package `repytah` forms the aligned hierarchies for a given pieces of sequential data, giving MIR users broader access to these tools through the open-source Python language. Similar to the original code, `repytah` extracts structural repetitions within a data stream and leverages their relationships to each other to build the aligned hierarchies representation. In addition to translating the code from MATLAB by cross-referencing the desired output of the package with the outputs from the original code on several examples, `repytah` improves on the original code, streamlining various computations and further modularizing functions. Additionally, this package provides more complete documentation, examples, and test files than the original code. 
 
@@ -70,11 +72,11 @@ Following suit, the presented package `repytah` forms the aligned hierarchies fo
 
 There are four modules in the `repytah` Python package that work together to form the aligned hierarchies: `search`, `assemble`, `transform`, and `utilities`:
 
-
  - The `search` module finds and records information about repeated structures, represented as diagonals in a song’s thresholded self-dissimilarity matrix. 
  - Once found, these repeated structures are later transformed and assembled into the aligned hierarchies using the `assemble` module, which finds the essential structure components from the repeated structures found with the `search` module, and then uses those essential structure components to build the aligned hierarchies. 
  - Throughout the process of building the aligned hierarchies, the found structure can be represented as either lists or as matrices. Functions in the `transform` module transform inputs between the different types, either from lists of indices into matrices or vice versa. 
  - Lastly, the `utilities` module contains functions that are frequently called by functions in the other three modules. 
+
 
 Each module has an associated Jupyter notebook file that summarizes the module’s functions. There are also test files for each module. 
 
