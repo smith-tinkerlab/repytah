@@ -82,7 +82,7 @@ Each module has an associated Jupyter notebook file that summarizes the moduleâ€
 
 Additionally, the package includes `example.py` which runs a complete example building aligned hierarchies from a single example CSV file for the score of Chopin's Mazurka Op. 6, No. 1. This example CSV file stores the musical information about each beat of the Mazurka as Chroma Features (or the twelve Western tones: {C, C#, D, D#, etc}). These Chroma features are extracted from the associated files on the [kern Scores data base](https://kern.humdrum.org/cgi-bin/browse?l=users/craig/classical/chopin/mazurka) [@S2005].
 
-In `example.py`, the first steps include transforming the sequential data into the SDM by first shingling the features [@CS2007; @CS2006NEAR; CS2006SEQ] and then using the cosine-dissimilarity measure on the resulting shingles. Again, we note that while `example.py` does compute the SDM, the `repytah` package's main contribution is the construction of the aligned hierarchies from a given SDM. 
+In `example.py`, the first steps include transforming the sequential data into the SDM by first shingling the features [@CS2007; @CS2006NEAR; @CS2006SEQ] and then using the cosine-dissimilarity measure on the resulting shingles. Again, we note that while `example.py` does compute the SDM, the `repytah` package's main contribution is the construction of the aligned hierarchies from a given SDM. 
 
 
 # Acknowledgements
