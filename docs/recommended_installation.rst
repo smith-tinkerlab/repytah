@@ -1,4 +1,4 @@
-Recommended Installation
+Installing from `conda` package-manager or from `pip`
 ============
 
 Anaconda

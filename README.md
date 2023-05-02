@@ -16,7 +16,11 @@ See our [website](https://repytah.readthedocs.io/en/latest/index.html) for a com
 
 This [example](https://repytah.readthedocs.io/en/latest/example_vignette.html) tutorial will show you a usage of the package from start to finish.
 
-## Statement of Need
+## Summary
+
+We introduce `repytah`, a Python package that constructs the aligned hierarchies representation that contains all possible structure-based hierarchical decompositions for a finite length piece of sequential data aligned on a common time axis. In particular, this representation--introduced by Kinnaird [@Kinnaird_ah] with music-based data (like musical recordings or scores) as the primary motivation--is intended for sequential data where repetitions have particular meaning (such as a verse, chorus, motif, or theme). Although the original motivation for the aligned hierarchies representation was finding structure for music-based data streams, there is nothing inherent in the construction of these representations that limits `repytah` to only being used on sequential data that is music-based. 
+
+The `repytah` package builds these aligned hierarchies by first extracting repeated structures (of all meaningful lengths) from the self-dissimilarity matrix (SDM) for a piece of sequential data. Intentionally `repytah` uses the SDM as the starting point for constructing the aligned hierarchies, as an SDM cannot be reversed-engineered back to the original signal and allows for researchers to collaborate with signals that are protected either by copyright or under privacy considerations. This package is a Python translation of the original MATLAB code by Kinnaird [-@Kinnaird_code] with additional documentation, and the code has been updated to leverage efficiencies in Python. 
 
 ### Problems Addressed
 
@@ -38,7 +42,7 @@ The latest stable release is available on PyPI, and you can install it by runnin
 pip install repytah
 ```
 
-**Forthcoming** - If you use Anaconda, you can install the package using `conda-forge`:
+If you use Anaconda, you can install the package using `conda-forge`:
 
 ```bash
 conda install -c conda-forge repytah
@@ -70,7 +74,7 @@ repytah (0.x.x, /path/to/repytah)
 ## Current and Future Work - Elements of the Package
 
 * Aligned Hierarchies - This is the fundamental output of the package, of which derivatives can be built. The aligned hierarchies for a given sequential data stream is the collection of all possible **hierarchical** structure decompositions, **aligned** on a common time axis. To this end, we offer all possible structure decompositions in one cohesive object.
-  * Includes walk through file example.py using supplied input.csv
+  * Includes walk through file `example.py` using supplied `input.csv`
 * _Forthcoming_ Aligned sub-Hierarchies - (AsH) - These are derivatives of the aligned hierarchies and are described in [Aligned sub-Hierarchies: a structure-based approach to the cover song task](http://ismir2018.ircam.fr/doc/pdfs/81_Paper.pdf)
 * _Forthcoming_ Start-End and S_NL diagrams
 * _Forthcoming_ SuPP and MaPP representations
@@ -81,7 +85,7 @@ The original code to this project was written in MATLAB by Katherine M. Kinnaird
 
 ### Acknowledgements
 
-This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) from 2019 to 2022, and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
+This code was developed as part of Smith College's Summer Undergraduate Research Fellowship (SURF) from 2019 to 2022 and has been partially funded by Smith College's CFCD funding mechanism. Additionally, as Kinnaird is the Clare Boothe Luce Assistant Professor of Computer Science and Statistical & Data Sciences at Smith College, this work has also been partially supported by Henry Luce Foundation's Clare Boothe Luce Program.
 
 Additionally, we would like to acknowledge and give thanks to Brian McFee and the [librosa](https://github.com/librosa) team. We significantly referenced the Python package [librosa](https://github.com/librosa/librosa) in our development process.
 
