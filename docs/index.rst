@@ -8,7 +8,7 @@ Citing repytah
 ==============
 Please cite ``repytah`` using the following:
 
-C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.0, 2023. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.1, 2023. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
 
 
 .. toctree::
