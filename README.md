@@ -10,6 +10,8 @@ A Python package that builds aligned hierarchies for sequential data streams.
 
 [![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
+[![DOI](https://zenodo.org/badge/198304490.svg)](https://zenodo.org/badge/latestdoi/198304490)
+
 ## Documentation
 
 See our [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
