@@ -95,4 +95,4 @@ Additionally, we would like to acknowledge and give thanks to Brian McFee and th
 
 Please cite `repytah` using the following:
 
-C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.1, 2023. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).
+C. Jia et al., repytah: A Python package that builds aligned hierarchies for sequential data streams. Python package version 0.1.2, 2023. [Online]. Available: [https://github.com/smith-tinkerlab/repytah](https://github.com/smith-tinkerlab/repytah).

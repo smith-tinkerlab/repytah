@@ -24,8 +24,8 @@ sys.path.insert(0, os.path.abspath('../repytah'))
 # -- Project information -----------------------------------------------------
 
 project = u"repytah"
-copyright = u"2021, repytah development team"
-author = u"Katherine M Kinnaird, Eleanor Donaher, Lizette Carpenter, Jordan Moody, Denise Nava, Sasha Yeutseyeva, Chenhui Jia, Marium Tapal, Betty Wang, Thu Tran, Zoie Zhao"
+copyright = u"2023, repytah development team"
+author = u"Chenhui Jia,Lizette Carpenter, Thu Tran, Amanda Y. Liu, Sasha Yeutseyeva, Marium Tapal, Yingke Wang, Zoie Kexin Zhao, Jordan Moody, Denise Nava, Eleanor Donaher, Lillian Yushu Jiang, Ben Bruncati, Katherine M. Kinnaird"
 
 
 # -- General configuration ---------------------------------------------------
