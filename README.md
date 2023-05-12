@@ -12,6 +12,8 @@ A Python package that builds aligned hierarchies for sequential data streams.
 
 [![DOI](https://zenodo.org/badge/198304490.svg)](https://zenodo.org/badge/latestdoi/198304490)
 
+
+
 ## Documentation
 
 See our [website](https://repytah.readthedocs.io/en/latest/index.html) for a complete reference manual and introductory tutorials.
