@@ -10,7 +10,9 @@ A Python package that builds aligned hierarchies for sequential data streams.
 
 [![codecov](https://codecov.io/gh/tinkerlab/repytah/branch/main/graph/badge.svg?token=ULWnUHaIJC)](https://codecov.io/gh/tinkerlab/repytah)
 
-[![DOI](https://zenodo.org/badge/198304490.svg)](https://zenodo.org/badge/latestdoi/198304490)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7931423.svg)](https://doi.org/10.5281/zenodo.7931423)
+
+
 
 
 
